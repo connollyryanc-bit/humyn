@@ -355,6 +355,18 @@ function Header({ active }: { active: TabKey }) {
             Board
           </Link>
           <Link
+            href="/pipeline"
+            style={{
+              padding: "7px 14px",
+              borderRadius: 100,
+              fontSize: 13,
+              fontWeight: 500,
+              color: "#4D4945",
+            }}
+          >
+            Pipeline
+          </Link>
+          <Link
             href="/settings/rate-card"
             style={{
               padding: "7px 14px",

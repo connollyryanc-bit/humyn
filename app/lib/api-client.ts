@@ -111,6 +111,11 @@ export async function fetchInsightsWeekly(): Promise<{ narrative: string; genera
   return jsonOrThrow<{ narrative: string; generatedAt: string }>(res, "GET /api/insights/weekly");
 }
 
+export async function fetchInsightsBoard(): Promise<{ narrative: string; generatedAt: string; source?: string }> {
+  const res = await fetch("/api/insights/board", { cache: "no-store" });
+  return jsonOrThrow<{ narrative: string; generatedAt: string; source?: string }>(res, "GET /api/insights/board");
+}
+
 export interface TeamAnalysis {
   compositionSummary: string;
   strengths: string[];

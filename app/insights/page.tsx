@@ -500,6 +500,18 @@ export default function InsightsPage() {
             >
               Insights
             </Link>
+            <Link
+              href="/board"
+              style={{
+                padding: "7px 14px",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#4D4945",
+              }}
+            >
+              Board
+            </Link>
           </nav>
           <div style={{ flex: 1 }} />
           <button

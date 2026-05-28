@@ -78,12 +78,51 @@ Wheel positions — eight positions across the four quadrants:
 - Pure Lens → **Analyst**
 - Lens/Drive mix → **Refiner** (e.g. "Refining Analyst", "Analysing Refiner")
 
-### Neutral Palette
+### Valtech Brand Palette (chrome + surfaces)
+Humyn lives inside Valtech Nordic. Chrome (nav, buttons, surfaces, accents) follows the
+Valtech brand guidelines. The four Pulse Map energies above are a documented exception —
+they are personality data and stay as defined.
+
+> **Hex values below are estimated from the Valtech brand sheet screenshots until the
+> official brand book confirms them.** Mark anything you swap so the real hex codes can
+> drop in cleanly later.
+
+Primary brand colours:
 ```
-Ink (primary text):     #1A1A1A
-Ink2 (secondary text):  #5A5A5A
-Ink3 (tertiary/labels): #9A9A9A
-Surface (page bg):      #F7F6F3
+Black:        #000000
+White:        #FFFFFF
+Gray:         #C8C5BD   (warm light)
+Coral:        #FF5040   (red-orange — primary brand accent)
+Ocean:        #1A2EAA   (deep blue)
+Moss:         #9CFF40   (bright lime)
+```
+
+Secondary brand colours:
+```
+Soft Black:   #161311
+Off White:    #F3F0EA
+Shade Gray:   #4D4945
+Ember:        #4D1A1A   (dark red)
+Midnight:     #0F1A2A   (very dark blue)
+Forest:       #0F2D1F   (very dark green)
+```
+
+Brand usage rules:
+- **Coral** replaces yellow as the chrome accent. The wordmark `y`, the "+ New profile"
+  icon, and the team-count badge all use Coral (not Spark yellow).
+- **Spark yellow** is reserved for Pulse personality data only (energy badges, ring
+  segments, bars, spider fill when primary is Spark, etc.). Never use it for chrome.
+- **Page surfaces**: Off White for the page background, White for cards. Soft Black or
+  Black for primary text. Shade Gray for secondary text.
+- **Typography** (Valtech Neue for display + headings, Sons for body + legal) is pending
+  until the .woff2 files arrive — current code uses the system font stack as a placeholder.
+
+### Working ink scale (derived from Valtech)
+```
+Ink (primary text):     #161311   (Soft Black)
+Ink2 (secondary text):  #4D4945   (Shade Gray)
+Ink3 (tertiary/labels): #9A9A9A   (unchanged neutral mid-gray)
+Surface (page bg):      #F3F0EA   (Off White)
 Card (white):           #FFFFFF
 Border:                 rgba(0,0,0,0.07)
 Subtle bg:              #FAFAF8

@@ -34,7 +34,7 @@ const LOADING_STAGES = [
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
     <span style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#1A1A1A" }}>
-      hum<span style={{ color: "#F5A623" }}>y</span>n
+      hum<span style={{ color: "#FF5040" }}>y</span>n
     </span>
   );
 }
@@ -258,7 +258,7 @@ function LoadingPreview() {
           style={{
             width: "40%",
             height: "100%",
-            background: "#F5A623",
+            background: "#FF5040",
             borderRadius: 4,
             animation: "humyn-pulse 1.4s ease-in-out infinite",
           }}
@@ -847,7 +847,7 @@ export default function PulseNewPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F7F6F3" }}>
+    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
       <header
         style={{
           height: 52,

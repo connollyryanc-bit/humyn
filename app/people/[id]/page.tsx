@@ -26,7 +26,7 @@ const tabs: { key: TabKey; label: string }[] = [
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
     <span style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#1A1A1A" }}>
-      hum<span style={{ color: "#F5A623" }}>y</span>n
+      hum<span style={{ color: "#FF5040" }}>y</span>n
     </span>
   );
 }
@@ -248,7 +248,7 @@ export default function PersonProfilePage() {
   const primaryColour = energy[person.primary];
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F7F6F3" }}>
+    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
       <header
         style={{
           height: 52,

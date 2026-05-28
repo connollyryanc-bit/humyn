@@ -701,6 +701,19 @@ export default function CapacityPage() {
               Teams
             </Link>
             <Link
+              href="/available"
+              style={{
+                padding: "7px 14px",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#4D4945",
+                background: "transparent",
+              }}
+            >
+              Available
+            </Link>
+            <Link
               href="/capacity"
               style={{
                 padding: "7px 14px",

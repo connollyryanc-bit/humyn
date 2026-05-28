@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { EnergyKey, Person, availability as availabilityMeta, energy } from "../page";
+import { EnergyKey, Person, energy } from "../page";
 import { PersonWithCapacity } from "../lib/capacity-data";
 import { fetchEnrichedPeople } from "../lib/api-client";
 
 const MARKETS = ["Stockholm", "Oslo", "Copenhagen", "Helsinki"] as const;
-type Market = typeof MARKETS[number];
-const ENERGIES: EnergyKey[] = ["red", "yellow", "green", "blue"];
+type Market = (typeof MARKETS)[number];
+const WEEK_COUNT = 8;
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -21,7 +21,7 @@ function HumynWordmark({ size = 22 }: { size?: number }) {
   );
 }
 
-function Avatar({ person, size = 42 }: { person: Person; size?: number }) {
+function Avatar({ person, size = 32 }: { person: Person; size?: number }) {
   const c = energy[person.primary];
   return (
     <div
@@ -45,299 +45,254 @@ function Avatar({ person, size = 42 }: { person: Person; size?: number }) {
   );
 }
 
-function EnergyBadge({ k, small = true }: { k: EnergyKey; small?: boolean }) {
-  const e = energy[k];
-  return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 6,
-        padding: small ? "3px 8px" : "4px 10px",
-        borderRadius: 100,
-        background: e.bg,
-        color: e.text,
-        border: `0.5px solid ${e.border}`,
-        fontSize: small ? 10 : 11,
-        fontWeight: 500,
-        whiteSpace: "nowrap",
-      }}
-    >
-      <span style={{ width: 6, height: 6, borderRadius: "50%", background: e.color }} />
-      {e.label}
-    </span>
-  );
-}
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      style={{
-        fontSize: 10,
-        color: "#9A9A9A",
-        textTransform: "uppercase",
-        letterSpacing: "0.08em",
-        fontWeight: 500,
-        marginBottom: 12,
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-function Card({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      style={{
-        background: "#FFFFFF",
-        border: "0.5px solid rgba(0,0,0,0.07)",
-        borderRadius: 12,
-        padding: "1.25rem",
-      }}
-    >
-      {children}
-    </div>
-  );
-}
-
-function HeroStat({
-  label,
-  value,
-  detail,
-  color,
-  bg,
-  border,
-}: {
+interface WeekStub {
+  start: Date;
+  end: Date;
   label: string;
-  value: string;
-  detail?: string;
-  color: string;
-  bg: string;
-  border: string;
-}) {
-  return (
-    <div
-      style={{
-        background: bg,
-        border: `0.5px solid ${border}`,
-        borderRadius: 12,
-        padding: "1rem 1.1rem",
-      }}
-    >
-      <div
-        style={{
-          fontSize: 10,
-          color: "#9A9A9A",
-          textTransform: "uppercase",
-          letterSpacing: "0.08em",
-          fontWeight: 500,
-        }}
-      >
-        {label}
-      </div>
-      <div
-        className="font-display"
-        style={{
-          fontSize: 26,
-          fontWeight: 700,
-          color,
-          letterSpacing: "-0.4px",
-          marginTop: 4,
-        }}
-      >
-        {value}
-      </div>
-      {detail && (
-        <div style={{ fontSize: 11, color: "#5A5A5A", lineHeight: 1.45, marginTop: 4 }}>
-          {detail}
-        </div>
-      )}
-    </div>
-  );
+  startLabel: string;
 }
 
-function PersonCard({ p }: { p: PersonWithCapacity }) {
-  const avail = availabilityMeta[p.available];
+function buildWeeks(weekCount: number, start: Date): WeekStub[] {
+  // Snap to Monday (Mon = 1, Sun = 0)
+  const monday = new Date(start);
+  const dow = monday.getDay();
+  const diff = dow === 0 ? -6 : 1 - dow;
+  monday.setDate(monday.getDate() + diff);
+  monday.setHours(0, 0, 0, 0);
+
+  const out: WeekStub[] = [];
+  for (let i = 0; i < weekCount; i++) {
+    const s = new Date(monday);
+    s.setDate(monday.getDate() + i * 7);
+    const e = new Date(s);
+    e.setDate(s.getDate() + 6);
+    const startLabel = s.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+    out.push({
+      start: s,
+      end: e,
+      label: i === 0 ? "This week" : `W+${i}`,
+      startLabel,
+    });
+  }
+  return out;
+}
+
+interface AllocationCell {
+  pct: number; // 0..100 — 0 means available
+  label: "Allocated" | "Partial" | "Available";
+}
+
+function deriveAllocation(p: PersonWithCapacity): AllocationCell[] {
+  const util = p.utilisation;
   const benchDays = p.capacity.benchDays;
-  const teamHref = `/teams?preselect=${p.id}`;
+  const cells = (vals: number[]): AllocationCell[] =>
+    vals.map((v) => ({
+      pct: v,
+      label: v >= 75 ? "Allocated" : v > 0 ? "Partial" : "Available",
+    }));
+
+  if (p.available === "allocated") {
+    if (util >= 90) return cells([100, 100, 100, 100, 100, 100, 100, 100]);
+    if (util >= 80) return cells([100, 100, 100, 100, 100, 90, 75, 60]);
+    if (util >= 70) return cells([100, 100, 100, 90, 75, 50, 0, 0]);
+    return cells([100, 100, 75, 50, 25, 0, 0, 0]);
+  }
+  if (p.available === "soon") {
+    return cells([100, 90, 25, 0, 0, 0, 0, 0]);
+  }
+  // available === "now"
+  if (benchDays > 14) return cells([0, 0, 0, 0, 0, 0, 0, 0]);
+  if (benchDays > 7) return cells([0, 0, 0, 0, 25, 50, 75, 75]);
+  return cells([0, 25, 50, 75, 75, 75, 75, 75]);
+}
+
+interface TooltipInfo {
+  rowId: number;
+  week: number;
+  text: string;
+}
+
+function TimelineRow({
+  person,
+  weeks,
+  allocation,
+  onCellEnter,
+  onCellLeave,
+}: {
+  person: PersonWithCapacity;
+  weeks: WeekStub[];
+  allocation: AllocationCell[];
+  onCellEnter: (info: TooltipInfo) => void;
+  onCellLeave: () => void;
+}) {
+  const e = energy[person.primary];
+  const client = person.capacity.currentProject ?? person.capacity.keyClientAtRisk ?? "Unassigned";
+  const lastAllocatedIndex = (() => {
+    for (let i = allocation.length - 1; i >= 0; i--) {
+      if (allocation[i].pct >= 75) return i;
+    }
+    return -1;
+  })();
 
   return (
     <div
       style={{
-        background: "#FFFFFF",
-        border: "0.5px solid rgba(0,0,0,0.07)",
-        borderRadius: 12,
-        padding: "1rem 1.1rem",
-        display: "flex",
-        flexDirection: "column",
-        gap: 12,
+        display: "grid",
+        gridTemplateColumns: `280px 1fr`,
+        alignItems: "stretch",
+        borderTop: "0.5px solid rgba(0,0,0,0.05)",
       }}
     >
-      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-        <Avatar person={p} size={42} />
+      <div
+        style={{
+          position: "sticky",
+          left: 0,
+          background: "#FFFFFF",
+          zIndex: 2,
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          padding: "10px 14px",
+          borderRight: "0.5px solid rgba(0,0,0,0.07)",
+        }}
+      >
+        <Avatar person={person} size={32} />
         <div style={{ flex: 1, minWidth: 0 }}>
           <Link
-            href={`/people/${p.id}`}
-            style={{ fontSize: 15, fontWeight: 600, color: "#161311", letterSpacing: "-0.2px" }}
+            href={`/people/${person.id}`}
+            style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}
           >
-            {p.name}
+            {person.name}
           </Link>
-          <div style={{ fontSize: 12, color: "#5A5A5A", marginTop: 2 }}>
-            {p.role} · {p.location}
-          </div>
-        </div>
-      </div>
-
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-        <EnergyBadge k={p.primary} />
-        <span
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            padding: "3px 9px",
-            borderRadius: 100,
-            background: avail.bg,
-            color: avail.text,
-            border: `0.5px solid ${avail.border}`,
-            fontSize: 10,
-            fontWeight: 600,
-            whiteSpace: "nowrap",
-          }}
-        >
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: avail.color }} />
-          {avail.label}
-        </span>
-        {benchDays > 0 && (
-          <span
+          <div
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              padding: "3px 9px",
-              borderRadius: 100,
-              background: benchDays > 14 ? "#FDF0EE" : "#FFFBF2",
-              color: benchDays > 14 ? "#9B2A1A" : "#8B5A00",
-              border: `0.5px solid ${benchDays > 14 ? "#FCCDC6" : "#FAD98A"}`,
-              fontSize: 10,
-              fontWeight: 600,
+              fontSize: 11,
+              color: "#9A9A9A",
+              fontWeight: 500,
+              marginTop: 1,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
               whiteSpace: "nowrap",
             }}
           >
-            {benchDays} days on bench
-          </span>
-        )}
-      </div>
-
-      {p.capabilities.length > 0 && (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {p.capabilities.slice(0, 3).map((c) => (
-            <span
-              key={c}
-              style={{
-                padding: "3px 9px",
-                borderRadius: 100,
-                background: "#FAFAF8",
-                color: "#5A5A5A",
-                border: "0.5px solid rgba(0,0,0,0.07)",
-                fontSize: 11,
-                fontWeight: 500,
-              }}
-            >
-              {c}
-            </span>
-          ))}
+            {person.role}
+          </div>
         </div>
-      )}
+        <span
+          aria-hidden
+          title={`Primary energy: ${e.label}`}
+          style={{
+            width: 8,
+            height: 8,
+            borderRadius: "50%",
+            background: e.color,
+            flexShrink: 0,
+          }}
+        />
+      </div>
 
       <div
         style={{
-          paddingTop: 12,
-          borderTop: "0.5px solid rgba(0,0,0,0.06)",
-          display: "flex",
-          gap: 24,
-          alignItems: "center",
+          display: "grid",
+          gridTemplateColumns: `repeat(${weeks.length}, minmax(60px, 1fr))`,
+          position: "relative",
         }}
       >
-        <div>
-          <div
-            style={{
-              fontSize: 10,
-              color: "#9A9A9A",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              fontWeight: 600,
-            }}
-          >
-            Day rate
-          </div>
-          <div
-            className="font-display"
-            style={{ fontSize: 16, fontWeight: 700, color: "#161311", marginTop: 2 }}
-          >
-            €{(p.dayRate || 1500).toLocaleString("en-GB")}
-          </div>
-        </div>
-        <div>
-          <div
-            style={{
-              fontSize: 10,
-              color: "#9A9A9A",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              fontWeight: 600,
-            }}
-          >
-            Loyalty
-          </div>
-          <div
-            className="font-display"
-            style={{
-              fontSize: 16,
-              fontWeight: 700,
-              color: p.capacity.loyaltyScore >= 70 ? "#1A5C38" : p.capacity.loyaltyScore >= 50 ? "#8B5A00" : "#9B2A1A",
-              marginTop: 2,
-            }}
-          >
-            {p.capacity.loyaltyScore}
-          </div>
-        </div>
-      </div>
-
-      <div style={{ display: "flex", gap: 8 }}>
-        <Link
-          href={`/people/${p.id}`}
-          style={{
-            flex: 1,
-            padding: "8px 12px",
-            borderRadius: 8,
-            border: "0.5px solid rgba(0,0,0,0.07)",
-            background: "#FFFFFF",
-            color: "#161311",
-            fontSize: 12,
-            fontWeight: 500,
-            textAlign: "center",
-          }}
-        >
-          Profile
-        </Link>
-        <Link
-          href={teamHref}
-          style={{
-            flex: 1,
-            padding: "8px 12px",
-            borderRadius: 8,
-            background: "#161311",
-            color: "#FFFFFF",
-            fontSize: 12,
-            fontWeight: 500,
-            textAlign: "center",
-          }}
-        >
-          Add to team
-        </Link>
+        {allocation.map((cell, i) => {
+          const isAllocated = cell.pct >= 75;
+          const isPartial = cell.pct > 0 && cell.pct < 75;
+          const bg = isAllocated
+            ? e.color
+            : isPartial
+              ? "#FAD98A"
+              : "#EEF7F2";
+          const fill = isAllocated
+            ? 1
+            : isPartial
+              ? cell.pct / 100
+              : 1;
+          const tooltipText = isAllocated
+            ? `${client} · ${cell.pct}% · ${weeks[i].startLabel} → ${weeks[lastAllocatedIndex === -1 ? i : Math.max(lastAllocatedIndex, i)].startLabel}`
+            : isPartial
+              ? `${client} · ${cell.pct}% (partial) · ${weeks[i].startLabel}`
+              : `Available · ${weeks[i].startLabel}`;
+          return (
+            <div
+              key={i}
+              onMouseEnter={() =>
+                onCellEnter({ rowId: person.id, week: i, text: tooltipText })
+              }
+              onMouseLeave={onCellLeave}
+              style={{
+                position: "relative",
+                padding: "10px 4px",
+                borderRight:
+                  i < allocation.length - 1
+                    ? "0.5px dashed rgba(0,0,0,0.05)"
+                    : "none",
+                background: cell.pct === 0 ? "rgba(46,139,87,0.06)" : "transparent",
+                cursor: "default",
+              }}
+            >
+              <div
+                style={{
+                  height: 22,
+                  borderRadius: 6,
+                  background: bg,
+                  opacity: cell.pct === 0 ? 0.5 : fill,
+                  border:
+                    cell.pct === 0
+                      ? "0.5px dashed #9ED4B8"
+                      : "0.5px solid rgba(0,0,0,0.06)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 10,
+                  fontWeight: 700,
+                  color: isAllocated ? "#FFFFFF" : isPartial ? "#8B5A00" : "#1A5C38",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {isAllocated ? `${cell.pct}%` : isPartial ? `${cell.pct}%` : "Free"}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
+  );
+}
+
+function FilterChip({
+  active,
+  onClick,
+  children,
+  tone,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  tone?: { active: string; activeBg: string };
+}) {
+  const activeColor = tone?.active ?? "#FFFFFF";
+  const activeBg = tone?.activeBg ?? "#161311";
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        padding: "6px 12px",
+        borderRadius: 100,
+        border: active ? "none" : "0.5px solid rgba(0,0,0,0.07)",
+        background: active ? activeBg : "#FFFFFF",
+        color: active ? activeColor : "#4D4945",
+        fontSize: 12,
+        fontWeight: 500,
+        cursor: "pointer",
+        fontFamily: "inherit",
+      }}
+    >
+      {children}
+    </button>
   );
 }
 
@@ -347,9 +302,11 @@ export default function AvailablePage() {
   const [error, setError] = useState<string>("");
 
   const [marketFilter, setMarketFilter] = useState<"all" | Market>("all");
-  const [energyFilter, setEnergyFilter] = useState<Set<EnergyKey>>(new Set());
-  const [search, setSearch] = useState<string>("");
-  const [includeSoon, setIncludeSoon] = useState<boolean>(true);
+  const [availableNow2Wk, setAvailableNow2Wk] = useState<boolean>(false);
+  const [collapsedCities, setCollapsedCities] = useState<Set<Market>>(new Set());
+  const [tooltip, setTooltip] = useState<TooltipInfo | null>(null);
+
+  const weeks = useMemo(() => buildWeeks(WEEK_COUNT, new Date()), []);
 
   useEffect(() => {
     let cancelled = false;
@@ -369,67 +326,50 @@ export default function AvailablePage() {
     };
   }, []);
 
-  const availableNow = useMemo(
-    () => enriched.filter((p) => p.available === "now"),
-    [enriched],
-  );
-  const availableSoon = useMemo(
-    () => enriched.filter((p) => p.available === "soon"),
-    [enriched],
-  );
-  const availablePool = useMemo(
-    () => (includeSoon ? [...availableNow, ...availableSoon] : availableNow),
-    [includeSoon, availableNow, availableSoon],
-  );
+  const allocations = useMemo(() => {
+    const map = new Map<number, AllocationCell[]>();
+    enriched.forEach((p) => map.set(p.id, deriveAllocation(p)));
+    return map;
+  }, [enriched]);
 
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    return availablePool.filter((p) => {
+  const visiblePool = useMemo(() => {
+    return enriched.filter((p) => {
       if (marketFilter !== "all" && p.location !== marketFilter) return false;
-      if (energyFilter.size > 0 && !energyFilter.has(p.primary)) return false;
-      if (q) {
-        const hay = [p.name, p.role, p.location, ...p.capabilities].join(" ").toLowerCase();
-        if (!hay.includes(q)) return false;
+      if (availableNow2Wk) {
+        const a = allocations.get(p.id);
+        if (!a) return false;
+        // person counts if either of the first two weeks is free
+        if (a[0].pct > 0 && a[1].pct > 0) return false;
       }
       return true;
     });
-  }, [availablePool, marketFilter, energyFilter, search]);
+  }, [enriched, marketFilter, availableNow2Wk, allocations]);
 
-  const sorted = useMemo(
-    () =>
-      [...filtered].sort((a, b) => {
-        const benchDelta = b.capacity.benchDays - a.capacity.benchDays;
-        if (benchDelta !== 0) return benchDelta;
-        return (a.dayRate || 0) - (b.dayRate || 0);
-      }),
-    [filtered],
-  );
-
-  const marketCounts = useMemo(() => {
-    const counts: Record<Market, number> = {
-      Stockholm: 0,
-      Oslo: 0,
-      Copenhagen: 0,
-      Helsinki: 0,
-    };
-    availablePool.forEach((p) => {
-      if (MARKETS.includes(p.location as Market)) {
-        counts[p.location as Market] += 1;
-      }
+  const byMarket = useMemo(() => {
+    const groups = new Map<Market, PersonWithCapacity[]>();
+    MARKETS.forEach((m) => groups.set(m, []));
+    visiblePool.forEach((p) => {
+      const m = p.location as Market;
+      if (MARKETS.includes(m)) groups.get(m)!.push(p);
     });
-    return counts;
-  }, [availablePool]);
+    groups.forEach((list) => {
+      list.sort((a, b) => {
+        // sort by total allocation ascending (most available first)
+        const aa = allocations.get(a.id);
+        const bb = allocations.get(b.id);
+        const sumA = aa ? aa.reduce((s, c) => s + c.pct, 0) : 0;
+        const sumB = bb ? bb.reduce((s, c) => s + c.pct, 0) : 0;
+        return sumA - sumB;
+      });
+    });
+    return groups;
+  }, [visiblePool, allocations]);
 
-  const combinedDayRate = useMemo(
-    () => filtered.reduce((s, p) => s + (p.dayRate || 1500), 0),
-    [filtered],
-  );
-
-  function toggleEnergy(k: EnergyKey) {
-    setEnergyFilter((prev) => {
+  function toggleCity(m: Market) {
+    setCollapsedCities((prev) => {
       const next = new Set(prev);
-      if (next.has(k)) next.delete(k);
-      else next.add(k);
+      if (next.has(m)) next.delete(m);
+      else next.add(m);
       return next;
     });
   }
@@ -566,7 +506,7 @@ export default function AvailablePage() {
               fontWeight: 500,
             }}
           >
-            Compass · Pan-Nordic availability
+            Compass · Resource timeline · next {WEEK_COUNT} weeks
           </div>
           <h1
             className="font-display"
@@ -581,8 +521,9 @@ export default function AvailablePage() {
             Available
           </h1>
           <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.6 }}>
-            Every consultant available now or soon across Stockholm, Oslo, Copenhagen and Helsinki
-            in one view. Replaces the weekly phone-around between market capacity managers.
+            A {WEEK_COUNT}-week look at every consultant&apos;s engagement window. Coloured bars
+            are current allocations, green cells are free capacity. Grouped by Nordic market —
+            click a city header to collapse.
           </div>
         </div>
 
@@ -603,228 +544,289 @@ export default function AvailablePage() {
         )}
 
         {!loaded ? (
-          <Card>Loading availability…</Card>
+          <div
+            style={{
+              background: "#FFFFFF",
+              border: "0.5px solid rgba(0,0,0,0.07)",
+              borderRadius: 12,
+              padding: "1.25rem",
+            }}
+          >
+            Loading timeline…
+          </div>
         ) : (
           <>
             <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+                background: "#FFFFFF",
+                border: "0.5px solid rgba(0,0,0,0.07)",
+                borderRadius: 12,
+                padding: "12px 14px",
+                marginBottom: 14,
+                display: "flex",
+                alignItems: "center",
+                flexWrap: "wrap",
                 gap: 12,
-                marginBottom: 20,
               }}
             >
-              <HeroStat
-                label="Available now"
-                value={String(availableNow.length)}
-                detail="On bench or coming off-project this week"
-                color="#1A5C38"
-                bg="#EEF7F2"
-                border="#9ED4B8"
+              <span
+                style={{
+                  fontSize: 11,
+                  color: "#9A9A9A",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  fontWeight: 600,
+                }}
+              >
+                City
+              </span>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                <FilterChip active={marketFilter === "all"} onClick={() => setMarketFilter("all")}>
+                  All
+                </FilterChip>
+                {MARKETS.map((m) => (
+                  <FilterChip
+                    key={m}
+                    active={marketFilter === m}
+                    onClick={() => setMarketFilter(m)}
+                  >
+                    {m}
+                  </FilterChip>
+                ))}
+              </div>
+              <div
+                style={{
+                  width: 1,
+                  height: 22,
+                  background: "rgba(0,0,0,0.07)",
+                  margin: "0 4px",
+                }}
               />
-              <HeroStat
-                label="Available soon"
-                value={String(availableSoon.length)}
-                detail="Coming off-project in the next 2–4 weeks"
-                color="#8B5A00"
-                bg="#FFFBF2"
-                border="#FAD98A"
-              />
-              <HeroStat
-                label="Markets covered"
-                value={String(
-                  Object.values(marketCounts).filter((c) => c > 0).length,
-                )}
-                detail={MARKETS.map((m) => `${m} ${marketCounts[m]}`).join(" · ")}
-                color="#124A6E"
-                bg="#EEF4FB"
-                border="#8DC2E8"
-              />
-              <HeroStat
-                label="Combined day rate"
-                value={`€${(combinedDayRate / 1000).toFixed(1)}k`}
-                detail={`Across ${filtered.length} matching ${filtered.length === 1 ? "person" : "people"}`}
-                color="#161311"
-                bg="#FAFAF8"
-                border="rgba(0,0,0,0.07)"
-              />
-            </div>
-
-            <Card>
+              <FilterChip
+                active={availableNow2Wk}
+                onClick={() => setAvailableNow2Wk((v) => !v)}
+                tone={{ active: "#1A5C38", activeBg: "#EEF7F2" }}
+              >
+                Available in next 2 weeks
+              </FilterChip>
+              <div style={{ flex: 1 }} />
               <div
                 style={{
                   display: "flex",
+                  gap: 12,
+                  fontSize: 11,
+                  color: "#5A5A5A",
                   flexWrap: "wrap",
-                  alignItems: "center",
-                  gap: 14,
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
                   <span
                     style={{
-                      fontSize: 11,
-                      color: "#9A9A9A",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.08em",
-                      fontWeight: 600,
+                      width: 14,
+                      height: 14,
+                      borderRadius: 4,
+                      background: "#1E6FA5",
+                      opacity: 0.85,
                     }}
-                  >
-                    Market
-                  </span>
-                  {(["all", ...MARKETS] as const).map((m) => (
-                    <button
-                      key={m}
-                      onClick={() => setMarketFilter(m)}
-                      style={{
-                        padding: "5px 10px",
-                        borderRadius: 100,
-                        border:
-                          marketFilter === m
-                            ? "none"
-                            : "0.5px solid rgba(0,0,0,0.07)",
-                        background: marketFilter === m ? "#161311" : "#FFFFFF",
-                        color: marketFilter === m ? "#FFFFFF" : "#4D4945",
-                        fontSize: 12,
-                        fontWeight: 500,
-                        cursor: "pointer",
-                        fontFamily: "inherit",
-                      }}
-                    >
-                      {m === "all" ? "All" : m}
-                    </button>
-                  ))}
-                </div>
-
-                <div
-                  style={{
-                    width: 1,
-                    height: 22,
-                    background: "rgba(0,0,0,0.07)",
-                    margin: "0 4px",
-                  }}
-                />
-
-                <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+                  />
+                  Allocated
+                </span>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
                   <span
                     style={{
-                      fontSize: 11,
-                      color: "#9A9A9A",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.08em",
-                      fontWeight: 600,
+                      width: 14,
+                      height: 14,
+                      borderRadius: 4,
+                      background: "#FAD98A",
                     }}
-                  >
-                    Energy
-                  </span>
-                  {ENERGIES.map((k) => {
-                    const active = energyFilter.has(k);
-                    const e = energy[k];
-                    return (
-                      <button
-                        key={k}
-                        onClick={() => toggleEnergy(k)}
-                        style={{
-                          padding: "5px 10px",
-                          borderRadius: 100,
-                          border: `0.5px solid ${active ? e.color : "rgba(0,0,0,0.07)"}`,
-                          background: active ? e.bg : "#FFFFFF",
-                          color: active ? e.text : "#4D4945",
-                          fontSize: 12,
-                          fontWeight: 500,
-                          cursor: "pointer",
-                          fontFamily: "inherit",
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 6,
-                        }}
-                      >
-                        <span
-                          style={{ width: 6, height: 6, borderRadius: "50%", background: e.color }}
-                        />
-                        {e.label}
-                      </button>
-                    );
-                  })}
-                </div>
+                  />
+                  Partial
+                </span>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                  <span
+                    style={{
+                      width: 14,
+                      height: 14,
+                      borderRadius: 4,
+                      background: "#EEF7F2",
+                      border: "0.5px dashed #9ED4B8",
+                    }}
+                  />
+                  Available
+                </span>
+              </div>
+            </div>
 
+            <div
+              style={{
+                background: "#FFFFFF",
+                border: "0.5px solid rgba(0,0,0,0.07)",
+                borderRadius: 12,
+                overflow: "hidden",
+                position: "relative",
+              }}
+            >
+              {tooltip && (
                 <div
                   style={{
-                    width: 1,
-                    height: 22,
-                    background: "rgba(0,0,0,0.07)",
-                    margin: "0 4px",
-                  }}
-                />
-
-                <label
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                    fontSize: 12,
-                    color: "#4D4945",
-                    cursor: "pointer",
+                    position: "absolute",
+                    top: 8,
+                    right: 14,
+                    background: "#161311",
+                    color: "#FFFFFF",
+                    padding: "6px 10px",
+                    borderRadius: 6,
+                    fontSize: 11,
+                    fontWeight: 500,
+                    zIndex: 5,
+                    pointerEvents: "none",
                   }}
                 >
-                  <input
-                    type="checkbox"
-                    checked={includeSoon}
-                    onChange={(e) => setIncludeSoon(e.target.checked)}
-                  />
-                  Include &ldquo;soon&rdquo;
-                </label>
-
-                <div style={{ flex: 1, minWidth: 200 }}>
-                  <input
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Search name, role, capability…"
-                    style={{
-                      width: "100%",
-                      padding: "7px 12px",
-                      borderRadius: 8,
-                      border: "0.5px solid rgba(0,0,0,0.07)",
-                      background: "#FFFFFF",
-                      color: "#161311",
-                      fontSize: 12,
-                      outline: "none",
-                      boxSizing: "border-box",
-                      fontFamily: "inherit",
-                    }}
-                  />
+                  {tooltip.text}
                 </div>
-              </div>
+              )}
 
-              <div
-                style={{
-                  marginTop: 12,
-                  paddingTop: 12,
-                  borderTop: "0.5px solid rgba(0,0,0,0.06)",
-                  fontSize: 12,
-                  color: "#5A5A5A",
-                }}
-              >
-                {filtered.length === 0
-                  ? "No one matches the current filters."
-                  : `${filtered.length} ${filtered.length === 1 ? "person" : "people"} match — sorted by days on bench (longest first), then by day rate (lowest first).`}
-              </div>
-            </Card>
-
-            <div style={{ height: 12 }} />
-
-            {sorted.length > 0 && (
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-                  gap: 12,
+                  gridTemplateColumns: `280px 1fr`,
+                  background: "#FAFAF8",
+                  borderBottom: "0.5px solid rgba(0,0,0,0.06)",
                 }}
               >
-                {sorted.map((p) => (
-                  <PersonCard key={p.id} p={p} />
-                ))}
+                <div
+                  style={{
+                    padding: "10px 14px",
+                    fontSize: 10,
+                    color: "#9A9A9A",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    fontWeight: 600,
+                    borderRight: "0.5px solid rgba(0,0,0,0.07)",
+                  }}
+                >
+                  Consultant
+                </div>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: `repeat(${weeks.length}, minmax(60px, 1fr))`,
+                  }}
+                >
+                  {weeks.map((w, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        padding: "10px 4px",
+                        fontSize: 10,
+                        color: "#9A9A9A",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.08em",
+                        fontWeight: 600,
+                        textAlign: "center",
+                        borderRight:
+                          i < weeks.length - 1
+                            ? "0.5px solid rgba(0,0,0,0.04)"
+                            : "none",
+                      }}
+                    >
+                      <div>{w.label}</div>
+                      <div style={{ color: "#5A5A5A", fontWeight: 500, marginTop: 2 }}>
+                        {w.startLabel}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            )}
+
+              {MARKETS.map((m) => {
+                const list = byMarket.get(m) ?? [];
+                if (marketFilter !== "all" && marketFilter !== m) return null;
+                if (list.length === 0 && marketFilter === "all") return null;
+                const collapsed = collapsedCities.has(m);
+                return (
+                  <div key={m}>
+                    <button
+                      onClick={() => toggleCity(m)}
+                      style={{
+                        width: "100%",
+                        padding: "10px 14px",
+                        background: "#FAFAF8",
+                        border: "none",
+                        borderTop: "0.5px solid rgba(0,0,0,0.06)",
+                        borderBottom: collapsed ? "none" : "0.5px solid rgba(0,0,0,0.06)",
+                        textAlign: "left",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 10,
+                        fontFamily: "inherit",
+                      }}
+                    >
+                      <span
+                        aria-hidden
+                        style={{
+                          display: "inline-block",
+                          fontSize: 10,
+                          color: "#5A5A5A",
+                          transform: collapsed ? "rotate(-90deg)" : "rotate(0deg)",
+                          transition: "transform 0.15s ease",
+                        }}
+                      >
+                        ▼
+                      </span>
+                      <span
+                        className="font-display"
+                        style={{ fontSize: 15, fontWeight: 600, color: "#161311" }}
+                      >
+                        {m}
+                      </span>
+                      <span style={{ fontSize: 11, color: "#9A9A9A" }}>
+                        {list.length} {list.length === 1 ? "consultant" : "consultants"}
+                      </span>
+                    </button>
+                    {!collapsed &&
+                      list.map((p) => (
+                        <TimelineRow
+                          key={p.id}
+                          person={p}
+                          weeks={weeks}
+                          allocation={allocations.get(p.id) ?? []}
+                          onCellEnter={setTooltip}
+                          onCellLeave={() => setTooltip(null)}
+                        />
+                      ))}
+                    {!collapsed && list.length === 0 && (
+                      <div
+                        style={{
+                          padding: "14px 14px",
+                          fontSize: 12,
+                          color: "#9A9A9A",
+                          borderTop: "0.5px solid rgba(0,0,0,0.05)",
+                        }}
+                      >
+                        No consultants in {m} match the current filters.
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            <div
+              style={{
+                marginTop: 14,
+                fontSize: 11,
+                color: "#9A9A9A",
+                lineHeight: 1.55,
+                maxWidth: 720,
+              }}
+            >
+              The {WEEK_COUNT}-week outlook is derived from each consultant&apos;s current
+              availability, utilisation and bench days — not from a live engagement plan. When ERP
+              / OpenAir integration lands, these bars will use real engagement start and end
+              dates.
+            </div>
           </>
         )}
       </main>

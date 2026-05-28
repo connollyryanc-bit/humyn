@@ -101,25 +101,6 @@ function StatusBadge({ k }: { k: AvailKey }) {
   );
 }
 
-function UtilPill({ value }: { value: number }) {
-  const tone = utilTone(value);
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-      <div style={{ width: 72, height: 5, background: "#EDEDEA", borderRadius: 4, overflow: "hidden" }}>
-        <div
-          style={{
-            width: `${Math.min(value, 100)}%`,
-            height: "100%",
-            background: tone.color,
-            borderRadius: 4,
-          }}
-        />
-      </div>
-      <span style={{ fontSize: 11, color: tone.color, fontWeight: 600 }}>{value}%</span>
-    </div>
-  );
-}
-
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div
@@ -196,26 +177,39 @@ function PersonCard({
   onToggleTeam: (p: Person) => void;
 }) {
   const tone = utilTone(person.utilisation);
+  const atRisk = person.utilisation < 65;
+  const availAccent =
+    person.available === "now"
+      ? "#2E8B57"
+      : person.available === "soon"
+        ? "#F5A623"
+        : "transparent";
   return (
     <div
       style={{
-        background: "#FFFFFF",
+        position: "relative",
+        background: atRisk ? "#FFF8F7" : "#FFFFFF",
         border: "0.5px solid rgba(0,0,0,0.07)",
+        borderLeft: availAccent === "transparent" ? "0.5px solid rgba(0,0,0,0.07)" : `3px solid ${availAccent}`,
         borderRadius: 12,
         padding: "1.25rem",
+        paddingBottom: "1.5rem",
         display: "flex",
         flexDirection: "column",
         gap: 14,
+        boxShadow: atRisk ? "0 4px 16px rgba(232, 64, 42, 0.12)" : "none",
+        overflow: "hidden",
+        transition: "box-shadow 0.15s ease",
       }}
     >
       <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
         <Avatar person={person} size={42} />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 15, fontWeight: 600, color: "#1A1A1A", letterSpacing: "-0.2px" }}>
+          <div style={{ fontSize: 15, fontWeight: 600, color: "#161311", letterSpacing: "-0.2px" }}>
             {person.name}
           </div>
-          <div style={{ fontSize: 12, color: "#5A5A5A", marginTop: 2 }}>
-            {person.role} · {person.location}
+          <div style={{ fontSize: 12, color: "#9A9A9A", marginTop: 2, fontWeight: 500 }}>
+            {person.role} · <span style={{ color: "#5A5A5A" }}>{person.location}</span>
           </div>
         </div>
         <button
@@ -273,22 +267,28 @@ function PersonCard({
         <EnergyBars person={person} />
       </div>
 
-      <div>
-        <SectionLabel>Utilisation · {tone.label}</SectionLabel>
-        <div style={{ height: 6, background: "#EDEDEA", borderRadius: 4, overflow: "hidden" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div style={{ flex: 1, height: 5, background: "#EDEDEA", borderRadius: 3, overflow: "hidden" }}>
           <div
             style={{
               width: `${Math.min(person.utilisation, 100)}%`,
               height: "100%",
               background: tone.color,
-              borderRadius: 4,
+              borderRadius: 3,
             }}
           />
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6 }}>
-          <span style={{ fontSize: 11, color: "#9A9A9A" }}>{person.utilisation}% of 80% target</span>
-          <span style={{ fontSize: 11, color: tone.color, fontWeight: 600 }}>{tone.label}</span>
-        </div>
+        <span
+          style={{
+            fontSize: 11,
+            color: tone.color,
+            fontWeight: 700,
+            minWidth: 38,
+            textAlign: "right",
+          }}
+        >
+          {person.utilisation}%
+        </span>
       </div>
 
       <div style={{ display: "flex", gap: 24, paddingTop: 12, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
@@ -347,7 +347,7 @@ function PersonCard({
             flex: 1,
             padding: "8px 12px",
             borderRadius: 8,
-            background: "#1A1A1A",
+            background: "#161311",
             color: "#FFFFFF",
             fontSize: 12,
             fontWeight: 500,
@@ -357,6 +357,18 @@ function PersonCard({
           Full profile
         </Link>
       </div>
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 4,
+          background: tone.color,
+          opacity: 0.85,
+        }}
+      />
     </div>
   );
 }
@@ -372,42 +384,72 @@ function PersonRow({
   onQuickView: (p: Person) => void;
   onToggleTeam: (p: Person) => void;
 }) {
+  const tone = utilTone(person.utilisation);
   return (
     <tr style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}>
-      <td style={{ padding: "12px 14px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <Avatar person={person} size={32} />
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "#1A1A1A" }}>{person.name}</div>
-            <div style={{ fontSize: 11, color: "#9A9A9A" }}>{person.role}</div>
-          </div>
-        </div>
+      <td style={{ padding: "10px 14px", width: 44 }}>
+        <Avatar person={person} size={32} />
       </td>
-      <td style={{ padding: "12px 14px", fontSize: 12, color: "#5A5A5A" }}>{person.location}</td>
-      <td style={{ padding: "12px 14px" }}>
+      <td style={{ padding: "10px 14px" }}>
+        <div style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>{person.name}</div>
+      </td>
+      <td style={{ padding: "10px 14px", fontSize: 12, color: "#9A9A9A", fontWeight: 500 }}>
+        {person.role}
+      </td>
+      <td style={{ padding: "10px 14px", fontSize: 12, color: "#5A5A5A" }}>{person.location}</td>
+      <td style={{ padding: "10px 14px" }}>
         <EnergyBadge k={person.primary} small />
       </td>
-      <td style={{ padding: "12px 14px", fontSize: 12, color: "#5A5A5A" }}>{person.wheelPosition}</td>
-      <td style={{ padding: "12px 14px" }}>
-        <UtilPill value={person.utilisation} />
+      <td style={{ padding: "10px 14px", minWidth: 140 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div
+            style={{
+              flex: 1,
+              height: 5,
+              background: "#EDEDEA",
+              borderRadius: 3,
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                width: `${Math.min(person.utilisation, 100)}%`,
+                height: "100%",
+                background: tone.color,
+                borderRadius: 3,
+              }}
+            />
+          </div>
+          <span
+            style={{
+              fontSize: 11,
+              color: tone.color,
+              fontWeight: 700,
+              minWidth: 36,
+              textAlign: "right",
+            }}
+          >
+            {person.utilisation}%
+          </span>
+        </div>
       </td>
-      <td style={{ padding: "12px 14px" }}>
+      <td style={{ padding: "10px 14px" }}>
         <StatusBadge k={person.available} />
       </td>
-      <td style={{ padding: "12px 14px", fontSize: 12, color: "#5A5A5A" }}>{person.revenue}</td>
-      <td style={{ padding: "12px 14px" }}>
+      <td style={{ padding: "10px 14px" }}>
         <div style={{ display: "flex", gap: 6, justifyContent: "flex-end" }}>
           <button
             onClick={() => onQuickView(person)}
             style={{
               padding: "6px 10px",
               borderRadius: 8,
-              border: "1px solid rgba(0,0,0,0.07)",
+              border: "0.5px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#1A1A1A",
+              color: "#161311",
               fontSize: 11,
               fontWeight: 500,
               cursor: "pointer",
+              fontFamily: "inherit",
             }}
           >
             Quick view
@@ -417,7 +459,7 @@ function PersonRow({
             style={{
               padding: "6px 10px",
               borderRadius: 8,
-              background: "#1A1A1A",
+              background: "#161311",
               color: "#FFFFFF",
               fontSize: 11,
               fontWeight: 500,
@@ -432,12 +474,13 @@ function PersonRow({
               width: 28,
               height: 28,
               borderRadius: 8,
-              border: "1px solid rgba(0,0,0,0.07)",
-              background: inTeam ? "#1A1A1A" : "#FFFFFF",
-              color: inTeam ? "#FFFFFF" : "#1A1A1A",
+              border: "0.5px solid rgba(0,0,0,0.07)",
+              background: inTeam ? "#161311" : "#FFFFFF",
+              color: inTeam ? "#FFFFFF" : "#161311",
               cursor: "pointer",
               fontSize: 14,
               lineHeight: 1,
+              fontFamily: "inherit",
             }}
           >
             {inTeam ? "−" : "+"}
@@ -865,13 +908,26 @@ function groupKeyFor(p: Person, g: GroupKey): string {
   return "all";
 }
 
+const VIEW_STORAGE_KEY = "humyn.directory-view";
+
 export default function PeoplePage() {
-  const [view, setView] = useState<"card" | "table">("card");
+  const [view, setView] = useState<"card" | "list">("card");
   const [search, setSearch] = useState<string>("");
   const [groupBy, setGroupBy] = useState<GroupKey>("none");
   const [selected, setSelected] = useState<Person | null>(null);
   const [team, setTeam] = useState<Person[]>([]);
   const [teamOpen, setTeamOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const saved = window.localStorage.getItem(VIEW_STORAGE_KEY);
+    if (saved === "card" || saved === "list") setView(saved);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(VIEW_STORAGE_KEY, view);
+  }, [view]);
   const [mergedPeople, setMergedPeople] = useState<Person[]>(people);
 
   useEffect(() => {
@@ -1197,22 +1253,31 @@ export default function PeoplePage() {
                 padding: 2,
               }}
             >
-              {(["card", "table"] as const).map((v) => (
+              {(["card", "list"] as const).map((v) => (
                 <button
                   key={v}
                   onClick={() => setView(v)}
+                  aria-label={v === "card" ? "Cards view" : "List view"}
+                  title={v === "card" ? "Cards view" : "List view"}
                   style={{
                     padding: "6px 12px",
                     borderRadius: 6,
                     border: "none",
-                    background: view === v ? "#1A1A1A" : "transparent",
+                    background: view === v ? "#161311" : "transparent",
                     color: view === v ? "#FFFFFF" : "#5A5A5A",
                     fontSize: 12,
                     fontWeight: 500,
                     cursor: "pointer",
+                    fontFamily: "inherit",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
                   }}
                 >
-                  {v === "card" ? "Cards" : "Table"}
+                  <span aria-hidden style={{ fontSize: 11, opacity: 0.85 }}>
+                    {v === "card" ? "▦" : "☰"}
+                  </span>
+                  {v === "card" ? "Cards" : "List"}
                 </button>
               ))}
             </div>
@@ -1269,7 +1334,7 @@ export default function PeoplePage() {
                   <table style={{ width: "100%", borderCollapse: "collapse" }}>
                     <thead>
                       <tr style={{ background: "#FAFAF8" }}>
-                        {["Person", "Location", "Energy", "Wheel", "Utilisation", "Available", "Revenue", ""].map(
+                        {["", "Name", "Role", "Location", "Energy", "Utilisation", "Availability", ""].map(
                           (h, i) => (
                             <th
                               key={i}

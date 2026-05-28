@@ -1,6 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useMemo, useState } from "react";
+import { JOB_STATUS_TONE, Job } from "./types";
+import { seedCandidates, seedJobs } from "./seed";
+import { energy } from "../page";
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -13,15 +17,7 @@ function HumynWordmark({ size = 22 }: { size?: number }) {
   );
 }
 
-function NavLink({
-  href,
-  label,
-  active,
-}: {
-  href: string;
-  label: string;
-  active?: boolean;
-}) {
+function NavLink({ href, label, active }: { href: string; label: string; active?: boolean }) {
   return (
     <Link
       href={href}
@@ -39,7 +35,44 @@ function NavLink({
   );
 }
 
+function StatusBadge({ status }: { status: Job["status"] }) {
+  const tone = JOB_STATUS_TONE[status];
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+        padding: "3px 9px",
+        borderRadius: 100,
+        background: tone.bg,
+        color: tone.color,
+        border: "0.5px solid rgba(0,0,0,0.07)",
+        fontSize: 11,
+        fontWeight: 600,
+      }}
+    >
+      <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", background: tone.color }} />
+      {tone.label}
+    </span>
+  );
+}
+
+type StatusFilter = "all" | Job["status"];
+
 export default function PipelinePage() {
+  const [filter, setFilter] = useState<StatusFilter>("all");
+
+  const counts = useMemo(() => {
+    const c: Record<StatusFilter, number> = { all: seedJobs.length, draft: 0, active: 0, paused: 0, closed: 0 };
+    seedJobs.forEach((j) => {
+      c[j.status] = (c[j.status] ?? 0) + 1;
+    });
+    return c;
+  }, []);
+
+  const jobs = seedJobs.filter((j) => filter === "all" || j.status === filter);
+
   return (
     <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
       <header
@@ -55,16 +88,7 @@ export default function PipelinePage() {
           padding: "0 32px",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 28,
-            width: "100%",
-            maxWidth: 1280,
-            margin: "0 auto",
-          }}
-        >
+        <div style={{ display: "flex", alignItems: "center", gap: 28, width: "100%", maxWidth: 1280, margin: "0 auto" }}>
           <Link href="/">
             <HumynWordmark />
           </Link>
@@ -108,9 +132,9 @@ export default function PipelinePage() {
               Jobs
             </h1>
             <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.6 }}>
-              Proprietary ATS with Pulse from day one. Every candidate is profiled the
-              moment they enter the pipeline, with a team-fit score against the team
-              they would join.
+              {seedJobs.length} jobs on the board · {seedCandidates.length} candidates in
+              flight across the Nordic markets. Sample data — wiring to the real backing
+              store comes next.
             </div>
           </div>
           <Link
@@ -132,85 +156,96 @@ export default function PipelinePage() {
 
         <div
           style={{
+            display: "flex",
+            gap: 4,
+            padding: 4,
+            background: "#FFFFFF",
+            border: "0.5px solid rgba(0,0,0,0.07)",
+            borderRadius: 12,
+            marginBottom: 16,
+            width: "fit-content",
+          }}
+        >
+          {(["all", "active", "paused", "draft", "closed"] as StatusFilter[]).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              style={{
+                padding: "6px 12px",
+                borderRadius: 8,
+                border: "none",
+                background: filter === f ? "#161311" : "transparent",
+                color: filter === f ? "#FFFFFF" : "#4D4945",
+                fontSize: 12,
+                fontWeight: 400,
+                cursor: "pointer",
+                fontFamily: "inherit",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {f === "all" ? "All" : f.charAt(0).toUpperCase() + f.slice(1)} · {counts[f]}
+            </button>
+          ))}
+        </div>
+
+        <div
+          style={{
             background: "#FFFFFF",
             border: "0.5px solid rgba(0,0,0,0.07)",
             borderRadius: 14,
-            padding: "28px 32px",
+            overflow: "hidden",
           }}
         >
-          <div
-            style={{
-              fontSize: 11,
-              color: "#9A9A9A",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              fontWeight: 600,
-              marginBottom: 6,
-            }}
-          >
-            Scaffolded — coming soon
-          </div>
-          <h2
-            className="font-display"
-            style={{
-              fontSize: 22,
-              fontWeight: 600,
-              color: "#161311",
-              letterSpacing: "-0.3px",
-              margin: "0 0 10px",
-            }}
-          >
-            Jobs list
-          </h2>
-          <p style={{ fontSize: 14, color: "#4D4945", lineHeight: 1.65, margin: "0 0 16px", maxWidth: 720 }}>
-            A scannable list of every open hire. Each row will surface the internal
-            title, department, market, recruiter, application count and current status.
-            Clicking a job opens the per-job kanban.
-          </p>
-          <ul
-            style={{
-              margin: 0,
-              padding: 0,
-              listStyle: "none",
-              display: "flex",
-              flexDirection: "column",
-              gap: 8,
-              maxWidth: 720,
-            }}
-          >
-            {[
-              "List view with internal title, department, market, status, application count, recruiter",
-              "Status badges: Draft, Active, Paused, Closed",
-              "Filter by department, market, recruiter, status",
-              "Click a job → /pipeline/[jobId] for the candidate kanban",
-              "+ New job → /pipeline/new for the job-creation flow",
-            ].map((b, i) => (
-              <li
-                key={i}
+          {jobs.length === 0 && (
+            <div style={{ padding: 32, textAlign: "center", color: "#9A9A9A", fontSize: 13 }}>
+              No jobs match this filter.
+            </div>
+          )}
+          {jobs.map((j, i) => {
+            const applicantsInJob = seedCandidates.filter((c) => c.jobId === j.id).length;
+            const e = energy[j.requiredEnergy];
+            return (
+              <Link
+                key={j.id}
+                href={`/pipeline/${j.id}`}
                 style={{
-                  fontSize: 13,
-                  color: "#5A5A5A",
-                  lineHeight: 1.55,
-                  paddingLeft: 18,
-                  position: "relative",
+                  display: "grid",
+                  gridTemplateColumns: "minmax(0, 2.5fr) 130px 130px 110px 110px",
+                  gap: 12,
+                  alignItems: "center",
+                  padding: "14px 22px",
+                  borderTop: i === 0 ? "none" : "0.5px solid rgba(0,0,0,0.05)",
+                  textDecoration: "none",
+                  color: "inherit",
                 }}
               >
-                <span
-                  aria-hidden
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    top: 8,
-                    width: 6,
-                    height: 6,
-                    borderRadius: "50%",
-                    background: "#D4974A",
-                  }}
-                />
-                {b}
-              </li>
-            ))}
-          </ul>
+                <div style={{ minWidth: 0, display: "flex", alignItems: "center", gap: 12 }}>
+                  <span
+                    aria-hidden
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      background: e.color,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 13.5, fontWeight: 600, color: "#161311" }}>{j.internalTitle}</div>
+                    <div style={{ fontSize: 11, color: "#9A9A9A", marginTop: 2 }}>
+                      {j.externalTitle} · {j.tags.join(" · ")}
+                    </div>
+                  </div>
+                </div>
+                <div style={{ fontSize: 12, color: "#5A5A5A" }}>{j.department}</div>
+                <div style={{ fontSize: 12, color: "#5A5A5A" }}>{j.market}</div>
+                <div style={{ fontSize: 12, color: "#161311", fontWeight: 500 }}>
+                  {applicantsInJob} candidate{applicantsInJob === 1 ? "" : "s"}
+                </div>
+                <StatusBadge status={j.status} />
+              </Link>
+            );
+          })}
         </div>
       </main>
     </div>

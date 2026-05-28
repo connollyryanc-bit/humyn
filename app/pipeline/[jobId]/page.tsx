@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { DEFAULT_STAGES } from "../types";
+import { useMemo } from "react";
+import { DEFAULT_STAGES, JOB_STATUS_TONE } from "../types";
+import { seedCandidates, seedJobs } from "../seed";
+import { energy } from "../../page";
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -15,15 +18,7 @@ function HumynWordmark({ size = 22 }: { size?: number }) {
   );
 }
 
-function NavLink({
-  href,
-  label,
-  active,
-}: {
-  href: string;
-  label: string;
-  active?: boolean;
-}) {
+function NavLink({ href, label, active }: { href: string; label: string; active?: boolean }) {
   return (
     <Link
       href={href}
@@ -41,9 +36,32 @@ function NavLink({
   );
 }
 
+function initialsOf(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
 export default function JobKanbanPage() {
   const params = useParams<{ jobId: string }>();
-  const jobId = params?.jobId ?? "";
+  const jobIdNum = Number(params?.jobId);
+  const job = seedJobs.find((j) => j.id === jobIdNum);
+  const candidates = useMemo(
+    () => seedCandidates.filter((c) => c.jobId === jobIdNum),
+    [jobIdNum],
+  );
+
+  const byStage = useMemo(() => {
+    const map = new Map<string, typeof candidates>();
+    DEFAULT_STAGES.forEach((s) => map.set(s.key, []));
+    candidates.forEach((c) => {
+      const arr = map.get(c.currentStage) ?? [];
+      arr.push(c);
+      map.set(c.currentStage, arr);
+    });
+    return map;
+  }, [candidates]);
 
   return (
     <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
@@ -60,16 +78,7 @@ export default function JobKanbanPage() {
           padding: "0 32px",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 28,
-            width: "100%",
-            maxWidth: 1280,
-            margin: "0 auto",
-          }}
-        >
+        <div style={{ display: "flex", alignItems: "center", gap: 28, width: "100%", maxWidth: 1280, margin: "0 auto" }}>
           <Link href="/">
             <HumynWordmark />
           </Link>
@@ -90,169 +99,195 @@ export default function JobKanbanPage() {
         <div style={{ marginBottom: 22 }}>
           <Link
             href="/pipeline"
-            style={{
-              fontSize: 12,
-              color: "#5A5A5A",
-              textDecoration: "none",
-            }}
+            style={{ fontSize: 12, color: "#5A5A5A", textDecoration: "none" }}
           >
             ← All jobs
           </Link>
-          <div
-            style={{
-              fontSize: 11,
-              color: "#9A9A9A",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              fontWeight: 500,
-              marginTop: 12,
-            }}
-          >
-            Pipeline · Job #{jobId || "?"}
-          </div>
-          <h1
-            className="font-display"
-            style={{
-              fontSize: 28,
-              fontWeight: 600,
-              color: "#161311",
-              letterSpacing: "-0.5px",
-              margin: "6px 0 4px",
-            }}
-          >
-            Candidate kanban
-          </h1>
-          <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.6 }}>
-            Drag-free kanban — stage transitions via per-card buttons. Internal
-            candidates carry their existing Pulse profile across from the pitch board.
-          </div>
-        </div>
-
-        <div
-          style={{
-            background: "#FFFFFF",
-            border: "0.5px solid rgba(0,0,0,0.07)",
-            borderRadius: 14,
-            padding: "20px 22px",
-            marginBottom: 20,
-          }}
-        >
-          <div
-            style={{
-              fontSize: 11,
-              color: "#9A9A9A",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              fontWeight: 600,
-              marginBottom: 10,
-            }}
-          >
-            Default stages — customisable per job
-          </div>
-          <div
-            style={{
-              display: "flex",
-              gap: 8,
-              flexWrap: "wrap",
-            }}
-          >
-            {DEFAULT_STAGES.map((s) => (
-              <span
-                key={s.key}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "5px 12px",
-                  borderRadius: 100,
-                  background: "#FAFAF8",
-                  border: "0.5px solid rgba(0,0,0,0.07)",
-                  fontSize: 11,
-                  color: "#4D4945",
-                  fontWeight: 400,
-                  whiteSpace: "nowrap",
-                }}
-              >
-                <span
-                  aria-hidden
-                  style={{
-                    width: 6,
-                    height: 6,
-                    borderRadius: "50%",
-                    background: s.tone,
-                  }}
-                />
-                {s.label}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            gap: 12,
-            overflowX: "auto",
-            paddingBottom: 12,
-          }}
-        >
-          {DEFAULT_STAGES.map((s) => (
-            <div
-              key={s.key}
-              style={{
-                flexShrink: 0,
-                width: 280,
-                background: "#FFFFFF",
-                border: "0.5px solid rgba(0,0,0,0.07)",
-                borderRadius: 12,
-                padding: "14px 14px 18px",
-                minHeight: 360,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  marginBottom: 14,
-                  paddingBottom: 10,
-                  borderBottom: "0.5px solid rgba(0,0,0,0.05)",
-                }}
-              >
-                <span
-                  aria-hidden
-                  style={{
-                    width: 8,
-                    height: 8,
-                    borderRadius: "50%",
-                    background: s.tone,
-                  }}
-                />
-                <div
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: "#161311",
-                    flex: 1,
-                  }}
-                >
-                  {s.label}
-                </div>
-                <div style={{ fontSize: 11, color: "#9A9A9A" }}>0</div>
-              </div>
+          {job ? (
+            <>
               <div
                 style={{
                   fontSize: 11,
                   color: "#9A9A9A",
-                  textAlign: "center",
-                  padding: "20px 8px",
-                  lineHeight: 1.5,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  fontWeight: 500,
+                  marginTop: 12,
                 }}
               >
-                Candidates appear here once we wire the data layer.
+                Pipeline · {job.department} · {job.market}
               </div>
-            </div>
-          ))}
+              <h1
+                className="font-display"
+                style={{
+                  fontSize: 28,
+                  fontWeight: 600,
+                  color: "#161311",
+                  letterSpacing: "-0.5px",
+                  margin: "6px 0 4px",
+                }}
+              >
+                {job.internalTitle}
+              </h1>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  flexWrap: "wrap",
+                  fontSize: 12,
+                  color: "#5A5A5A",
+                  marginTop: 6,
+                }}
+              >
+                <span>{job.externalTitle}</span>
+                <span style={{ color: "#9A9A9A" }}>·</span>
+                <span>{candidates.length} candidates</span>
+                <span style={{ color: "#9A9A9A" }}>·</span>
+                <span>
+                  Required energy:{" "}
+                  <strong style={{ color: energy[job.requiredEnergy].text }}>
+                    {energy[job.requiredEnergy].label}
+                  </strong>
+                </span>
+                <span
+                  style={{
+                    fontSize: 11,
+                    color: JOB_STATUS_TONE[job.status].color,
+                    background: JOB_STATUS_TONE[job.status].bg,
+                    padding: "3px 9px",
+                    borderRadius: 100,
+                    fontWeight: 600,
+                  }}
+                >
+                  {JOB_STATUS_TONE[job.status].label}
+                </span>
+              </div>
+            </>
+          ) : (
+            <h1 className="font-display" style={{ fontSize: 24, color: "#161311", marginTop: 12 }}>
+              Job not found
+            </h1>
+          )}
+        </div>
+
+        <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 12 }}>
+          {DEFAULT_STAGES.map((s) => {
+            const inStage = byStage.get(s.key) ?? [];
+            return (
+              <div
+                key={s.key}
+                style={{
+                  flexShrink: 0,
+                  width: 280,
+                  background: "#FFFFFF",
+                  border: "0.5px solid rgba(0,0,0,0.07)",
+                  borderRadius: 12,
+                  padding: "14px 14px 18px",
+                  minHeight: 460,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    marginBottom: 14,
+                    paddingBottom: 10,
+                    borderBottom: "0.5px solid rgba(0,0,0,0.05)",
+                  }}
+                >
+                  <span aria-hidden style={{ width: 8, height: 8, borderRadius: "50%", background: s.tone }} />
+                  <div style={{ fontSize: 12, fontWeight: 600, color: "#161311", flex: 1 }}>{s.label}</div>
+                  <div style={{ fontSize: 11, color: "#9A9A9A" }}>{inStage.length}</div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {inStage.length === 0 && (
+                    <div style={{ fontSize: 11, color: "#9A9A9A", textAlign: "center", padding: "16px 4px" }}>
+                      No candidates here.
+                    </div>
+                  )}
+                  {inStage.map((c) => {
+                    const e = c.pulseProfile ? energy[c.pulseProfile.primary] : null;
+                    return (
+                      <Link
+                        key={c.id}
+                        href={`/pipeline/${jobIdNum}/candidates/${c.id}`}
+                        style={{
+                          display: "block",
+                          border: "0.5px solid rgba(0,0,0,0.07)",
+                          borderRadius: 10,
+                          padding: 12,
+                          background: "#FAFAF8",
+                          textDecoration: "none",
+                          color: "inherit",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <div
+                            style={{
+                              width: 28,
+                              height: 28,
+                              borderRadius: "50%",
+                              background: e ? e.bg : "#F3F0EA",
+                              color: e ? e.text : "#5A5A5A",
+                              border: `0.5px solid ${e ? e.border : "rgba(0,0,0,0.1)"}`,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              fontSize: 10,
+                              fontWeight: 600,
+                              flexShrink: 0,
+                            }}
+                          >
+                            {initialsOf(c.name)}
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ fontSize: 12.5, fontWeight: 600, color: "#161311" }}>{c.name}</div>
+                            <div style={{ fontSize: 10, color: "#9A9A9A", marginTop: 2 }}>
+                              {c.location} · {c.source}
+                            </div>
+                          </div>
+                          {c.isInternal && (
+                            <span
+                              style={{
+                                fontSize: 9,
+                                fontWeight: 600,
+                                color: "#3D8A61",
+                                background: "#EFF8F3",
+                                padding: "2px 6px",
+                                borderRadius: 100,
+                                letterSpacing: "0.05em",
+                              }}
+                            >
+                              INT
+                            </span>
+                          )}
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            marginTop: 10,
+                            fontSize: 11,
+                            color: "#9A9A9A",
+                          }}
+                        >
+                          <span>{"★".repeat(c.rating)}{"☆".repeat(5 - c.rating)}</span>
+                          {c.teamFitScore !== null && (
+                            <span style={{ color: "#3D8A61", fontWeight: 600 }}>
+                              {c.teamFitScore}% fit
+                            </span>
+                          )}
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </main>
     </div>

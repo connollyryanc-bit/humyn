@@ -168,3 +168,39 @@ export async function analyzeBriefViaApi(input: {
   const data = await jsonOrThrow<{ analysis: BriefAnalysis }>(res, "POST /api/briefs/analyze");
   return data.analysis;
 }
+
+export interface RateCardRow {
+  id: number;
+  roleBand: string;
+  seniority: string;
+  market: string;
+  dayRateEur: number;
+  notes: string;
+}
+
+export async function fetchRateCards(): Promise<RateCardRow[]> {
+  const res = await fetch("/api/rate-cards", { cache: "no-store" });
+  const data = await jsonOrThrow<{ cards: RateCardRow[] }>(res, "GET /api/rate-cards");
+  return data.cards;
+}
+
+export async function upsertRateCardViaApi(input: {
+  roleBand: string;
+  seniority: string;
+  market: string;
+  dayRateEur: number;
+  notes?: string;
+}): Promise<RateCardRow> {
+  const res = await fetch("/api/rate-cards", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  const data = await jsonOrThrow<{ card: RateCardRow }>(res, "POST /api/rate-cards");
+  return data.card;
+}
+
+export async function deleteRateCardViaApi(id: number): Promise<void> {
+  const res = await fetch(`/api/rate-cards/${id}`, { method: "DELETE" });
+  await jsonOrThrow<{ ok: boolean }>(res, `DELETE /api/rate-cards/${id}`);
+}

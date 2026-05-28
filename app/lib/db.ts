@@ -355,3 +355,76 @@ export async function deleteTeam(id: number): Promise<void> {
   const { error } = await sb.from("teams").delete().eq("id", id);
   if (error) throw new Error(`deleteTeam(${id}): ${error.message}`);
 }
+
+export interface RateCardRow {
+  id: number;
+  roleBand: string;
+  seniority: string;
+  market: string;
+  dayRateEur: number;
+  notes: string;
+}
+
+interface RateCardDbRow {
+  id: number;
+  role_band: string;
+  seniority: string;
+  market: string;
+  day_rate_eur: number;
+  notes: string;
+}
+
+function rowToRateCard(row: RateCardDbRow): RateCardRow {
+  return {
+    id: row.id,
+    roleBand: row.role_band,
+    seniority: row.seniority,
+    market: row.market,
+    dayRateEur: row.day_rate_eur,
+    notes: row.notes ?? "",
+  };
+}
+
+export async function getAllRateCards(): Promise<RateCardRow[]> {
+  const sb = getSupabaseAdmin();
+  const { data, error } = await sb
+    .from("rate_cards")
+    .select("*")
+    .order("role_band")
+    .order("seniority")
+    .order("market");
+  if (error) throw new Error(`getAllRateCards: ${error.message}`);
+  return (data as RateCardDbRow[]).map(rowToRateCard);
+}
+
+export async function upsertRateCard(input: {
+  roleBand: string;
+  seniority: string;
+  market: string;
+  dayRateEur: number;
+  notes?: string;
+}): Promise<RateCardRow> {
+  const sb = getSupabaseAdmin();
+  const { data, error } = await sb
+    .from("rate_cards")
+    .upsert(
+      {
+        role_band: input.roleBand,
+        seniority: input.seniority,
+        market: input.market,
+        day_rate_eur: input.dayRateEur,
+        notes: input.notes ?? "",
+      },
+      { onConflict: "role_band,seniority,market" },
+    )
+    .select("*")
+    .single();
+  if (error) throw new Error(`upsertRateCard: ${error.message}`);
+  return rowToRateCard(data as RateCardDbRow);
+}
+
+export async function deleteRateCard(id: number): Promise<void> {
+  const sb = getSupabaseAdmin();
+  const { error } = await sb.from("rate_cards").delete().eq("id", id);
+  if (error) throw new Error(`deleteRateCard(${id}): ${error.message}`);
+}

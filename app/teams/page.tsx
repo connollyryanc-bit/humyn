@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { fetchAllPeople, fetchEnrichedPeople } from "../lib/api-client";
 import { energy, Person } from "../page";
 import type { PersonWithCapacity } from "../lib/capacity-data";
+import { usePersistedState } from "../lib/local-store";
 import { BRIEF_STAGES, Brief, BriefStage, PitchRole, TEAMS_TABS, TeamsTabKey } from "./types";
 import { seedBriefs, seedPitchRoles } from "./seed";
 
@@ -70,7 +71,7 @@ function Card({ children, padding = "20px 22px", style }: { children: React.Reac
   );
 }
 
-function PriorityPill({ priority }: { priority: Brief["priority"] }) {
+function PriorityPill({ priority, onClick }: { priority: Brief["priority"]; onClick?: () => void }) {
   const tone =
     priority === "urgent"
       ? { bg: "#FDF3F2", color: "#C4534A", label: "Urgent" }
@@ -78,7 +79,14 @@ function PriorityPill({ priority }: { priority: Brief["priority"] }) {
         ? { bg: "#F3F0EA", color: "#5A5A5A", label: "Low" }
         : { bg: "#FEF8EE", color: "#B87A2E", label: "Normal" };
   return (
-    <span
+    <button
+      onClick={(ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        onClick?.();
+      }}
+      title={onClick ? "Click to cycle priority" : undefined}
+      disabled={!onClick}
       style={{
         display: "inline-block",
         padding: "2px 8px",
@@ -88,10 +96,13 @@ function PriorityPill({ priority }: { priority: Brief["priority"] }) {
         fontSize: 10,
         fontWeight: 600,
         letterSpacing: "0.04em",
+        border: "none",
+        cursor: onClick ? "pointer" : "default",
+        fontFamily: "inherit",
       }}
     >
       {tone.label}
-    </span>
+    </button>
   );
 }
 
@@ -112,10 +123,7 @@ function StageBadge({ stage }: { stage: BriefStage }) {
         color: "#4D4945",
       }}
     >
-      <span
-        aria-hidden
-        style={{ width: 6, height: 6, borderRadius: "50%", background: meta.tone }}
-      />
+      <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", background: meta.tone }} />
       {meta.label}
     </span>
   );
@@ -133,11 +141,26 @@ function HarmonyDot({ score }: { score: number | null }) {
 }
 
 const TAB_STORAGE_KEY = "humyn.teams-tab";
+const STAGE_KEYS = BRIEF_STAGES.map((s) => s.key);
+function stageIndex(stage: BriefStage): number {
+  return STAGE_KEYS.indexOf(stage);
+}
+
+const PRIORITY_CYCLE: Brief["priority"][] = ["urgent", "normal", "low"];
+function nextPriority(p: Brief["priority"]): Brief["priority"] {
+  return PRIORITY_CYCLE[(PRIORITY_CYCLE.indexOf(p) + 1) % PRIORITY_CYCLE.length];
+}
 
 export default function TeamsPage() {
   const [tab, setTab] = useState<TeamsTabKey>("portfolio");
   const [people, setPeople] = useState<Person[]>([]);
   const [enriched, setEnriched] = useState<PersonWithCapacity[]>([]);
+
+  const [briefs, setBriefs] = usePersistedState<Brief[]>("humyn.briefs.v1", seedBriefs);
+  const [applications, setApplications] = usePersistedState<number[]>(
+    "humyn.pitch-applications.v1",
+    [],
+  );
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -163,6 +186,30 @@ export default function TeamsPage() {
       cancelled = true;
     };
   }, []);
+
+  function moveBrief(briefId: number, direction: -1 | 1) {
+    setBriefs((prev) =>
+      prev.map((b) => {
+        if (b.id !== briefId) return b;
+        const idx = stageIndex(b.stage);
+        const next = idx + direction;
+        if (next < 0 || next >= STAGE_KEYS.length) return b;
+        return { ...b, stage: STAGE_KEYS[next] };
+      }),
+    );
+  }
+
+  function cyclePriority(briefId: number) {
+    setBriefs((prev) =>
+      prev.map((b) => (b.id === briefId ? { ...b, priority: nextPriority(b.priority) } : b)),
+    );
+  }
+
+  function toggleApplication(roleId: number) {
+    setApplications((prev) =>
+      prev.includes(roleId) ? prev.filter((id) => id !== roleId) : [...prev, roleId],
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
@@ -222,8 +269,9 @@ export default function TeamsPage() {
             Teams
           </h1>
           <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.6 }}>
-            Brief portfolio across the four Nordic markets. {seedBriefs.length} briefs on the board
-            this week. Sample data — wiring to the real backing store comes next.
+            Brief portfolio across the four Nordic markets. {briefs.length} briefs on the board.
+            Move them across stages, change priority, and apply to open roles — every change
+            saves to this browser.
           </div>
         </div>
 
@@ -261,10 +309,21 @@ export default function TeamsPage() {
           ))}
         </div>
 
-        {tab === "portfolio" && <PortfolioTab briefs={seedBriefs} people={people} enriched={enriched} />}
-        {tab === "kanban" && <KanbanTab briefs={seedBriefs} />}
-        {tab === "timeline" && <TimelineTab briefs={seedBriefs} people={people} />}
-        {tab === "pitch" && <PitchTab roles={seedPitchRoles} />}
+        {tab === "portfolio" && (
+          <PortfolioTab
+            briefs={briefs}
+            people={people}
+            enriched={enriched}
+            onCyclePriority={cyclePriority}
+          />
+        )}
+        {tab === "kanban" && (
+          <KanbanTab briefs={briefs} onMove={moveBrief} onCyclePriority={cyclePriority} />
+        )}
+        {tab === "timeline" && <TimelineTab briefs={briefs} people={people} />}
+        {tab === "pitch" && (
+          <PitchTab roles={seedPitchRoles} applications={applications} onToggle={toggleApplication} />
+        )}
         {tab === "availability" && <AvailabilityTab people={people} enriched={enriched} />}
         {tab === "build" && <BuildTeamLink />}
         {tab === "markets" && <MarketsLink />}
@@ -275,7 +334,17 @@ export default function TeamsPage() {
 
 // ---------- Portfolio ----------
 
-function PortfolioTab({ briefs, people, enriched }: { briefs: Brief[]; people: Person[]; enriched: PersonWithCapacity[] }) {
+function PortfolioTab({
+  briefs,
+  people,
+  enriched,
+  onCyclePriority,
+}: {
+  briefs: Brief[];
+  people: Person[];
+  enriched: PersonWithCapacity[];
+  onCyclePriority: (id: number) => void;
+}) {
   const urgent = briefs.filter((b) => b.priority === "urgent");
   const unstaffed = briefs.filter((b) => b.stage === "unstaffed");
   const nowAvailable = people.filter((p) => p.available === "now");
@@ -290,7 +359,7 @@ function PortfolioTab({ briefs, people, enriched }: { briefs: Brief[]; people: P
     <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 2fr) minmax(280px, 1fr)", gap: 20 }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <Card>
-          <SectionLabel>Priority actions · {urgent.length + unstaffed.length}</SectionLabel>
+          <SectionLabel>Priority actions · {urgent.length + unstaffed.filter((b) => b.priority !== "urgent").length}</SectionLabel>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {[...urgent, ...unstaffed.filter((b) => b.priority !== "urgent")].slice(0, 6).map((b) => (
               <div
@@ -305,7 +374,7 @@ function PortfolioTab({ briefs, people, enriched }: { briefs: Brief[]; people: P
                   border: "0.5px solid #F0CECA",
                 }}
               >
-                <PriorityPill priority={b.priority} />
+                <PriorityPill priority={b.priority} onClick={() => onCyclePriority(b.id)} />
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>{b.name}</div>
                   <div style={{ fontSize: 11, color: "#5A5A5A", marginTop: 2 }}>
@@ -345,7 +414,7 @@ function PortfolioTab({ briefs, people, enriched }: { briefs: Brief[]; people: P
                 </div>
                 <StageBadge stage={b.stage} />
                 <HarmonyDot score={b.harmonyScore} />
-                <PriorityPill priority={b.priority} />
+                <PriorityPill priority={b.priority} onClick={() => onCyclePriority(b.id)} />
               </div>
             ))}
           </div>
@@ -374,10 +443,7 @@ function PortfolioTab({ briefs, people, enriched }: { briefs: Brief[]; people: P
                     textDecoration: "none",
                   }}
                 >
-                  <span
-                    aria-hidden
-                    style={{ width: 8, height: 8, borderRadius: "50%", background: e.color }}
-                  />
+                  <span aria-hidden style={{ width: 8, height: 8, borderRadius: "50%", background: e.color }} />
                   <span style={{ fontSize: 12, fontWeight: 500, color: "#161311", flex: 1, minWidth: 0 }}>
                     {p.name}
                   </span>
@@ -417,10 +483,9 @@ function PortfolioTab({ briefs, people, enriched }: { briefs: Brief[]; people: P
         <Card>
           <SectionLabel>This week’s read</SectionLabel>
           <p style={{ fontSize: 12.5, color: "#4D4945", lineHeight: 1.6, margin: 0 }}>
-            {urgent.length} urgent briefs need attention this week — biggest gap is the
-            Volvo Cars extension (Driver-led engineering lead) which is still unstaffed.
-            Nordea wealth pitch closes in five days. Helsinki bench widening — two consultants
-            available now, both Analyst-led.
+            {urgent.length} urgent brief{urgent.length === 1 ? "" : "s"} flagged. Click any
+            priority pill on the list to cycle between urgent / normal / low. Move briefs
+            between stages on the Kanban tab; everything you do here saves locally.
           </p>
         </Card>
       </div>
@@ -430,7 +495,15 @@ function PortfolioTab({ briefs, people, enriched }: { briefs: Brief[]; people: P
 
 // ---------- Kanban ----------
 
-function KanbanTab({ briefs }: { briefs: Brief[] }) {
+function KanbanTab({
+  briefs,
+  onMove,
+  onCyclePriority,
+}: {
+  briefs: Brief[];
+  onMove: (id: number, dir: -1 | 1) => void;
+  onCyclePriority: (id: number) => void;
+}) {
   return (
     <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 12 }}>
       {BRIEF_STAGES.map((s) => {
@@ -465,36 +538,100 @@ function KanbanTab({ briefs }: { briefs: Brief[] }) {
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {inStage.length === 0 && (
                 <div style={{ fontSize: 11, color: "#9A9A9A", textAlign: "center", padding: "16px 4px" }}>
-                  No briefs in this stage.
+                  Use the arrows on cards to bring briefs here.
                 </div>
               )}
               {inStage.map((b) => (
-                <div
-                  key={b.id}
-                  style={{
-                    border: "0.5px solid rgba(0,0,0,0.07)",
-                    borderRadius: 10,
-                    padding: 12,
-                    background: "#FAFAF8",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                    <PriorityPill priority={b.priority} />
-                    <HarmonyDot score={b.harmonyScore} />
-                  </div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "#161311", marginBottom: 4 }}>{b.name}</div>
-                  <div style={{ fontSize: 11, color: "#9A9A9A", lineHeight: 1.5 }}>
-                    {b.client} · {b.market}
-                    <br />
-                    Starts {b.startDate}
-                    {b.daysToStart !== null && ` · in ${b.daysToStart}d`}
-                  </div>
-                </div>
+                <BriefCard key={b.id} brief={b} onMove={onMove} onCyclePriority={onCyclePriority} />
               ))}
             </div>
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function BriefCard({
+  brief,
+  onMove,
+  onCyclePriority,
+}: {
+  brief: Brief;
+  onMove: (id: number, dir: -1 | 1) => void;
+  onCyclePriority: (id: number) => void;
+}) {
+  const idx = stageIndex(brief.stage);
+  const canBack = idx > 0;
+  const canFwd = idx < STAGE_KEYS.length - 1;
+  return (
+    <div
+      style={{
+        border: "0.5px solid rgba(0,0,0,0.07)",
+        borderRadius: 10,
+        padding: 12,
+        background: "#FAFAF8",
+        display: "flex",
+        flexDirection: "column",
+        gap: 8,
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <PriorityPill priority={brief.priority} onClick={() => onCyclePriority(brief.id)} />
+        <HarmonyDot score={brief.harmonyScore} />
+      </div>
+      <div style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>{brief.name}</div>
+      <div style={{ fontSize: 11, color: "#9A9A9A", lineHeight: 1.5 }}>
+        {brief.client} · {brief.market}
+        <br />
+        Starts {brief.startDate}
+        {brief.daysToStart !== null && ` · in ${brief.daysToStart}d`}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 6,
+          paddingTop: 8,
+          borderTop: "0.5px dashed rgba(0,0,0,0.06)",
+        }}
+      >
+        <button
+          onClick={() => onMove(brief.id, -1)}
+          disabled={!canBack}
+          aria-label="Move to previous stage"
+          style={{
+            padding: "4px 8px",
+            borderRadius: 6,
+            border: "0.5px solid rgba(0,0,0,0.08)",
+            background: canBack ? "#FFFFFF" : "#FAFAF8",
+            color: canBack ? "#4D4945" : "#D1CDC4",
+            fontSize: 11,
+            cursor: canBack ? "pointer" : "not-allowed",
+            fontFamily: "inherit",
+          }}
+        >
+          ← Back
+        </button>
+        <button
+          onClick={() => onMove(brief.id, 1)}
+          disabled={!canFwd}
+          aria-label="Move to next stage"
+          style={{
+            padding: "4px 8px",
+            borderRadius: 6,
+            border: "none",
+            background: canFwd ? "#161311" : "#E0DDD8",
+            color: canFwd ? "#FFFFFF" : "#9A9A9A",
+            fontSize: 11,
+            cursor: canFwd ? "pointer" : "not-allowed",
+            fontFamily: "inherit",
+          }}
+        >
+          Next →
+        </button>
+      </div>
     </div>
   );
 }
@@ -507,8 +644,8 @@ function TimelineTab({ briefs, people }: { briefs: Brief[]; people: Person[] }) 
     <Card>
       <SectionLabel>Next 8 weeks · {people.length} consultants</SectionLabel>
       <div style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.6, marginBottom: 16 }}>
-        Sample timeline based on active and confirmed briefs. The full Gantt loads here
-        once we wire engagement plans. Until then this is a snapshot of confirmed work.
+        Snapshot of confirmed and active engagements. Drag-and-drop scheduling and the full Gantt
+        come once we wire engagement plans.
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {stickyBriefs.map((b) => (
@@ -544,15 +681,41 @@ function TimelineTab({ briefs, people }: { briefs: Brief[]; people: Person[] }) 
 
 // ---------- Pitch board ----------
 
-function PitchTab({ roles }: { roles: PitchRole[] }) {
+function PitchTab({
+  roles,
+  applications,
+  onToggle,
+}: {
+  roles: PitchRole[];
+  applications: number[];
+  onToggle: (id: number) => void;
+}) {
+  const totalCredits = applications.reduce((sum, id) => {
+    const role = roles.find((r) => r.id === id);
+    return sum + (role ? Math.round(role.creditsOnSelection * 0.25) : 0);
+  }, 0);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <Card>
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
+          <div>
+            <SectionLabel>Your activity</SectionLabel>
+            <div style={{ fontSize: 13, color: "#4D4945" }}>
+              {applications.length} active application{applications.length === 1 ? "" : "s"} ·{" "}
+              <span style={{ color: "#3D8A61", fontWeight: 600 }}>{totalCredits} credits earned for applying</span>
+            </div>
+          </div>
+          <div style={{ fontSize: 11, color: "#9A9A9A", maxWidth: 360, lineHeight: 1.5 }}>
+            Applying earns 25% of the role&apos;s credits up front. Shortlisting earns 50% more.
+            Selection earns the full amount.
+          </div>
+        </div>
+      </Card>
+
+      <Card>
         <div style={{ display: "flex", alignItems: "baseline", gap: 16, marginBottom: 4 }}>
           <SectionLabel>Open roles · {roles.length}</SectionLabel>
-          <div style={{ fontSize: 11, color: "#9A9A9A" }}>
-            Apply earns 20 credits · Shortlisted earns 40 · Selected earns full
-          </div>
         </div>
         <div
           style={{
@@ -564,14 +727,15 @@ function PitchTab({ roles }: { roles: PitchRole[] }) {
         >
           {roles.map((r) => {
             const e = energy[r.requiredEnergy];
+            const applied = applications.includes(r.id);
             return (
               <div
                 key={r.id}
                 style={{
-                  border: "0.5px solid rgba(0,0,0,0.07)",
+                  border: applied ? "0.5px solid #5CAB82" : "0.5px solid rgba(0,0,0,0.07)",
                   borderRadius: 12,
                   padding: 16,
-                  background: "#FFFFFF",
+                  background: applied ? "#EFF8F3" : "#FFFFFF",
                   display: "flex",
                   flexDirection: "column",
                   gap: 10,
@@ -625,17 +789,33 @@ function PitchTab({ roles }: { roles: PitchRole[] }) {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    paddingTop: 8,
+                    paddingTop: 10,
                     borderTop: "0.5px solid rgba(0,0,0,0.05)",
                     marginTop: "auto",
+                    gap: 12,
                   }}
                 >
                   <div style={{ fontSize: 11, color: "#9A9A9A" }}>
                     {r.duration} · starts {r.startDate}
+                    <br />
+                    {r.applicantCount + (applied ? 1 : 0)} applicant{r.applicantCount + (applied ? 1 : 0) === 1 ? "" : "s"}
                   </div>
-                  <div style={{ fontSize: 11, color: "#5A5A5A" }}>
-                    {r.applicantCount} {r.applicantCount === 1 ? "applicant" : "applicants"}
-                  </div>
+                  <button
+                    onClick={() => onToggle(r.id)}
+                    style={{
+                      padding: "7px 14px",
+                      borderRadius: 100,
+                      border: applied ? "0.5px solid #5CAB82" : "none",
+                      background: applied ? "#FFFFFF" : "#161311",
+                      color: applied ? "#3D8A61" : "#FFFFFF",
+                      fontSize: 12,
+                      fontWeight: 500,
+                      cursor: "pointer",
+                      fontFamily: "inherit",
+                    }}
+                  >
+                    {applied ? "✓ Applied" : "Apply"}
+                  </button>
                 </div>
               </div>
             );
@@ -673,11 +853,7 @@ function AvailabilityTab({ people, enriched }: { people: Person[]; enriched: Per
                 const cap = enrichedById.get(p.id);
                 const benchDays = cap?.capacity.benchDays ?? 0;
                 const statusBg =
-                  p.available === "now"
-                    ? "#5CAB82"
-                    : p.available === "soon"
-                      ? "#D4974A"
-                      : "#E0DDD8";
+                  p.available === "now" ? "#5CAB82" : p.available === "soon" ? "#D4974A" : "#E0DDD8";
                 return (
                   <Link
                     key={p.id}
@@ -700,12 +876,7 @@ function AvailabilityTab({ people, enriched }: { people: Person[]; enriched: Per
                     </div>
                     <span
                       aria-hidden
-                      style={{
-                        width: 7,
-                        height: 7,
-                        borderRadius: "50%",
-                        background: statusBg,
-                      }}
+                      style={{ width: 7, height: 7, borderRadius: "50%", background: statusBg }}
                       title={`${p.available}${benchDays > 0 ? ` · ${benchDays}d bench` : ""}`}
                     />
                   </Link>

@@ -41,8 +41,9 @@ Humyn brings everything together in one place. It understands not just what some
 The foundation. Every person gets a rich profile built from LinkedIn data and internal signals — no lengthy questionnaire required.
 
 Profiles include:
-- Insights Discovery energy profile (four colours: Red, Yellow, Green, Blue)
-- 72-position wheel placement (e.g. Inspirer, Director, Supporter)
+- Humyn Pulse Map energy profile (four energies: Drive, Spark, Steady, Lens)
+- Wheel position placement across eight types (Driver, Catalyst, Connector, Carer, Anchor, Builder, Analyst, Refiner — plus mixed positions like Catalysing Driver or Refining Analyst)
+- Three visualisations on every profile: energy ring, eight-axis engagement spider chart, vertical energy dynamics bars
 - Drivers and detractors
 - Communication style guides (how to speak, how to email)
 - AI message composer — write in a style that lands with each personality
@@ -131,21 +132,27 @@ Features:
 
 ---
 
-## Personality Framework
+## Personality Framework — The Humyn Pulse Map
 
-Humyn uses the **Insights Discovery** model as its scientific foundation:
+Humyn uses its own proprietary four-energy temperament framework, informed by Jungian
+psychological types. The Pulse Map is not Insights Discovery — Humyn does not license,
+depend on, or reproduce that vocabulary. The platform owns this language outright, which
+matters for white-labelling and pan-Nordic rollout.
 
-| Energy | Colour | Traits | DISC equivalent |
-|--------|--------|--------|-----------------|
-| Fiery Red | 🔴 | Decisive, driven, direct | Dominant (D) |
-| Sunshine Yellow | 🟡 | Enthusiastic, sociable, creative | Influential (I) |
-| Earth Green | 🟢 | Caring, patient, steady | Steady (S) |
-| Cool Blue | 🔵 | Analytical, precise, careful | Conscientious (C) |
+| Energy | Colour | Hex      | Traits | Approximate DISC parallel |
+|--------|--------|----------|--------|---------------------------|
+| Drive  | red    | `#E8402A` | Decisive, driven, direct | Dominant (D) |
+| Spark  | yellow | `#F5A623` | Enthusiastic, sociable, creative | Influential (I) |
+| Steady | green  | `#2E8B57` | Caring, patient, steady | Steady (S) |
+| Lens   | blue   | `#1E6FA5` | Analytical, precise, careful | Conscientious (C) |
 
-The 72-position wheel gives nuance within each quadrant:
-- Pure positions: Director (Red), Inspirer (Yellow), Supporter (Green), Observer (Blue)
-- Mixed positions: Motivator (Red/Yellow), Helper (Yellow/Green), Coordinator (Green/Blue), Reformer (Blue/Red)
-- Plus further refinements within each (8 positions per quadrant = 72 total positions on the wheel)
+The wheel has eight positions — four pure, four mixed:
+
+- **Pure positions**: Driver (Drive), Connector (Spark), Anchor (Steady), Analyst (Lens)
+- **Mixed positions**: Catalyst (Drive/Spark), Carer (Spark/Steady), Builder (Steady/Lens), Refiner (Lens/Drive)
+
+Mixed positions are expressed with a primary + influence pattern, e.g. *Catalysing Driver*
+(Driver with Catalyst influence) or *Refining Analyst* (Analyst with Refiner influence).
 
 ---
 
@@ -164,8 +171,8 @@ The 72-position wheel gives nuance within each quadrant:
 
 ### AI Layer
 - Claude API for profile inference, message composition, written insights
-- NLP model for LinkedIn text → Insights energy mapping
-- Interview transcript processing
+- LinkedIn text → Humyn Pulse Map energy mapping via a server-side route (`/api/pulse`)
+- Interview transcript processing (planned)
 
 ### Auth (Phase 2)
 - Role-based access control (RBAC)
@@ -182,40 +189,134 @@ The 72-position wheel gives nuance within each quadrant:
 
 ## Build Phases
 
-### Phase 1 — Pulse MVP (Current)
+### Phase 1 — Pulse MVP (Mostly shipped)
 **Goal:** Every Valtech Nordic consultant has a rich profile. The people directory is live and useful.
 
 - [x] People directory with card and table views
-- [x] Flexible grouping and search
-- [x] Individual profile pages
-- [x] Quick view drawer
-- [x] Team builder (basic)
-- [x] AI message composer (template-based)
-- [ ] LinkedIn paste → profile generation
-- [ ] Add/edit person flow
-- [ ] 72-position energy wheel visualisation
-- [ ] Profile confidence scoring
+- [x] Flexible grouping (None / Availability / Energy / Location / Utilisation) and search across name, role, location, capabilities
+- [x] Individual profile pages with four tabs (Overview, Personality, How to Engage, Achievements)
+- [x] Quick view drawer (420px, right-side, energy bars + best trait / watch-out / drivers / how to speak)
+- [x] Team builder (selected people, combined energy, dominant energy, average utilisation, energy gap warnings)
+- [x] AI message composer (template-based, primary-energy themed output)
+- [x] LinkedIn paste → profile generation via Claude API at `/pulse/new`
+- [x] Energy ring, energy dynamics bars, and engagement spider chart on every profile (see `app/components/energy.tsx`)
+- [x] Profile confidence scoring (returned by the AI generator, displayed on the generated profile)
+- [x] Rebrand to the Humyn Pulse Map — full break from Insights Discovery vocabulary
+- [x] Valtech brand alignment (Coral accent, Off White surface, Valtech Neue + Sons fonts)
+- [ ] Add / edit person flow (form to author profiles without code)
+- [ ] Save-to-directory wiring on the Pulse generator
+- [ ] Chrome extension — one-click profile generation from any LinkedIn page
 
-### Phase 2 — Compass (Capacity)
+### Phase 2 — Compass (Capacity) — In progress
 **Goal:** The capacity manager has a real-time view of utilisation, availability and demand.
 
-- [ ] Utilisation dashboard
-- [ ] Availability heatmap
-- [ ] C-suite read-only dashboard
-- [ ] Power BI / Excel data integration
-- [ ] Demand forecasting
-- [ ] Written AI insights reports
+- [x] Capacity & retention dashboard at `/capacity` — flight-risk alerts, utilisation bars vs 80% target, bench duration with energy-specific thresholds (Spark 14d · Steady 21d · Drive/Lens 28d), cost-of-leaving breakdown, AI-written weekly read
+- [ ] Availability heatmap (who's free, by week)
+- [ ] Demand forecasting cross-referenced against the pitch pipeline and seasonality
+- [ ] C-suite read-only board dashboard (revenue, margin, capacity, demand)
+- [ ] ERP / OpenAir integration for live availability data
+- [ ] Power BI / SharePoint / Excel data ingestion
+- [ ] AI-written weekly narrative reports (auto-generated, exportable as PDF)
+- [ ] Pan-Nordic job board — every available person across all markets in one view
 
 ### Phase 3 — Pipeline (Hiring)
 **Goal:** Hiring is managed entirely within Humyn, integrated with Pulse from day one.
 
 - [ ] Job posting management
-- [ ] Candidate tracking pipeline
-- [ ] Interview scheduling
-- [ ] AI transcript analysis
+- [ ] Candidate tracking pipeline (Applied → Screened → Interviewed → Offer → Hired)
+- [ ] Brief / RFP upload → AI team suggestion (the dream feature — see Evolved Vision)
+- [ ] Interview scheduling with calendar sync
+- [ ] AI transcript analysis (scoring, fit summary, red flags)
 - [ ] Email automation
 - [ ] Offer and onboarding flow
-- [ ] Candidate Pulse assessment
+- [ ] Candidate Pulse assessment auto-triggered from LinkedIn paste
+
+---
+
+## The Evolved Vision
+
+Pulse / Compass / Pipeline are the platform structure. The six themes below are what the
+platform is *for* — the strategic problems Humyn solves that the spreadsheets and ATSes
+cannot.
+
+### 1. Culture and harmony intelligence
+Understanding the cost of culture mismatch across teams and markets. Humyn measures
+harmony — how the energy mix of a team predicts conflict, decision-making speed, and
+client satisfaction — and quantifies the cost of mismatch in lost margin and missed
+deadlines. Culture is also compared across Stockholm, Oslo, Copenhagen and Helsinki so
+leaders can see where the Nordic markets differ and where they cohere, and so that
+projects spanning markets can be staffed deliberately rather than by availability alone.
+
+### 2. Retention prediction and loyalty intelligence
+Predicting who is going to leave before they do. The model combines bench time, primary
+energy, recent project fit, team energy balance, and external signals (LinkedIn activity,
+recruiter contact) into a single loyalty score per person. Each profile carries a
+cost-of-leaving calculator: recruitment + lost three-month revenue + onboarding. Bench
+risk thresholds are energy-specific — **Spark goes restless at 14 days, Steady at 21,
+Drive and Lens at 28** — and the dashboard flags people the moment they cross the line.
+First version of this is live at `/capacity`.
+
+### 3. Brief and RFP → team AI (the dream feature)
+Upload an RFP or project brief. The AI reads it, infers the required skills, seniority
+band, personality types, and client context, and proposes three ranked team options drawn
+from every Valtech Nordic market. Each option shows skills fit, energy-harmony score,
+combined availability, and projected day-rate. This requires ERP / OpenAir integration
+for live availability data — but once it exists, **this is the feature that makes Humyn
+irreplaceable.** No spreadsheet, no ATS, no capacity tool combines personality and
+availability into a single team recommendation.
+
+### 4. Pan-Nordic job board
+Every available person across every Nordic market in one view. Replaces the weekly phone
+calls between market capacity managers asking "do you have a senior data scientist free
+in Q3?" Filterable by skill, location, energy type, availability, day rate, and
+client-history. Live availability is pulled from OpenAir (or whichever ERP the relevant
+market uses) so the board never goes stale.
+
+### 5. Executive and board dashboards
+A clean, read-only view designed for the C-suite and board. Revenue per consultant,
+margin trends, capacity vs target, demand forecast cross-referenced against the pitch
+pipeline and seasonality. AI-written weekly narrative reports turn the data into prose
+that an executive can scan in 90 seconds. Individual consultant revenue and client
+relationship value surface in the same view so the board can see who carries the firm.
+
+### 6. Hiring platform with Pulse from day one
+A proprietary ATS built from scratch — not a Teamtailor integration. Every candidate is
+profiled via LinkedIn paste the moment they enter the pipeline, with a team-fit score
+calculated against the actual team they would join. AI handles interview scheduling,
+transcript analysis (scoring, fit summary, red flags), and offer management. When a
+candidate is hired, their profile moves straight into the people directory without any
+re-keying. The Pulse identity follows the person from application to alumnus.
+
+---
+
+## Commercial Opportunity
+
+Every professional-services firm has the same set of problems — fragmented people data,
+reactive capacity management, gut-feel hiring. Humyn is differentiated because:
+
+- **Works from LinkedIn data alone** — no 200-question assessments, no consultant time
+  burned filling in forms. A profile is two minutes from a paste.
+- **Purpose-built for consultancies** — not generic HR software retrofitted, not a
+  personality tool retrofitted. Built for utilisation, day-rates, bench risk and
+  team composition from the ground up.
+- **Combines personality, capacity and hiring in one platform** — the three things that
+  every consultancy currently runs in separate tools.
+- **Proprietary Pulse Map framework** — Drive / Spark / Steady / Lens are Humyn's own
+  vocabulary. No Crystal Knows licence, no Insights Discovery dependency, no royalty
+  exposure as the platform scales or white-labels.
+- **Chrome extension as the Phase 2 profiling accelerator** — one click on any LinkedIn
+  profile generates a Humyn profile in place. This is what makes profiling client
+  stakeholders and prospective candidates frictionless.
+
+### Expansion path
+
+1. **Valtech Nordic** — current build, real users in Stockholm, Oslo, Copenhagen, Helsinki
+2. **Pan-Nordic rollout** — all Valtech Nordic markets fully on platform
+3. **Other Valtech global markets** — UK, Netherlands, Germany, France, North America
+4. **White-label SaaS product** — Humyn as a standalone product for other consultancies,
+   priced per seat, with the Pulse Map as the trademarked core
+
+The goal is to make Humyn the people-intelligence layer for the modern consultancy.
 
 ---
 
@@ -231,14 +332,17 @@ The 72-position wheel gives nuance within each quadrant:
 
 ## The Bigger Picture
 
-If Pulse proves its value at Valtech Nordic, the platform has a clear expansion path:
+If Pulse proves its value at Valtech Nordic, the platform has a clear expansion path
+(see Commercial Opportunity above for the full mechanics). Two further angles worth
+noting separately:
 
-1. **Pan-Nordic rollout** — Sweden, Norway, Denmark, Finland
-2. **Other Valtech markets** — UK, Netherlands, Germany
-3. **White-label product** — Humyn as a SaaS product for other consultancies
-4. **Client-facing version** — Profile client stakeholders, improve pitch win rates
-
-The goal is to make Humyn the people intelligence layer for the modern consultancy.
+- **Client-facing intelligence** — once stakeholder profiling is wired through the Chrome
+  extension, sales and pitch teams can profile a prospect's procurement panel and shape
+  the pitch to their dominant energy mix. Early data suggests this materially shifts
+  win-rate on close decisions.
+- **Alumni network** — when someone leaves Valtech, their Humyn profile follows them.
+  Alumni become a referral and rehire pool, profiled and warm, rather than disappearing
+  into LinkedIn.
 
 ---
 

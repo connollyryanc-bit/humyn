@@ -31,8 +31,10 @@ We are currently building Stage 1.
 
 ### Brand
 - Name: **humyn** (always lowercase)
-- Wordmark: `hum` + `y` in Spark (yellow) + `n` — the `y` is always the brand accent colour
-- Tone: Clean, modern, minimal — inspired by Monday.com's aesthetic
+- Wordmark: `hum` + `y` in **Valtech Coral `#FF5040`** + `n`. The accent `y` is Coral, not
+  Spark yellow — Spark is reserved for Pulse personality data, never used for chrome.
+- Tone: Clean, modern, minimal — inspired by Monday.com's aesthetic, executed in the
+  Valtech brand (Off White surfaces, Soft Black ink, Coral accent, Valtech Neue + Sons type).
 - No heavy borders, no drop shadows unless subtle, lots of white space
 
 ### Colours — Humyn Pulse Map Energies
@@ -141,7 +143,7 @@ Valtech brand fonts, self-hosted via `next/font/local` from `public/fonts/`.
 Sizing (web-scaled from the brand sheet, which targets print 32–38pt for headings):
 - Page H1 titles: 30–32px, weight 600, letter-spacing -0.4px to -0.5px, `font-display`
 - Sub-section titles: 18–22px, weight 600
-- Section labels: 11px, weight 500, uppercase, letter-spacing 0.06–0.08em, color Ink3
+- Section labels: 11px, weight 500, uppercase, letter-spacing **0.07em**, color Ink3
 - Body: 13–14px, color Ink2, line-height 1.6, Sons (default)
 - Small labels: 10–11px
 
@@ -150,6 +152,8 @@ Valtech Neue — this keeps the variable lookup consistent and stays in step wit
 Next.js font loader.
 
 ### Spacing & Shape
+- **Card border: always `0.5px solid rgba(0,0,0,0.07)`** — never 1px, never a darker
+  colour. This is the canonical border for cards, panels, inputs, drawers, and tables.
 - Border radius: 8–12px for cards, 100px for pills/badges
 - Card padding: 1rem to 1.25rem
 - Gap between cards: 12px
@@ -160,10 +164,30 @@ Next.js font loader.
 ### Components — always build these consistently
 
 **Avatar**: Circular, coloured background from primary energy colour, initials, bordered
-**EnergyBadge**: Pill with colour dot + energy label, coloured bg/text
-**StatusBadge**: Pill — green for available now, amber for soon, red for allocated
+**EnergyBadge**: Pill with colour dot + energy label (Drive / Spark / Steady / Lens), coloured bg/text
+**StatusBadge**: Pill — Steady green for available now, Spark yellow for soon, Drive red for allocated
 **UtilPill**: Small bar + percentage, colour-coded green/amber/red vs 80% target
-**Section label**: Uppercase, 11px, Ink3, letter-spacing 0.06em
+**Section label**: Uppercase, 11px, Ink3, letter-spacing 0.07em
+**RiskPill** (capacity dashboard): high / medium / watch / low; reuses the four energy colours
+  as risk tones (Drive red = high, Spark yellow = medium, neutral = watch, Steady green = low)
+
+### Shared visualisations — never recreate, always import
+
+These live in [`app/components/energy.tsx`](app/components/energy.tsx) and are used by
+every profile-related page. If a new page needs an energy visual, import from here:
+
+```ts
+import { EnergyRing, EnergyDynamics, EnergySpider } from "../../components/energy";
+```
+
+- **EnergyRing** — donut with the four energies sized by score, position name in the
+  centre, energy labels (DRIVE / SPARK / STEADY / LENS) anchored outside the ring.
+- **EnergyDynamics** — vertical bar chart of the four energies.
+- **EnergySpider** — eight-axis radar (Pace, Decisiveness, Rigour, Listening, Steadiness,
+  Empathy, Sociability, Curiosity) derived from the energy mix.
+
+If a visualisation that already exists looks wrong, fix it inside `energy.tsx` — don't
+build a parallel implementation in a page file.
 
 ---
 
@@ -209,17 +233,46 @@ Utilisation colour logic:
 
 ```
 app/
-  page.tsx              — People directory (main page)
+  page.tsx                  — People directory. Exports `people` array, `Person`
+                              interface, `energy`, `availability`, `utilTone`. The
+                              source of truth — every other page imports types and
+                              helpers from here.
+  layout.tsx                — Root layout. Loads Valtech Neue + Sons via next/font/local
+                              from app/fonts.ts. Keep minimal.
+  fonts.ts                  — next/font/local declarations for Valtech Neue + Sons.
+                              Exposes --font-display and --font-body CSS variables.
+  globals.css               — Reset, body defaults, .font-display utility. No Tailwind.
   people/
     [id]/
-      page.tsx          — Individual full profile page
-  teams/
-    page.tsx            — Team builder (Stage 1, coming soon)
+      page.tsx              — Individual full profile page (Overview / Personality /
+                              How to Engage / Achievements tabs). Imports people from
+                              ../../page.
+  pulse/
+    new/
+      page.tsx              — LinkedIn-paste → Pulse profile generator. Two-column UI,
+                              cycles through empty / loading / error / ready states.
+  api/
+    pulse/
+      route.ts              — Server-side Anthropic Messages API proxy used by /pulse/new.
+                              The Anthropic key lives in ANTHROPIC_API_KEY (Vercel env
+                              var on production; .env.local locally). Never expose it
+                              client-side.
   capacity/
-    page.tsx            — Capacity dashboard (Stage 2)
-  insights/
-    page.tsx            — AI insights & reports (Stage 2)
+    page.tsx                — Capacity & retention dashboard. Flight risks, utilisation,
+                              bench duration, cost-of-leaving, AI-written weekly read.
+                              Built — first page of Compass.
+  components/
+    energy.tsx              — Shared visualisations: EnergyRing, EnergyDynamics,
+                              EnergySpider. Pure SVG, no chart library.
+                              **DO NOT recreate these — always import.**
+public/
+  fonts/                    — Valtech Neue (Light/Book/Bold + italics) and Sons
+                              (Light/Regular/SemiBold + italics) as .woff2.
 ```
+
+Planned but not yet built — keep these in mind when navigating future tasks:
+`app/teams/page.tsx` (full team builder page), `app/insights/page.tsx` (AI insights),
+`app/pipeline/` (hiring), Chrome extension for one-click LinkedIn profiling.
 
 ---
 
@@ -295,20 +348,26 @@ The nav has four items: People, Teams, Capacity, Insights
 
 ## Current Status
 
-Stage 1 is in active development. The following is built:
-- People directory with card and table views
-- Flexible grouping and search
-- Quick view drawer
-- Individual profile pages with tabs
-- Team builder (basic)
-- AI message composer (template-based, not yet connected to Claude API)
+Stage 1 (Pulse) is largely shipped and Stage 2 (Compass) has started. Live now:
 
-Next priorities:
-- Connect AI message composer to real Claude API
-- LinkedIn paste → profile generation (Pulse inference engine)
-- Add person flow
-- Richer energy ring + spider chart visualisations (done — see app/components/energy.tsx)
-- Capacity dashboard (Stage 2 start)
+- People directory with card and table views, grouping, search, quick-view drawer
+- Individual profile pages — four tabs, energy ring, dynamics bars, spider chart, AI
+  message composer (template-based, primary-energy themed)
+- Pulse profile generator at `/pulse/new` — LinkedIn paste → full profile via Claude API
+- Team builder drawer (combined energy, dominant energy, gap warnings)
+- New profile + Build team buttons in the nav
+- 12 Nordic consultants in the people array with full profile data
+- Full Valtech brand alignment: Coral accent, Off White surface, Valtech Neue + Sons fonts
+- Humyn Pulse Map rename — clean break from Insights Discovery vocabulary
+- `/capacity` dashboard — flight risks, utilisation vs 80% target, bench duration, cost-of-leaving, AI weekly read
+
+Next priorities (top three on the queue):
+- Add / edit person flow (form to author profiles without code)
+- Save-to-directory wiring on the Pulse generator
+- Insights dashboard at `/insights` (AI-written weekly narrative reports)
+- Chrome extension — one-click LinkedIn profile generation
+- ERP / OpenAir integration for live availability data
+- Brief / RFP → AI team suggestion (the dream feature, see PRODUCT.md)
 
 ---
 

@@ -47,12 +47,25 @@ Always read CLAUDE.md before making any changes.
 
 | File | Rule |
 |------|------|
-| `app/page.tsx` | Main people directory. Export `people` array and `Person` type. |
-| `app/people/[id]/page.tsx` | Individual profile page. Import people from `../../page`. |
-| `app/layout.tsx` | Global layout. Keep minimal — no global styles beyond reset basics. |
+| `app/page.tsx` | Main people directory. Source of truth — exports `people` array, `Person`, `EnergyKey`, `AvailKey`, `energy`, `availability`, `utilTone`. Every other page imports from here. |
+| `app/people/[id]/page.tsx` | Individual profile page. Import people + types from `../../page`. |
+| `app/pulse/new/page.tsx` | LinkedIn-paste profile generator. Talks to `/api/pulse`. Never call Anthropic directly from a page component — the key must stay server-side. |
+| `app/api/pulse/route.ts` | Server-side Anthropic proxy. Edit only when changing the system prompt, model, or validation. Reads `ANTHROPIC_API_KEY` from env. |
+| `app/capacity/page.tsx` | Capacity & retention dashboard. CapacityData lives in this file alongside the page until we wire a real backing store. |
+| `app/components/energy.tsx` | Shared SVG visualisations (EnergyRing, EnergyDynamics, EnergySpider). **Always import. Never recreate in a page file.** Fix bugs here, not in copies. |
+| `app/layout.tsx` | Root layout. Loads Valtech Neue + Sons via next/font/local. Keep minimal. |
+| `app/fonts.ts` | next/font/local declarations. Update only when fonts change. |
+| `app/globals.css` | Reset + body defaults + `.font-display` utility. No Tailwind. |
+| `public/fonts/` | Valtech Neue + Sons `.woff2` files. Do not delete. |
 | `CLAUDE.md` | Never edit unless explicitly asked. |
 | `AGENTS.md` | Never edit unless explicitly asked. |
 | `PRODUCT.md` | Never edit unless explicitly asked. |
+
+### Before building any new visualisation
+
+Always check `app/components/energy.tsx` first. The energy ring, dynamics bars, and
+spider chart already exist as shared SVG components. If a page needs one of these, import
+it — do not rebuild. If the existing component is missing a feature, extend it in place.
 
 ---
 
@@ -124,12 +137,23 @@ const [view, setView] = useState<"card" | "table">("card");
 
 ## Colour Usage Rules
 
-- **Red** = urgency, high drive, allocated status, warnings
-- **Yellow** = brand, highlight, primary actions, sunshine energy
-- **Green** = positive, available, on target, earth energy
-- **Blue** = analytical, cool, information, calm energy
-- **Never** use these colours decoratively — always purposefully
-- **Never** invent new colours outside the defined palette
+The four Pulse Map energies are personality data. Use their colours only when the UI is
+about a person's energy mix, never as decorative chrome.
+
+- **Drive (`#E8402A`)** — urgency, decisiveness, high-risk states, allocated availability
+- **Spark (`#F5A623`)** — enthusiasm signals, soft warnings, "below target" utilisation,
+  medium risk in the capacity dashboard. **Never used for chrome** — that's Coral's job.
+- **Steady (`#2E8B57`)** — calm, supportive signals, "on target" utilisation, low risk,
+  available-now status
+- **Lens (`#1E6FA5`)** — analytical signals, information, precise reads
+
+Chrome (the parts of the UI that are NOT about personality data) uses the Valtech brand
+palette — Coral `#FF5040` is the accent, Off White `#F3F0EA` is the surface, Soft Black
+`#161311` is the primary ink. The accent `y` in the humyn wordmark is Coral, not Spark.
+
+- **Never** invent colours outside the Pulse + Valtech palettes
+- **Never** use Spark yellow for chrome (the wordmark, buttons, badges that aren't about energy)
+- **Never** use Coral for personality data (the four energies own those slots)
 
 ---
 
@@ -137,6 +161,18 @@ const [view, setView] = useState<"card" | "table">("card");
 
 - Using `energyConfig` instead of `energy` as the variable name
 - Forgetting to export `people` and `Person` from page.tsx
+- Using Insights Discovery vocabulary (Fiery Red, Sunshine Yellow, Director, Inspirer,
+  72-position wheel). The framework is the Humyn Pulse Map — Drive / Spark / Steady / Lens,
+  with eight positions (Driver / Catalyst / Connector / Carer / Anchor / Builder / Analyst /
+  Refiner).
+- Using Spark yellow `#F5A623` for chrome — the wordmark `y`, the "+" icon, the team-count
+  badge are all **Coral `#FF5040`**. Spark belongs to personality data only.
+- Rebuilding an energy ring / spider / dynamics chart inline in a page file — always import
+  from `app/components/energy.tsx`.
+- Calling the Anthropic API directly from a client component. The key only ever sits on
+  the server route at `app/api/pulse/route.ts`.
+- Setting `fontFamily` inline to use Valtech Neue — always use `className="font-display"`
+  so the next/font CSS variable lookup stays consistent.
 - Using `onClick` on a div without also setting `cursor: pointer`
 - Forgetting `boxSizing: "border-box"` on inputs
 - Using `<a>` tags instead of Next.js `<Link>` for internal navigation
@@ -155,13 +191,49 @@ const [view, setView] = useState<"card" | "table">("card");
 
 ---
 
+## Planned Future Features — Aware But Not Yet Built
+
+Keep these in mind when working — they shape architecture decisions today:
+
+- **Chrome extension** — one-click Humyn profile generation from any LinkedIn page. The
+  extension posts the same scraped text to `/api/pulse` that the manual paste flow uses,
+  so keep that route stable.
+- **ERP / OpenAir integration** — live availability data replacing the hand-curated
+  `utilisation` and `available` fields on `Person`. Don't bake assumptions about that
+  data being static into new code.
+- **Brief / RFP → AI team suggestion** — the dream feature. Will need a new route that
+  accepts a brief and returns ranked team options. Plan for it; don't build it.
+- **Pan-Nordic job board** at `/jobs` — single view of every available person.
+- **C-suite read-only dashboard** at `/board` — clean revenue + capacity + demand view.
+- **Hiring pipeline** at `/pipeline` — proprietary ATS with Pulse from day one.
+
+See PRODUCT.md "The Evolved Vision" for the full strategic picture.
+
+---
+
 ## Git Commit Messages
 
-Always use clear, descriptive commit messages:
-- `add [feature name]`
-- `fix [what was broken]`
-- `update [what changed and why]`
-- `refactor [what and why]`
+Always use clear, descriptive commit messages — first line is a short summary, body
+explains the why and the user-visible effect.
 
-Never: `update`, `fix`, `changes`, `wip`
+Good first lines (concrete, scoped, user-visible):
+- `add /capacity dashboard with flight-risk, utilisation, bench and cost-of-leaving panels`
+- `rename to Humyn Pulse Map and add ring + spider + dynamics visuals`
+- `wire Valtech Neue + Sons fonts via next/font/local`
+- `fix overlapping labels on the energy ring`
+- `align humyn chrome with Valtech brand: Coral accent, Off White surface`
+- `add Pulse profile generator at /pulse/new`
+
+Bad first lines:
+- `update` / `fix` / `changes` / `wip` — too vague
+- `tweak styles` — no information
+- `refactor components` — doesn't tell future-you what changed
+- `feat: blah` — no Conventional Commits in this repo
+
+Always co-author the commit:
+```
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+```
+
+Push to `main` only when explicitly authorised. Vercel auto-deploys main to production.
 

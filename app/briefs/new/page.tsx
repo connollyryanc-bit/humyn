@@ -690,6 +690,18 @@ export default function BriefsNewPage() {
             >
               Board
             </Link>
+            <Link
+              href="/settings/rate-card"
+              style={{
+                padding: "7px 14px",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#4D4945",
+              }}
+            >
+              Rates
+            </Link>
           </nav>
           <div style={{ flex: 1 }} />
           <Link

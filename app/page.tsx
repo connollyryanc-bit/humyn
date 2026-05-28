@@ -165,33 +165,6 @@ function EnergyBars({ person }: { person: Person }) {
   );
 }
 
-function EnergyDots({ person }: { person: Person }) {
-  const max = 12;
-  const min = 4;
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-      {(["driver", "energizer", "supporter", "analyst"] as EnergyKey[]).map((k) => {
-        const v = person.scores[k];
-        const size = min + (v / 100) * (max - min);
-        return (
-          <span
-            key={k}
-            title={`${energy[k].label} ${v}%`}
-            style={{
-              width: size,
-              height: size,
-              borderRadius: "50%",
-              background: energy[k].color,
-              opacity: 0.35 + (v / 100) * 0.65,
-              flexShrink: 0,
-            }}
-          />
-        );
-      })}
-    </div>
-  );
-}
-
 function PersonCard({
   person,
   inTeam,
@@ -204,7 +177,12 @@ function PersonCard({
   onToggleTeam: (p: Person) => void;
 }) {
   const tone = utilTone(person.utilisation);
-  const e = energy[person.primary];
+  const availAccent =
+    person.available === "now"
+      ? "#5CAB82"
+      : person.available === "soon"
+        ? "#D4974A"
+        : "transparent";
   const statusDotBg =
     person.available === "now"
       ? "#5CAB82"
@@ -214,222 +192,204 @@ function PersonCard({
   const statusDotBorder =
     person.available === "now" || person.available === "soon"
       ? "none"
-      : "0.5px solid rgba(0,0,0,0.15)";
+      : "0.5px solid #ccc";
   return (
     <div
-      onClick={() => onQuickView(person)}
       style={{
         position: "relative",
         background: "#FFFFFF",
         border: "0.5px solid rgba(0,0,0,0.07)",
-        borderRadius: 16,
-        padding: "20px 22px 18px",
+        borderRadius: 12,
+        padding: "1.25rem",
+        paddingBottom: "1.5rem",
         display: "flex",
         flexDirection: "column",
-        gap: 18,
+        gap: 14,
+        boxShadow: "none",
         overflow: "hidden",
-        cursor: "pointer",
-        transition: "border-color 0.15s ease, transform 0.15s ease",
-      }}
-      onMouseEnter={(ev) => {
-        ev.currentTarget.style.borderColor = e.border;
-      }}
-      onMouseLeave={(ev) => {
-        ev.currentTarget.style.borderColor = "rgba(0,0,0,0.07)";
+        transition: "box-shadow 0.15s ease",
       }}
     >
-      <div
-        aria-hidden
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 3,
-          background: e.color,
-          opacity: 0.55,
-        }}
-      />
-
-      <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
-        <div
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+        <Avatar person={person} size={42} />
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 15, fontWeight: 600, color: "#161311", letterSpacing: "-0.2px" }}>
+            {person.name}
+          </div>
+          <div style={{ fontSize: 12, color: "#9A9A9A", marginTop: 2, fontWeight: 500 }}>
+            {person.role} · <span style={{ color: "#5A5A5A" }}>{person.location}</span>
+          </div>
+        </div>
+        <span
+          aria-hidden
+          title={availability[person.available].label}
           style={{
-            position: "relative",
-            width: 52,
-            height: 52,
+            width: 7,
+            height: 7,
+            borderRadius: "50%",
+            background: statusDotBg,
+            border: statusDotBorder,
+            flexShrink: 0,
+            marginTop: 10,
+          }}
+        />
+        <button
+          onClick={() => onToggleTeam(person)}
+          aria-label={inTeam ? "Remove from team" : "Add to team"}
+          style={{
+            width: 28,
+            height: 28,
+            borderRadius: 8,
+            border: "1px solid rgba(0,0,0,0.07)",
+            background: inTeam ? "#1A1A1A" : "#FFFFFF",
+            color: inTeam ? "#FFFFFF" : "#1A1A1A",
+            cursor: "pointer",
+            fontSize: 16,
+            lineHeight: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             flexShrink: 0,
           }}
         >
-          <div
-            aria-hidden
-            style={{
-              position: "absolute",
-              inset: -3,
-              borderRadius: "50%",
-              border: `1.5px solid ${e.color}`,
-              opacity: 0.6,
-            }}
-          />
-          <Avatar person={person} size={52} />
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div
-            className="font-display"
-            style={{
-              fontSize: 17,
-              fontWeight: 600,
-              color: "#161311",
-              letterSpacing: "-0.3px",
-              lineHeight: 1.2,
-            }}
-          >
-            {person.name}
-          </div>
-          <div
-            style={{
-              fontSize: 12,
-              color: "#5A5A5A",
-              marginTop: 3,
-              fontWeight: 400,
-              lineHeight: 1.4,
-            }}
-          >
-            {person.role}
-          </div>
-          <div
-            style={{
-              fontSize: 11,
-              color: "#9A9A9A",
-              marginTop: 1,
-              fontWeight: 400,
-            }}
-          >
-            {person.location}
-          </div>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10 }}>
-          <span
-            aria-hidden
-            title={availability[person.available].label}
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              background: statusDotBg,
-              border: statusDotBorder,
-              flexShrink: 0,
-            }}
-          />
-          <button
-            onClick={(ev) => {
-              ev.stopPropagation();
-              onToggleTeam(person);
-            }}
-            aria-label={inTeam ? "Remove from team" : "Add to team"}
-            style={{
-              width: 26,
-              height: 26,
-              borderRadius: 8,
-              border: "0.5px solid rgba(0,0,0,0.1)",
-              background: inTeam ? "#161311" : "#FFFFFF",
-              color: inTeam ? "#FFFFFF" : "#161311",
-              cursor: "pointer",
-              fontSize: 15,
-              lineHeight: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            {inTeam ? "−" : "+"}
-          </button>
-        </div>
+          {inTeam ? "−" : "+"}
+        </button>
       </div>
 
       <p
         style={{
           fontSize: 13,
-          color: "#3A3633",
+          color: "#5A5A5A",
           lineHeight: 1.55,
           margin: 0,
-          fontStyle: "italic",
           display: "-webkit-box",
           WebkitLineClamp: 2,
           WebkitBoxOrient: "vertical",
           overflow: "hidden",
         }}
       >
-        &ldquo;{person.bestTrait}&rdquo;
+        {person.bio}
       </p>
 
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+        {person.capabilities.slice(0, 3).map((c) => (
+          <Pill key={c}>{c}</Pill>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        <EnergyBadge k={person.primary} small />
+        <Pill>{person.wheelPosition}</Pill>
+        <StatusBadge k={person.available} />
+      </div>
+
+      <div>
+        <SectionLabel>Energy profile</SectionLabel>
+        <EnergyBars person={person} />
+      </div>
+
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div style={{ flex: 1, height: 5, background: "#EDEDEA", borderRadius: 3, overflow: "hidden" }}>
           <div
             style={{
-              fontSize: 9,
-              color: "#9A9A9A",
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              fontWeight: 600,
+              width: `${Math.min(person.utilisation, 100)}%`,
+              height: "100%",
+              background: tone.color,
+              borderRadius: 3,
             }}
-          >
-            {person.wheelPosition}
-          </div>
-          <EnergyDots person={person} />
+          />
         </div>
-        <div style={{ textAlign: "right" }}>
+        <span
+          style={{
+            fontSize: 11,
+            color: tone.color,
+            fontWeight: 600,
+            minWidth: 38,
+            textAlign: "right",
+          }}
+        >
+          {person.utilisation}%
+        </span>
+      </div>
+
+      <div style={{ display: "flex", gap: 24, paddingTop: 12, borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+        <div>
           <div
             style={{
-              fontSize: 9,
+              fontSize: 10,
               color: "#9A9A9A",
               textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              fontWeight: 600,
+              letterSpacing: "0.06em",
             }}
           >
-            Utilisation
+            Clients
           </div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: "#1A1A1A", marginTop: 2 }}>
+            {person.clients}
+          </div>
+        </div>
+        <div>
           <div
             style={{
-              fontSize: 18,
-              fontWeight: 600,
-              color: tone.color,
-              letterSpacing: "-0.3px",
-              lineHeight: 1.1,
-              marginTop: 2,
+              fontSize: 10,
+              color: "#9A9A9A",
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
             }}
           >
-            {person.utilisation}%
+            Revenue
+          </div>
+          <div style={{ fontSize: 14, fontWeight: 600, color: "#1A1A1A", marginTop: 2 }}>
+            {person.revenue}
           </div>
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingTop: 14,
-          borderTop: "0.5px solid rgba(0,0,0,0.06)",
-        }}
-      >
-        <div style={{ fontSize: 11, color: "#9A9A9A" }}>
-          {person.clients} {person.clients === 1 ? "client" : "clients"} · {person.revenue}
-        </div>
-        <Link
-          href={`/people/${person.id}`}
-          onClick={(ev) => ev.stopPropagation()}
+      <div style={{ display: "flex", gap: 8 }}>
+        <button
+          onClick={() => onQuickView(person)}
           style={{
+            flex: 1,
+            padding: "8px 12px",
+            borderRadius: 8,
+            border: "1px solid rgba(0,0,0,0.07)",
+            background: "#FFFFFF",
+            color: "#1A1A1A",
             fontSize: 12,
-            fontWeight: 500,
-            color: e.text,
-            textDecoration: "none",
+            fontWeight: 400,
+            cursor: "pointer",
           }}
         >
-          Open profile →
+          Quick view
+        </button>
+        <Link
+          href={`/people/${person.id}`}
+          style={{
+            flex: 1,
+            padding: "8px 12px",
+            borderRadius: 8,
+            background: "#161311",
+            color: "#FFFFFF",
+            fontSize: 12,
+            fontWeight: 400,
+            textAlign: "center",
+          }}
+        >
+          Full profile
         </Link>
       </div>
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 4,
+          background: tone.color,
+          opacity: 0.85,
+        }}
+      />
     </div>
   );
 }
@@ -1382,8 +1342,8 @@ export default function PeoplePage() {
                 <div
                   style={{
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-                    gap: 20,
+                    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+                    gap: 12,
                   }}
                 >
                   {g.people.map((p) => (

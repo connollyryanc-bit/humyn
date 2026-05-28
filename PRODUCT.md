@@ -80,15 +80,65 @@ Data sources to integrate:
 ### Platform 3: Pipeline — Hiring & HR
 The talent layer. A proprietary ATS integrated with Pulse from day one.
 
-Features:
-- Job posting and management
-- Candidate tracking pipeline
-- Interview scheduling with calendar sync
-- AI transcript analysis — scoring, fit summary, red flags
-- Automated email communications
-- Offer and onboarding flow
-- Pulse assessment triggered automatically for all candidates
-- Candidate vs team fit scoring
+Features — inspired by Teamtailor UX, built from scratch
+with Humyn Pulse intelligence baked in from day one:
+
+Job management:
+- Create jobs with internal title (not shown to candidates)
+  and external title (shown on career site)
+- Job templates for recurring role types
+- Per-job application form builder: Name, Email, Phone,
+  Resume, Cover letter — each Off/Optional/Mandatory
+- Custom screening questions: Text, Yes/No, Multiple
+  choice, Range 1-10, Video response
+- AI-suggested questions based on role type
+- Job status: Draft, Active, Paused, Closed
+- Tags, department, division, location, region per job
+
+Candidate pipeline — kanban per job:
+- Default stages: Inbox → Reviewing → Phone screening →
+  Manager interview → HR interview → Group interview →
+  Reference check → Offer → Hired
+- Stages customisable per job
+- Every stage change logged to activity feed
+
+Candidate profile — richer than Teamtailor:
+- Personal info, applied role, current stage
+- Star rating 1-5 and review notes
+- Tags and source tracking
+- Pulse profile auto-generated from LinkedIn paste
+- Team fit score vs the team they would join
+- Activity feed — every action timestamped
+- Comments tab — internal notes and @mentions
+- To-dos tab — tasks assigned to team members
+- Evaluation tab — structured scoring
+- Messages tab — all communications with candidate
+
+Trigger automation per stage:
+- Send email (template to candidate)
+- Add comment (internal note)
+- Tag candidate
+- Mark as internal candidate
+- Smart schedule (send calendar booking link)
+- Invite to group meeting
+- Add to-do list
+- Ask for reference
+- Send NPS survey
+- Add to nurture campaign
+
+Career site:
+- External job board showing all active roles
+- Branded per market (Valtech Nordic market sites)
+- Candidates apply directly or "connect" for future roles
+
+Nurture campaigns:
+- Connected candidates enter automated email sequences
+- Warm pipeline for future demand forecasting
+
+Onboarding flow when candidate is hired:
+- Contract sent trigger
+- Pulse profile auto-created in people directory
+- Buddy assigned, Day 1 schedule created
 
 ---
 
@@ -214,6 +264,9 @@ The wheel has eight positions — four pure, four mixed:
 **Goal:** The capacity manager has a real-time view of utilisation, availability and demand.
 
 - [x] Capacity & retention dashboard at `/capacity` — flight-risk alerts, utilisation bars vs 80% target, bench duration with energy-specific thresholds (Energizer 14d · Supporter 21d · Driver/Analyst 28d), cost-of-leaving breakdown, AI-written weekly read
+- [x] Teams module at /teams — portfolio view, kanban,
+  timeline, pitch board (internal marketplace), availability
+  calendar, Monday bench email automation
 - [ ] Availability heatmap (who's free, by week)
 - [ ] Demand forecasting cross-referenced against the pitch pipeline and seasonality
 - [ ] C-suite read-only board dashboard (revenue, margin, capacity, demand)
@@ -223,16 +276,25 @@ The wheel has eight positions — four pure, four mixed:
 - [ ] Pan-Nordic job board — every available person across all markets in one view
 
 ### Phase 3 — Pipeline (Hiring)
-**Goal:** Hiring is managed entirely within Humyn, integrated with Pulse from day one.
+Goal: Hiring managed entirely within Humyn, with Pulse
+intelligence from the first moment a candidate touches
+the platform.
 
-- [ ] Job posting management
-- [ ] Candidate tracking pipeline (Applied → Screened → Interviewed → Offer → Hired)
-- [ ] Brief / RFP upload → AI team suggestion (the dream feature — see Evolved Vision)
+- [ ] Job list and overview at /pipeline
+- [ ] Per-job candidate kanban with customisable stages
+- [ ] Application form builder per job
+- [ ] Candidate Pulse profile auto-generated on entry
+- [ ] Team fit score vs joining team
+- [ ] Trigger automation per stage (email, schedule,
+      to-do, tag, NPS, nurture)
+- [ ] AI transcript analysis (scoring, fit, red flags)
 - [ ] Interview scheduling with calendar sync
-- [ ] AI transcript analysis (scoring, fit summary, red flags)
-- [ ] Email automation
 - [ ] Offer and onboarding flow
-- [ ] Candidate Pulse assessment auto-triggered from LinkedIn paste
+- [ ] Career site at /career (external-facing job board)
+- [ ] Nurture campaign management
+- [ ] Internal candidate flow from pitch board → pipeline
+- [ ] Hired candidate → auto-created Person in directory
+- [ ] Brief / RFP upload → AI team suggestion
 
 ---
 
@@ -290,6 +352,46 @@ calculated against the actual team they would join. AI handles interview schedul
 transcript analysis (scoring, fit summary, red flags), and offer management. When a
 candidate is hired, their profile moves straight into the people directory without any
 re-keying. The Pulse identity follows the person from application to alumnus.
+
+### 7. T-shaped team model
+Future consulting teams are not five people from the same
+office. They are deliberately assembled pods of T-shaped
+professionals — each with a deep specialist domain (the
+vertical of the T) and broad adjacent capability (the
+horizontal). Humyn maps both. When composing a team the
+engine ensures verticals don't overlap unnecessarily while
+the horizontals give the team enough shared language to
+collaborate without friction. Energy profiles sit on top
+of the skills architecture — so you're optimising for
+who can do the work AND who can think together.
+
+### 8. Internal job pitch board
+A two-way marketplace sitting inside the Teams module.
+Instead of the capacity manager always pushing people
+onto projects, consultants pull themselves toward work
+they want. When a brief arrives the capacity manager
+posts roles to the board. Consultants receive a
+personalised Monday morning email (toned to their
+Pulse energy type) showing matched open roles.
+They apply in one click. The capacity manager sees
+all applicants with Pulse profiles and AI-recommended
+best fit. Credits reward participation — applying,
+getting shortlisted, getting selected, referring a
+colleague. Credits accumulate into a score that feeds
+performance review and bonus framework. No toxic
+rankings — scores are private, not competitive.
+
+### 9. Pan-Nordic workforce orchestration
+One unified view of every consultant across all four
+Nordic markets. Replaces the weekly phone calls between
+market capacity managers. The brief-to-team AI searches
+across all markets simultaneously — a Helsinki Analyst
+can be matched to a Stockholm brief, a Copenhagen
+Energizer can balance an Oslo delivery team.
+The platform thinks organisationally not territorially.
+Live availability eventually comes from ERP/OpenAir
+so the board never goes stale. Excel import is the
+bridge until integration is live.
 
 ---
 

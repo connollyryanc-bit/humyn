@@ -226,6 +226,86 @@ interface Person {
   howToSpeak: string;         // paragraph on verbal communication style
   howToEmail: string;         // paragraph on written communication style
 }
+
+interface Brief {
+  id: number;
+  name: string;
+  client: string;
+  market: string;
+  stage: "unstaffed" | "analysing" | "proposed" | "buyin" |
+         "confirmed" | "active";
+  startDate: string;
+  duration: string;
+  harmonyScore: number | null;
+  teamIds: number[];
+  priority: "urgent" | "normal" | "low";
+  briefType: string;
+  daysToStart: number | null;
+  requiredEnergy: {
+    driver: "essential" | "high" | "medium" | "low";
+    energizer: "essential" | "high" | "medium" | "low";
+    supporter: "essential" | "high" | "medium" | "low";
+    analyst: "essential" | "high" | "medium" | "low";
+  };
+}
+
+interface PitchRole {
+  id: number;
+  briefId: number;
+  title: string;
+  briefName: string;
+  market: string;
+  duration: string;
+  startDate: string;
+  level: "junior" | "mid" | "senior" | "lead";
+  requiredEnergy: EnergyKey;
+  skills: string[];
+  applicantCount: number;
+  closingDate: string;
+  creditsOnSelection: number;
+  postedDaysAgo: number;
+}
+
+interface Job {
+  id: number;
+  internalTitle: string;
+  externalTitle: string;
+  department: string;
+  location: string;
+  market: string;
+  status: "draft" | "active" | "paused" | "closed";
+  recruiterId: number;
+  hiringManagerId: number;
+  tags: string[];
+  createdDate: string;
+  applicationCount: number;
+  requiredEnergy: EnergyKey;
+  teamId: number | null;
+}
+
+interface Candidate {
+  id: number;
+  jobId: number;
+  name: string;
+  email: string;
+  location: string;
+  linkedIn: string | null;
+  currentStage: string;
+  rating: number;
+  tags: string[];
+  isInternal: boolean;
+  pulseProfile: {
+    primary: EnergyKey;
+    secondary: EnergyKey;
+    scores: Record<EnergyKey, number>;
+    wheelPosition: string;
+    confidence: number;
+  } | null;
+  teamFitScore: number | null;
+  appliedDate: string;
+  source: "direct" | "linkedin" | "referral" |
+          "internal" | "nurture" | "agency";
+}
 ```
 
 Utilisation colour logic:
@@ -267,6 +347,25 @@ app/
     page.tsx                — Capacity & retention dashboard. Flight risks, utilisation,
                               bench duration, cost-of-leaving, AI-written weekly read.
                               Built — first page of Compass.
+  teams/
+    page.tsx                — Full Teams module. Five tabs: Portfolio
+                              (Monday morning brief overview), Kanban
+                              (all briefs by stage), Timeline (8-week
+                              Gantt per consultant), Pitch board
+                              (internal job marketplace), Availability
+                              (all markets, filterable). Manages 15-20
+                              concurrent briefs across 4 Nordic markets.
+                              Includes Monday bench email automation
+                              settings panel.
+  pipeline/
+    page.tsx                — Jobs list and hiring overview
+    [jobId]/
+      page.tsx              — Candidate kanban per job
+      candidates/
+        [candidateId]/
+          page.tsx          — Individual candidate profile
+    new/
+      page.tsx              — Create new job flow
   components/
     energy.tsx              — Shared visualisations: EnergyRing, EnergyDynamics,
                               EnergySpider. Pure SVG, no chart library.
@@ -324,6 +423,47 @@ The nav has four items: People, Teams, Capacity, Insights
 - Button generates a message written in the style that lands with that person's energy type
 - Output shown in coloured box matching their primary energy
 
+**Teams module (/teams):**
+The capacity manager manages 15-20 concurrent briefs across
+4 Nordic markets simultaneously. Five views:
+- Portfolio: Monday morning triage — priority actions,
+  all briefs as a list, available people, market snapshot,
+  upcoming availability, AI weekly insight
+- Kanban: all briefs as cards across 6 stage columns
+  (Unstaffed, Analysing, Proposed, Buy-in, Confirmed, Active)
+- Timeline: 8-week Gantt — consultants as rows, project
+  blocks as columns, colour-coded by energy type
+- Pitch board: internal job marketplace with 4 sub-tabs
+  (Open roles, Manage roles, My applications, Credits)
+- Availability: all people organised by market, filterable
+
+**Pitch board — internal job marketplace:**
+Consultants self-select into open project roles.
+Each role shows match % based on energy and skills fit.
+Applying earns credits. Shortlisting earns more.
+Selection earns most. Referrals earn too.
+Credits feed into performance review and bonus framework.
+Monday email: bench consultants receive personalised email
+at 08:00 every Monday with matched open roles.
+Email tone is personalised by Pulse Map energy type —
+Driver gets direct/outcome-focused, Energizer gets
+enthusiastic/relational, Supporter gets warm/unhurried,
+Analyst gets structured/detailed.
+
+**Pipeline module (/pipeline):**
+Proprietary ATS with Pulse from day one.
+Hiring flow: Inbox → Reviewing → Phone screening →
+Manager interview → HR interview → Group interview →
+Reference check → Offer → Hired
+Stages are customisable per job.
+Trigger automation fires per stage:
+send email, add comment, tag candidate, smart schedule,
+add to-do, send NPS, add to nurture campaign.
+Internal candidates (from pitch board) flow directly
+into Pipeline — their Pulse profile carries over.
+When hired, candidate profile becomes a Person in the
+people directory automatically.
+
 ---
 
 ## TypeScript Rules
@@ -367,13 +507,15 @@ Stage 1 (Pulse) is largely shipped and Stage 2 (Compass) has started. Live now:
 - Humyn Pulse Map rename — clean break from Insights Discovery vocabulary
 - `/capacity` dashboard — flight risks, utilisation vs 80% target, bench duration, cost-of-leaving, AI weekly read
 
-Next priorities (top three on the queue):
-- Add / edit person flow (form to author profiles without code)
-- Save-to-directory wiring on the Pulse generator
-- Insights dashboard at `/insights` (AI-written weekly narrative reports)
-- Chrome extension — one-click LinkedIn profile generation
-- ERP / OpenAir integration for live availability data
-- Brief / RFP → AI team suggestion (the dream feature, see PRODUCT.md)
+Next priorities:
+- Teams module at /teams (brief portfolio, kanban,
+  timeline, pitch board, availability, Monday emails)
+- Add/edit person flow (form to author profiles)
+- Save-to-directory wiring on Pulse generator
+- Pipeline module at /pipeline (proprietary ATS)
+- Insights dashboard at /insights (C-suite view)
+- Chrome extension for one-click LinkedIn profiling
+- ERP/OpenAir integration for live availability
 
 ---
 

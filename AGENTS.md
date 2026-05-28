@@ -52,6 +52,10 @@ Always read CLAUDE.md before making any changes.
 | `app/pulse/new/page.tsx` | LinkedIn-paste profile generator. Talks to `/api/pulse`. Never call Anthropic directly from a page component — the key must stay server-side. |
 | `app/api/pulse/route.ts` | Server-side Anthropic proxy. Edit only when changing the system prompt, model, or validation. Reads `ANTHROPIC_API_KEY` from env. |
 | `app/capacity/page.tsx` | Capacity & retention dashboard. CapacityData lives in this file alongside the page until we wire a real backing store. |
+| `app/teams/page.tsx` | Full Teams module. Five tabs. Brief data, PitchRole data and PersonAvailability data all live in this file until a backing store exists. Import Person and EnergyKey from ../../page (check exact depth). |
+| `app/pipeline/page.tsx` | Jobs list. Job interface lives here. |
+| `app/pipeline/[jobId]/page.tsx` | Per-job candidate kanban. Imports Job from ../page. |
+| `app/pipeline/[jobId]/candidates/[candidateId]/page.tsx` | Candidate profile. Imports Candidate and Job from ../../page. Imports Pulse components from ../../../../components/energy. |
 | `app/components/energy.tsx` | Shared SVG visualisations (EnergyRing, EnergyDynamics, EnergySpider). **Always import. Never recreate in a page file.** Fix bugs here, not in copies. |
 | `app/layout.tsx` | Root layout. Loads Valtech Neue + Sons via next/font/local. Keep minimal. |
 | `app/fonts.ts` | next/font/local declarations. Update only when fonts change. |
@@ -66,6 +70,97 @@ Always read CLAUDE.md before making any changes.
 Always check `app/components/energy.tsx` first. The energy ring, dynamics bars, and
 spider chart already exist as shared SVG components. If a page needs one of these, import
 it — do not rebuild. If the existing component is missing a feature, extend it in place.
+
+#### Building the Pipeline module — build order
+
+Build in this order to avoid circular dependencies:
+
+1. app/pipeline/page.tsx — jobs list first
+   Needs Job interface only. Shows all jobs as a list
+   with stage counts, status badges, recruiter assigned.
+
+2. app/pipeline/[jobId]/page.tsx — kanban per job
+   Needs Job + Candidate interfaces. The kanban is the
+   core interaction. Stages scroll horizontally, each
+   column 280px wide. Candidate cards show name, avatar
+   with energy colour if profiled, star rating, source.
+
+3. app/pipeline/[jobId]/candidates/[candidateId]/page.tsx
+   Needs all interfaces. This is the richest page —
+   a Pulse profile combined with a recruitment tracker.
+   Reuse the Pulse profile display from people/[id].
+   Import EnergyRing, EnergyDynamics from components/energy.
+
+4. app/pipeline/new/page.tsx — job creation last
+   Form with internal title, external title, department,
+   location, application form builder, stage editor.
+
+Key Pipeline patterns:
+- Kanban uses click-to-move-stage buttons (not drag/drop)
+- Every stage change logs to the activity feed
+- Internal candidates already have a Pulse profile —
+  display it, never regenerate
+- Team fit score compares candidate Pulse scores against
+  average scores of the team they would join
+- Trigger automation is shown as a UI config panel
+  per stage — implementation can be stubbed for now
+
+#### Pipeline design patterns
+
+Pipeline pages feel more task-focused than profile-focused.
+Clean kanban aesthetic with Humyn energy colour language.
+Candidate profile is richest page — Pulse profile display
+plus recruitment activity tracker in a two-column layout.
+Stage columns scroll horizontally, fixed 280px each.
+
+#### Building the Teams module
+
+The Teams module is the operational heart for a capacity
+manager handling 15-20 concurrent briefs simultaneously.
+The primary view is the portfolio — everything at once,
+triaged by urgency, not a single brief in isolation.
+
+Five tabs — build in this order:
+1. Portfolio tab first — this is the default view and
+   the most important. Priority actions surfaced at top,
+   briefs list below, available people and market
+   snapshot on the right, AI insight at the bottom.
+
+2. Kanban tab — all briefs as cards across 6 stage
+   columns. Horizontally scrollable. Same stage colour
+   system as Pipeline.
+
+3. Availability tab — all people by market. Simple grid.
+   Filterable by energy type and availability status.
+
+4. Pitch board tab — four sub-tabs. Open roles is the
+   consultant view. Manage roles is the capacity manager
+   view. My applications shows application status.
+   Credits shows the gamification score.
+
+5. Timeline tab last — 8-week Gantt, consultants as rows,
+   project blocks as columns. Most complex to build.
+
+Monday bench email settings:
+- Collapsible panel below the main tabs
+- Shows who receives an email this Monday (benchDays > 0)
+- Toggle settings for: bench consultants, finishing within
+  14 days, personalise by energy, matched roles only
+- Shows total count and scheduled send time
+
+#### Gamification — ethical design rules
+
+The credit system rewards participation not ranking.
+Scores are private — consultants see their own score,
+never colleagues'. No leaderboards. No public rankings.
+No punitive mechanics — credits only go up, never down.
+The score signals proactive engagement for performance
+review and bonus framework when available.
+Referral credits reward collaborative sourcing — pointing
+a colleague toward a role they'd suit, even if you
+applied yourself, earns credits when they are selected.
+This makes every consultant a distributed sourcing agent
+without it feeling competitive or transactional.
 
 ---
 

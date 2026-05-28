@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { fetchAllPeople } from "./lib/api-client";
+import { SignedInBadge } from "./components/signed-in-badge";
 import {
   AvailKey,
   EnergyKey,
@@ -1079,6 +1080,7 @@ export default function PeoplePage() {
               </span>
             )}
           </button>
+          <SignedInBadge />
         </div>
       </header>
 

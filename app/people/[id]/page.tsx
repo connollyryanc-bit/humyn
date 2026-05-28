@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { notFound, useParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AvailKey,
   EnergyKey,
@@ -13,6 +13,7 @@ import {
   utilTone,
 } from "../../page";
 import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
+import { findPerson } from "../../lib/people-store";
 
 type TabKey = "overview" | "personality" | "engage" | "achievements";
 
@@ -239,12 +240,29 @@ export default function PersonProfilePage() {
   const [tab, setTab] = useState<TabKey>("overview");
   const [draft, setDraft] = useState<string>("");
   const [generated, setGenerated] = useState<string>("");
+  const [person, setPerson] = useState<Person | undefined>(() =>
+    people.find((p) => p.id === Number(params?.id)),
+  );
+  const [resolved, setResolved] = useState<boolean>(false);
 
   const id = Number(params?.id);
-  const person = useMemo<Person | undefined>(() => people.find((p) => p.id === id), [id]);
+
+  useEffect(() => {
+    const found = findPerson(id, people);
+    setPerson(found);
+    setResolved(true);
+  }, [id]);
+
+  if (resolved && !person) {
+    notFound();
+  }
 
   if (!person) {
-    notFound();
+    return (
+      <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>Loading…</div>
+      </div>
+    );
   }
 
   const tone = utilTone(person.utilisation);
@@ -318,7 +336,8 @@ export default function PersonProfilePage() {
             >
               Capacity
             </Link>
-            <span
+            <Link
+              href="/insights"
               style={{
                 padding: "7px 14px",
                 borderRadius: 100,
@@ -326,21 +345,34 @@ export default function PersonProfilePage() {
                 fontWeight: 500,
                 color: "#4D4945",
                 background: "transparent",
-                cursor: "pointer",
               }}
             >
               Insights
-            </span>
+            </Link>
           </nav>
           <div style={{ flex: 1 }} />
+          <Link
+            href={`/people/${person.id}/edit`}
+            style={{
+              padding: "7px 14px",
+              borderRadius: 100,
+              border: "0.5px solid rgba(0,0,0,0.07)",
+              background: "#FFFFFF",
+              color: "#161311",
+              fontSize: 12,
+              fontWeight: 500,
+            }}
+          >
+            Edit profile
+          </Link>
           <Link
             href="/"
             style={{
               padding: "7px 14px",
               borderRadius: 100,
-              border: "1px solid rgba(0,0,0,0.07)",
+              border: "0.5px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#1A1A1A",
+              color: "#161311",
               fontSize: 12,
               fontWeight: 500,
             }}

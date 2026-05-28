@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { mergePeople } from "./lib/people-store";
 
 export type EnergyKey = "red" | "yellow" | "green" | "blue";
 export type AvailKey = "now" | "soon" | "allocated";
@@ -1249,15 +1250,20 @@ export default function PeoplePage() {
   const [selected, setSelected] = useState<Person | null>(null);
   const [team, setTeam] = useState<Person[]>([]);
   const [teamOpen, setTeamOpen] = useState<boolean>(false);
+  const [mergedPeople, setMergedPeople] = useState<Person[]>(people);
+
+  useEffect(() => {
+    setMergedPeople(mergePeople(people));
+  }, []);
 
   const filtered = useMemo<Person[]>(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return people;
-    return people.filter((p) => {
+    if (!q) return mergedPeople;
+    return mergedPeople.filter((p) => {
       const hay = [p.name, p.role, p.location, ...p.capabilities].join(" ").toLowerCase();
       return hay.includes(q);
     });
-  }, [search]);
+  }, [search, mergedPeople]);
 
   const grouped = useMemo<{ key: string; label: string; people: Person[] }[]>(() => {
     if (groupBy === "none") {
@@ -1347,7 +1353,8 @@ export default function PeoplePage() {
             >
               Capacity
             </Link>
-            <span
+            <Link
+              href="/insights"
               style={{
                 padding: "7px 14px",
                 borderRadius: 100,
@@ -1355,21 +1362,34 @@ export default function PeoplePage() {
                 fontWeight: 500,
                 color: "#4D4945",
                 background: "transparent",
-                cursor: "pointer",
               }}
             >
               Insights
-            </span>
+            </Link>
           </nav>
           <div style={{ flex: 1 }} />
+          <Link
+            href="/people/new"
+            style={{
+              padding: "7px 14px",
+              borderRadius: 100,
+              border: "0.5px solid rgba(0,0,0,0.07)",
+              background: "#FFFFFF",
+              color: "#161311",
+              fontSize: 12,
+              fontWeight: 500,
+            }}
+          >
+            Add manually
+          </Link>
           <Link
             href="/pulse/new"
             style={{
               padding: "7px 14px",
               borderRadius: 100,
-              border: "1px solid rgba(0,0,0,0.07)",
+              border: "0.5px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#1A1A1A",
+              color: "#161311",
               fontSize: 12,
               fontWeight: 500,
               display: "inline-flex",
@@ -1450,7 +1470,7 @@ export default function PeoplePage() {
               People
             </h1>
             <div style={{ fontSize: 13, color: "#5A5A5A", marginTop: 4 }}>
-              {filtered.length} {filtered.length === 1 ? "person" : "people"} · {people.length} total
+              {filtered.length} {filtered.length === 1 ? "person" : "people"} · {mergedPeople.length} total
             </div>
           </div>
 

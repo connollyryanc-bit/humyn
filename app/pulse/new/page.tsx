@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { EnergyKey, energy } from "../../page";
+import { EnergyKey, Person, energy } from "../../page";
 import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
+import { initialsFromName, nextCustomId, saveStoredPerson } from "../../lib/people-store";
 
 interface GeneratedProfile {
   name: string;
@@ -781,6 +783,7 @@ function ProfileView({
 }
 
 export default function PulseNewPage() {
+  const router = useRouter();
   const [text, setText] = useState<string>("");
   const [nameDraft, setNameDraft] = useState<string>("");
   const [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
@@ -834,8 +837,37 @@ export default function PulseNewPage() {
   }
 
   function saveProfile() {
+    if (!profile) return;
+    const displayName = (nameDraft.trim() || profile.name || "Unknown").trim();
+    const wheelLabel = profile.wheelPosition || `${energy[profile.primary].label} type`;
+    const newId = nextCustomId();
+    const person: Person = {
+      id: newId,
+      name: displayName,
+      initials: initialsFromName(displayName),
+      role: "Generated from LinkedIn",
+      location: "Stockholm",
+      primary: profile.primary,
+      secondary: profile.secondary,
+      scores: profile.scores,
+      utilisation: 0,
+      available: "now",
+      clients: 0,
+      revenue: "—",
+      bio: profile.bio,
+      capabilities: profile.capabilities,
+      achievements: profile.achievements,
+      bestTrait: profile.bestTrait,
+      vice: profile.vice,
+      wheelPosition: wheelLabel,
+      drivers: profile.drivers,
+      detractors: profile.detractors,
+      howToSpeak: profile.howToSpeak,
+      howToEmail: profile.howToEmail,
+    };
+    saveStoredPerson(person);
     setSaveState("saved");
-    setTimeout(() => setSaveState("idle"), 2500);
+    setTimeout(() => router.push(`/people/${newId}/edit`), 600);
   }
 
   async function copyLink() {
@@ -918,7 +950,8 @@ export default function PulseNewPage() {
             >
               Capacity
             </Link>
-            <span
+            <Link
+              href="/insights"
               style={{
                 padding: "7px 14px",
                 borderRadius: 100,
@@ -926,11 +959,10 @@ export default function PulseNewPage() {
                 fontWeight: 500,
                 color: "#4D4945",
                 background: "transparent",
-                cursor: "pointer",
               }}
             >
               Insights
-            </span>
+            </Link>
           </nav>
           <div style={{ flex: 1 }} />
           <Link

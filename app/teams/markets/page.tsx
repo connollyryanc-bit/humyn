@@ -1742,6 +1742,13 @@ function BuildTab({
 
 export default function TeamsPage() {
   const [tab, setTab] = useState<TabKey>("saved");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const t = params.get("tab");
+    if (t === "build" || t === "markets" || t === "saved") setTab(t);
+  }, []);
   const [people, setPeople] = useState<Person[]>([]);
   const [enriched, setEnriched] = useState<PersonWithCapacity[]>([]);
   const [teams, setTeams] = useState<TeamPayload[]>([]);

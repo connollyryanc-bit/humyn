@@ -171,6 +171,7 @@ export default function TeamsPage() {
         {tab === "timeline" && <TimelinePlaceholder />}
         {tab === "pitch" && <PitchPlaceholder />}
         {tab === "availability" && <AvailabilityPlaceholder />}
+        {tab === "build" && <BuildTeamLink />}
         {tab === "markets" && <MarketsLink />}
       </main>
     </div>
@@ -362,18 +363,36 @@ function AvailabilityPlaceholder() {
   );
 }
 
+function BuildTeamLink() {
+  return (
+    <ScaffoldCard
+      title="Build team — compose teams with personality fit"
+      body="The full team-composition workbench. Drag people into a draft team, see the harmony score update live, get energy-gap warnings, an AI conflict-cost projection, and ranked swap suggestions. Saved teams live in the same workbench."
+      bullets={[
+        "Draft picker — every consultant filterable by market, energy, availability",
+        "Harmony dial — live score as you add or remove people",
+        "Energy gap detection — undersupplied + oversupplied energies",
+        "AI team analysis — friction pairs, missing angle, kickoff prompt",
+        "Conflict cost projection — productivity loss in euros per quarter",
+        "Saved teams list — name, client, members, harmony, last edit",
+      ]}
+      cta={{ href: "/teams/markets?tab=build", label: "Open Build team workbench →" }}
+    />
+  );
+}
+
 function MarketsLink() {
   return (
     <ScaffoldCard
       title="Markets — Nordic culture analysis"
-      body="The existing Markets, Saved teams and Team builder views — the full team-composition workbench — live at /teams/markets while we wire the new module. Nothing was lost; everything is one click away."
+      body="Per-market culture profiles plus the cross-market friction matrix. Understand how Stockholm, Oslo, Copenhagen and Helsinki differ in dominant energy so projects spanning markets can be staffed deliberately."
       bullets={[
-        "Cross-market friction matrix",
         "Per-market culture cards (dominant energy, top capabilities, signature)",
-        "Saved teams list with harmony scores",
-        "Team builder with energy gap detection + AI analysis",
+        "Cross-market friction matrix — every market pair scored",
+        "Best-for and watch-for notes per market",
+        "Average loyalty + utilisation per market",
       ]}
-      cta={{ href: "/teams/markets", label: "Open Markets view →" }}
+      cta={{ href: "/teams/markets?tab=markets", label: "Open Markets analysis →" }}
     />
   );
 }

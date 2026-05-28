@@ -65,6 +65,7 @@ export const TEAMS_TABS = [
   { key: "timeline",     label: "Timeline" },
   { key: "pitch",        label: "Pitch board" },
   { key: "availability", label: "Availability" },
+  { key: "build",        label: "Build team" },
   { key: "markets",      label: "Markets" },
 ] as const;
 

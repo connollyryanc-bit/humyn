@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { DEFAULT_STAGES, JOB_STATUS_TONE, Candidate } from "../types";
 import { seedCandidates, seedJobs } from "../seed";
 import { energy } from "../../page";
@@ -76,6 +76,9 @@ export default function JobKanbanPage() {
     return map;
   }, [jobCandidates]);
 
+  const [draggingId, setDraggingId] = useState<number | null>(null);
+  const [dragOverStage, setDragOverStage] = useState<string | null>(null);
+
   function moveCandidate(candidateId: number, direction: -1 | 1) {
     setCandidates((prev) =>
       prev.map((c) => {
@@ -85,6 +88,13 @@ export default function JobKanbanPage() {
         if (next < 0 || next >= STAGE_KEYS.length) return c;
         return { ...c, currentStage: STAGE_KEYS[next] };
       }),
+    );
+  }
+
+  function setStage(candidateId: number, stageKey: string) {
+    if (!STAGE_KEYS.includes(stageKey)) return;
+    setCandidates((prev) =>
+      prev.map((c) => (c.id === candidateId ? { ...c, currentStage: stageKey } : c)),
     );
   }
 
@@ -214,17 +224,39 @@ export default function JobKanbanPage() {
         <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 12 }}>
           {DEFAULT_STAGES.map((s) => {
             const inStage = byStage.get(s.key) ?? [];
+            const isDropTarget = dragOverStage === s.key;
             return (
               <div
                 key={s.key}
+                onDragOver={(ev) => {
+                  ev.preventDefault();
+                  ev.dataTransfer.dropEffect = "move";
+                  if (dragOverStage !== s.key) setDragOverStage(s.key);
+                }}
+                onDragLeave={(ev) => {
+                  const related = ev.relatedTarget as Node | null;
+                  if (related && ev.currentTarget.contains(related)) return;
+                  if (dragOverStage === s.key) setDragOverStage(null);
+                }}
+                onDrop={(ev) => {
+                  ev.preventDefault();
+                  const raw = ev.dataTransfer.getData("text/plain");
+                  const id = Number(raw);
+                  if (!Number.isNaN(id)) setStage(id, s.key);
+                  setDragOverStage(null);
+                  setDraggingId(null);
+                }}
                 style={{
                   flexShrink: 0,
                   width: 280,
-                  background: "#FFFFFF",
-                  border: "0.5px solid rgba(0,0,0,0.07)",
+                  background: isDropTarget ? "#EFF8F3" : "#FFFFFF",
+                  border: isDropTarget
+                    ? "1px dashed #5CAB82"
+                    : "0.5px solid rgba(0,0,0,0.07)",
                   borderRadius: 12,
                   padding: "14px 14px 18px",
                   minHeight: 460,
+                  transition: "background 0.12s ease, border-color 0.12s ease",
                 }}
               >
                 <div
@@ -244,7 +276,7 @@ export default function JobKanbanPage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {inStage.length === 0 && (
                     <div style={{ fontSize: 11, color: "#9A9A9A", textAlign: "center", padding: "16px 4px" }}>
-                      Drop candidates here using the chevrons.
+                      {isDropTarget ? "Release to move here" : "Drag candidates here or use the chevrons."}
                     </div>
                   )}
                   {inStage.map((c) => (
@@ -252,8 +284,14 @@ export default function JobKanbanPage() {
                       key={c.id}
                       candidate={c}
                       jobId={jobIdNum}
+                      isDragging={draggingId === c.id}
                       onMove={moveCandidate}
                       onRate={setRating}
+                      onDragStart={(id) => setDraggingId(id)}
+                      onDragEnd={() => {
+                        setDraggingId(null);
+                        setDragOverStage(null);
+                      }}
                     />
                   ))}
                 </div>
@@ -269,13 +307,19 @@ export default function JobKanbanPage() {
 function CandidateCard({
   candidate,
   jobId,
+  isDragging,
   onMove,
   onRate,
+  onDragStart,
+  onDragEnd,
 }: {
   candidate: Candidate;
   jobId: number;
+  isDragging: boolean;
   onMove: (id: number, dir: -1 | 1) => void;
   onRate: (id: number, r: number) => void;
+  onDragStart: (id: number) => void;
+  onDragEnd: () => void;
 }) {
   const e = candidate.pulseProfile ? energy[candidate.pulseProfile.primary] : null;
   const idx = stageIndex(candidate.currentStage);
@@ -284,6 +328,13 @@ function CandidateCard({
 
   return (
     <div
+      draggable
+      onDragStart={(ev) => {
+        ev.dataTransfer.setData("text/plain", String(candidate.id));
+        ev.dataTransfer.effectAllowed = "move";
+        onDragStart(candidate.id);
+      }}
+      onDragEnd={onDragEnd}
       style={{
         border: "0.5px solid rgba(0,0,0,0.07)",
         borderRadius: 10,
@@ -292,6 +343,9 @@ function CandidateCard({
         display: "flex",
         flexDirection: "column",
         gap: 10,
+        opacity: isDragging ? 0.4 : 1,
+        cursor: "grab",
+        transition: "opacity 0.12s ease",
       }}
     >
       <Link

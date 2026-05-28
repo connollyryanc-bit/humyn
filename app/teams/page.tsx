@@ -199,6 +199,10 @@ export default function TeamsPage() {
     );
   }
 
+  function setBriefStage(briefId: number, stageKey: BriefStage) {
+    setBriefs((prev) => prev.map((b) => (b.id === briefId ? { ...b, stage: stageKey } : b)));
+  }
+
   function cyclePriority(briefId: number) {
     setBriefs((prev) =>
       prev.map((b) => (b.id === briefId ? { ...b, priority: nextPriority(b.priority) } : b)),
@@ -318,7 +322,12 @@ export default function TeamsPage() {
           />
         )}
         {tab === "kanban" && (
-          <KanbanTab briefs={briefs} onMove={moveBrief} onCyclePriority={cyclePriority} />
+          <KanbanTab
+            briefs={briefs}
+            onMove={moveBrief}
+            onSetStage={setBriefStage}
+            onCyclePriority={cyclePriority}
+          />
         )}
         {tab === "timeline" && <TimelineTab briefs={briefs} people={people} />}
         {tab === "pitch" && (
@@ -498,27 +507,54 @@ function PortfolioTab({
 function KanbanTab({
   briefs,
   onMove,
+  onSetStage,
   onCyclePriority,
 }: {
   briefs: Brief[];
   onMove: (id: number, dir: -1 | 1) => void;
+  onSetStage: (id: number, stage: BriefStage) => void;
   onCyclePriority: (id: number) => void;
 }) {
+  const [draggingId, setDraggingId] = useState<number | null>(null);
+  const [dragOverStage, setDragOverStage] = useState<BriefStage | null>(null);
+
   return (
     <div style={{ display: "flex", gap: 12, overflowX: "auto", paddingBottom: 12 }}>
       {BRIEF_STAGES.map((s) => {
         const inStage = briefs.filter((b) => b.stage === s.key);
+        const isDropTarget = dragOverStage === s.key;
         return (
           <div
             key={s.key}
+            onDragOver={(ev) => {
+              ev.preventDefault();
+              ev.dataTransfer.dropEffect = "move";
+              if (dragOverStage !== s.key) setDragOverStage(s.key);
+            }}
+            onDragLeave={(ev) => {
+              const related = ev.relatedTarget as Node | null;
+              if (related && ev.currentTarget.contains(related)) return;
+              if (dragOverStage === s.key) setDragOverStage(null);
+            }}
+            onDrop={(ev) => {
+              ev.preventDefault();
+              const raw = ev.dataTransfer.getData("text/plain");
+              const id = Number(raw);
+              if (!Number.isNaN(id)) onSetStage(id, s.key);
+              setDragOverStage(null);
+              setDraggingId(null);
+            }}
             style={{
               flexShrink: 0,
               width: 280,
-              background: "#FFFFFF",
-              border: "0.5px solid rgba(0,0,0,0.07)",
+              background: isDropTarget ? "#EFF8F3" : "#FFFFFF",
+              border: isDropTarget
+                ? "1px dashed #5CAB82"
+                : "0.5px solid rgba(0,0,0,0.07)",
               borderRadius: 12,
               padding: "14px 14px 18px",
               minHeight: 480,
+              transition: "background 0.12s ease, border-color 0.12s ease",
             }}
           >
             <div
@@ -538,11 +574,22 @@ function KanbanTab({
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {inStage.length === 0 && (
                 <div style={{ fontSize: 11, color: "#9A9A9A", textAlign: "center", padding: "16px 4px" }}>
-                  Use the arrows on cards to bring briefs here.
+                  {isDropTarget ? "Release to move here" : "Drag briefs here or use the arrows."}
                 </div>
               )}
               {inStage.map((b) => (
-                <BriefCard key={b.id} brief={b} onMove={onMove} onCyclePriority={onCyclePriority} />
+                <BriefCard
+                  key={b.id}
+                  brief={b}
+                  isDragging={draggingId === b.id}
+                  onMove={onMove}
+                  onCyclePriority={onCyclePriority}
+                  onDragStart={(id) => setDraggingId(id)}
+                  onDragEnd={() => {
+                    setDraggingId(null);
+                    setDragOverStage(null);
+                  }}
+                />
               ))}
             </div>
           </div>
@@ -554,18 +601,31 @@ function KanbanTab({
 
 function BriefCard({
   brief,
+  isDragging,
   onMove,
   onCyclePriority,
+  onDragStart,
+  onDragEnd,
 }: {
   brief: Brief;
+  isDragging: boolean;
   onMove: (id: number, dir: -1 | 1) => void;
   onCyclePriority: (id: number) => void;
+  onDragStart: (id: number) => void;
+  onDragEnd: () => void;
 }) {
   const idx = stageIndex(brief.stage);
   const canBack = idx > 0;
   const canFwd = idx < STAGE_KEYS.length - 1;
   return (
     <div
+      draggable
+      onDragStart={(ev) => {
+        ev.dataTransfer.setData("text/plain", String(brief.id));
+        ev.dataTransfer.effectAllowed = "move";
+        onDragStart(brief.id);
+      }}
+      onDragEnd={onDragEnd}
       style={{
         border: "0.5px solid rgba(0,0,0,0.07)",
         borderRadius: 10,
@@ -574,6 +634,9 @@ function BriefCard({
         display: "flex",
         flexDirection: "column",
         gap: 8,
+        opacity: isDragging ? 0.4 : 1,
+        cursor: "grab",
+        transition: "opacity 0.12s ease",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>

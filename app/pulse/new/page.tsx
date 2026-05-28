@@ -886,28 +886,51 @@ export default function PulseNewPage() {
                 borderRadius: 100,
                 fontSize: 13,
                 fontWeight: 500,
-                color: "#5A5A5A",
+                color: "#4D4945",
                 background: "transparent",
               }}
             >
               People
             </Link>
-            {["Teams", "Capacity", "Insights"].map((n) => (
-              <span
-                key={n}
-                style={{
-                  padding: "7px 14px",
-                  borderRadius: 100,
-                  fontSize: 13,
-                  fontWeight: 500,
-                  color: "#5A5A5A",
-                  background: "transparent",
-                  cursor: "pointer",
-                }}
-              >
-                {n}
-              </span>
-            ))}
+            <span
+              style={{
+                padding: "7px 14px",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#4D4945",
+                background: "transparent",
+                cursor: "pointer",
+              }}
+            >
+              Teams
+            </span>
+            <Link
+              href="/capacity"
+              style={{
+                padding: "7px 14px",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#4D4945",
+                background: "transparent",
+              }}
+            >
+              Capacity
+            </Link>
+            <span
+              style={{
+                padding: "7px 14px",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#4D4945",
+                background: "transparent",
+                cursor: "pointer",
+              }}
+            >
+              Insights
+            </span>
           </nav>
           <div style={{ flex: 1 }} />
           <Link

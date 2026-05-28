@@ -1309,27 +1309,57 @@ export default function PeoplePage() {
         >
           <HumynWordmark />
           <nav style={{ display: "flex", gap: 4, marginLeft: 12 }}>
-            {[
-              { label: "People", active: true },
-              { label: "Teams", active: false },
-              { label: "Capacity", active: false },
-              { label: "Insights", active: false },
-            ].map((n) => (
-              <span
-                key={n.label}
-                style={{
-                  padding: "7px 14px",
-                  borderRadius: 100,
-                  fontSize: 13,
-                  fontWeight: 500,
-                  color: n.active ? "#FFFFFF" : "#5A5A5A",
-                  background: n.active ? "#1A1A1A" : "transparent",
-                  cursor: "pointer",
-                }}
-              >
-                {n.label}
-              </span>
-            ))}
+            <span
+              style={{
+                padding: "7px 14px",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#FFFFFF",
+                background: "#161311",
+              }}
+            >
+              People
+            </span>
+            <span
+              style={{
+                padding: "7px 14px",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#4D4945",
+                background: "transparent",
+                cursor: "pointer",
+              }}
+            >
+              Teams
+            </span>
+            <Link
+              href="/capacity"
+              style={{
+                padding: "7px 14px",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#4D4945",
+                background: "transparent",
+              }}
+            >
+              Capacity
+            </Link>
+            <span
+              style={{
+                padding: "7px 14px",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#4D4945",
+                background: "transparent",
+                cursor: "pointer",
+              }}
+            >
+              Insights
+            </span>
           </nav>
           <div style={{ flex: 1 }} />
           <Link

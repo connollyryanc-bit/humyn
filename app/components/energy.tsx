@@ -67,7 +67,13 @@ export function EnergyRing({
   const primaryColour = energy[primary];
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-label="Energy mix ring">
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      aria-label="Energy mix ring"
+      style={{ overflow: "visible" }}
+    >
       <circle cx={cx} cy={cy} r={rOuter} fill="#FAFAF8" />
 
       {segments.map((s) =>
@@ -219,7 +225,13 @@ export function EnergySpider({
   const primaryColour = energy[primary];
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-label="Engagement spider chart">
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      aria-label="Engagement spider chart"
+      style={{ overflow: "visible" }}
+    >
       {ringLevels.map((level) => {
         const pts = Array.from({ length: n }, (_, i) => point(i, level).join(","))
           .join(" ");
@@ -334,6 +346,7 @@ export function EnergyDynamics({
       height={height}
       viewBox={`0 0 ${width} ${height}`}
       aria-label="Energy dynamics bars"
+      style={{ overflow: "visible" }}
     >
       {[0.25, 0.5, 0.75, 1].map((p) => {
         const y = padTop + plotHeight * (1 - p);

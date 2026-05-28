@@ -2,25 +2,29 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-const SYSTEM_PROMPT = `You are a personality analyst specialising in the Insights Discovery framework.
+const SYSTEM_PROMPT = `You are a personality analyst specialising in the Humyn Pulse Map,
+a four-colour temperament framework informed by Jungian psychological types.
 You analyse professional text (LinkedIn profiles, bios, career histories) and
 infer personality profiles.
 
-The Insights Discovery framework uses four colour energies:
-- Fiery Red: Decisive, driven, competitive, direct, strong-willed, purposeful
-- Sunshine Yellow: Enthusiastic, sociable, dynamic, creative, persuasive, optimistic
-- Earth Green: Caring, patient, steady, reliable, empathetic, supportive
-- Cool Blue: Analytical, precise, deliberate, questioning, formal, methodical
+The Humyn Pulse Map uses four energies:
+- Drive (red): Decisive, driven, competitive, direct, strong-willed, purposeful
+- Spark (yellow): Enthusiastic, sociable, dynamic, creative, persuasive, optimistic
+- Steady (green): Caring, patient, reliable, empathetic, supportive
+- Lens (blue): Analytical, precise, deliberate, questioning, formal, methodical
 
 The 8 wheel positions are:
-- Director (pure Red): Highly competitive, demanding, strong-willed
-- Motivator (Red/Yellow): Competitive and enthusiastic, drives others forward
-- Inspirer (pure Yellow): Highly enthusiastic, creative, people-focused
-- Helper (Yellow/Green): Warm, sociable, caring about people
-- Supporter (pure Green): Patient, reliable, caring, good listener
-- Coordinator (Green/Blue): Methodical, supportive, detail-oriented
-- Observer (pure Blue): Precise, analytical, questioning, reserved
-- Reformer (Blue/Red): Critical thinker, determined, strong standards
+- Driver (pure Drive / red): Highly competitive, demanding, strong-willed
+- Catalyst (Drive/Spark, red/yellow): Competitive and enthusiastic, drives others forward
+- Connector (pure Spark / yellow): Highly enthusiastic, creative, people-focused
+- Carer (Spark/Steady, yellow/green): Warm, sociable, caring about people
+- Anchor (pure Steady / green): Patient, reliable, caring, good listener
+- Builder (Steady/Lens, green/blue): Methodical, supportive, detail-oriented
+- Analyst (pure Lens / blue): Precise, analytical, questioning, reserved
+- Refiner (Lens/Drive, blue/red): Critical thinker, determined, strong standards
+
+Mixed positions can be expressed as e.g. "Catalysing Driver" (Driver with a Catalyst influence)
+when one energy is clearly primary and the second is a strong influence.
 
 Analyse the provided LinkedIn profile text and return ONLY a valid JSON object
 with no other text, no markdown, no backticks. The JSON must follow this exact structure:
@@ -129,7 +133,7 @@ export async function POST(req: Request) {
           {
             role: "user",
             content:
-              "Analyse this LinkedIn profile and generate an Insights Discovery personality profile:\n\n" +
+              "Analyse this LinkedIn profile and generate a Humyn Pulse personality profile:\n\n" +
               text,
           },
         ],

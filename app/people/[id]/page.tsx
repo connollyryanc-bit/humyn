@@ -12,6 +12,7 @@ import {
   people,
   utilTone,
 } from "../../page";
+import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
 
 type TabKey = "overview" | "personality" | "engage" | "achievements";
 
@@ -428,99 +429,131 @@ export default function PersonProfilePage() {
         </div>
 
         {tab === "overview" && (
-          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 12 }}>
-            <Card>
-              <SectionLabel>Energy breakdown</SectionLabel>
-              <EnergyBars person={person} />
-              <div
-                style={{
-                  marginTop: 14,
-                  padding: 12,
-                  background: primaryColour.bg,
-                  border: `1px solid ${primaryColour.border}`,
-                  borderRadius: 10,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 4,
-                }}
-              >
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 12 }}>
+              <Card>
+                <SectionLabel>Energy ring</SectionLabel>
+                <div style={{ display: "flex", justifyContent: "center", padding: "8px 0" }}>
+                  <EnergyRing
+                    scores={person.scores}
+                    position={person.wheelPosition}
+                    primary={person.primary}
+                  />
+                </div>
+                <EnergyBars person={person} />
+              </Card>
+
+              <Card>
+                <SectionLabel>Energy dynamics</SectionLabel>
+                <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
+                  <EnergyDynamics scores={person.scores} />
+                </div>
                 <div
                   style={{
-                    fontSize: 10,
-                    color: primaryColour.text,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.07em",
-                    fontWeight: 600,
+                    marginTop: 14,
+                    padding: 12,
+                    background: primaryColour.bg,
+                    border: `1px solid ${primaryColour.border}`,
+                    borderRadius: 10,
                   }}
                 >
-                  Primary energy
+                  <div
+                    style={{
+                      fontSize: 10,
+                      color: primaryColour.text,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.07em",
+                      fontWeight: 600,
+                      marginBottom: 4,
+                    }}
+                  >
+                    Primary energy
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: primaryColour.text }}>
+                    {primaryColour.label} · {person.wheelPosition}
+                  </div>
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: primaryColour.text }}>
-                  {primaryColour.label} · {person.wheelPosition}
-                </div>
-              </div>
-            </Card>
+              </Card>
+            </div>
 
             <Card>
-              <SectionLabel>Capabilities</SectionLabel>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {person.capabilities.map((c) => (
-                  <Pill key={c}>{c}</Pill>
-                ))}
-              </div>
-            </Card>
-
-            <Card>
-              <SectionLabel>Best trait</SectionLabel>
+              <SectionLabel>Engagement signals</SectionLabel>
               <div
                 style={{
-                  background: "#EEF7F2",
-                  border: "1px solid #9ED4B8",
-                  borderRadius: 10,
-                  padding: 14,
-                  fontSize: 13,
-                  color: "#1A5C38",
-                  lineHeight: 1.55,
+                  fontSize: 12,
+                  color: "#9A9A9A",
+                  marginBottom: 12,
+                  lineHeight: 1.5,
+                  maxWidth: 520,
                 }}
               >
-                {person.bestTrait}
+                Eight engagement dimensions derived from the energy mix — useful for predicting
+                how {person.name.split(" ")[0]} shows up in meetings, decisions and reviews.
+              </div>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <EnergySpider scores={person.scores} primary={person.primary} />
               </div>
             </Card>
 
-            <Card>
-              <SectionLabel>Watch-out</SectionLabel>
-              <div
-                style={{
-                  background: "#FDF0EE",
-                  border: "1px solid #FCCDC6",
-                  borderRadius: 10,
-                  padding: 14,
-                  fontSize: 13,
-                  color: "#9B2A1A",
-                  lineHeight: 1.55,
-                }}
-              >
-                {person.vice}
-              </div>
-            </Card>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <Card>
+                <SectionLabel>Capabilities</SectionLabel>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {person.capabilities.map((c) => (
+                    <Pill key={c}>{c}</Pill>
+                  ))}
+                </div>
+              </Card>
 
-            <Card>
-              <SectionLabel>Drivers</SectionLabel>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {person.drivers.map((d) => (
-                  <Pill key={d}>{d}</Pill>
-                ))}
-              </div>
-            </Card>
+              <Card>
+                <SectionLabel>Best trait & watch-out</SectionLabel>
+                <div
+                  style={{
+                    background: "#EEF7F2",
+                    border: "1px solid #9ED4B8",
+                    borderRadius: 10,
+                    padding: 14,
+                    fontSize: 13,
+                    color: "#1A5C38",
+                    lineHeight: 1.55,
+                    marginBottom: 10,
+                  }}
+                >
+                  {person.bestTrait}
+                </div>
+                <div
+                  style={{
+                    background: "#FDF0EE",
+                    border: "1px solid #FCCDC6",
+                    borderRadius: 10,
+                    padding: 14,
+                    fontSize: 13,
+                    color: "#9B2A1A",
+                    lineHeight: 1.55,
+                  }}
+                >
+                  {person.vice}
+                </div>
+              </Card>
 
-            <Card>
-              <SectionLabel>Detractors</SectionLabel>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {person.detractors.map((d) => (
-                  <Pill key={d}>{d}</Pill>
-                ))}
-              </div>
-            </Card>
+              <Card>
+                <SectionLabel>Drivers</SectionLabel>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {person.drivers.map((d) => (
+                    <Pill key={d}>{d}</Pill>
+                  ))}
+                </div>
+              </Card>
+
+              <Card>
+                <SectionLabel>Detractors</SectionLabel>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {person.detractors.map((d) => (
+                    <Pill key={d}>{d}</Pill>
+                  ))}
+                </div>
+              </Card>
+            </div>
           </div>
         )}
 
@@ -544,7 +577,7 @@ export default function PersonProfilePage() {
                 <span style={{ color: primaryColour.text, fontWeight: 600 }}>
                   {primaryColour.label}
                 </span>{" "}
-                quadrant of the Insights Discovery wheel, with{" "}
+                quadrant of the Humyn Pulse Map, with{" "}
                 <span style={{ color: energy[person.secondary].text, fontWeight: 600 }}>
                   {energy[person.secondary].label}
                 </span>{" "}

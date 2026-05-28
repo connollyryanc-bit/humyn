@@ -31,38 +31,52 @@ We are currently building Stage 1.
 
 ### Brand
 - Name: **humyn** (always lowercase)
-- Wordmark: `hum` + `y` in Sunshine Yellow + `n` — the `y` is always the brand accent colour
+- Wordmark: `hum` + `y` in Spark (yellow) + `n` — the `y` is always the brand accent colour
 - Tone: Clean, modern, minimal — inspired by Monday.com's aesthetic
 - No heavy borders, no drop shadows unless subtle, lots of white space
 
-### Colours — Insights Discovery Energy System
-These four colours are the entire colour language of Humyn. Use them consistently and meaningfully.
+### Colours — Humyn Pulse Map Energies
+These four colours are the entire colour language of Humyn. They map to four temperament
+energies in the Humyn Pulse Map — a Jungian-informed framework, distinct from third-party
+typologies like Insights Discovery. Do NOT use Insights Discovery vocabulary (Fiery Red /
+Sunshine Yellow / Earth Green / Cool Blue, or Director / Motivator / Inspirer / Helper /
+Supporter / Coordinator / Observer / Reformer).
 
 ```
-Fiery Red:
+Drive (red):
   color: #E8402A
   bg: #FDF0EE
   text: #9B2A1A
   border: #FCCDC6
 
-Sunshine Yellow (brand primary):
+Spark (yellow) — brand primary:
   color: #F5A623
   bg: #FFFBF2
   text: #8B5A00
   border: #FAD98A
 
-Earth Green:
+Steady (green):
   color: #2E8B57
   bg: #EEF7F2
   text: #1A5C38
   border: #9ED4B8
 
-Cool Blue:
+Lens (blue):
   color: #1E6FA5
   bg: #EEF4FB
   text: #124A6E
   border: #8DC2E8
 ```
+
+Wheel positions — eight positions across the four quadrants:
+- Pure Drive → **Driver**
+- Drive/Spark mix → **Catalyst** (e.g. "Catalysing Driver", "Driving Catalyst")
+- Pure Spark → **Connector**
+- Spark/Steady mix → **Carer** (e.g. "Connecting Carer", "Caring Connector")
+- Pure Steady → **Anchor**
+- Steady/Lens mix → **Builder** (e.g. "Building Anchor", "Anchored Builder")
+- Pure Lens → **Analyst**
+- Lens/Drive mix → **Refiner** (e.g. "Refining Analyst", "Analysing Refiner")
 
 ### Neutral Palette
 ```
@@ -123,7 +137,7 @@ interface Person {
   achievements: string[];     // 3 key achievements
   bestTrait: string;          // one-line strength
   vice: string;               // one-line watch-out
-  wheelPosition: string;      // Insights 72-position name e.g. "Inspirer", "Director"
+  wheelPosition: string;      // Pulse Map position e.g. "Connector", "Driver", "Catalysing Driver"
   drivers: string[];          // 4 things that motivate them
   detractors: string[];       // 4 things that drain them
   howToSpeak: string;         // paragraph on verbal communication style
@@ -222,7 +236,7 @@ The nav has four items: People, Teams, Capacity, Insights
 - Never use gradients — flat colours only
 - Never add animations beyond simple CSS transitions (0.15s)
 - Never make cards or sections feel heavy or cramped — white space is intentional
-- Never abbreviate energy colour names (always "Fiery Red" not "Red")
+- Always use the Pulse Map energy names in UI ("Drive", "Spark", "Steady", "Lens" — not "Red", "Yellow", "Green", "Blue")
 
 ---
 
@@ -240,7 +254,7 @@ Next priorities:
 - Connect AI message composer to real Claude API
 - LinkedIn paste → profile generation (Pulse inference engine)
 - Add person flow
-- Richer energy wheel visualisation (72-position)
+- Richer energy ring + spider chart visualisations (done — see app/components/energy.tsx)
 - Capacity dashboard (Stage 2 start)
 
 ---

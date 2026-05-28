@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { EnergyKey, energy } from "../../page";
+import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
 
 interface GeneratedProfile {
   name: string;
@@ -157,48 +158,6 @@ function EnergyBars({ scores }: { scores: GeneratedProfile["scores"] }) {
   );
 }
 
-function EnergyPie({ scores, size = 180 }: { scores: GeneratedProfile["scores"]; size?: number }) {
-  const cx = size / 2;
-  const cy = size / 2;
-  const r = size / 2 - 6;
-  const keys: EnergyKey[] = ["red", "yellow", "green", "blue"];
-  const total = keys.reduce((a, k) => a + Math.max(0, scores[k]), 0) || 1;
-
-  let start = -Math.PI / 2;
-  const segments = keys.map((k) => {
-    const value = Math.max(0, scores[k]);
-    const angle = (value / total) * Math.PI * 2;
-    const end = start + angle;
-    const x1 = cx + r * Math.cos(start);
-    const y1 = cy + r * Math.sin(start);
-    const x2 = cx + r * Math.cos(end);
-    const y2 = cy + r * Math.sin(end);
-    const largeArc = angle > Math.PI ? 1 : 0;
-    const path =
-      angle >= Math.PI * 2 - 0.0001
-        ? `M ${cx - r},${cy} A ${r},${r} 0 1 1 ${cx + r},${cy} A ${r},${r} 0 1 1 ${cx - r},${cy} Z`
-        : `M ${cx},${cy} L ${x1},${y1} A ${r},${r} 0 ${largeArc} 1 ${x2},${y2} Z`;
-    start = end;
-    return { k, path, value };
-  });
-
-  return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-label="Energy distribution">
-      {segments.map((s) => (
-        <path
-          key={s.k}
-          d={s.path}
-          fill={energy[s.k].color}
-          stroke="#FFFFFF"
-          strokeWidth={2}
-          opacity={s.value > 0 ? 1 : 0}
-        />
-      ))}
-      <circle cx={cx} cy={cy} r={r * 0.42} fill="#FFFFFF" />
-    </svg>
-  );
-}
-
 function buildAiMessage(profile: GeneratedProfile, input: string): string {
   const name = profile.name.split(/\s+/)[0] || "there";
   const trimmed = input.trim().replace(/\s+/g, " ");
@@ -243,7 +202,7 @@ function EmptyPreview() {
       <div style={{ fontSize: 14, fontWeight: 600, color: "#5A5A5A" }}>Profile preview</div>
       <p style={{ fontSize: 12, lineHeight: 1.55, maxWidth: 320, margin: 0 }}>
         Paste a LinkedIn About + Experience section on the left and click Generate profile. A full
-        Insights profile will appear here in a few seconds.
+        Pulse profile will appear here in a few seconds.
       </p>
     </div>
   );
@@ -282,7 +241,7 @@ function LoadingPreview() {
       />
       <div style={{ fontSize: 14, fontWeight: 600, color: "#1A1A1A" }}>{LOADING_STAGES[stage]}</div>
       <div style={{ fontSize: 12, color: "#9A9A9A", textAlign: "center", maxWidth: 320 }}>
-        Claude is reading the profile and inferring the Insights energy mix. This usually takes 3–10
+        Claude is reading the profile and inferring the Pulse energy mix. This usually takes 3–10
         seconds.
       </div>
       <div
@@ -455,20 +414,68 @@ function ProfileView({
         </div>
       </section>
 
-      <Card>
-        <SectionLabel>Energy profile</SectionLabel>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(180px, 220px) 1fr",
-            gap: 24,
-            alignItems: "center",
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <EnergyPie scores={profile.scores} />
+      <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 12 }}>
+        <Card>
+          <SectionLabel>Energy ring</SectionLabel>
+          <div style={{ display: "flex", justifyContent: "center", padding: "8px 0" }}>
+            <EnergyRing
+              scores={profile.scores}
+              position={profile.wheelPosition}
+              primary={profile.primary}
+            />
           </div>
           <EnergyBars scores={profile.scores} />
+        </Card>
+
+        <Card>
+          <SectionLabel>Energy dynamics</SectionLabel>
+          <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
+            <EnergyDynamics scores={profile.scores} />
+          </div>
+          <div
+            style={{
+              marginTop: 14,
+              padding: 12,
+              background: primary.bg,
+              border: `1px solid ${primary.border}`,
+              borderRadius: 10,
+            }}
+          >
+            <div
+              style={{
+                fontSize: 10,
+                color: primary.text,
+                textTransform: "uppercase",
+                letterSpacing: "0.07em",
+                fontWeight: 600,
+                marginBottom: 4,
+              }}
+            >
+              Primary energy
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: primary.text }}>
+              {primary.label} · {profile.wheelPosition}
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <Card>
+        <SectionLabel>Engagement signals</SectionLabel>
+        <div
+          style={{
+            fontSize: 12,
+            color: "#9A9A9A",
+            marginBottom: 12,
+            lineHeight: 1.5,
+            maxWidth: 520,
+          }}
+        >
+          Eight engagement dimensions derived from the energy mix — how this person is likely to
+          show up in meetings, decisions and reviews.
+        </div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <EnergySpider scores={profile.scores} primary={profile.primary} />
         </div>
       </Card>
 
@@ -941,7 +948,7 @@ export default function PulseNewPage() {
           </h1>
           <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720 }}>
             Drop in the About and Experience text from any LinkedIn profile — yours, a candidate&apos;s,
-            or a client&apos;s. Claude reads it and builds a full Insights energy profile with
+            or a client&apos;s. Claude reads it and builds a full Pulse energy profile with
             communication guidance and a confidence score.
           </div>
         </div>

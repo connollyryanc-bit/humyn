@@ -129,11 +129,25 @@ Subtle bg:              #FAFAF8
 ```
 
 ### Typography
-- Font: `system-ui, -apple-system, sans-serif`
-- Page titles: 22–26px, weight 600, letter-spacing -0.3px to -0.5px
+Valtech brand fonts, self-hosted via `next/font/local` from `public/fonts/`.
+
+- **Display / headings** — Valtech Neue (Light 300, Book 400, Bold 700, plus italics).
+  Wired up as CSS variable `--font-display`. Use via `className="font-display"` on any
+  element that should render in Valtech Neue (wordmark, page H1s, hero name inputs).
+- **Body / legal** — Sons (Light 300, Regular 400, SemiBold 600, plus italics). Wired up
+  as CSS variable `--font-body`. Set as the default body font in `globals.css`, so every
+  element inherits Sons unless explicitly told otherwise.
+
+Sizing (web-scaled from the brand sheet, which targets print 32–38pt for headings):
+- Page H1 titles: 30–32px, weight 600, letter-spacing -0.4px to -0.5px, `font-display`
+- Sub-section titles: 18–22px, weight 600
 - Section labels: 11px, weight 500, uppercase, letter-spacing 0.06–0.08em, color Ink3
-- Body: 13–14px, color Ink2, line-height 1.6
+- Body: 13–14px, color Ink2, line-height 1.6, Sons (default)
 - Small labels: 10–11px
+
+Always add the `font-display` className (never an inline `fontFamily`) when you need
+Valtech Neue — this keeps the variable lookup consistent and stays in step with the
+Next.js font loader.
 
 ### Spacing & Shape
 - Border radius: 8–12px for cards, 100px for pills/badges

@@ -397,7 +397,10 @@ export const people: Person[] = [
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
-    <span style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#1A1A1A" }}>
+    <span
+      className="font-display"
+      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
+    >
       hum<span style={{ color: "#FF5040" }}>y</span>n
     </span>
   );
@@ -1405,10 +1408,11 @@ export default function PeoplePage() {
               Pulse · Valtech Nordic
             </div>
             <h1
+              className="font-display"
               style={{
-                fontSize: 26,
+                fontSize: 32,
                 fontWeight: 600,
-                color: "#1A1A1A",
+                color: "#161311",
                 letterSpacing: "-0.5px",
                 margin: "6px 0 0",
               }}

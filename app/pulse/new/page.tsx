@@ -33,7 +33,10 @@ const LOADING_STAGES = [
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
-    <span style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#1A1A1A" }}>
+    <span
+      className="font-display"
+      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
+    >
       hum<span style={{ color: "#FF5040" }}>y</span>n
     </span>
   );
@@ -385,14 +388,15 @@ function ProfileView({
               Generated Pulse profile
             </div>
             <input
+              className="font-display"
               value={nameDraft}
               onChange={(e) => setNameDraft(e.target.value)}
               placeholder={profile.name || "Add a name"}
               style={{
                 width: "100%",
-                fontSize: 24,
+                fontSize: 28,
                 fontWeight: 600,
-                color: "#1A1A1A",
+                color: "#161311",
                 letterSpacing: "-0.5px",
                 border: "none",
                 outline: "none",
@@ -936,10 +940,11 @@ export default function PulseNewPage() {
             Pulse · Profile generator
           </div>
           <h1
+            className="font-display"
             style={{
-              fontSize: 26,
+              fontSize: 32,
               fontWeight: 600,
-              color: "#1A1A1A",
+              color: "#161311",
               letterSpacing: "-0.5px",
               margin: "6px 0 4px",
             }}

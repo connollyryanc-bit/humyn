@@ -53,3 +53,60 @@ export async function fetchEnrichedPeople(): Promise<PersonWithCapacity[]> {
   const data = await jsonOrThrow<{ enriched: PersonWithCapacity[] }>(res, "GET /api/capacity");
   return data.enriched;
 }
+
+export interface TeamPayload {
+  id: number;
+  name: string;
+  description: string;
+  client: string | null;
+  members: Array<{ personId: number; role: string }>;
+}
+
+export async function fetchAllTeams(): Promise<TeamPayload[]> {
+  const res = await fetch("/api/teams", { cache: "no-store" });
+  const data = await jsonOrThrow<{ teams: TeamPayload[] }>(res, "GET /api/teams");
+  return data.teams;
+}
+
+export async function createTeamViaApi(input: {
+  name: string;
+  description?: string;
+  client?: string | null;
+  members: Array<{ personId: number; role: string }>;
+}): Promise<TeamPayload> {
+  const res = await fetch("/api/teams", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  const data = await jsonOrThrow<{ team: TeamPayload }>(res, "POST /api/teams");
+  return data.team;
+}
+
+export async function updateTeamViaApi(
+  id: number,
+  input: {
+    name: string;
+    description?: string;
+    client?: string | null;
+    members: Array<{ personId: number; role: string }>;
+  },
+): Promise<TeamPayload> {
+  const res = await fetch(`/api/teams/${id}`, {
+    method: "PUT",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  const data = await jsonOrThrow<{ team: TeamPayload }>(res, `PUT /api/teams/${id}`);
+  return data.team;
+}
+
+export async function deleteTeamViaApi(id: number): Promise<void> {
+  const res = await fetch(`/api/teams/${id}`, { method: "DELETE" });
+  await jsonOrThrow<{ ok: boolean }>(res, `DELETE /api/teams/${id}`);
+}
+
+export async function fetchInsightsWeekly(): Promise<{ narrative: string; generatedAt: string }> {
+  const res = await fetch("/api/insights/weekly", { cache: "no-store" });
+  return jsonOrThrow<{ narrative: string; generatedAt: string }>(res, "GET /api/insights/weekly");
+}

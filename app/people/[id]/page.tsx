@@ -321,7 +321,8 @@ export default function PersonProfilePage() {
             >
               People
             </Link>
-            <span
+            <Link
+              href="/teams"
               style={{
                 padding: "7px 14px",
                 borderRadius: 100,
@@ -329,11 +330,10 @@ export default function PersonProfilePage() {
                 fontWeight: 500,
                 color: "#4D4945",
                 background: "transparent",
-                cursor: "pointer",
               }}
             >
               Teams
-            </span>
+            </Link>
             <Link
               href="/capacity"
               style={{

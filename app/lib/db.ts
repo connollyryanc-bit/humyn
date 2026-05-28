@@ -229,3 +229,126 @@ export async function getEnrichedPeople(): Promise<PersonWithCapacity[]> {
     .filter((p) => capacity[p.id])
     .map((p) => ({ ...p, capacity: capacity[p.id] }));
 }
+
+interface TeamRow {
+  id: number;
+  name: string;
+  description: string;
+  client: string | null;
+}
+
+interface TeamMemberRow {
+  team_id: number;
+  person_id: number;
+  role: string;
+}
+
+export interface TeamRecord {
+  id: number;
+  name: string;
+  description: string;
+  client: string | null;
+  members: Array<{ personId: number; role: string }>;
+}
+
+export async function getAllTeams(): Promise<TeamRecord[]> {
+  const sb = getSupabaseAdmin();
+  const { data: teams, error: teamsError } = await sb
+    .from("teams")
+    .select("*")
+    .order("id", { ascending: true });
+  if (teamsError) throw new Error(`getAllTeams: ${teamsError.message}`);
+  const { data: members, error: membersError } = await sb
+    .from("team_members")
+    .select("*");
+  if (membersError) throw new Error(`getAllTeams members: ${membersError.message}`);
+  const memberMap = new Map<number, TeamMemberRow[]>();
+  (members as TeamMemberRow[]).forEach((m) => {
+    if (!memberMap.has(m.team_id)) memberMap.set(m.team_id, []);
+    memberMap.get(m.team_id)!.push(m);
+  });
+  return (teams as TeamRow[]).map((t) => ({
+    id: t.id,
+    name: t.name,
+    description: t.description,
+    client: t.client,
+    members: (memberMap.get(t.id) ?? []).map((m) => ({
+      personId: m.person_id,
+      role: m.role,
+    })),
+  }));
+}
+
+export async function createTeam(input: {
+  name: string;
+  description?: string;
+  client?: string | null;
+  members: Array<{ personId: number; role: string }>;
+}): Promise<TeamRecord> {
+  const sb = getSupabaseAdmin();
+  const { data: team, error } = await sb
+    .from("teams")
+    .insert({
+      name: input.name,
+      description: input.description ?? "",
+      client: input.client ?? null,
+    })
+    .select("*")
+    .single();
+  if (error) throw new Error(`createTeam: ${error.message}`);
+  if (input.members.length > 0) {
+    const memberRows = input.members.map((m) => ({
+      team_id: (team as TeamRow).id,
+      person_id: m.personId,
+      role: m.role,
+    }));
+    const { error: membersError } = await sb.from("team_members").insert(memberRows);
+    if (membersError) throw new Error(`createTeam members: ${membersError.message}`);
+  }
+  return {
+    id: (team as TeamRow).id,
+    name: (team as TeamRow).name,
+    description: (team as TeamRow).description,
+    client: (team as TeamRow).client,
+    members: input.members,
+  };
+}
+
+export async function updateTeam(
+  id: number,
+  input: {
+    name: string;
+    description?: string;
+    client?: string | null;
+    members: Array<{ personId: number; role: string }>;
+  },
+): Promise<TeamRecord> {
+  const sb = getSupabaseAdmin();
+  const { error: updateError } = await sb
+    .from("teams")
+    .update({
+      name: input.name,
+      description: input.description ?? "",
+      client: input.client ?? null,
+    })
+    .eq("id", id);
+  if (updateError) throw new Error(`updateTeam: ${updateError.message}`);
+  const { error: deleteError } = await sb.from("team_members").delete().eq("team_id", id);
+  if (deleteError) throw new Error(`updateTeam clear members: ${deleteError.message}`);
+  if (input.members.length > 0) {
+    const memberRows = input.members.map((m) => ({
+      team_id: id,
+      person_id: m.personId,
+      role: m.role,
+    }));
+    const { error: insertError } = await sb.from("team_members").insert(memberRows);
+    if (insertError) throw new Error(`updateTeam members: ${insertError.message}`);
+  }
+  return { id, name: input.name, description: input.description ?? "", client: input.client ?? null, members: input.members };
+}
+
+export async function deleteTeam(id: number): Promise<void> {
+  const sb = getSupabaseAdmin();
+  const { error } = await sb.from("teams").delete().eq("id", id);
+  if (error) throw new Error(`deleteTeam(${id}): ${error.message}`);
+}

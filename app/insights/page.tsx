@@ -11,7 +11,7 @@ import {
   formatEuros,
   riskTone,
 } from "../lib/capacity-data";
-import { fetchEnrichedPeople } from "../lib/api-client";
+import { fetchEnrichedPeople, fetchInsightsWeekly } from "../lib/api-client";
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -371,7 +371,27 @@ export default function InsightsPage() {
     return counts;
   }, [enriched]);
 
-  const weeklyRead = useMemo(() => buildWeeklyInsight(enriched), [enriched]);
+  const templateRead = useMemo(() => buildWeeklyInsight(enriched), [enriched]);
+  const [aiRead, setAiRead] = useState<string>("");
+  const [aiSource, setAiSource] = useState<string>("");
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchInsightsWeekly()
+      .then((res) => {
+        if (cancelled) return;
+        setAiRead(res.narrative);
+        setAiSource((res as { source?: string }).source ?? "claude");
+      })
+      .catch(() => {
+        // silent fallback to template — already shown
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const weeklyRead = aiRead || templateRead;
   const outlook = useMemo(() => buildOutlook(enriched, avgUtil), [enriched, avgUtil]);
 
   const now = new Date();
@@ -431,18 +451,18 @@ export default function InsightsPage() {
             >
               People
             </Link>
-            <span
+            <Link
+              href="/teams"
               style={{
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
                 fontWeight: 500,
                 color: "#4D4945",
-                cursor: "pointer",
               }}
             >
               Teams
-            </span>
+            </Link>
             <Link
               href="/capacity"
               style={{
@@ -533,6 +553,9 @@ export default function InsightsPage() {
         >
           <div
             style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
               fontSize: 10,
               color: "rgba(255,255,255,0.6)",
               textTransform: "uppercase",
@@ -541,7 +564,19 @@ export default function InsightsPage() {
               marginBottom: 10,
             }}
           >
-            This week's read
+            <span>This week's read</span>
+            <span
+              style={{
+                padding: "2px 8px",
+                borderRadius: 100,
+                background: aiSource === "claude" ? "#F5A623" : "rgba(255,255,255,0.12)",
+                color: aiSource === "claude" ? "#161311" : "rgba(255,255,255,0.7)",
+                fontSize: 9,
+                letterSpacing: "0.07em",
+              }}
+            >
+              {aiSource === "claude" ? "AI · Claude" : aiSource ? "Templated fallback" : "Loading…"}
+            </span>
           </div>
           <p
             className="font-display"

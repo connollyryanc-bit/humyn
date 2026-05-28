@@ -76,7 +76,8 @@ export default function NewPersonPage() {
             >
               People
             </Link>
-            <span
+            <Link
+              href="/teams"
               style={{
                 padding: "7px 14px",
                 borderRadius: 100,
@@ -86,7 +87,7 @@ export default function NewPersonPage() {
               }}
             >
               Teams
-            </span>
+            </Link>
             <Link
               href="/capacity"
               style={{

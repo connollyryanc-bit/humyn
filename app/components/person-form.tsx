@@ -114,6 +114,7 @@ export function PersonForm({
   const [available, setAvailable] = useState<AvailKey>(initial.available);
   const [clients, setClients] = useState(initial.clients);
   const [revenue, setRevenue] = useState(initial.revenue);
+  const [dayRate, setDayRate] = useState(initial.dayRate ?? 0);
   const [bio, setBio] = useState(initial.bio);
   const [bestTrait, setBestTrait] = useState(initial.bestTrait);
   const [vice, setVice] = useState(initial.vice);
@@ -150,6 +151,7 @@ export function PersonForm({
       available,
       clients,
       revenue: revenue.trim(),
+      dayRate: Math.max(0, Math.round(dayRate || 0)),
       bio: bio.trim(),
       capabilities: linesToList(capabilitiesText),
       achievements: linesToList(achievementsText),
@@ -388,6 +390,21 @@ export function PersonForm({
             <input
               value={revenue}
               onChange={(e) => setRevenue(e.target.value)}
+              style={inputStyle}
+            />
+          </Field>
+        </div>
+        <div style={{ marginTop: 12 }}>
+          <Field
+            label="Day rate (€)"
+            hint="Used by the team builder's friction-cost projection. Sum of team day rates × productivity loss × project days = projected friction cost."
+          >
+            <input
+              type="number"
+              min={0}
+              step={100}
+              value={dayRate}
+              onChange={(e) => setDayRate(Number(e.target.value))}
               style={inputStyle}
             />
           </Field>

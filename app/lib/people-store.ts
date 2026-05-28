@@ -94,6 +94,7 @@ export function emptyPerson(): Person {
     available: "soon",
     clients: 0,
     revenue: "€0",
+    dayRate: 1500,
     bio: "",
     capabilities: [],
     achievements: [],

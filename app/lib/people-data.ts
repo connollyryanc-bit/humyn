@@ -14,6 +14,7 @@ export interface Person {
   available: AvailKey;
   clients: number;
   revenue: string;
+  dayRate: number;
   bio: string;
   capabilities: string[];
   achievements: string[];
@@ -65,6 +66,7 @@ export const people: Person[] = [
     available: "allocated",
     clients: 6,
     revenue: "€1.4M",
+    dayRate: 3500,
     bio: "Senior delivery lead with 14 years across financial services and retail. Known for landing big-ticket pitches and turning around stalled engagements without burning the team out.",
     capabilities: ["Engagement leadership", "Pitch & sales", "Digital strategy", "Stakeholder management"],
     achievements: [
@@ -93,6 +95,7 @@ export const people: Person[] = [
     available: "soon",
     clients: 3,
     revenue: "€820k",
+    dayRate: 2800,
     bio: "Backend architect specialising in event-driven systems. The person we send in when an engagement is technically off the rails and needs a calm hand to redesign without drama.",
     capabilities: ["Distributed systems", "Event sourcing", "AWS architecture", "Technical due diligence"],
     achievements: [
@@ -121,6 +124,7 @@ export const people: Person[] = [
     available: "allocated",
     clients: 4,
     revenue: "€690k",
+    dayRate: 3500,
     bio: "User research and service design lead. Builds psychologically safe teams where junior designers do their best work. Clients ask for her by name three years after engagements end.",
     capabilities: ["Service design", "Qualitative research", "Workshop facilitation", "Team coaching"],
     achievements: [
@@ -149,6 +153,7 @@ export const people: Person[] = [
     available: "soon",
     clients: 5,
     revenue: "€510k",
+    dayRate: 2000,
     bio: "Strategy and innovation consultant. The face in the room at C-suite workshops — turns abstract ambition into a roadmap clients can actually start on Monday.",
     capabilities: ["Innovation strategy", "C-suite facilitation", "Storytelling", "New venture design"],
     achievements: [
@@ -177,6 +182,7 @@ export const people: Person[] = [
     available: "allocated",
     clients: 2,
     revenue: "€420k",
+    dayRate: 2000,
     bio: "Applied ML lead with a stats PhD. Builds production models that survive contact with real data. Direct, occasionally blunt, deeply respected by engineering.",
     capabilities: ["Applied ML", "MLOps", "Causal inference", "Forecasting"],
     achievements: [
@@ -205,6 +211,7 @@ export const people: Person[] = [
     available: "soon",
     clients: 3,
     revenue: "€540k",
+    dayRate: 2000,
     bio: "Cross-functional architect who bridges product, engineering and ops. Calm in escalations, thorough in writeups, the person clients trust when stakes are high.",
     capabilities: ["Enterprise architecture", "API design", "Cloud migration", "Technical writing"],
     achievements: [
@@ -233,6 +240,7 @@ export const people: Person[] = [
     available: "allocated",
     clients: 4,
     revenue: "€460k",
+    dayRate: 2000,
     bio: "Product designer with a service-design heart. Pairs effortlessly with engineering, runs lightweight workshops that move decisions forward instead of generating Post-its.",
     capabilities: ["Product design", "Design systems", "Prototyping", "Workshop facilitation"],
     achievements: [
@@ -261,6 +269,7 @@ export const people: Person[] = [
     available: "allocated",
     clients: 2,
     revenue: "€780k",
+    dayRate: 2800,
     bio: "Programme manager who keeps engagements healthy. Quietly unblocks two things before standup that no one knew were stuck. Loved by both clients and engineers.",
     capabilities: ["Programme management", "Agile delivery", "Risk management", "Client governance"],
     achievements: [
@@ -289,6 +298,7 @@ export const people: Person[] = [
     available: "soon",
     clients: 3,
     revenue: "€330k",
+    dayRate: 2000,
     bio: "React specialist who pairs design sensibility with type-system rigour. Brings energy into the engineering team — the rare frontend clients want in the workshop.",
     capabilities: ["React & Next.js", "TypeScript", "Accessibility", "Design-engineering bridge"],
     achievements: [
@@ -317,6 +327,7 @@ export const people: Person[] = [
     available: "now",
     clients: 2,
     revenue: "€280k",
+    dayRate: 2000,
     bio: "Backend engineer with a security mindset. Quietly precise, asks the question that exposes the shaky assumption. Coming off a long engagement and ready for the next hard problem.",
     capabilities: ["Go & Rust", "API security", "Postgres performance", "Threat modelling"],
     achievements: [
@@ -345,6 +356,7 @@ export const people: Person[] = [
     available: "now",
     clients: 7,
     revenue: "€1.1M",
+    dayRate: 3500,
     bio: "Senior client partner owning the top three Nordic accounts. Reads a room in seconds, negotiates hard, leaves the relationship stronger than she found it.",
     capabilities: ["Account leadership", "Negotiation", "Executive coaching", "Pipeline building"],
     achievements: [
@@ -373,6 +385,7 @@ export const people: Person[] = [
     available: "allocated",
     clients: 3,
     revenue: "€620k",
+    dayRate: 2800,
     bio: "Engineering manager with a deep technical bench. Sets a high bar, runs tight engagements, and grows engineers fast. The person clients ask for when timelines look impossible.",
     capabilities: ["Engineering management", "Technical strategy", "Hiring", "Performance coaching"],
     achievements: [

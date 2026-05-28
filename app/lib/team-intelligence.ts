@@ -195,32 +195,65 @@ export function calculateHarmony(team: Person[]): TeamHarmony {
   };
 }
 
+export const PRODUCTIVITY_BANDS: Array<{
+  min: number;
+  loss: number;
+  label: string;
+  rationale: string;
+}> = [
+  {
+    min: 85,
+    loss: 0,
+    label: "Excellent",
+    rationale: "No projected friction cost. Run the team as composed.",
+  },
+  {
+    min: 70,
+    loss: 0.02,
+    label: "Healthy",
+    rationale: "~2% productivity loss to small frictions. One kickoff conversation closes most of it.",
+  },
+  {
+    min: 50,
+    loss: 0.05,
+    label: "Watch",
+    rationale: "~5% productivity loss to interpersonal friction. Pair-coaching recommended at kickoff.",
+  },
+  {
+    min: 0,
+    loss: 0.1,
+    label: "At risk",
+    rationale: "10%+ productivity loss is the industry norm in this band. Consider re-composition.",
+  },
+];
+
+const FALLBACK_DAY_RATE = 1500;
+const BILLABLE_DAYS_PER_MONTH = 18;
+
+export function teamCombinedDayRate(team: Person[]): number {
+  return team.reduce(
+    (sum, p) => sum + (p.dayRate && p.dayRate > 0 ? p.dayRate : FALLBACK_DAY_RATE),
+    0,
+  );
+}
+
 export function calculateConflictCost(
   team: Person[],
   harmonyScore: number,
   monthsRunning = 3,
-  avgDayRate = 950,
 ): ConflictCost {
-  let productivityLossPct: number;
-  let rationale: string;
-  if (harmonyScore >= 85) {
-    productivityLossPct = 0;
-    rationale = "Excellent harmony — no projected friction cost. Run the team as composed.";
-  } else if (harmonyScore >= 70) {
-    productivityLossPct = 0.02;
-    rationale = "Healthy band — ~2% productivity loss to small frictions. Worth one kickoff conversation.";
-  } else if (harmonyScore >= 50) {
-    productivityLossPct = 0.05;
-    rationale = "Watch band — ~5% productivity loss to interpersonal friction. Pair-coaching recommended.";
-  } else {
-    productivityLossPct = 0.1;
-    rationale = "At-risk band — 10%+ productivity loss is the industry norm. Consider re-composition.";
-  }
-  const billableDaysPerMonth = 18;
-  const teamDailyRate = team.length * avgDayRate;
-  const totalProjectBillable = teamDailyRate * billableDaysPerMonth * monthsRunning;
-  const euros = Math.round((totalProjectBillable * productivityLossPct) / 1000) * 1000;
-  return { productivityLossPct, euros, rationale };
+  const band =
+    PRODUCTIVITY_BANDS.find((b) => harmonyScore >= b.min) ??
+    PRODUCTIVITY_BANDS[PRODUCTIVITY_BANDS.length - 1];
+
+  const teamDailyRate = teamCombinedDayRate(team);
+  const totalProjectBillable = teamDailyRate * BILLABLE_DAYS_PER_MONTH * monthsRunning;
+  const euros = Math.round((totalProjectBillable * band.loss) / 1000) * 1000;
+  return {
+    productivityLossPct: band.loss,
+    euros,
+    rationale: `${band.label} band — ${band.rationale}`,
+  };
 }
 
 export function suggestSwaps(
@@ -385,31 +418,60 @@ function buildSignature(
   return `${market} runs ${dominantLabel(dominant)}–${dominantLabel(second)} (avg ${dominantLabel(dominant)} ${avg[dominant]}%, ${dominantLabel(second)} ${avg[second]}%) across ${size} consultant${size === 1 ? "" : "s"}.`;
 }
 
-const ENERGY_FRICTION_MATRIX: Record<EnergyKey, Record<EnergyKey, number>> = {
-  red:    { red: 25, yellow: 10, green: 35, blue: 20 },
-  yellow: { red: 10, yellow: 20, green: 5,  blue: 30 },
-  green:  { red: 35, yellow: 5,  green: 15, blue: 10 },
-  blue:   { red: 20, yellow: 30, green: 10, blue: 25 },
+// Pulse Map wheel position (clockwise from top): Drive (0°) → Spark (90°) →
+// Steady (180°) → Lens (270°). Energies at 180° apart on the wheel feel like
+// opposites; neighbours feel close.
+const WHEEL_DEGREES: Record<EnergyKey, number> = {
+  red: 0,
+  yellow: 90,
+  green: 180,
+  blue: 270,
 };
 
-export function crossMarketFriction(a: MarketCulture, b: MarketCulture): {
+function angularDistance(a: EnergyKey, b: EnergyKey): number {
+  const diff = Math.abs(WHEEL_DEGREES[a] - WHEEL_DEGREES[b]);
+  return Math.min(diff, 360 - diff);
+}
+
+export function crossMarketFriction(
+  a: MarketCulture,
+  b: MarketCulture,
+): {
   pct: number;
   label: "Low" | "Moderate" | "High";
   note: string;
+  why: string;
 } {
-  const pct = ENERGY_FRICTION_MATRIX[a.dominantEnergy][b.dominantEnergy];
+  // Compute weighted wheel-distance: each pairing of energies between the two
+  // markets contributes a × b weight. The result is the "average angular
+  // distance" between the two market temperaments, scaled into 0–100.
+  let weightedDistance = 0;
+  let weightTotal = 0;
+  (Object.keys(a.averageScores) as EnergyKey[]).forEach((ea) => {
+    (Object.keys(b.averageScores) as EnergyKey[]).forEach((eb) => {
+      const w = a.averageScores[ea] * b.averageScores[eb];
+      weightedDistance += angularDistance(ea, eb) * w;
+      weightTotal += w;
+    });
+  });
+
+  const avgDistance = weightTotal > 0 ? weightedDistance / weightTotal : 0;
+  const pct = Math.round((avgDistance / 180) * 100);
+
   let label: "Low" | "Moderate" | "High" = "Low";
-  if (pct >= 30) label = "High";
-  else if (pct >= 15) label = "Moderate";
+  if (pct >= 55) label = "High";
+  else if (pct >= 35) label = "Moderate";
 
   const note =
     label === "Low"
-      ? `${dominantLabel(a.dominantEnergy)} and ${dominantLabel(b.dominantEnergy)} sit close on the wheel — should collaborate easily.`
+      ? `${dominantLabel(a.dominantEnergy)} and ${dominantLabel(b.dominantEnergy)} sit close on the Pulse wheel — collaboration should feel natural.`
       : label === "Moderate"
-        ? `${dominantLabel(a.dominantEnergy)} and ${dominantLabel(b.dominantEnergy)} need explicit handoffs and shared terminology to avoid drift.`
-        : `${dominantLabel(a.dominantEnergy)} and ${dominantLabel(b.dominantEnergy)} are wheel opposites — assume friction at kickoff and pair-coach.`;
+        ? `${dominantLabel(a.dominantEnergy)} and ${dominantLabel(b.dominantEnergy)} are off-axis — plan explicit handoffs and shared terminology at kickoff.`
+        : `${dominantLabel(a.dominantEnergy)} and ${dominantLabel(b.dominantEnergy)} are wheel opposites — assume friction and pair-coach early.`;
 
-  return { pct, label, note };
+  const why = `${a.name}: ${dominantLabel(a.dominantEnergy)} ${a.averageScores[a.dominantEnergy]}%. ${b.name}: ${dominantLabel(b.dominantEnergy)} ${b.averageScores[b.dominantEnergy]}%. Weighted wheel distance ≈ ${Math.round(avgDistance)}° of 180° max.`;
+
+  return { pct, label, note, why };
 }
 
 export interface SavedTeamSummary {

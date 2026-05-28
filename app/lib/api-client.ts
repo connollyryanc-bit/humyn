@@ -110,3 +110,27 @@ export async function fetchInsightsWeekly(): Promise<{ narrative: string; genera
   const res = await fetch("/api/insights/weekly", { cache: "no-store" });
   return jsonOrThrow<{ narrative: string; generatedAt: string }>(res, "GET /api/insights/weekly");
 }
+
+export interface TeamAnalysis {
+  compositionSummary: string;
+  strengths: string[];
+  frictionPairs: Array<{
+    a: string;
+    b: string;
+    severity: "low" | "medium" | "high";
+    reason: string;
+  }>;
+  dynamicsRisks: string[];
+  missingAngle: string;
+  kickoffPrompt: string;
+}
+
+export async function analyzeTeamViaApi(personIds: number[]): Promise<TeamAnalysis> {
+  const res = await fetch("/api/teams/analyze", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ personIds }),
+  });
+  const data = await jsonOrThrow<{ analysis: TeamAnalysis }>(res, "POST /api/teams/analyze");
+  return data.analysis;
+}

@@ -24,6 +24,7 @@ export async function POST() {
     available: p.available,
     clients: p.clients,
     revenue: p.revenue,
+    day_rate_eur: p.dayRate ?? 0,
     bio: p.bio,
     capabilities: p.capabilities,
     achievements: p.achievements,

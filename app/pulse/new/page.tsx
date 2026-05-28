@@ -854,6 +854,7 @@ export default function PulseNewPage() {
       available: "now",
       clients: 0,
       revenue: "—",
+      dayRate: 1500,
       bio: profile.bio,
       capabilities: profile.capabilities,
       achievements: profile.achievements,

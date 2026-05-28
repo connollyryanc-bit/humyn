@@ -6,7 +6,9 @@ import { EnergyKey, Person, energy } from "../page";
 import { PersonWithCapacity } from "../lib/capacity-data";
 import { EnergyRing } from "../components/energy";
 import {
+  TeamAnalysis,
   TeamPayload,
+  analyzeTeamViaApi,
   createTeamViaApi,
   deleteTeamViaApi,
   fetchAllPeople,
@@ -774,13 +776,23 @@ function MarketCard({ market }: { market: MarketCulture }) {
 
 function CrossMarketMatrix({ markets }: { markets: MarketCulture[] }) {
   const valid = markets.filter((m) => m.count > 0);
+  const [hover, setHover] = useState<{ row: string; col: string } | null>(null);
   if (valid.length < 2) return null;
+  const hovered =
+    hover && valid.find((m) => m.name === hover.row) && valid.find((m) => m.name === hover.col)
+      ? crossMarketFriction(
+          valid.find((m) => m.name === hover.row)!,
+          valid.find((m) => m.name === hover.col)!,
+        )
+      : null;
   return (
     <Card>
       <SectionLabel>Cross-market collaboration friction</SectionLabel>
-      <div style={{ fontSize: 12, color: "#5A5A5A", marginBottom: 14, lineHeight: 1.55, maxWidth: 560 }}>
-        Friction score between dominant energies in each market. Use when staffing across offices —
-        higher numbers mean more explicit communication and pair-coaching needed at kickoff.
+      <div style={{ fontSize: 12, color: "#5A5A5A", marginBottom: 14, lineHeight: 1.55, maxWidth: 640 }}>
+        Computed from the weighted Pulse-wheel distance between each market's full energy mix —
+        not a hardcoded score. 0° = identical temperament, 180° = wheel opposites. Higher numbers
+        mean more explicit handoffs and pair-coaching needed at kickoff. Hover any cell to see the
+        underlying maths.
       </div>
       <div style={{ overflowX: "auto" }}>
         <table style={{ width: "100%", borderCollapse: "separate", borderSpacing: 4 }}>
@@ -843,15 +855,20 @@ function CrossMarketMatrix({ markets }: { markets: MarketCulture[] }) {
                     f.label === "Low" ? "#2E8B57" : f.label === "Moderate" ? "#F5A623" : "#E8402A";
                   const bg =
                     f.label === "Low" ? "#EEF7F2" : f.label === "Moderate" ? "#FFFBF2" : "#FDF0EE";
+                  const isHover = hover && hover.row === row.name && hover.col === col.name;
                   return (
                     <td
                       key={col.name}
-                      title={f.note}
+                      title={`${f.note}\n\n${f.why}`}
+                      onMouseEnter={() => setHover({ row: row.name, col: col.name })}
+                      onMouseLeave={() => setHover(null)}
                       style={{
                         background: bg,
                         borderRadius: 6,
                         padding: "12px 8px",
                         textAlign: "center",
+                        outline: isHover ? `2px solid ${colour}` : "none",
+                        cursor: "help",
                       }}
                     >
                       <div
@@ -878,6 +895,41 @@ function CrossMarketMatrix({ markets }: { markets: MarketCulture[] }) {
             ))}
           </tbody>
         </table>
+      </div>
+      <div
+        style={{
+          marginTop: 14,
+          padding: 12,
+          background: "#FAFAF8",
+          border: "0.5px solid rgba(0,0,0,0.07)",
+          borderRadius: 10,
+          minHeight: 56,
+        }}
+      >
+        {hovered && hover ? (
+          <>
+            <div
+              style={{
+                fontSize: 10,
+                color: "#9A9A9A",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                fontWeight: 600,
+                marginBottom: 6,
+              }}
+            >
+              {hover.row} ↔ {hover.col} · {hovered.label} friction · {hovered.pct}
+            </div>
+            <div style={{ fontSize: 13, color: "#161311", lineHeight: 1.55, marginBottom: 4 }}>
+              {hovered.note}
+            </div>
+            <div style={{ fontSize: 11, color: "#5A5A5A", lineHeight: 1.5 }}>{hovered.why}</div>
+          </>
+        ) : (
+          <div style={{ fontSize: 12, color: "#9A9A9A", lineHeight: 1.55 }}>
+            Hover any matrix cell to see the underlying calculation and the cross-market collaboration note.
+          </div>
+        )}
       </div>
     </Card>
   );
@@ -907,6 +959,16 @@ function BuildTab({
   editingId: number | null;
 }) {
   const [search, setSearch] = useState<string>("");
+  const [aiAnalysis, setAiAnalysis] = useState<TeamAnalysis | null>(null);
+  const [aiHash, setAiHash] = useState<string>("");
+  const [aiLoading, setAiLoading] = useState<boolean>(false);
+  const [aiError, setAiError] = useState<string>("");
+
+  const currentHash = useMemo(
+    () => selected.map((p) => p.id).sort((a, b) => a - b).join("-"),
+    [selected],
+  );
+  const aiStale = aiHash !== currentHash;
 
   const harmony = useMemo(() => calculateHarmony(selected), [selected]);
   const cost = useMemo(
@@ -1195,6 +1257,250 @@ function BuildTab({
                   </div>
                 )}
               </div>
+            </Card>
+
+            <Card>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 10 }}>
+                <div>
+                  <SectionLabel>AI deep read · Claude</SectionLabel>
+                  <div style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.55, maxWidth: 520 }}>
+                    Semantic pass over the team's drivers, detractors and energy mix. Catches frictions the heuristic misses and adds dynamics + missing-angle observations.
+                  </div>
+                </div>
+                <button
+                  onClick={async () => {
+                    if (aiLoading) return;
+                    setAiError("");
+                    setAiLoading(true);
+                    try {
+                      const result = await analyzeTeamViaApi(selected.map((p) => p.id));
+                      setAiAnalysis(result);
+                      setAiHash(currentHash);
+                    } catch (err) {
+                      setAiError(err instanceof Error ? err.message : "Analysis failed.");
+                    } finally {
+                      setAiLoading(false);
+                    }
+                  }}
+                  disabled={aiLoading || selected.length < 2}
+                  style={{
+                    padding: "8px 14px",
+                    borderRadius: 8,
+                    background:
+                      aiLoading || selected.length < 2
+                        ? "#EDEDEA"
+                        : aiAnalysis && !aiStale
+                          ? "#FFFFFF"
+                          : "#161311",
+                    color:
+                      aiLoading || selected.length < 2
+                        ? "#9A9A9A"
+                        : aiAnalysis && !aiStale
+                          ? "#161311"
+                          : "#FFFFFF",
+                    fontSize: 12,
+                    fontWeight: 600,
+                    cursor:
+                      aiLoading || selected.length < 2 ? "not-allowed" : "pointer",
+                    fontFamily: "inherit",
+                    border:
+                      aiAnalysis && !aiStale && !aiLoading && selected.length >= 2
+                        ? "0.5px solid rgba(0,0,0,0.07)"
+                        : "none",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {aiLoading
+                    ? "Analysing…"
+                    : aiAnalysis && !aiStale
+                      ? "Re-run analysis"
+                      : "Run AI analysis"}
+                </button>
+              </div>
+
+              {selected.length < 2 && (
+                <div
+                  style={{
+                    padding: 12,
+                    background: "#FAFAF8",
+                    border: "0.5px dashed rgba(0,0,0,0.12)",
+                    borderRadius: 10,
+                    fontSize: 12,
+                    color: "#9A9A9A",
+                    textAlign: "center",
+                  }}
+                >
+                  Add at least two people to run the AI deep read.
+                </div>
+              )}
+
+              {aiError && (
+                <div
+                  style={{
+                    padding: 12,
+                    background: "#FDF0EE",
+                    border: "0.5px solid #FCCDC6",
+                    borderRadius: 10,
+                    fontSize: 12,
+                    color: "#9B2A1A",
+                  }}
+                >
+                  {aiError}
+                </div>
+              )}
+
+              {aiAnalysis && !aiError && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  {aiStale && (
+                    <div
+                      style={{
+                        padding: "8px 12px",
+                        background: "#FFFBF2",
+                        border: "0.5px solid #FAD98A",
+                        borderRadius: 10,
+                        fontSize: 11,
+                        color: "#8B5A00",
+                      }}
+                    >
+                      Team has changed since the last analysis. Re-run to refresh.
+                    </div>
+                  )}
+
+                  <p
+                    style={{
+                      fontSize: 14,
+                      color: "#161311",
+                      lineHeight: 1.6,
+                      margin: 0,
+                      fontStyle: "italic",
+                    }}
+                  >
+                    {aiAnalysis.compositionSummary}
+                  </p>
+
+                  {aiAnalysis.strengths.length > 0 && (
+                    <div>
+                      <SectionLabel>Strengths</SectionLabel>
+                      <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: "#1A5C38", lineHeight: 1.65 }}>
+                        {aiAnalysis.strengths.map((s, i) => (
+                          <li key={i}>{s}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {aiAnalysis.frictionPairs.length > 0 && (
+                    <div>
+                      <SectionLabel>AI-identified friction · {aiAnalysis.frictionPairs.length}</SectionLabel>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                        {aiAnalysis.frictionPairs.map((fp, i) => {
+                          const tone =
+                            fp.severity === "high"
+                              ? { bg: "#FDF0EE", border: "#FCCDC6", text: "#9B2A1A" }
+                              : fp.severity === "medium"
+                                ? { bg: "#FFFBF2", border: "#FAD98A", text: "#8B5A00" }
+                                : { bg: "#FAFAF8", border: "rgba(0,0,0,0.07)", text: "#5A5A5A" };
+                          return (
+                            <div
+                              key={i}
+                              style={{
+                                padding: "10px 12px",
+                                background: tone.bg,
+                                border: `0.5px solid ${tone.border}`,
+                                borderRadius: 10,
+                              }}
+                            >
+                              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                                <span style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>
+                                  {fp.a} ↔ {fp.b}
+                                </span>
+                                <span
+                                  style={{
+                                    padding: "2px 8px",
+                                    borderRadius: 100,
+                                    background: tone.text + "22",
+                                    color: tone.text,
+                                    fontSize: 9,
+                                    fontWeight: 700,
+                                    textTransform: "uppercase",
+                                    letterSpacing: "0.08em",
+                                  }}
+                                >
+                                  {fp.severity}
+                                </span>
+                              </div>
+                              <div style={{ fontSize: 12, color: tone.text, lineHeight: 1.5 }}>{fp.reason}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {aiAnalysis.dynamicsRisks.length > 0 && (
+                    <div>
+                      <SectionLabel>Team-dynamic risks</SectionLabel>
+                      <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: "#8B5A00", lineHeight: 1.65 }}>
+                        {aiAnalysis.dynamicsRisks.map((r, i) => (
+                          <li key={i}>{r}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {aiAnalysis.missingAngle && (
+                    <div
+                      style={{
+                        padding: 12,
+                        background: "#EEF4FB",
+                        border: "0.5px solid #8DC2E8",
+                        borderRadius: 10,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 10,
+                          color: "#124A6E",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.08em",
+                          fontWeight: 600,
+                          marginBottom: 4,
+                        }}
+                      >
+                        Missing angle
+                      </div>
+                      <div style={{ fontSize: 13, color: "#124A6E", lineHeight: 1.55 }}>{aiAnalysis.missingAngle}</div>
+                    </div>
+                  )}
+
+                  {aiAnalysis.kickoffPrompt && (
+                    <div
+                      style={{
+                        padding: 12,
+                        background: "#161311",
+                        color: "#FFFFFF",
+                        borderRadius: 10,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 10,
+                          color: "rgba(255,255,255,0.6)",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.08em",
+                          fontWeight: 600,
+                          marginBottom: 4,
+                        }}
+                      >
+                        Open the kickoff with
+                      </div>
+                      <div style={{ fontSize: 13, color: "#FFFFFF", lineHeight: 1.55, fontStyle: "italic" }}>
+                        &ldquo;{aiAnalysis.kickoffPrompt}&rdquo;
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </Card>
 
             {gaps.length > 0 && (

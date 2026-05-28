@@ -19,6 +19,7 @@ interface PersonRow {
   available: AvailKey;
   clients: number;
   revenue: string;
+  day_rate_eur: number;
   bio: string;
   capabilities: string[];
   achievements: string[];
@@ -65,6 +66,7 @@ function rowToPerson(row: PersonRow): Person {
     available: row.available,
     clients: row.clients,
     revenue: row.revenue,
+    dayRate: row.day_rate_eur ?? 0,
     bio: row.bio,
     capabilities: row.capabilities ?? [],
     achievements: row.achievements ?? [],
@@ -94,6 +96,7 @@ function personToRow(p: Person): Omit<PersonRow, "id"> & { id?: number } {
     available: p.available,
     clients: p.clients,
     revenue: p.revenue,
+    day_rate_eur: p.dayRate ?? 0,
     bio: p.bio,
     capabilities: p.capabilities,
     achievements: p.achievements,

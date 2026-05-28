@@ -38,6 +38,7 @@ create table if not exists people (
   available         avail_key   not null default 'soon',
   clients           int         not null default 0,
   revenue           text        not null default '€0',
+  day_rate_eur      int         not null default 0,
   bio               text        not null default '',
   capabilities      text[]      not null default '{}',
   achievements      text[]      not null default '{}',

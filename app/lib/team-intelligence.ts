@@ -50,35 +50,35 @@ const HARMONY_BANDS: Array<{
 ];
 
 const POSITION_OF_PRIMARY: Record<EnergyKey, string> = {
-  red: "Driver",
-  yellow: "Energizer",
-  green: "Supporter",
-  blue: "Analyst",
+  driver: "Driver",
+  energizer: "Energizer",
+  supporter: "Supporter",
+  analyst: "Analyst",
 };
 
-const ENERGIES: EnergyKey[] = ["red", "yellow", "green", "blue"];
+const ENERGIES: EnergyKey[] = ["driver", "energizer", "supporter", "analyst"];
 
 export function averageScores(team: Person[]): Record<EnergyKey, number> {
-  if (team.length === 0) return { red: 0, yellow: 0, green: 0, blue: 0 };
-  const sum = { red: 0, yellow: 0, green: 0, blue: 0 };
+  if (team.length === 0) return { driver: 0, energizer: 0, supporter: 0, analyst: 0 };
+  const sum = { driver: 0, energizer: 0, supporter: 0, analyst: 0 };
   team.forEach((p) => {
-    sum.red += p.scores.red;
-    sum.yellow += p.scores.yellow;
-    sum.green += p.scores.green;
-    sum.blue += p.scores.blue;
+    sum.driver += p.scores.driver;
+    sum.energizer += p.scores.energizer;
+    sum.supporter += p.scores.supporter;
+    sum.analyst += p.scores.analyst;
   });
   const n = team.length;
   return {
-    red: Math.round(sum.red / n),
-    yellow: Math.round(sum.yellow / n),
-    green: Math.round(sum.green / n),
-    blue: Math.round(sum.blue / n),
+    driver: Math.round(sum.driver / n),
+    energizer: Math.round(sum.energizer / n),
+    supporter: Math.round(sum.supporter / n),
+    analyst: Math.round(sum.analyst / n),
   };
 }
 
 export function dominantEnergy(team: Person[]): EnergyKey {
   const avg = averageScores(team);
-  return ENERGIES.reduce((best, k) => (avg[k] > avg[best] ? k : best), "red" as EnergyKey);
+  return ENERGIES.reduce((best, k) => (avg[k] > avg[best] ? k : best), "driver" as EnergyKey);
 }
 
 function coefficientOfVariation(values: number[]): number {
@@ -120,16 +120,16 @@ export function detectFrictionPairs(team: Person[]): FrictionPair[] {
           `${b.name.split(" ")[0]}'s drive for "${bTriggersA[0]}" is on ${a.name.split(" ")[0]}'s drain list`,
         );
       }
-      if (a.primary === b.primary && a.primary === "red") {
+      if (a.primary === b.primary && a.primary === "driver") {
         reasons.push("Two pure Drivers — watch for pace and authority clashes");
       }
-      if (a.primary === b.primary && a.primary === "yellow") {
+      if (a.primary === b.primary && a.primary === "energizer") {
         reasons.push("Two pure Energizers — risk of low follow-through");
       }
-      if (a.primary === b.primary && a.primary === "green") {
+      if (a.primary === b.primary && a.primary === "supporter") {
         reasons.push("Two pure Supporters — risk of slow decisions");
       }
-      if (a.primary === b.primary && a.primary === "blue") {
+      if (a.primary === b.primary && a.primary === "analyst") {
         reasons.push("Two pure Analysts — risk of analysis paralysis");
       }
       if (reasons.length > 0) {
@@ -155,7 +155,7 @@ export function detectEnergyGaps(team: Person[]): EnergyGap[] {
       gaps.push({
         energy: k,
         severity: "oversupplied",
-        detail: `Team average ${avg[k]}% — risks of ${k === "red" ? "Driver overload (burnout, conflict)" : k === "yellow" ? "Energizer overload (low follow-through)" : k === "green" ? "Supporter overload (slow decisions)" : "Analyst overload (analysis paralysis)"}.`,
+        detail: `Team average ${avg[k]}% — risks of ${k === "driver" ? "Driver overload (burnout, conflict)" : k === "energizer" ? "Energizer overload (low follow-through)" : k === "supporter" ? "Supporter overload (slow decisions)" : "Analyst overload (analysis paralysis)"}.`,
       });
     }
   });
@@ -311,9 +311,9 @@ export interface MarketCulture {
 }
 
 function dominantLabel(k: EnergyKey): string {
-  if (k === "red") return "Driver";
-  if (k === "yellow") return "Energizer";
-  if (k === "green") return "Supporter";
+  if (k === "driver") return "Driver";
+  if (k === "energizer") return "Energizer";
+  if (k === "supporter") return "Supporter";
   return "Analyst";
 }
 
@@ -326,8 +326,8 @@ export function computeMarketCulture(
     return {
       name: market,
       count: 0,
-      averageScores: { red: 0, yellow: 0, green: 0, blue: 0 },
-      dominantEnergy: "yellow",
+      averageScores: { driver: 0, energizer: 0, supporter: 0, analyst: 0 },
+      dominantEnergy: "energizer",
       averageUtilisation: 0,
       averageLoyalty: 0,
       topCapabilities: [],
@@ -340,11 +340,11 @@ export function computeMarketCulture(
   const avg = averageScores(inMarket);
   const dominant = ENERGIES.reduce(
     (best, k) => (avg[k] > avg[best] ? k : best),
-    "red" as EnergyKey,
+    "driver" as EnergyKey,
   );
   const second = ENERGIES.filter((k) => k !== dominant).reduce(
     (best, k) => (avg[k] > avg[best] ? k : best),
-    ENERGIES.find((k) => k !== dominant) ?? "red",
+    ENERGIES.find((k) => k !== dominant) ?? "driver",
   );
 
   const averageUtilisation = Math.round(
@@ -383,18 +383,18 @@ export function computeMarketCulture(
 
 function buildBestFor(dominant: EnergyKey, second: EnergyKey): string {
   const pairs: Record<string, string> = {
-    "red-yellow": "Client-facing pitches and pace-led engagements where momentum wins.",
-    "red-blue":   "High-stakes turnarounds and rigorous delivery under pressure.",
-    "red-green":  "Senior leadership programmes where steady relationships need decisive direction.",
-    "yellow-red": "Pitches, workshops and new-business sprints with executive audiences.",
-    "yellow-green": "Service design, customer experience and long-term client partnerships.",
-    "yellow-blue":  "Strategy work that needs both creative energy and analytical depth.",
-    "green-yellow": "Service design and people-centred change programmes.",
-    "green-blue":   "Long-form delivery, programme governance and complex multi-stakeholder work.",
-    "green-red":    "Steady delivery anchored by a clear leadership voice.",
-    "blue-red":   "Critical analytical engagements that need decisive recommendations.",
-    "blue-green": "Research, data and architecture work with a long delivery horizon.",
-    "blue-yellow":"Analytical engagements that need a client-facing communicator.",
+    "driver-energizer":     "Client-facing pitches and pace-led engagements where momentum wins.",
+    "driver-analyst":       "High-stakes turnarounds and rigorous delivery under pressure.",
+    "driver-supporter":     "Senior leadership programmes where steady relationships need decisive direction.",
+    "energizer-driver":     "Pitches, workshops and new-business sprints with executive audiences.",
+    "energizer-supporter":  "Service design, customer experience and long-term client partnerships.",
+    "energizer-analyst":    "Strategy work that needs both creative energy and analytical depth.",
+    "supporter-energizer":  "Service design and people-centred change programmes.",
+    "supporter-analyst":    "Long-form delivery, programme governance and complex multi-stakeholder work.",
+    "supporter-driver":     "Steady delivery anchored by a clear leadership voice.",
+    "analyst-driver":       "Critical analytical engagements that need decisive recommendations.",
+    "analyst-supporter":    "Research, data and architecture work with a long delivery horizon.",
+    "analyst-energizer":    "Analytical engagements that need a client-facing communicator.",
   };
   const key = `${dominant}-${second}`;
   return pairs[key] ?? "Balanced engagements across the spectrum.";
@@ -425,10 +425,10 @@ function buildSignature(
 // → Supporter (180°) → Analyst (270°). Energies at 180° apart on the wheel
 // feel like opposites; neighbours feel close.
 const WHEEL_DEGREES: Record<EnergyKey, number> = {
-  red: 0,
-  yellow: 90,
-  green: 180,
-  blue: 270,
+  driver: 0,
+  energizer: 90,
+  supporter: 180,
+  analyst: 270,
 };
 
 function angularDistance(a: EnergyKey, b: EnergyKey): number {

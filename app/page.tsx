@@ -67,7 +67,7 @@ function EnergyBadge({ k, small = false }: { k: EnergyKey; small?: boolean }) {
         color: e.text,
         border: `1px solid ${e.border}`,
         fontSize: small ? 10 : 11,
-        fontWeight: 500,
+        fontWeight: 400,
         whiteSpace: "nowrap",
       }}
     >
@@ -91,7 +91,7 @@ function StatusBadge({ k }: { k: AvailKey }) {
         color: a.text,
         border: `1px solid ${a.border}`,
         fontSize: 10,
-        fontWeight: 500,
+        fontWeight: 400,
         whiteSpace: "nowrap",
       }}
     >
@@ -109,7 +109,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
         color: "#9A9A9A",
         textTransform: "uppercase",
         letterSpacing: "0.07em",
-        fontWeight: 500,
+        fontWeight: 400,
         marginBottom: 10,
       }}
     >
@@ -130,7 +130,7 @@ function Pill({ children }: { children: React.ReactNode }) {
         color: "#5A5A5A",
         border: "1px solid rgba(0,0,0,0.07)",
         fontSize: 11,
-        fontWeight: 500,
+        fontWeight: 400,
         whiteSpace: "nowrap",
       }}
     >
@@ -142,7 +142,7 @@ function Pill({ children }: { children: React.ReactNode }) {
 function EnergyBars({ person }: { person: Person }) {
   return (
     <div>
-      {(["red", "yellow", "green", "blue"] as EnergyKey[]).map((c) => (
+      {(["driver", "energizer", "supporter", "analyst"] as EnergyKey[]).map((c) => (
         <div key={c} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
           <div style={{ width: 6, height: 6, borderRadius: "50%", background: energy[c].color, flexShrink: 0 }} />
           <span style={{ fontSize: 11, color: "#5A5A5A", width: 110 }}>{energy[c].label}</span>
@@ -177,27 +177,35 @@ function PersonCard({
   onToggleTeam: (p: Person) => void;
 }) {
   const tone = utilTone(person.utilisation);
-  const atRisk = person.utilisation < 65;
   const availAccent =
     person.available === "now"
-      ? "#2E8B57"
+      ? "#5CAB82"
       : person.available === "soon"
-        ? "#F5A623"
+        ? "#D4974A"
         : "transparent";
+  const statusDotBg =
+    person.available === "now"
+      ? "#5CAB82"
+      : person.available === "soon"
+        ? "#D4974A"
+        : "#E0DDD8";
+  const statusDotBorder =
+    person.available === "now" || person.available === "soon"
+      ? "none"
+      : "0.5px solid #ccc";
   return (
     <div
       style={{
         position: "relative",
-        background: atRisk ? "#FFF8F7" : "#FFFFFF",
+        background: "#FFFFFF",
         border: "0.5px solid rgba(0,0,0,0.07)",
-        borderLeft: availAccent === "transparent" ? "0.5px solid rgba(0,0,0,0.07)" : `3px solid ${availAccent}`,
         borderRadius: 12,
         padding: "1.25rem",
         paddingBottom: "1.5rem",
         display: "flex",
         flexDirection: "column",
         gap: 14,
-        boxShadow: atRisk ? "0 4px 16px rgba(232, 64, 42, 0.12)" : "none",
+        boxShadow: "none",
         overflow: "hidden",
         transition: "box-shadow 0.15s ease",
       }}
@@ -212,6 +220,19 @@ function PersonCard({
             {person.role} · <span style={{ color: "#5A5A5A" }}>{person.location}</span>
           </div>
         </div>
+        <span
+          aria-hidden
+          title={availability[person.available].label}
+          style={{
+            width: 7,
+            height: 7,
+            borderRadius: "50%",
+            background: statusDotBg,
+            border: statusDotBorder,
+            flexShrink: 0,
+            marginTop: 10,
+          }}
+        />
         <button
           onClick={() => onToggleTeam(person)}
           aria-label={inTeam ? "Remove from team" : "Add to team"}
@@ -282,7 +303,7 @@ function PersonCard({
           style={{
             fontSize: 11,
             color: tone.color,
-            fontWeight: 700,
+            fontWeight: 600,
             minWidth: 38,
             textAlign: "right",
           }}
@@ -335,7 +356,7 @@ function PersonCard({
             background: "#FFFFFF",
             color: "#1A1A1A",
             fontSize: 12,
-            fontWeight: 500,
+            fontWeight: 400,
             cursor: "pointer",
           }}
         >
@@ -350,7 +371,7 @@ function PersonCard({
             background: "#161311",
             color: "#FFFFFF",
             fontSize: 12,
-            fontWeight: 500,
+            fontWeight: 400,
             textAlign: "center",
           }}
         >
@@ -424,7 +445,7 @@ function PersonRow({
             style={{
               fontSize: 11,
               color: tone.color,
-              fontWeight: 700,
+              fontWeight: 600,
               minWidth: 36,
               textAlign: "right",
             }}
@@ -447,7 +468,7 @@ function PersonRow({
               background: "#FFFFFF",
               color: "#161311",
               fontSize: 11,
-              fontWeight: 500,
+              fontWeight: 400,
               cursor: "pointer",
               fontFamily: "inherit",
             }}
@@ -462,7 +483,7 @@ function PersonRow({
               background: "#161311",
               color: "#FFFFFF",
               fontSize: 11,
-              fontWeight: 500,
+              fontWeight: 400,
             }}
           >
             Open
@@ -647,25 +668,25 @@ function TeamBuilderDrawer({
   onRemove: (p: Person) => void;
 }) {
   const combined = useMemo(() => {
-    const sum = { red: 0, yellow: 0, green: 0, blue: 0 };
+    const sum = { driver: 0, energizer: 0, supporter: 0, analyst: 0 };
     team.forEach((p) => {
-      sum.red += p.scores.red;
-      sum.yellow += p.scores.yellow;
-      sum.green += p.scores.green;
-      sum.blue += p.scores.blue;
+      sum.driver += p.scores.driver;
+      sum.energizer += p.scores.energizer;
+      sum.supporter += p.scores.supporter;
+      sum.analyst += p.scores.analyst;
     });
     const n = Math.max(team.length, 1);
     return {
-      red: Math.round(sum.red / n),
-      yellow: Math.round(sum.yellow / n),
-      green: Math.round(sum.green / n),
-      blue: Math.round(sum.blue / n),
+      driver: Math.round(sum.driver / n),
+      energizer: Math.round(sum.energizer / n),
+      supporter: Math.round(sum.supporter / n),
+      analyst: Math.round(sum.analyst / n),
     };
   }, [team]);
 
-  const dominant: EnergyKey = (["red", "yellow", "green", "blue"] as EnergyKey[]).reduce(
+  const dominant: EnergyKey = (["driver", "energizer", "supporter", "analyst"] as EnergyKey[]).reduce(
     (best, c) => (combined[c] > combined[best] ? c : best),
-    "red" as EnergyKey,
+    "driver" as EnergyKey,
   );
 
   const avgUtil = team.length
@@ -673,7 +694,7 @@ function TeamBuilderDrawer({
     : 0;
 
   const gaps: string[] = [];
-  (["red", "yellow", "green", "blue"] as EnergyKey[]).forEach((c) => {
+  (["driver", "energizer", "supporter", "analyst"] as EnergyKey[]).forEach((c) => {
     if (team.length > 0 && combined[c] < 35) gaps.push(energy[c].label);
   });
 
@@ -777,7 +798,7 @@ function TeamBuilderDrawer({
 
             <div>
               <SectionLabel>Combined energy</SectionLabel>
-              {(["red", "yellow", "green", "blue"] as EnergyKey[]).map((c) => (
+              {(["driver", "energizer", "supporter", "analyst"] as EnergyKey[]).map((c) => (
                 <div key={c} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
                   <div style={{ width: 6, height: 6, borderRadius: "50%", background: energy[c].color }} />
                   <span style={{ fontSize: 11, color: "#5A5A5A", width: 110 }}>{energy[c].label}</span>
@@ -1008,7 +1029,7 @@ export default function PeoplePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#FFFFFF",
                 background: "#161311",
               }}
@@ -1021,7 +1042,7 @@ export default function PeoplePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#4D4945",
                 background: "transparent",
               }}
@@ -1034,7 +1055,7 @@ export default function PeoplePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#4D4945",
                 background: "transparent",
               }}
@@ -1047,7 +1068,7 @@ export default function PeoplePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#4D4945",
                 background: "transparent",
               }}
@@ -1060,7 +1081,7 @@ export default function PeoplePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#4D4945",
                 background: "transparent",
               }}
@@ -1073,7 +1094,7 @@ export default function PeoplePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#4D4945",
                 background: "transparent",
               }}
@@ -1086,7 +1107,7 @@ export default function PeoplePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#4D4945",
                 background: "transparent",
               }}
@@ -1104,7 +1125,7 @@ export default function PeoplePage() {
               background: "#FFFFFF",
               color: "#161311",
               fontSize: 12,
-              fontWeight: 500,
+              fontWeight: 400,
             }}
           >
             Add manually
@@ -1118,7 +1139,7 @@ export default function PeoplePage() {
               background: "#FFFFFF",
               color: "#161311",
               fontSize: 12,
-              fontWeight: 500,
+              fontWeight: 400,
               display: "inline-flex",
               alignItems: "center",
               gap: 6,
@@ -1135,7 +1156,7 @@ export default function PeoplePage() {
               background: "#161311",
               color: "#FFFFFF",
               fontSize: 12,
-              fontWeight: 500,
+              fontWeight: 400,
               display: "inline-flex",
               alignItems: "center",
               gap: 6,
@@ -1152,7 +1173,7 @@ export default function PeoplePage() {
               background: team.length ? "#1A1A1A" : "#FFFFFF",
               color: team.length ? "#FFFFFF" : "#1A1A1A",
               fontSize: 12,
-              fontWeight: 500,
+              fontWeight: 400,
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
@@ -1167,7 +1188,7 @@ export default function PeoplePage() {
                   color: "#FFFFFF",
                   borderRadius: 100,
                   fontSize: 10,
-                  fontWeight: 700,
+                  fontWeight: 600,
                   padding: "1px 7px",
                 }}
               >
@@ -1197,7 +1218,7 @@ export default function PeoplePage() {
                 color: "#9A9A9A",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
-                fontWeight: 500,
+                fontWeight: 400,
               }}
             >
               Pulse · Valtech Nordic
@@ -1279,7 +1300,7 @@ export default function PeoplePage() {
                     background: view === v ? "#161311" : "transparent",
                     color: view === v ? "#FFFFFF" : "#5A5A5A",
                     fontSize: 12,
-                    fontWeight: 500,
+                    fontWeight: 400,
                     cursor: "pointer",
                     fontFamily: "inherit",
                     display: "inline-flex",
@@ -1308,7 +1329,7 @@ export default function PeoplePage() {
                       color: "#9A9A9A",
                       textTransform: "uppercase",
                       letterSpacing: "0.07em",
-                      fontWeight: 500,
+                      fontWeight: 400,
                     }}
                   >
                     {g.label}
@@ -1358,7 +1379,7 @@ export default function PeoplePage() {
                                 color: "#9A9A9A",
                                 textTransform: "uppercase",
                                 letterSpacing: "0.06em",
-                                fontWeight: 500,
+                                fontWeight: 400,
                                 borderBottom: "1px solid rgba(0,0,0,0.06)",
                               }}
                             >

@@ -186,7 +186,7 @@ function StatBlock({
 function MiniEnergyBars({ scores }: { scores: Record<EnergyKey, number> }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-      {(["red", "yellow", "green", "blue"] as EnergyKey[]).map((c) => (
+      {(["driver", "energizer", "supporter", "analyst"] as EnergyKey[]).map((c) => (
         <div key={c} style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ fontSize: 10, color: "#5A5A5A", width: 56, fontWeight: 500 }}>
             {energy[c].label}
@@ -1988,9 +1988,9 @@ export default function TeamsPage() {
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   <div style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.6 }}>
-                    Average across {people.length} consultants — Driver {overallAverage.red}%{" "}
-                    · Energizer {overallAverage.yellow}% · Supporter {overallAverage.green}%{" "}
-                    · Analyst {overallAverage.blue}%. The market cards below show how each office
+                    Average across {people.length} consultants — Driver {overallAverage.driver}%{" "}
+                    · Energizer {overallAverage.energizer}% · Supporter {overallAverage.supporter}%{" "}
+                    · Analyst {overallAverage.analyst}%. The market cards below show how each office
                     leans against this average.
                   </div>
                 </div>

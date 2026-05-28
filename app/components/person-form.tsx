@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AvailKey, EnergyKey, Person, energy } from "../page";
 import { deriveWheelPosition, initialsFromName } from "../lib/people-store";
 
-const ENERGIES: EnergyKey[] = ["red", "yellow", "green", "blue"];
+const ENERGIES: EnergyKey[] = ["driver", "energizer", "supporter", "analyst"];
 const LOCATIONS = ["Stockholm", "Oslo", "Copenhagen", "Helsinki"] as const;
 const AVAILABILITIES: { value: AvailKey; label: string }[] = [
   { value: "now", label: "Available now" },

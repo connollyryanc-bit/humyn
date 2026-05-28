@@ -12,7 +12,7 @@ import {
 
 const MARKETS = ["Stockholm", "Oslo", "Copenhagen", "Helsinki"] as const;
 type Market = typeof MARKETS[number];
-const ENERGIES: EnergyKey[] = ["red", "yellow", "green", "blue"];
+const ENERGIES: EnergyKey[] = ["driver", "energizer", "supporter", "analyst"];
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -168,23 +168,23 @@ function MarketSummaryCard({
     );
   }
 
-  const sum = { red: 0, yellow: 0, green: 0, blue: 0 };
+  const sum = { driver: 0, energizer: 0, supporter: 0, analyst: 0 };
   people.forEach((p) => {
-    sum.red += p.scores.red;
-    sum.yellow += p.scores.yellow;
-    sum.green += p.scores.green;
-    sum.blue += p.scores.blue;
+    sum.driver += p.scores.driver;
+    sum.energizer += p.scores.energizer;
+    sum.supporter += p.scores.supporter;
+    sum.analyst += p.scores.analyst;
   });
   const n = people.length;
   const avgEnergies: Record<EnergyKey, number> = {
-    red: Math.round(sum.red / n),
-    yellow: Math.round(sum.yellow / n),
-    green: Math.round(sum.green / n),
-    blue: Math.round(sum.blue / n),
+    driver: Math.round(sum.driver / n),
+    energizer: Math.round(sum.energizer / n),
+    supporter: Math.round(sum.supporter / n),
+    analyst: Math.round(sum.analyst / n),
   };
   const dominant = ENERGIES.reduce(
     (best, k) => (avgEnergies[k] > avgEnergies[best] ? k : best),
-    "red" as EnergyKey,
+    "driver" as EnergyKey,
   );
   const avgUtil = Math.round(people.reduce((s, p) => s + p.utilisation, 0) / n);
   const dailyRate = people.reduce((s, p) => s + (p.dayRate || 1500), 0);
@@ -373,23 +373,23 @@ export default function BoardPage() {
       0,
     );
 
-    const sum = { red: 0, yellow: 0, green: 0, blue: 0 };
+    const sum = { driver: 0, energizer: 0, supporter: 0, analyst: 0 };
     enriched.forEach((p) => {
-      sum.red += p.scores.red;
-      sum.yellow += p.scores.yellow;
-      sum.green += p.scores.green;
-      sum.blue += p.scores.blue;
+      sum.driver += p.scores.driver;
+      sum.energizer += p.scores.energizer;
+      sum.supporter += p.scores.supporter;
+      sum.analyst += p.scores.analyst;
     });
     const n = enriched.length;
     const orgEnergies: Record<EnergyKey, number> = {
-      red: Math.round(sum.red / n),
-      yellow: Math.round(sum.yellow / n),
-      green: Math.round(sum.green / n),
-      blue: Math.round(sum.blue / n),
+      driver: Math.round(sum.driver / n),
+      energizer: Math.round(sum.energizer / n),
+      supporter: Math.round(sum.supporter / n),
+      analyst: Math.round(sum.analyst / n),
     };
     const orgDominant: EnergyKey = ENERGIES.reduce(
       (best, k) => (orgEnergies[k] > orgEnergies[best] ? k : best),
-      "red" as EnergyKey,
+      "driver" as EnergyKey,
     );
 
     const topExposure = [...enriched]

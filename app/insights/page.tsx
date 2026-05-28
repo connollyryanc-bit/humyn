@@ -366,7 +366,7 @@ export default function InsightsPage() {
   }, [enriched]);
 
   const energyMix = useMemo(() => {
-    const counts: Record<EnergyKey, number> = { red: 0, yellow: 0, green: 0, blue: 0 };
+    const counts: Record<EnergyKey, number> = { driver: 0, energizer: 0, supporter: 0, analyst: 0 };
     enriched.forEach((p) => (counts[p.primary] += 1));
     return counts;
   }, [enriched]);
@@ -768,8 +768,8 @@ export default function InsightsPage() {
               }}
             >
               <span style={{ fontWeight: 600, color: "#5A5A5A" }}>Bench thresholds:</span>{" "}
-              Energizer: risk at {benchThresholds.yellow}d · Supporter: risk at{" "}
-              {benchThresholds.green}d · Driver &amp; Analyst: risk at {benchThresholds.red}d
+              Energizer: risk at {benchThresholds.energizer}d · Supporter: risk at{" "}
+              {benchThresholds.supporter}d · Driver &amp; Analyst: risk at {benchThresholds.driver}d
             </div>
           </Card>
         </div>
@@ -800,8 +800,8 @@ export default function InsightsPage() {
               }}
             >
               <span style={{ fontWeight: 600, color: "#5A5A5A" }}>Energy mix across markets:</span>{" "}
-              Driver {energyMix.red} · Energizer {energyMix.yellow} · Supporter{" "}
-              {energyMix.green} · Analyst {energyMix.blue}
+              Driver {energyMix.driver} · Energizer {energyMix.energizer} · Supporter{" "}
+              {energyMix.supporter} · Analyst {energyMix.analyst}
             </div>
           </Card>
         </div>

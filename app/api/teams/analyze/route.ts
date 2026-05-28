@@ -45,7 +45,7 @@ interface AnalyzeBody {
 }
 
 function personBrief(p: Person): string {
-  return `- ${p.name} (${p.role}, ${p.location}). Primary energy: ${energy[p.primary].label}, secondary: ${energy[p.secondary].label}. Wheel position: ${p.wheelPosition}. Energy scores: Driver ${p.scores.red}, Energizer ${p.scores.yellow}, Supporter ${p.scores.green}, Analyst ${p.scores.blue}. Best trait: ${p.bestTrait || "n/a"}. Watch-out: ${p.vice || "n/a"}. Drivers: ${p.drivers.join("; ") || "none"}. Detractors: ${p.detractors.join("; ") || "none"}.`;
+  return `- ${p.name} (${p.role}, ${p.location}). Primary energy: ${energy[p.primary].label}, secondary: ${energy[p.secondary].label}. Wheel position: ${p.wheelPosition}. Energy scores: Driver ${p.scores.driver}, Energizer ${p.scores.energizer}, Supporter ${p.scores.supporter}, Analyst ${p.scores.analyst}. Best trait: ${p.bestTrait || "n/a"}. Watch-out: ${p.vice || "n/a"}. Drivers: ${p.drivers.join("; ") || "none"}. Detractors: ${p.detractors.join("; ") || "none"}.`;
 }
 
 export async function POST(req: Request) {

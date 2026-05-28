@@ -1,4 +1,4 @@
-export type EnergyKey = "red" | "yellow" | "green" | "blue";
+export type EnergyKey = "driver" | "energizer" | "supporter" | "analyst";
 export type AvailKey = "now" | "soon" | "allocated";
 
 export interface Person {
@@ -9,7 +9,7 @@ export interface Person {
   location: string;
   primary: EnergyKey;
   secondary: EnergyKey;
-  scores: { red: number; yellow: number; green: number; blue: number };
+  scores: { driver: number; energizer: number; supporter: number; analyst: number };
   utilisation: number;
   available: AvailKey;
   clients: number;
@@ -31,25 +31,27 @@ export const energy: Record<
   EnergyKey,
   { color: string; bg: string; text: string; border: string; label: string }
 > = {
-  red:    { color: "#E8402A", bg: "#FDF0EE", text: "#9B2A1A", border: "#FCCDC6", label: "Driver" },
-  yellow: { color: "#F5A623", bg: "#FFFBF2", text: "#8B5A00", border: "#FAD98A", label: "Energizer" },
-  green:  { color: "#2E8B57", bg: "#EEF7F2", text: "#1A5C38", border: "#9ED4B8", label: "Supporter" },
-  blue:   { color: "#1E6FA5", bg: "#EEF4FB", text: "#124A6E", border: "#8DC2E8", label: "Analyst" },
+  driver:    { color: "#D97B73", bg: "#FDF3F2", text: "#C4534A", border: "#F0CECA", label: "Driver" },
+  energizer: { color: "#D4974A", bg: "#FEF8EE", text: "#B87A2E", border: "#F2DCB0", label: "Energizer" },
+  supporter: { color: "#5CAB82", bg: "#EFF8F3", text: "#3D8A61", border: "#B6E0CB", label: "Supporter" },
+  analyst:   { color: "#6B9FCC", bg: "#F0F5FB", text: "#4A80B0", border: "#C4D9EF", label: "Analyst" },
 };
+
+export const ENERGIES: EnergyKey[] = ["driver", "energizer", "supporter", "analyst"];
 
 export const availability: Record<
   AvailKey,
   { color: string; bg: string; text: string; border: string; label: string }
 > = {
-  now:       { color: "#2E8B57", bg: "#EEF7F2", text: "#1A5C38", border: "#9ED4B8", label: "Available now" },
-  soon:      { color: "#F5A623", bg: "#FFFBF2", text: "#8B5A00", border: "#FAD98A", label: "Available soon" },
-  allocated: { color: "#E8402A", bg: "#FDF0EE", text: "#9B2A1A", border: "#FCCDC6", label: "Allocated" },
+  now:       { color: "#5CAB82", bg: "#EFF8F3", text: "#3D8A61", border: "#B6E0CB", label: "Available now" },
+  soon:      { color: "#D4974A", bg: "#FEF8EE", text: "#B87A2E", border: "#F2DCB0", label: "Available soon" },
+  allocated: { color: "#D97B73", bg: "#FDF3F2", text: "#C4534A", border: "#F0CECA", label: "Allocated" },
 };
 
 export function utilTone(u: number): { color: string; label: string } {
-  if (u >= 80) return { color: "#2E8B57", label: "On target" };
-  if (u >= 65) return { color: "#F5A623", label: "Below target" };
-  return { color: "#E8402A", label: "At risk" };
+  if (u >= 80) return { color: "#5CAB82", label: "On target" };
+  if (u >= 65) return { color: "#D4974A", label: "Below target" };
+  return { color: "#D97B73", label: "At risk" };
 }
 
 export const people: Person[] = [
@@ -59,9 +61,9 @@ export const people: Person[] = [
     initials: "LS",
     role: "Engagement Director",
     location: "Stockholm",
-    primary: "red",
-    secondary: "yellow",
-    scores: { red: 86, yellow: 71, green: 32, blue: 44 },
+    primary: "driver",
+    secondary: "energizer",
+    scores: { driver: 86, energizer: 71, supporter: 32, analyst: 44 },
     utilisation: 92,
     available: "allocated",
     clients: 6,
@@ -88,9 +90,9 @@ export const people: Person[] = [
     initials: "ML",
     role: "Principal Tech Lead",
     location: "Copenhagen",
-    primary: "blue",
-    secondary: "green",
-    scores: { red: 28, yellow: 24, green: 64, blue: 91 },
+    primary: "analyst",
+    secondary: "supporter",
+    scores: { driver: 28, energizer: 24, supporter: 64, analyst: 91 },
     utilisation: 78,
     available: "soon",
     clients: 3,
@@ -117,9 +119,9 @@ export const people: Person[] = [
     initials: "PA",
     role: "UX Director",
     location: "Copenhagen",
-    primary: "green",
-    secondary: "yellow",
-    scores: { red: 22, yellow: 67, green: 88, blue: 41 },
+    primary: "supporter",
+    secondary: "energizer",
+    scores: { driver: 22, energizer: 67, supporter: 88, analyst: 41 },
     utilisation: 84,
     available: "allocated",
     clients: 4,
@@ -146,9 +148,9 @@ export const people: Person[] = [
     initials: "AB",
     role: "Strategy Consultant",
     location: "Oslo",
-    primary: "yellow",
-    secondary: "red",
-    scores: { red: 64, yellow: 89, green: 41, blue: 36 },
+    primary: "energizer",
+    secondary: "driver",
+    scores: { driver: 64, energizer: 89, supporter: 41, analyst: 36 },
     utilisation: 71,
     available: "soon",
     clients: 5,
@@ -175,9 +177,9 @@ export const people: Person[] = [
     initials: "HM",
     role: "Senior Data Scientist",
     location: "Helsinki",
-    primary: "blue",
-    secondary: "red",
-    scores: { red: 58, yellow: 31, green: 39, blue: 88 },
+    primary: "analyst",
+    secondary: "driver",
+    scores: { driver: 58, energizer: 31, supporter: 39, analyst: 88 },
     utilisation: 88,
     available: "allocated",
     clients: 2,
@@ -204,9 +206,9 @@ export const people: Person[] = [
     initials: "EH",
     role: "Solutions Architect",
     location: "Stockholm",
-    primary: "blue",
-    secondary: "green",
-    scores: { red: 26, yellow: 38, green: 71, blue: 84 },
+    primary: "analyst",
+    secondary: "supporter",
+    scores: { driver: 26, energizer: 38, supporter: 71, analyst: 84 },
     utilisation: 67,
     available: "soon",
     clients: 3,
@@ -233,9 +235,9 @@ export const people: Person[] = [
     initials: "SL",
     role: "Senior Product Designer",
     location: "Stockholm",
-    primary: "yellow",
-    secondary: "green",
-    scores: { red: 33, yellow: 86, green: 72, blue: 38 },
+    primary: "energizer",
+    secondary: "supporter",
+    scores: { driver: 33, energizer: 86, supporter: 72, analyst: 38 },
     utilisation: 81,
     available: "allocated",
     clients: 4,
@@ -262,9 +264,9 @@ export const people: Person[] = [
     initials: "TK",
     role: "Delivery Lead",
     location: "Copenhagen",
-    primary: "green",
-    secondary: "blue",
-    scores: { red: 31, yellow: 42, green: 87, blue: 69 },
+    primary: "supporter",
+    secondary: "analyst",
+    scores: { driver: 31, energizer: 42, supporter: 87, analyst: 69 },
     utilisation: 86,
     available: "allocated",
     clients: 2,
@@ -291,9 +293,9 @@ export const people: Person[] = [
     initials: "IS",
     role: "Senior Frontend Engineer",
     location: "Oslo",
-    primary: "yellow",
-    secondary: "blue",
-    scores: { red: 34, yellow: 84, green: 47, blue: 71 },
+    primary: "energizer",
+    secondary: "analyst",
+    scores: { driver: 34, energizer: 84, supporter: 47, analyst: 71 },
     utilisation: 74,
     available: "soon",
     clients: 3,
@@ -320,9 +322,9 @@ export const people: Person[] = [
     initials: "NV",
     role: "Senior Backend Engineer",
     location: "Helsinki",
-    primary: "blue",
-    secondary: "red",
-    scores: { red: 61, yellow: 28, green: 36, blue: 87 },
+    primary: "analyst",
+    secondary: "driver",
+    scores: { driver: 61, energizer: 28, supporter: 36, analyst: 87 },
     utilisation: 59,
     available: "now",
     clients: 2,
@@ -349,9 +351,9 @@ export const people: Person[] = [
     initials: "AF",
     role: "Client Partner",
     location: "Stockholm",
-    primary: "red",
-    secondary: "yellow",
-    scores: { red: 82, yellow: 78, green: 36, blue: 41 },
+    primary: "driver",
+    secondary: "energizer",
+    scores: { driver: 82, energizer: 78, supporter: 36, analyst: 41 },
     utilisation: 64,
     available: "now",
     clients: 7,
@@ -378,9 +380,9 @@ export const people: Person[] = [
     initials: "MD",
     role: "Engineering Manager",
     location: "Oslo",
-    primary: "red",
-    secondary: "blue",
-    scores: { red: 79, yellow: 38, green: 42, blue: 74 },
+    primary: "driver",
+    secondary: "analyst",
+    scores: { driver: 79, energizer: 38, supporter: 42, analyst: 74 },
     utilisation: 83,
     available: "allocated",
     clients: 3,

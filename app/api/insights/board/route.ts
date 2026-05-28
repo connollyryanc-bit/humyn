@@ -57,7 +57,7 @@ function buildAnalystBrief(enriched: PersonWithCapacity[]): string {
 - Burnout-flagged: ${burnouts.length}
 - On bench: ${onBench.length}
 
-Dominant energies across the org: Driver ${enriched.filter((p) => p.primary === "red").length}, Energizer ${enriched.filter((p) => p.primary === "yellow").length}, Supporter ${enriched.filter((p) => p.primary === "green").length}, Analyst ${enriched.filter((p) => p.primary === "blue").length}.`;
+Dominant energies across the org: Driver ${enriched.filter((p) => p.primary === "driver").length}, Energizer ${enriched.filter((p) => p.primary === "energizer").length}, Supporter ${enriched.filter((p) => p.primary === "supporter").length}, Analyst ${enriched.filter((p) => p.primary === "analyst").length}.`;
 }
 
 export async function GET() {
@@ -136,10 +136,10 @@ export async function GET() {
 
   // Quick avoidance of energy-name leakage for board prose
   const labels = {
-    red: energy.red.label,
-    yellow: energy.yellow.label,
-    green: energy.green.label,
-    blue: energy.blue.label,
+    driver: energy.driver.label,
+    energizer: energy.energizer.label,
+    supporter: energy.supporter.label,
+    analyst: energy.analyst.label,
   };
   void labels;
 

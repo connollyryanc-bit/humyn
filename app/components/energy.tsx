@@ -2,9 +2,9 @@
 
 import { EnergyKey, energy } from "../page";
 
-export type EnergyScores = { red: number; yellow: number; green: number; blue: number };
+export type EnergyScores = { driver: number; energizer: number; supporter: number; analyst: number };
 
-const ENERGIES: EnergyKey[] = ["red", "yellow", "green", "blue"];
+const ENERGIES: EnergyKey[] = ["driver", "energizer", "supporter", "analyst"];
 
 function arcPath(
   cx: number,
@@ -58,10 +58,10 @@ export function EnergyRing({
 
   const labelAngles = [0, 90, 180, 270];
   const labels: { k: EnergyKey; angle: number }[] = [
-    { k: "red", angle: 45 },
-    { k: "yellow", angle: 135 },
-    { k: "green", angle: 225 },
-    { k: "blue", angle: 315 },
+    { k: "driver", angle: 45 },
+    { k: "energizer", angle: 135 },
+    { k: "supporter", angle: 225 },
+    { k: "analyst", angle: 315 },
   ];
 
   const primaryColour = energy[primary];
@@ -181,14 +181,14 @@ const SPIDER_AXES: {
   name: string;
   fn: (s: EnergyScores) => number;
 }[] = [
-  { name: "Pace",        fn: (s) => s.red * 0.7 + s.yellow * 0.3 },
-  { name: "Decisiveness",fn: (s) => s.red * 0.8 + s.blue * 0.2 },
-  { name: "Rigour",      fn: (s) => s.blue * 0.85 + s.red * 0.15 },
-  { name: "Listening",   fn: (s) => s.green * 0.6 + s.blue * 0.4 },
-  { name: "Steadiness",  fn: (s) => s.green * 0.75 + s.blue * 0.25 },
-  { name: "Empathy",     fn: (s) => s.green * 0.7 + s.yellow * 0.3 },
-  { name: "Sociability", fn: (s) => s.yellow * 0.8 + s.red * 0.2 },
-  { name: "Curiosity",   fn: (s) => s.yellow * 0.55 + s.blue * 0.45 },
+  { name: "Pace",        fn: (s) => s.driver * 0.7 + s.energizer * 0.3 },
+  { name: "Decisiveness",fn: (s) => s.driver * 0.8 + s.analyst * 0.2 },
+  { name: "Rigour",      fn: (s) => s.analyst * 0.85 + s.driver * 0.15 },
+  { name: "Listening",   fn: (s) => s.supporter * 0.6 + s.analyst * 0.4 },
+  { name: "Steadiness",  fn: (s) => s.supporter * 0.75 + s.analyst * 0.25 },
+  { name: "Empathy",     fn: (s) => s.supporter * 0.7 + s.energizer * 0.3 },
+  { name: "Sociability", fn: (s) => s.energizer * 0.8 + s.driver * 0.2 },
+  { name: "Curiosity",   fn: (s) => s.energizer * 0.55 + s.analyst * 0.45 },
 ];
 
 export function spiderValues(scores: EnergyScores): { name: string; value: number }[] {

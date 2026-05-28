@@ -51,7 +51,7 @@ function buildAnalystBrief(enriched: PersonWithCapacity[]): string {
 - Burnout-flagged: ${burnouts.length}
 - On bench: ${onBench.length} (${onBench.reduce((s, p) => s + p.capacity.benchDays, 0)} days combined)
 - Three-month revenue exposure from flight risks: €${(totalExposure / 1000).toFixed(0)}k
-- Energy-specific bench thresholds: Energizer ${benchThresholds.yellow}d · Supporter ${benchThresholds.green}d · Driver ${benchThresholds.red}d · Analyst ${benchThresholds.blue}d`);
+- Energy-specific bench thresholds: Energizer ${benchThresholds.energizer}d · Supporter ${benchThresholds.supporter}d · Driver ${benchThresholds.driver}d · Analyst ${benchThresholds.analyst}d`);
 
   if (flightRisks.length > 0) {
     sections.push(`Flight risks needing decisions this week:

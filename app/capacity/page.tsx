@@ -968,8 +968,8 @@ export default function CapacityPage() {
                 }}
               >
                 <span style={{ fontWeight: 600, color: "#5A5A5A" }}>Risk thresholds:</span>{" "}
-                Energizer: risk at {benchThresholds.yellow}d · Supporter: risk at{" "}
-                {benchThresholds.green}d · Driver &amp; Analyst: risk at {benchThresholds.red}d
+                Energizer: risk at {benchThresholds.energizer}d · Supporter: risk at{" "}
+                {benchThresholds.supporter}d · Driver &amp; Analyst: risk at {benchThresholds.driver}d
               </div>
             </Card>
 

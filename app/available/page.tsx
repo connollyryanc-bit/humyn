@@ -203,7 +203,7 @@ function TimelineRow({
             style={{
               fontSize: 11,
               color: "#9A9A9A",
-              fontWeight: 500,
+              fontWeight: 400,
               marginTop: 1,
               overflow: "hidden",
               textOverflow: "ellipsis",
@@ -241,7 +241,7 @@ function TimelineRow({
             ? e.color
             : isPartial
               ? "#FAD98A"
-              : "#EEF7F2";
+              : "#EFF8F3";
           const fill = isAllocated
             ? 1
             : isPartial
@@ -266,7 +266,7 @@ function TimelineRow({
                   i < allocation.length - 1
                     ? "0.5px dashed rgba(0,0,0,0.05)"
                     : "none",
-                background: cell.pct === 0 ? "rgba(46,139,87,0.06)" : "transparent",
+                background: cell.pct === 0 ? "rgba(92,171,130,0.06)" : "transparent",
                 cursor: "default",
               }}
             >
@@ -278,14 +278,14 @@ function TimelineRow({
                   opacity: cell.pct === 0 ? 0.5 : fill,
                   border:
                     cell.pct === 0
-                      ? "0.5px dashed #9ED4B8"
+                      ? "0.5px dashed #B6E0CB"
                       : "0.5px solid rgba(0,0,0,0.06)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: 10,
-                  fontWeight: 700,
-                  color: isAllocated ? "#FFFFFF" : isPartial ? "#8B5A00" : "#1A5C38",
+                  fontWeight: 600,
+                  color: isAllocated ? "#FFFFFF" : isPartial ? "#8B5A00" : "#3D8A61",
                   letterSpacing: "0.02em",
                 }}
               >
@@ -322,7 +322,7 @@ function FilterChip({
         background: active ? activeBg : "#FFFFFF",
         color: active ? activeColor : "#4D4945",
         fontSize: 12,
-        fontWeight: 500,
+        fontWeight: 400,
         cursor: "pointer",
         fontFamily: "inherit",
       }}
@@ -450,7 +450,7 @@ export default function AvailablePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#4D4945",
               }}
             >
@@ -462,7 +462,7 @@ export default function AvailablePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#4D4945",
               }}
             >
@@ -474,7 +474,7 @@ export default function AvailablePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#FFFFFF",
                 background: "#161311",
               }}
@@ -487,7 +487,7 @@ export default function AvailablePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#4D4945",
               }}
             >
@@ -499,7 +499,7 @@ export default function AvailablePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#4D4945",
               }}
             >
@@ -511,7 +511,7 @@ export default function AvailablePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#4D4945",
               }}
             >
@@ -523,7 +523,7 @@ export default function AvailablePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 400,
                 color: "#4D4945",
               }}
             >
@@ -540,7 +540,7 @@ export default function AvailablePage() {
               background: "#161311",
               color: "#FFFFFF",
               fontSize: 12,
-              fontWeight: 500,
+              fontWeight: 400,
             }}
           >
             Brief → Team
@@ -556,7 +556,7 @@ export default function AvailablePage() {
               color: "#9A9A9A",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
-              fontWeight: 500,
+              fontWeight: 400,
             }}
           >
             Compass · Resource timeline · next {WEEK_COUNT} weeks
@@ -671,7 +671,7 @@ export default function AvailablePage() {
                   background: "#FFFFFF",
                   color: "#4D4945",
                   fontSize: 12,
-                  fontWeight: 500,
+                  fontWeight: 400,
                   cursor: "pointer",
                   fontFamily: "inherit",
                 }}
@@ -694,7 +694,7 @@ export default function AvailablePage() {
                       width: 14,
                       height: 14,
                       borderRadius: 4,
-                      background: "#1E6FA5",
+                      background: "#9A9A9A",
                       opacity: 0.85,
                     }}
                   />
@@ -717,8 +717,8 @@ export default function AvailablePage() {
                       width: 14,
                       height: 14,
                       borderRadius: 4,
-                      background: "#EEF7F2",
-                      border: "0.5px dashed #9ED4B8",
+                      background: "#EFF8F3",
+                      border: "0.5px dashed #B6E0CB",
                     }}
                   />
                   Available
@@ -746,7 +746,7 @@ export default function AvailablePage() {
                     padding: "6px 10px",
                     borderRadius: 6,
                     fontSize: 11,
-                    fontWeight: 500,
+                    fontWeight: 400,
                     zIndex: 5,
                     pointerEvents: "none",
                   }}
@@ -818,7 +818,7 @@ export default function AvailablePage() {
                         }}
                       >
                         <div>{w.label}</div>
-                        <div style={{ color: "#5A5A5A", fontWeight: 500, marginTop: 2 }}>
+                        <div style={{ color: "#5A5A5A", fontWeight: 400, marginTop: 2 }}>
                           {w.startLabel}
                         </div>
                       </div>

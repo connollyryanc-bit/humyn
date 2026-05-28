@@ -11,7 +11,7 @@ import { createPersonViaApi } from "../../lib/api-client";
 interface GeneratedProfile {
   name: string;
   bio: string;
-  scores: { red: number; yellow: number; green: number; blue: number };
+  scores: { driver: number; energizer: number; supporter: number; analyst: number };
   wheelPosition: string;
   primary: EnergyKey;
   secondary: EnergyKey;
@@ -131,7 +131,7 @@ function EnergyBadge({ k, small = false }: { k: EnergyKey; small?: boolean }) {
 function EnergyBars({ scores }: { scores: GeneratedProfile["scores"] }) {
   return (
     <div>
-      {(["red", "yellow", "green", "blue"] as EnergyKey[]).map((c) => (
+      {(["driver", "energizer", "supporter", "analyst"] as EnergyKey[]).map((c) => (
         <div key={c} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
           <div style={{ width: 8, height: 8, borderRadius: "50%", background: energy[c].color, flexShrink: 0 }} />
           <span style={{ fontSize: 12, color: "#5A5A5A", width: 130, fontWeight: 500 }}>
@@ -169,13 +169,13 @@ function buildAiMessage(profile: GeneratedProfile, input: string): string {
   const trimmed = input.trim().replace(/\s+/g, " ");
   if (!trimmed) return "";
   switch (profile.primary) {
-    case "red":
+    case "driver":
       return `${name} — quick one. ${trimmed} I'd like a yes/no by end of day and I'll handle the follow-through. If you'd push back, tell me why in one line and I'll bring options.`;
-    case "yellow":
+    case "energizer":
       return `Hey ${name}! Got something I think you'll actually enjoy. ${trimmed} Would love your take — even a rough reaction is helpful. Happy to jump on a quick call if it's easier than typing it out.`;
-    case "green":
+    case "supporter":
       return `Hi ${name}, hope you're doing well. Wanted to bring this to you because I value how you think about these things. ${trimmed} No rush — take the time you need. Let me know what would help you decide.`;
-    case "blue":
+    case "analyst":
       return `${name}, sharing context up front. ${trimmed} The constraints are: timing, scope, and who's downstream of the decision. I'd value your read on the trade-offs before I commit either way. Happy to send any supporting data you want first.`;
   }
 }

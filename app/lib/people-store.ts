@@ -62,17 +62,17 @@ export function initialsFromName(name: string): string {
 }
 
 const PURE: Record<EnergyKey, string> = {
-  red: "Driver",
-  yellow: "Energizer",
-  green: "Supporter",
-  blue: "Analyst",
+  driver: "Driver",
+  energizer: "Energizer",
+  supporter: "Supporter",
+  analyst: "Analyst",
 };
 
 const MIXED: Record<EnergyKey, Record<EnergyKey, string>> = {
-  red:    { red: "Driver",              yellow: "Energizing Driver",   green: "Supportive Driver",    blue: "Analytical Driver"    },
-  yellow: { red: "Driving Energizer",   yellow: "Energizer",           green: "Supportive Energizer", blue: "Analytical Energizer" },
-  green:  { red: "Driving Supporter",   yellow: "Energizing Supporter",green: "Supporter",            blue: "Analytical Supporter" },
-  blue:   { red: "Driving Analyst",     yellow: "Energizing Analyst",  green: "Supportive Analyst",   blue: "Analyst"              },
+  driver:    { driver: "Driver",              energizer: "Energizing Driver",   supporter: "Supportive Driver",    analyst: "Analytical Driver"    },
+  energizer: { driver: "Driving Energizer",   energizer: "Energizer",           supporter: "Supportive Energizer", analyst: "Analytical Energizer" },
+  supporter: { driver: "Driving Supporter",   energizer: "Energizing Supporter",supporter: "Supporter",            analyst: "Analytical Supporter" },
+  analyst:   { driver: "Driving Analyst",     energizer: "Energizing Analyst",  supporter: "Supportive Analyst",   analyst: "Analyst"              },
 };
 
 export function deriveWheelPosition(primary: EnergyKey, secondary: EnergyKey): string {
@@ -87,9 +87,9 @@ export function emptyPerson(): Person {
     initials: "",
     role: "",
     location: "Stockholm",
-    primary: "yellow",
-    secondary: "green",
-    scores: { red: 25, yellow: 60, green: 50, blue: 35 },
+    primary: "energizer",
+    secondary: "supporter",
+    scores: { driver: 25, energizer: 60, supporter: 50, analyst: 35 },
     utilisation: 75,
     available: "soon",
     clients: 0,

@@ -220,10 +220,10 @@ export const riskTone: Record<
 };
 
 export const benchThresholds: Record<EnergyKey, number> = {
-  red: 28,
-  yellow: 14,
-  green: 21,
-  blue: 28,
+  driver: 28,
+  energizer: 14,
+  supporter: 21,
+  analyst: 28,
 };
 
 export function formatEuros(value: number): string {

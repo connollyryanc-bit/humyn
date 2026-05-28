@@ -73,7 +73,7 @@ interface AnalyzeBody {
 }
 
 function personLine(p: PersonWithCapacity): string {
-  return `id ${p.id}: ${p.name} (${p.role}, ${p.location}). Primary ${energy[p.primary].label} (${p.scores[p.primary]}%), secondary ${energy[p.secondary].label}. All energies: Driver ${p.scores.red} / Energizer ${p.scores.yellow} / Supporter ${p.scores.green} / Analyst ${p.scores.blue}. Capabilities: ${p.capabilities.join(", ") || "n/a"}. Availability: ${p.available}, ${p.utilisation}% util, ${p.capacity.benchDays}d bench, risk ${p.capacity.riskLevel}. Day rate €${p.dayRate || 1500}.`;
+  return `id ${p.id}: ${p.name} (${p.role}, ${p.location}). Primary ${energy[p.primary].label} (${p.scores[p.primary]}%), secondary ${energy[p.secondary].label}. All energies: Driver ${p.scores.driver} / Energizer ${p.scores.energizer} / Supporter ${p.scores.supporter} / Analyst ${p.scores.analyst}. Capabilities: ${p.capabilities.join(", ") || "n/a"}. Availability: ${p.available}, ${p.utilisation}% util, ${p.capacity.benchDays}d bench, risk ${p.capacity.riskLevel}. Day rate €${p.dayRate || 1500}.`;
 }
 
 export async function POST(req: Request) {

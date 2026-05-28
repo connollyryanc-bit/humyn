@@ -1,4 +1,4 @@
-import { EnergyKey, Person, energy, people } from "../page";
+import { EnergyKey, Person, energy, people } from "./people-data";
 
 export type RiskLevel = "high" | "medium" | "watch" | "low";
 
@@ -248,8 +248,9 @@ export function benchTone(days: number): { color: string; label: string } {
   return { color: "#2E8B57", label: "Manageable" };
 }
 
-export function averageUtilisation(): number {
-  return Math.round(people.reduce((s, p) => s + p.utilisation, 0) / people.length);
+export function averageUtilisation(source: PersonWithCapacity[] = enrichedPeople()): number {
+  if (source.length === 0) return 0;
+  return Math.round(source.reduce((s, p) => s + p.utilisation, 0) / source.length);
 }
 
 export function utilisationStatTone(util: number) {
@@ -258,8 +259,11 @@ export function utilisationStatTone(util: number) {
   return { color: "#9B2A1A", bg: "#FDF0EE", border: "#FCCDC6", label: "At risk" };
 }
 
-export function buildWeeklyInsight(): string {
-  const enriched = enrichedPeople();
+export function buildWeeklyInsight(source?: PersonWithCapacity[]): string {
+  const enriched = source ?? enrichedPeople();
+  if (enriched.length === 0) {
+    return "No people data available yet — the directory is still loading.";
+  }
   const lowestLoyalty = [...enriched].sort(
     (a, b) => a.capacity.loyaltyScore - b.capacity.loyaltyScore,
   )[0];
@@ -267,7 +271,7 @@ export function buildWeeklyInsight(): string {
     (p) => p.capacity.riskLevel === "high" || p.capacity.riskLevel === "medium",
   );
   const burnouts = enriched.filter((p) => p.capacity.burnoutRisk);
-  const avgUtil = averageUtilisation();
+  const avgUtil = averageUtilisation(enriched);
   const utilGap = 80 - avgUtil;
 
   const flightNames = flightRisks

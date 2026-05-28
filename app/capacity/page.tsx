@@ -1,19 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { EnergyKey, Person, energy, people, utilTone } from "../page";
+import { useEffect, useMemo, useState } from "react";
+import { EnergyKey, Person, energy, utilTone } from "../page";
 import {
   PersonWithCapacity,
   RiskLevel,
   averageUtilisation,
   benchThresholds,
   buildWeeklyInsight,
-  enrichedPeople,
   formatEuros,
   riskTone,
   utilisationStatTone,
 } from "../lib/capacity-data";
+import { fetchEnrichedPeople } from "../lib/api-client";
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -528,7 +528,25 @@ const RISK_ORDER: Record<RiskLevel, number> = {
 };
 
 export default function CapacityPage() {
-  const enriched = useMemo<PersonWithCapacity[]>(() => enrichedPeople(), []);
+  const [enriched, setEnriched] = useState<PersonWithCapacity[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchEnrichedPeople()
+      .then((list) => {
+        if (cancelled) return;
+        setEnriched(list);
+        setLoaded(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const flightRisks = useMemo(
     () =>
@@ -569,7 +587,7 @@ export default function CapacityPage() {
     [benchPeople],
   );
 
-  const avgUtil = averageUtilisation();
+  const avgUtil = averageUtilisation(enriched);
   const utilStatTone = utilisationStatTone(avgUtil);
 
   const flightCount = enriched.filter(
@@ -585,16 +603,47 @@ export default function CapacityPage() {
     [flightRisks],
   );
 
-  const [costPersonId, setCostPersonId] = useState<number>(
-    () => lowestLoyalty?.id ?? flightRisks[0]?.id ?? enriched[0].id,
-  );
+  const [costPersonId, setCostPersonId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (costPersonId == null && enriched.length > 0) {
+      const fallback = lowestLoyalty?.id ?? flightRisks[0]?.id ?? enriched[0].id;
+      setCostPersonId(fallback);
+    }
+  }, [enriched.length, lowestLoyalty, flightRisks, costPersonId]);
 
   const costEntry =
     enriched.find((p) => p.id === costPersonId) ?? lowestLoyalty ?? enriched[0];
-  const cost = costEntry.capacity;
-  const totalCost = cost.replacementCost + cost.lostRevenue3Months + cost.onboardingCost;
+  const cost = costEntry?.capacity;
+  const totalCost = cost
+    ? cost.replacementCost + cost.lostRevenue3Months + cost.onboardingCost
+    : 0;
 
-  const aiInsight = useMemo(() => buildWeeklyInsight(), []);
+  const aiInsight = useMemo(() => buildWeeklyInsight(enriched), [enriched]);
+
+  if (loaded && enriched.length === 0) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#F3F0EA", padding: 32 }}>
+        <div style={{ maxWidth: 720, margin: "60px auto", textAlign: "center" }}>
+          <h1 className="font-display" style={{ fontSize: 24, color: "#161311" }}>
+            No capacity data yet
+          </h1>
+          <p style={{ fontSize: 14, color: "#5A5A5A", marginTop: 10, lineHeight: 1.6 }}>
+            Seed the database by POSTing to <code>/api/seed</code>, or add people via the
+            directory.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!loaded || !costEntry) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#F3F0EA", padding: 32 }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>Loading capacity…</div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
@@ -725,7 +774,7 @@ export default function CapacityPage() {
             Capacity &amp; retention
           </h1>
           <div style={{ fontSize: 13, color: "#5A5A5A" }}>
-            Valtech Nordic · {people.length} consultants · Live
+            Valtech Nordic · {enriched.length} consultants · Live
           </div>
         </div>
 

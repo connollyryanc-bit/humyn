@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
-import { EnergyKey, Person, energy, people } from "../page";
+import { useEffect, useMemo, useState } from "react";
+import { EnergyKey, Person, energy } from "../page";
 import {
   PersonWithCapacity,
   averageUtilisation,
   benchThresholds,
   buildWeeklyInsight,
-  enrichedPeople,
   formatEuros,
   riskTone,
 } from "../lib/capacity-data";
+import { fetchEnrichedPeople } from "../lib/api-client";
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -288,8 +288,27 @@ function buildOutlook(enriched: PersonWithCapacity[], avgUtil: number): string {
 const MARKETS = ["Stockholm", "Oslo", "Copenhagen", "Helsinki"] as const;
 
 export default function InsightsPage() {
-  const enriched = useMemo<PersonWithCapacity[]>(() => enrichedPeople(), []);
-  const avgUtil = averageUtilisation();
+  const [enriched, setEnriched] = useState<PersonWithCapacity[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchEnrichedPeople()
+      .then((list) => {
+        if (cancelled) return;
+        setEnriched(list);
+        setLoaded(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const avgUtil = averageUtilisation(enriched);
 
   const flightRisks = useMemo(
     () =>
@@ -352,7 +371,7 @@ export default function InsightsPage() {
     return counts;
   }, [enriched]);
 
-  const weeklyRead = useMemo(() => buildWeeklyInsight(), []);
+  const weeklyRead = useMemo(() => buildWeeklyInsight(enriched), [enriched]);
   const outlook = useMemo(() => buildOutlook(enriched, avgUtil), [enriched, avgUtil]);
 
   const now = new Date();
@@ -362,6 +381,14 @@ export default function InsightsPage() {
     month: "long",
     day: "numeric",
   });
+
+  if (!loaded) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#F3F0EA", padding: 32 }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>Loading insights…</div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>

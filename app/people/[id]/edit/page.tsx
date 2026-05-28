@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Person, people } from "../../../page";
+import { Person } from "../../../page";
 import { PersonForm } from "../../../components/person-form";
-import { findPerson, saveStoredPerson } from "../../../lib/people-store";
+import { fetchPerson, updatePersonViaApi } from "../../../lib/api-client";
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -26,9 +26,20 @@ export default function EditPersonPage() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const found = findPerson(id, people);
-    setPerson(found ?? null);
-    setLoaded(true);
+    let cancelled = false;
+    fetchPerson(id)
+      .then((found) => {
+        if (cancelled) return;
+        setPerson(found ?? null);
+        setLoaded(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   if (loaded && !person) {
@@ -43,9 +54,15 @@ export default function EditPersonPage() {
     );
   }
 
-  function handleSubmit(next: Person) {
-    saveStoredPerson(next);
-    router.push(`/people/${next.id}`);
+  async function handleSubmit(next: Person) {
+    try {
+      const saved = await updatePersonViaApi(next.id, next);
+      router.push(`/people/${saved.id}`);
+    } catch (err) {
+      alert(
+        `Could not save: ${err instanceof Error ? err.message : "unknown error"}`,
+      );
+    }
   }
 
   return (

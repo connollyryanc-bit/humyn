@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { Person } from "../../page";
 import { PersonForm } from "../../components/person-form";
-import { emptyPerson, nextCustomId, saveStoredPerson } from "../../lib/people-store";
+import { emptyPerson } from "../../lib/people-store";
+import { createPersonViaApi } from "../../lib/api-client";
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -22,10 +23,15 @@ export default function NewPersonPage() {
   const router = useRouter();
   const initial = useMemo<Person>(() => emptyPerson(), []);
 
-  function handleSubmit(person: Person) {
-    const next: Person = { ...person, id: nextCustomId() };
-    saveStoredPerson(next);
-    router.push(`/people/${next.id}`);
+  async function handleSubmit(person: Person) {
+    try {
+      const created = await createPersonViaApi(person);
+      router.push(`/people/${created.id}`);
+    } catch (err) {
+      alert(
+        `Could not save: ${err instanceof Error ? err.message : "unknown error"}`,
+      );
+    }
   }
 
   return (

@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { EnergyKey, Person, energy } from "../../page";
 import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
-import { initialsFromName, nextCustomId, saveStoredPerson } from "../../lib/people-store";
+import { initialsFromName } from "../../lib/people-store";
+import { createPersonViaApi } from "../../lib/api-client";
 
 interface GeneratedProfile {
   name: string;
@@ -836,13 +837,12 @@ export default function PulseNewPage() {
     setCopyState("idle");
   }
 
-  function saveProfile() {
+  async function saveProfile() {
     if (!profile) return;
     const displayName = (nameDraft.trim() || profile.name || "Unknown").trim();
     const wheelLabel = profile.wheelPosition || `${energy[profile.primary].label} type`;
-    const newId = nextCustomId();
-    const person: Person = {
-      id: newId,
+    const draftPerson: Person = {
+      id: 0,
       name: displayName,
       initials: initialsFromName(displayName),
       role: "Generated from LinkedIn",
@@ -865,9 +865,15 @@ export default function PulseNewPage() {
       howToSpeak: profile.howToSpeak,
       howToEmail: profile.howToEmail,
     };
-    saveStoredPerson(person);
-    setSaveState("saved");
-    setTimeout(() => router.push(`/people/${newId}/edit`), 600);
+    try {
+      const saved = await createPersonViaApi(draftPerson);
+      setSaveState("saved");
+      setTimeout(() => router.push(`/people/${saved.id}/edit`), 600);
+    } catch (err) {
+      alert(
+        `Could not save: ${err instanceof Error ? err.message : "unknown error"}`,
+      );
+    }
   }
 
   async function copyLink() {

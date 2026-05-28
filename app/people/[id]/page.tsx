@@ -13,7 +13,7 @@ import {
   utilTone,
 } from "../../page";
 import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
-import { findPerson } from "../../lib/people-store";
+import { fetchPerson } from "../../lib/api-client";
 
 type TabKey = "overview" | "personality" | "engage" | "achievements";
 
@@ -248,9 +248,20 @@ export default function PersonProfilePage() {
   const id = Number(params?.id);
 
   useEffect(() => {
-    const found = findPerson(id, people);
-    setPerson(found);
-    setResolved(true);
+    let cancelled = false;
+    fetchPerson(id)
+      .then((found) => {
+        if (cancelled) return;
+        setPerson(found ?? undefined);
+        setResolved(true);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setResolved(true);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [id]);
 
   if (resolved && !person) {

@@ -33,7 +33,7 @@ export function EnergyRing({
   scores,
   position,
   primary,
-  size = 240,
+  size = 280,
 }: {
   scores: EnergyScores;
   position: string;
@@ -42,7 +42,7 @@ export function EnergyRing({
 }) {
   const cx = size / 2;
   const cy = size / 2;
-  const rOuter = size / 2 - 4;
+  const rOuter = size / 2 - 40;
   const rInner = rOuter - 22;
 
   const total = ENERGIES.reduce((a, k) => a + Math.max(0, scores[k]), 0) || 1;
@@ -131,25 +131,40 @@ export function EnergyRing({
 
       {labels.map(({ k, angle }) => {
         const a = ((angle - 90) * Math.PI) / 180;
-        const r = rOuter + 14;
-        const x = cx + r * Math.cos(a);
-        const y = cy + r * Math.sin(a) + 4;
+        const lr = rOuter + 18;
+        const lx = cx + lr * Math.cos(a);
+        const ly = cy + lr * Math.sin(a);
+        const isRight = Math.cos(a) > 0;
+        const anchor: "start" | "end" = isRight ? "start" : "end";
         return (
-          <text
-            key={k}
-            x={x}
-            y={y}
-            textAnchor="middle"
-            style={{
-              fontSize: 10,
-              fill: energy[k].text,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-            }}
-          >
-            {energy[k].label} {scores[k]}%
-          </text>
+          <g key={k}>
+            <text
+              x={lx}
+              y={ly - 1}
+              textAnchor={anchor}
+              style={{
+                fontSize: 10,
+                fill: energy[k].text,
+                fontWeight: 700,
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+              }}
+            >
+              {energy[k].label}
+            </text>
+            <text
+              x={lx}
+              y={ly + 13}
+              textAnchor={anchor}
+              style={{
+                fontSize: 11,
+                fill: energy[k].text,
+                fontWeight: 600,
+              }}
+            >
+              {scores[k]}%
+            </text>
+          </g>
         );
       })}
     </svg>

@@ -3,14 +3,39 @@ import { AvailKey, EnergyKey, Person } from "./people-data";
 import { CapacityData, PersonWithCapacity, RiskLevel } from "./capacity-data";
 import { getSupabaseAdmin } from "./supabase";
 
+type DbEnergyKey = "red" | "yellow" | "green" | "blue" | EnergyKey;
+
+const DB_TO_APP: Record<string, EnergyKey> = {
+  red: "driver",
+  yellow: "energizer",
+  green: "supporter",
+  blue: "analyst",
+  driver: "driver",
+  energizer: "energizer",
+  supporter: "supporter",
+  analyst: "analyst",
+};
+
+const APP_TO_DB: Record<EnergyKey, "red" | "yellow" | "green" | "blue"> = {
+  driver: "red",
+  energizer: "yellow",
+  supporter: "green",
+  analyst: "blue",
+};
+
+function decodeEnergy(value: string | null | undefined): EnergyKey {
+  if (value && DB_TO_APP[value]) return DB_TO_APP[value];
+  return "energizer";
+}
+
 interface PersonRow {
   id: number;
   name: string;
   initials: string;
   role: string;
   location: string;
-  primary_energy: EnergyKey;
-  secondary_energy: EnergyKey;
+  primary_energy: DbEnergyKey;
+  secondary_energy: DbEnergyKey;
   score_red: number;
   score_yellow: number;
   score_green: number;
@@ -54,8 +79,8 @@ function rowToPerson(row: PersonRow): Person {
     initials: row.initials,
     role: row.role,
     location: row.location,
-    primary: row.primary_energy,
-    secondary: row.secondary_energy,
+    primary: decodeEnergy(row.primary_energy),
+    secondary: decodeEnergy(row.secondary_energy),
     scores: {
       driver: row.score_red,
       energizer: row.score_yellow,
@@ -86,8 +111,8 @@ function personToRow(p: Person): Omit<PersonRow, "id"> & { id?: number } {
     initials: p.initials,
     role: p.role,
     location: p.location,
-    primary_energy: p.primary,
-    secondary_energy: p.secondary,
+    primary_energy: APP_TO_DB[p.primary],
+    secondary_energy: APP_TO_DB[p.secondary],
     score_red: p.scores.driver,
     score_yellow: p.scores.energizer,
     score_green: p.scores.supporter,

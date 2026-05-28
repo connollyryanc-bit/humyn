@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
-import { people } from "../../lib/people-data";
+import { EnergyKey, people } from "../../lib/people-data";
 import { capacityData } from "../../lib/capacity-data";
 import { getSupabaseAdmin } from "../../lib/supabase";
 
 export const runtime = "nodejs";
+
+const APP_TO_DB: Record<EnergyKey, "red" | "yellow" | "green" | "blue"> = {
+  driver: "red",
+  energizer: "yellow",
+  supporter: "green",
+  analyst: "blue",
+};
 
 export async function POST() {
   const sb = getSupabaseAdmin();
@@ -14,8 +21,8 @@ export async function POST() {
     initials: p.initials,
     role: p.role,
     location: p.location,
-    primary_energy: p.primary,
-    secondary_energy: p.secondary,
+    primary_energy: APP_TO_DB[p.primary],
+    secondary_energy: APP_TO_DB[p.secondary],
     score_red: p.scores.driver,
     score_yellow: p.scores.energizer,
     score_green: p.scores.supporter,

@@ -134,3 +134,37 @@ export async function analyzeTeamViaApi(personIds: number[]): Promise<TeamAnalys
   const data = await jsonOrThrow<{ analysis: TeamAnalysis }>(res, "POST /api/teams/analyze");
   return data.analysis;
 }
+
+export interface BriefAnalysis {
+  briefSummary: string;
+  inferredRequirements: {
+    skills: string[];
+    seniorityNotes: string;
+    energyMix: string;
+  };
+  proposals: Array<{
+    name: string;
+    rationale: string;
+    watchOut: string;
+    members: Array<{
+      personId: number;
+      role: string;
+      reason: string;
+    }>;
+  }>;
+}
+
+export async function analyzeBriefViaApi(input: {
+  briefText: string;
+  client?: string;
+  durationMonths?: number;
+  preferredMarket?: string;
+}): Promise<BriefAnalysis> {
+  const res = await fetch("/api/briefs/analyze", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  const data = await jsonOrThrow<{ analysis: BriefAnalysis }>(res, "POST /api/briefs/analyze");
+  return data.analysis;
+}

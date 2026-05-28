@@ -1030,6 +1030,23 @@ export default function PeoplePage() {
           >
             <span style={{ fontSize: 14, lineHeight: 1, color: "#FF5040" }}>+</span> New profile
           </Link>
+          <Link
+            href="/briefs/new"
+            style={{
+              padding: "7px 14px",
+              borderRadius: 100,
+              border: "none",
+              background: "#161311",
+              color: "#FFFFFF",
+              fontSize: 12,
+              fontWeight: 500,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            Brief → Team
+          </Link>
           <button
             onClick={() => setTeamOpen(true)}
             style={{

@@ -333,6 +333,20 @@ function Header({ active }: { active: TabKey }) {
         </nav>
         <div style={{ flex: 1 }} />
         <Link
+          href="/briefs/new"
+          style={{
+            padding: "7px 14px",
+            borderRadius: 100,
+            border: "none",
+            background: "#161311",
+            color: "#FFFFFF",
+            fontSize: 12,
+            fontWeight: 500,
+          }}
+        >
+          Brief → Team
+        </Link>
+        <Link
           href="/pulse/new"
           style={{
             padding: "7px 14px",

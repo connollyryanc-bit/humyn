@@ -41,8 +41,12 @@ Humyn brings everything together in one place. It understands not just what some
 The foundation. Every person gets a rich profile built from LinkedIn data and internal signals — no lengthy questionnaire required.
 
 Profiles include:
-- Humyn Pulse Map energy profile (four energies: Drive, Spark, Steady, Lens)
-- Wheel position placement across eight types (Driver, Catalyst, Connector, Carer, Anchor, Builder, Analyst, Refiner — plus mixed positions like Catalysing Driver or Refining Analyst)
+- Humyn Pulse Map energy profile — four archetypes named Colour → Behaviour → Archetype:
+  Driver (red, action-focused), Energizer (yellow, people-focused), Supporter (green,
+  stability-focused), Analyst (blue, process-focused)
+- Wheel position placement across eight types — pure quadrants (Driver, Energizer,
+  Supporter, Analyst) plus mixes (e.g. Energizing Driver, Supportive Energizer,
+  Analytical Supporter, Driving Analyst)
 - Three visualisations on every profile: energy ring, eight-axis engagement spider chart, vertical energy dynamics bars
 - Drivers and detractors
 - Communication style guides (how to speak, how to email)
@@ -139,20 +143,19 @@ psychological types. The Pulse Map is not Insights Discovery — Humyn does not 
 depend on, or reproduce that vocabulary. The platform owns this language outright, which
 matters for white-labelling and pan-Nordic rollout.
 
-| Energy | Colour | Hex      | Traits | Approximate DISC parallel |
-|--------|--------|----------|--------|---------------------------|
-| Drive  | red    | `#E8402A` | Decisive, driven, direct | Dominant (D) |
-| Spark  | yellow | `#F5A623` | Enthusiastic, sociable, creative | Influential (I) |
-| Steady | green  | `#2E8B57` | Caring, patient, steady | Steady (S) |
-| Lens   | blue   | `#1E6FA5` | Analytical, precise, careful | Conscientious (C) |
+| Colour | Behaviour          | Archetype  | Hex       | Traits                            | Approximate DISC parallel |
+|--------|--------------------|------------|-----------|-----------------------------------|---------------------------|
+| Red    | Action-focused     | Driver     | `#E8402A` | Decisive, driven, direct          | Dominant (D)              |
+| Yellow | People-focused     | Energizer  | `#F5A623` | Enthusiastic, sociable, creative  | Influential (I)           |
+| Green  | Stability-focused  | Supporter  | `#2E8B57` | Caring, patient, reliable         | Steady (S)                |
+| Blue   | Process-focused    | Analyst    | `#1E6FA5` | Analytical, precise, careful      | Conscientious (C)         |
 
 The wheel has eight positions — four pure, four mixed:
 
-- **Pure positions**: Driver (Drive), Connector (Spark), Anchor (Steady), Analyst (Lens)
-- **Mixed positions**: Catalyst (Drive/Spark), Carer (Spark/Steady), Builder (Steady/Lens), Refiner (Lens/Drive)
-
-Mixed positions are expressed with a primary + influence pattern, e.g. *Catalysing Driver*
-(Driver with Catalyst influence) or *Refining Analyst* (Analyst with Refiner influence).
+- **Pure positions**: Driver (red), Energizer (yellow), Supporter (green), Analyst (blue)
+- **Mixed positions**: red/yellow, yellow/green, green/blue, blue/red — expressed as
+  primary + influence (e.g. *Energizing Driver*, *Supportive Energizer*, *Analytical
+  Supporter*, *Driving Analyst*).
 
 ---
 
@@ -210,7 +213,7 @@ Mixed positions are expressed with a primary + influence pattern, e.g. *Catalysi
 ### Phase 2 — Compass (Capacity) — In progress
 **Goal:** The capacity manager has a real-time view of utilisation, availability and demand.
 
-- [x] Capacity & retention dashboard at `/capacity` — flight-risk alerts, utilisation bars vs 80% target, bench duration with energy-specific thresholds (Spark 14d · Steady 21d · Drive/Lens 28d), cost-of-leaving breakdown, AI-written weekly read
+- [x] Capacity & retention dashboard at `/capacity` — flight-risk alerts, utilisation bars vs 80% target, bench duration with energy-specific thresholds (Energizer 14d · Supporter 21d · Driver/Analyst 28d), cost-of-leaving breakdown, AI-written weekly read
 - [ ] Availability heatmap (who's free, by week)
 - [ ] Demand forecasting cross-referenced against the pitch pipeline and seasonality
 - [ ] C-suite read-only board dashboard (revenue, margin, capacity, demand)
@@ -252,8 +255,9 @@ Predicting who is going to leave before they do. The model combines bench time, 
 energy, recent project fit, team energy balance, and external signals (LinkedIn activity,
 recruiter contact) into a single loyalty score per person. Each profile carries a
 cost-of-leaving calculator: recruitment + lost three-month revenue + onboarding. Bench
-risk thresholds are energy-specific — **Spark goes restless at 14 days, Steady at 21,
-Drive and Lens at 28** — and the dashboard flags people the moment they cross the line.
+risk thresholds are energy-specific — **Energizer goes restless at 14 days, Supporter at
+21, Driver and Analyst at 28** — and the dashboard flags people the moment they cross
+the line.
 First version of this is live at `/capacity`.
 
 ### 3. Brief and RFP → team AI (the dream feature)
@@ -301,8 +305,8 @@ reactive capacity management, gut-feel hiring. Humyn is differentiated because:
   team composition from the ground up.
 - **Combines personality, capacity and hiring in one platform** — the three things that
   every consultancy currently runs in separate tools.
-- **Proprietary Pulse Map framework** — Drive / Spark / Steady / Lens are Humyn's own
-  vocabulary. No Crystal Knows licence, no Insights Discovery dependency, no royalty
+- **Proprietary Pulse Map framework** — Driver / Energizer / Supporter / Analyst are
+  Humyn's own vocabulary. No Crystal Knows licence, no Insights Discovery dependency, no royalty
   exposure as the platform scales or white-labels.
 - **Chrome extension as the Phase 2 profiling accelerator** — one click on any LinkedIn
   profile generates a Humyn profile in place. This is what makes profiling client

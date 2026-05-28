@@ -15,8 +15,8 @@ Voice rules:
   what the capacity manager should do this week. They need to know whether
   the platform is holding up.
 - No names — talk about the organisation's posture and exposure in aggregate.
-- Pulse Map vocabulary only (Drive, Spark, Steady, Lens). Never Insights
-  Discovery vocabulary.
+- Pulse Map vocabulary only (Driver, Energizer, Supporter, Analyst). Never
+  Insights Discovery vocabulary.
 - No bullet points, no headings, no hedging language ("perhaps", "might").
 - Lead with the headline number that matters most this week.
 - Plain language. No jargon, no internal product names beyond "Humyn Pulse".`;
@@ -57,7 +57,7 @@ function buildAnalystBrief(enriched: PersonWithCapacity[]): string {
 - Burnout-flagged: ${burnouts.length}
 - On bench: ${onBench.length}
 
-Dominant energies across the org: Drive ${enriched.filter((p) => p.primary === "red").length}, Spark ${enriched.filter((p) => p.primary === "yellow").length}, Steady ${enriched.filter((p) => p.primary === "green").length}, Lens ${enriched.filter((p) => p.primary === "blue").length}.`;
+Dominant energies across the org: Driver ${enriched.filter((p) => p.primary === "red").length}, Energizer ${enriched.filter((p) => p.primary === "yellow").length}, Supporter ${enriched.filter((p) => p.primary === "green").length}, Analyst ${enriched.filter((p) => p.primary === "blue").length}.`;
 }
 
 export async function GET() {

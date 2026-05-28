@@ -140,19 +140,23 @@ const [view, setView] = useState<"card" | "table">("card");
 The four Pulse Map energies are personality data. Use their colours only when the UI is
 about a person's energy mix, never as decorative chrome.
 
-- **Drive (`#E8402A`)** — urgency, decisiveness, high-risk states, allocated availability
-- **Spark (`#F5A623`)** — enthusiasm signals, soft warnings, "below target" utilisation,
-  medium risk in the capacity dashboard. **Never used for chrome** — that's Coral's job.
-- **Steady (`#2E8B57`)** — calm, supportive signals, "on target" utilisation, low risk,
-  available-now status
-- **Lens (`#1E6FA5`)** — analytical signals, information, precise reads
+- **Driver (red, `#E8402A`)** — action-focused; urgency, decisiveness, high-risk states,
+  allocated availability
+- **Energizer (yellow, `#F5A623`)** — people-focused; enthusiasm signals, soft warnings,
+  "below target" utilisation, medium risk in the capacity dashboard. **Never used for
+  chrome** — that's Coral's job.
+- **Supporter (green, `#2E8B57`)** — stability-focused; calm, supportive signals, "on
+  target" utilisation, low risk, available-now status
+- **Analyst (blue, `#1E6FA5`)** — process-focused; analytical signals, information,
+  precise reads
 
 Chrome (the parts of the UI that are NOT about personality data) uses the Valtech brand
 palette — Coral `#FF5040` is the accent, Off White `#F3F0EA` is the surface, Soft Black
-`#161311` is the primary ink. The accent `y` in the humyn wordmark is Coral, not Spark.
+`#161311` is the primary ink. The accent `y` in the humyn wordmark is Coral, not
+Energizer yellow.
 
 - **Never** invent colours outside the Pulse + Valtech palettes
-- **Never** use Spark yellow for chrome (the wordmark, buttons, badges that aren't about energy)
+- **Never** use Energizer yellow for chrome (the wordmark, buttons, badges that aren't about energy)
 - **Never** use Coral for personality data (the four energies own those slots)
 
 ---
@@ -162,11 +166,15 @@ palette — Coral `#FF5040` is the accent, Off White `#F3F0EA` is the surface, S
 - Using `energyConfig` instead of `energy` as the variable name
 - Forgetting to export `people` and `Person` from page.tsx
 - Using Insights Discovery vocabulary (Fiery Red, Sunshine Yellow, Director, Inspirer,
-  72-position wheel). The framework is the Humyn Pulse Map — Drive / Spark / Steady / Lens,
-  with eight positions (Driver / Catalyst / Connector / Carer / Anchor / Builder / Analyst /
-  Refiner).
-- Using Spark yellow `#F5A623` for chrome — the wordmark `y`, the "+" icon, the team-count
-  badge are all **Coral `#FF5040`**. Spark belongs to personality data only.
+  72-position wheel). The framework is the Humyn Pulse Map — four archetypes named by
+  colour and behaviour: **Driver** (red, action-focused), **Energizer** (yellow,
+  people-focused), **Supporter** (green, stability-focused), **Analyst** (blue,
+  process-focused). Eight wheel positions: pure quadrants (Driver / Energizer / Supporter
+  / Analyst) plus mixes (e.g. "Energizing Driver", "Supportive Energizer", "Analytical
+  Supporter", "Driving Analyst").
+- Using Energizer yellow `#F5A623` for chrome — the wordmark `y`, the "+" icon, the
+  team-count badge are all **Coral `#FF5040`**. Energizer belongs to personality data
+  only.
 - Rebuilding an energy ring / spider / dynamics chart inline in a page file — always import
   from `app/components/energy.tsx`.
 - Calling the Anthropic API directly from a client component. The key only ever sits on

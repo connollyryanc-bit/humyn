@@ -38,11 +38,11 @@ export const capacityData: Record<number, CapacityData> = {
     loyaltyScore: 71,
     riskLevel: "low",
     riskReasons: [
-      "7 days bench — manageable for Lens profile",
+      "7 days bench — manageable for Analyst profile",
       "Strong pipeline — likely allocated within 2 weeks",
     ],
     recommendedAction:
-      "Offer the Telenor data strategy brief — analytical complexity suits his Lens profile perfectly.",
+      "Offer the Telenor data strategy brief — analytical complexity suits his Analyst profile perfectly.",
     replacementCost: 95000,
     lostRevenue3Months: 123000,
     onboardingCost: 42000,
@@ -69,12 +69,12 @@ export const capacityData: Record<number, CapacityData> = {
     loyaltyScore: 54,
     riskLevel: "medium",
     riskReasons: [
-      "14 days on bench — Spark profiles disengage fast without momentum",
+      "14 days on bench — Energizer profiles disengage fast without momentum",
       "No pitch work since Q1 — needs creative strategic engagement",
       "Second month below 80% utilisation",
     ],
     recommendedAction:
-      "Get Aksel onto pitch work immediately. He is exactly what the Nordea brand brief needs — Spark energy, strategy background, available now. This is a high risk of losing him.",
+      "Get Aksel onto pitch work immediately. He is exactly what the Nordea brand brief needs — Energizer energy, strategy background, available now. This is a high risk of losing him.",
     replacementCost: 78000,
     lostRevenue3Months: 76000,
     onboardingCost: 35000,
@@ -101,12 +101,12 @@ export const capacityData: Record<number, CapacityData> = {
     loyaltyScore: 61,
     riskLevel: "watch",
     riskReasons: [
-      "11 days bench — approaching risk threshold for Lens profile",
+      "11 days bench — approaching risk threshold for Analyst profile",
       "Last two projects were below seniority level",
-      "Lens profiles need intellectual challenge — watch for disengagement",
+      "Analyst profiles need intellectual challenge — watch for disengagement",
     ],
     recommendedAction:
-      "Erik needs a technically complex brief. Consider him for the cloud architecture work coming from Telia — it is exactly the kind of problem that will re-engage a Lens profile.",
+      "Erik needs a technically complex brief. Consider him for the cloud architecture work coming from Telia — it is exactly the kind of problem that will re-engage an Analyst profile.",
     replacementCost: 72000,
     lostRevenue3Months: 81000,
     onboardingCost: 33000,
@@ -120,7 +120,7 @@ export const capacityData: Record<number, CapacityData> = {
     riskLevel: "low",
     riskReasons: [],
     recommendedAction:
-      "Saga is well allocated. Her Spark energy is valuable on the IKEA account — protect that relationship.",
+      "Saga is well allocated. Her Energizer energy is valuable on the IKEA account — protect that relationship.",
     replacementCost: 68000,
     lostRevenue3Months: 69000,
     onboardingCost: 31000,
@@ -134,7 +134,7 @@ export const capacityData: Record<number, CapacityData> = {
     riskLevel: "low",
     riskReasons: [],
     recommendedAction:
-      "Tobias is performing well and highly engaged. At 86% utilisation with a Steady profile he is in a good place.",
+      "Tobias is performing well and highly engaged. At 86% utilisation with a Supporter profile he is in a good place.",
     replacementCost: 88000,
     lostRevenue3Months: 117000,
     onboardingCost: 40000,
@@ -147,12 +147,12 @@ export const capacityData: Record<number, CapacityData> = {
     loyaltyScore: 63,
     riskLevel: "watch",
     riskReasons: [
-      "9 days bench — Spark profile approaching risk window",
+      "9 days bench — Energizer profile approaching risk window",
       "Junior to mid transition — needs mentorship and visible projects",
       "Low revenue figures may reflect underutilisation of her actual skill",
     ],
     recommendedAction:
-      "Pair Ida with a senior Spark mentor. Get her onto a client-facing project where she can develop relationships. She has strong potential that is currently underutilised.",
+      "Pair Ida with a senior Energizer mentor. Get her onto a client-facing project where she can develop relationships. She has strong potential that is currently underutilised.",
     replacementCost: 52000,
     lostRevenue3Months: 49000,
     onboardingCost: 25000,
@@ -167,11 +167,11 @@ export const capacityData: Record<number, CapacityData> = {
     riskReasons: [
       "21 days on bench — critical for any profile type",
       "Utilisation at 59% — second month running",
-      "Lens profile without intellectual challenge disengages permanently",
+      "Analyst profile without intellectual challenge disengages permanently",
       "No project pipeline visibility for next 4 weeks",
     ],
     recommendedAction:
-      "Urgent — speak with Niko this week. 21 days bench for a Lens profile is a serious flight risk. The Telia cloud architecture brief is perfect for him. If no allocation in 5 working days the risk of losing him becomes very high.",
+      "Urgent — speak with Niko this week. 21 days bench for an Analyst profile is a serious flight risk. The Telia cloud architecture brief is perfect for him. If no allocation in 5 working days the risk of losing him becomes very high.",
     replacementCost: 65000,
     lostRevenue3Months: 42000,
     onboardingCost: 28000,
@@ -199,7 +199,7 @@ export const capacityData: Record<number, CapacityData> = {
     riskLevel: "low",
     riskReasons: [],
     recommendedAction:
-      "Magnus is stable. As Engineering Manager his Drive energy is well placed — ensure he has visibility on the upcoming Telia brief.",
+      "Magnus is stable. As Engineering Manager his Driver energy is well placed — ensure he has visibility on the upcoming Telia brief.",
     replacementCost: 90000,
     lostRevenue3Months: 93000,
     onboardingCost: 41000,

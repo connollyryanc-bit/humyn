@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { EnergyKey, Person, energy } from "../page";
 import { PersonWithCapacity } from "../lib/capacity-data";
 import { fetchEnrichedPeople } from "../lib/api-client";
 
 const MARKETS = ["Stockholm", "Oslo", "Copenhagen", "Helsinki"] as const;
 type Market = (typeof MARKETS)[number];
-const WEEK_COUNT = 8;
+const WEEK_COUNT = 26;
+const WEEK_COLUMN_WIDTH = 76;
+const LEFT_COLUMN_WIDTH = 280;
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -82,28 +84,59 @@ interface AllocationCell {
   label: "Allocated" | "Partial" | "Available";
 }
 
-function deriveAllocation(p: PersonWithCapacity): AllocationCell[] {
+function buildAllocationPattern(p: PersonWithCapacity): number[] {
   const util = p.utilisation;
   const benchDays = p.capacity.benchDays;
-  const cells = (vals: number[]): AllocationCell[] =>
-    vals.map((v) => ({
-      pct: v,
-      label: v >= 75 ? "Allocated" : v > 0 ? "Partial" : "Available",
-    }));
 
+  // Seed = the first 8 weeks (the believable, near-term outlook).
+  // Tail = a generic "what comes next" assumption (the speculative far-future).
+  let seed: number[];
+  let tail: number;
   if (p.available === "allocated") {
-    if (util >= 90) return cells([100, 100, 100, 100, 100, 100, 100, 100]);
-    if (util >= 80) return cells([100, 100, 100, 100, 100, 90, 75, 60]);
-    if (util >= 70) return cells([100, 100, 100, 90, 75, 50, 0, 0]);
-    return cells([100, 100, 75, 50, 25, 0, 0, 0]);
+    if (util >= 90) {
+      seed = [100, 100, 100, 100, 100, 100, 100, 100];
+      tail = 75;
+    } else if (util >= 80) {
+      seed = [100, 100, 100, 100, 100, 90, 75, 60];
+      tail = 50;
+    } else if (util >= 70) {
+      seed = [100, 100, 100, 90, 75, 50, 0, 0];
+      tail = 25;
+    } else {
+      seed = [100, 100, 75, 50, 25, 0, 0, 0];
+      tail = 25;
+    }
+  } else if (p.available === "soon") {
+    seed = [100, 90, 25, 0, 0, 0, 0, 0];
+    tail = 75;
+  } else if (benchDays > 14) {
+    seed = [0, 0, 0, 0, 0, 0, 0, 0];
+    tail = 25;
+  } else if (benchDays > 7) {
+    seed = [0, 0, 0, 0, 25, 50, 75, 75];
+    tail = 75;
+  } else {
+    seed = [0, 25, 50, 75, 75, 75, 75, 75];
+    tail = 75;
   }
-  if (p.available === "soon") {
-    return cells([100, 90, 25, 0, 0, 0, 0, 0]);
+
+  const out = seed.slice();
+  // Gentle ramp from the last seed value toward the tail assumption.
+  const last = seed[seed.length - 1];
+  for (let i = seed.length; i < WEEK_COUNT; i++) {
+    const step = i - seed.length + 1;
+    const blend = Math.min(1, step / 4);
+    const value = Math.round(last + (tail - last) * blend);
+    out.push(value);
   }
-  // available === "now"
-  if (benchDays > 14) return cells([0, 0, 0, 0, 0, 0, 0, 0]);
-  if (benchDays > 7) return cells([0, 0, 0, 0, 25, 50, 75, 75]);
-  return cells([0, 25, 50, 75, 75, 75, 75, 75]);
+  return out;
+}
+
+function deriveAllocation(p: PersonWithCapacity): AllocationCell[] {
+  return buildAllocationPattern(p).map((v) => ({
+    pct: v,
+    label: v >= 75 ? "Allocated" : v > 0 ? "Partial" : "Available",
+  }));
 }
 
 interface TooltipInfo {
@@ -137,8 +170,7 @@ function TimelineRow({
   return (
     <div
       style={{
-        display: "grid",
-        gridTemplateColumns: `280px 1fr`,
+        display: "flex",
         alignItems: "stretch",
         borderTop: "0.5px solid rgba(0,0,0,0.05)",
       }}
@@ -149,11 +181,14 @@ function TimelineRow({
           left: 0,
           background: "#FFFFFF",
           zIndex: 2,
+          width: LEFT_COLUMN_WIDTH,
+          flexShrink: 0,
           display: "flex",
           alignItems: "center",
           gap: 10,
           padding: "10px 14px",
           borderRight: "0.5px solid rgba(0,0,0,0.07)",
+          boxSizing: "border-box",
         }}
       >
         <Avatar person={person} size={32} />
@@ -194,8 +229,9 @@ function TimelineRow({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: `repeat(${weeks.length}, minmax(60px, 1fr))`,
+          gridTemplateColumns: `repeat(${weeks.length}, ${WEEK_COLUMN_WIDTH}px)`,
           position: "relative",
+          flexShrink: 0,
         }}
       >
         {allocation.map((cell, i) => {
@@ -305,8 +341,13 @@ export default function AvailablePage() {
   const [availableNow2Wk, setAvailableNow2Wk] = useState<boolean>(false);
   const [collapsedCities, setCollapsedCities] = useState<Set<Market>>(new Set());
   const [tooltip, setTooltip] = useState<TooltipInfo | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const weeks = useMemo(() => buildWeeks(WEEK_COUNT, new Date()), []);
+
+  function jumpToToday() {
+    if (scrollRef.current) scrollRef.current.scrollLeft = 0;
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -521,9 +562,9 @@ export default function AvailablePage() {
             Available
           </h1>
           <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.6 }}>
-            A {WEEK_COUNT}-week look at every consultant&apos;s engagement window. Coloured bars
-            are current allocations, green cells are free capacity. Grouped by Nordic market —
-            click a city header to collapse.
+            A {WEEK_COUNT}-week look at every consultant&apos;s engagement window — scroll
+            horizontally for the far horizon. Coloured bars are current allocations, green cells
+            are free capacity. Grouped by Nordic market — click a city header to collapse.
           </div>
         </div>
 
@@ -609,6 +650,22 @@ export default function AvailablePage() {
               >
                 Available in next 2 weeks
               </FilterChip>
+              <button
+                onClick={jumpToToday}
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: 100,
+                  border: "0.5px solid rgba(0,0,0,0.07)",
+                  background: "#FFFFFF",
+                  color: "#4D4945",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  cursor: "pointer",
+                  fontFamily: "inherit",
+                }}
+              >
+                Jump to today
+              </button>
               <div style={{ flex: 1 }} />
               <div
                 style={{
@@ -687,130 +744,162 @@ export default function AvailablePage() {
               )}
 
               <div
+                ref={scrollRef}
                 style={{
-                  display: "grid",
-                  gridTemplateColumns: `280px 1fr`,
-                  background: "#FAFAF8",
-                  borderBottom: "0.5px solid rgba(0,0,0,0.06)",
+                  overflowX: "auto",
+                  overflowY: "visible",
+                  position: "relative",
                 }}
               >
                 <div
                   style={{
-                    padding: "10px 14px",
-                    fontSize: 10,
-                    color: "#9A9A9A",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    fontWeight: 600,
-                    borderRight: "0.5px solid rgba(0,0,0,0.07)",
+                    display: "flex",
+                    background: "#FAFAF8",
+                    borderBottom: "0.5px solid rgba(0,0,0,0.06)",
+                    position: "sticky",
+                    top: 0,
+                    zIndex: 3,
                   }}
                 >
-                  Consultant
-                </div>
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: `repeat(${weeks.length}, minmax(60px, 1fr))`,
-                  }}
-                >
-                  {weeks.map((w, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        padding: "10px 4px",
-                        fontSize: 10,
-                        color: "#9A9A9A",
-                        textTransform: "uppercase",
-                        letterSpacing: "0.08em",
-                        fontWeight: 600,
-                        textAlign: "center",
-                        borderRight:
-                          i < weeks.length - 1
-                            ? "0.5px solid rgba(0,0,0,0.04)"
-                            : "none",
-                      }}
-                    >
-                      <div>{w.label}</div>
-                      <div style={{ color: "#5A5A5A", fontWeight: 500, marginTop: 2 }}>
-                        {w.startLabel}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {MARKETS.map((m) => {
-                const list = byMarket.get(m) ?? [];
-                if (marketFilter !== "all" && marketFilter !== m) return null;
-                if (list.length === 0 && marketFilter === "all") return null;
-                const collapsed = collapsedCities.has(m);
-                return (
-                  <div key={m}>
-                    <button
-                      onClick={() => toggleCity(m)}
-                      style={{
-                        width: "100%",
-                        padding: "10px 14px",
-                        background: "#FAFAF8",
-                        border: "none",
-                        borderTop: "0.5px solid rgba(0,0,0,0.06)",
-                        borderBottom: collapsed ? "none" : "0.5px solid rgba(0,0,0,0.06)",
-                        textAlign: "left",
-                        cursor: "pointer",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 10,
-                        fontFamily: "inherit",
-                      }}
-                    >
-                      <span
-                        aria-hidden
-                        style={{
-                          display: "inline-block",
-                          fontSize: 10,
-                          color: "#5A5A5A",
-                          transform: collapsed ? "rotate(-90deg)" : "rotate(0deg)",
-                          transition: "transform 0.15s ease",
-                        }}
-                      >
-                        ▼
-                      </span>
-                      <span
-                        className="font-display"
-                        style={{ fontSize: 15, fontWeight: 600, color: "#161311" }}
-                      >
-                        {m}
-                      </span>
-                      <span style={{ fontSize: 11, color: "#9A9A9A" }}>
-                        {list.length} {list.length === 1 ? "consultant" : "consultants"}
-                      </span>
-                    </button>
-                    {!collapsed &&
-                      list.map((p) => (
-                        <TimelineRow
-                          key={p.id}
-                          person={p}
-                          weeks={weeks}
-                          allocation={allocations.get(p.id) ?? []}
-                          onCellEnter={setTooltip}
-                          onCellLeave={() => setTooltip(null)}
-                        />
-                      ))}
-                    {!collapsed && list.length === 0 && (
-                      <div
-                        style={{
-                          padding: "14px 14px",
-                          fontSize: 12,
-                          color: "#9A9A9A",
-                          borderTop: "0.5px solid rgba(0,0,0,0.05)",
-                        }}
-                      >
-                        No consultants in {m} match the current filters.
-                      </div>
-                    )}
+                  <div
+                    style={{
+                      position: "sticky",
+                      left: 0,
+                      zIndex: 4,
+                      background: "#FAFAF8",
+                      width: LEFT_COLUMN_WIDTH,
+                      flexShrink: 0,
+                      padding: "10px 14px",
+                      fontSize: 10,
+                      color: "#9A9A9A",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      fontWeight: 600,
+                      borderRight: "0.5px solid rgba(0,0,0,0.07)",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    Consultant
                   </div>
-                );
-              })}
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: `repeat(${weeks.length}, ${WEEK_COLUMN_WIDTH}px)`,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {weeks.map((w, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          padding: "10px 4px",
+                          fontSize: 10,
+                          color: "#9A9A9A",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.08em",
+                          fontWeight: 600,
+                          textAlign: "center",
+                          borderRight:
+                            i < weeks.length - 1
+                              ? "0.5px solid rgba(0,0,0,0.04)"
+                              : "none",
+                        }}
+                      >
+                        <div>{w.label}</div>
+                        <div style={{ color: "#5A5A5A", fontWeight: 500, marginTop: 2 }}>
+                          {w.startLabel}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {MARKETS.map((m) => {
+                  const list = byMarket.get(m) ?? [];
+                  if (marketFilter !== "all" && marketFilter !== m) return null;
+                  if (list.length === 0 && marketFilter === "all") return null;
+                  const collapsed = collapsedCities.has(m);
+                  const cityRowWidth = LEFT_COLUMN_WIDTH + weeks.length * WEEK_COLUMN_WIDTH;
+                  return (
+                    <div key={m}>
+                      <button
+                        onClick={() => toggleCity(m)}
+                        style={{
+                          width: cityRowWidth,
+                          padding: 0,
+                          background: "transparent",
+                          border: "none",
+                          borderTop: "0.5px solid rgba(0,0,0,0.06)",
+                          borderBottom: collapsed ? "none" : "0.5px solid rgba(0,0,0,0.06)",
+                          textAlign: "left",
+                          cursor: "pointer",
+                          fontFamily: "inherit",
+                          display: "block",
+                        }}
+                      >
+                        <div
+                          style={{
+                            position: "sticky",
+                            left: 0,
+                            width: LEFT_COLUMN_WIDTH + weeks.length * WEEK_COLUMN_WIDTH,
+                            background: "#FAFAF8",
+                            padding: "10px 14px",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10,
+                            boxSizing: "border-box",
+                          }}
+                        >
+                          <span
+                            aria-hidden
+                            style={{
+                              display: "inline-block",
+                              fontSize: 10,
+                              color: "#5A5A5A",
+                              transform: collapsed ? "rotate(-90deg)" : "rotate(0deg)",
+                              transition: "transform 0.15s ease",
+                            }}
+                          >
+                            ▼
+                          </span>
+                          <span
+                            className="font-display"
+                            style={{ fontSize: 15, fontWeight: 600, color: "#161311" }}
+                          >
+                            {m}
+                          </span>
+                          <span style={{ fontSize: 11, color: "#9A9A9A" }}>
+                            {list.length} {list.length === 1 ? "consultant" : "consultants"}
+                          </span>
+                        </div>
+                      </button>
+                      {!collapsed &&
+                        list.map((p) => (
+                          <TimelineRow
+                            key={p.id}
+                            person={p}
+                            weeks={weeks}
+                            allocation={allocations.get(p.id) ?? []}
+                            onCellEnter={setTooltip}
+                            onCellLeave={() => setTooltip(null)}
+                          />
+                        ))}
+                      {!collapsed && list.length === 0 && (
+                        <div
+                          style={{
+                            padding: "14px 14px",
+                            fontSize: 12,
+                            color: "#9A9A9A",
+                            borderTop: "0.5px solid rgba(0,0,0,0.05)",
+                          }}
+                        >
+                          No consultants in {m} match the current filters.
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             <div

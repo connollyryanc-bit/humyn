@@ -63,16 +63,16 @@ export function initialsFromName(name: string): string {
 
 const PURE: Record<EnergyKey, string> = {
   red: "Driver",
-  yellow: "Connector",
-  green: "Anchor",
+  yellow: "Energizer",
+  green: "Supporter",
   blue: "Analyst",
 };
 
 const MIXED: Record<EnergyKey, Record<EnergyKey, string>> = {
-  red:    { red: "Driver",            yellow: "Catalysing Driver", green: "Anchored Driver",   blue: "Refining Driver"   },
-  yellow: { red: "Driving Catalyst",  yellow: "Connector",         green: "Caring Connector",  blue: "Refining Connector"},
-  green:  { red: "Catalysing Anchor", yellow: "Connecting Carer",  green: "Anchor",            blue: "Building Anchor"   },
-  blue:   { red: "Driving Refiner",   yellow: "Connecting Analyst",green: "Building Analyst",  blue: "Analyst"           },
+  red:    { red: "Driver",              yellow: "Energizing Driver",   green: "Supportive Driver",    blue: "Analytical Driver"    },
+  yellow: { red: "Driving Energizer",   yellow: "Energizer",           green: "Supportive Energizer", blue: "Analytical Energizer" },
+  green:  { red: "Driving Supporter",   yellow: "Energizing Supporter",green: "Supporter",            blue: "Analytical Supporter" },
+  blue:   { red: "Driving Analyst",     yellow: "Energizing Analyst",  green: "Supportive Analyst",   blue: "Analyst"              },
 };
 
 export function deriveWheelPosition(primary: EnergyKey, secondary: EnergyKey): string {
@@ -100,7 +100,7 @@ export function emptyPerson(): Person {
     achievements: [],
     bestTrait: "",
     vice: "",
-    wheelPosition: "Connector",
+    wheelPosition: "Energizer",
     drivers: [],
     detractors: [],
     howToSpeak: "",

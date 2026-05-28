@@ -1976,10 +1976,10 @@ export default function TeamsPage() {
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   <div style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.6 }}>
-                    Average across {people.length} consultants — Drive {overallAverage.red}% · Spark{" "}
-                    {overallAverage.yellow}% · Steady {overallAverage.green}% · Lens{" "}
-                    {overallAverage.blue}%. The market cards below show how each office leans
-                    against this average.
+                    Average across {people.length} consultants — Driver {overallAverage.red}%{" "}
+                    · Energizer {overallAverage.yellow}% · Supporter {overallAverage.green}%{" "}
+                    · Analyst {overallAverage.blue}%. The market cards below show how each office
+                    leans against this average.
                   </div>
                 </div>
               </div>

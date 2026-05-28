@@ -5,8 +5,10 @@ import { Person, energy } from "../../../lib/people-data";
 export const runtime = "nodejs";
 
 const SYSTEM_PROMPT = `You are a team-composition analyst specialising in the Humyn Pulse Map
-(four energies — Drive, Spark, Steady, Lens). You are given a composed team and must
-return a structured JSON analysis useful to a Nordic capacity manager.
+(four energies — Driver (red, action-focused), Energizer (yellow, people-focused),
+Supporter (green, stability-focused), Analyst (blue, process-focused)).
+You are given a composed team and must return a structured JSON analysis useful
+to a Nordic capacity manager.
 
 Voice:
 - Direct, calm, specific. Real names from the data.
@@ -43,7 +45,7 @@ interface AnalyzeBody {
 }
 
 function personBrief(p: Person): string {
-  return `- ${p.name} (${p.role}, ${p.location}). Primary energy: ${energy[p.primary].label}, secondary: ${energy[p.secondary].label}. Wheel position: ${p.wheelPosition}. Energy scores: Drive ${p.scores.red}, Spark ${p.scores.yellow}, Steady ${p.scores.green}, Lens ${p.scores.blue}. Best trait: ${p.bestTrait || "n/a"}. Watch-out: ${p.vice || "n/a"}. Drivers: ${p.drivers.join("; ") || "none"}. Detractors: ${p.detractors.join("; ") || "none"}.`;
+  return `- ${p.name} (${p.role}, ${p.location}). Primary energy: ${energy[p.primary].label}, secondary: ${energy[p.secondary].label}. Wheel position: ${p.wheelPosition}. Energy scores: Driver ${p.scores.red}, Energizer ${p.scores.yellow}, Supporter ${p.scores.green}, Analyst ${p.scores.blue}. Best trait: ${p.bestTrait || "n/a"}. Watch-out: ${p.vice || "n/a"}. Drivers: ${p.drivers.join("; ") || "none"}. Detractors: ${p.detractors.join("; ") || "none"}.`;
 }
 
 export async function POST(req: Request) {

@@ -399,7 +399,7 @@ function ProposalCard({
           </span>
         )}
         <span>
-          Drive {avg.red}% · Spark {avg.yellow}% · Steady {avg.green}% · Lens {avg.blue}%
+          Driver {avg.red}% · Energizer {avg.yellow}% · Supporter {avg.green}% · Analyst {avg.blue}%
         </span>
         <span>Markets: {markets.join(" · ")}</span>
       </div>

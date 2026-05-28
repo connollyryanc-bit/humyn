@@ -32,7 +32,7 @@ We are currently building Stage 1.
 ### Brand
 - Name: **humyn** (always lowercase)
 - Wordmark: `hum` + `y` in **Valtech Coral `#FF5040`** + `n`. The accent `y` is Coral, not
-  Spark yellow — Spark is reserved for Pulse personality data, never used for chrome.
+  Energizer yellow — Energizer is reserved for Pulse personality data, never used for chrome.
 - Tone: Clean, modern, minimal — inspired by Monday.com's aesthetic, executed in the
   Valtech brand (Off White surfaces, Soft Black ink, Coral accent, Valtech Neue + Sons type).
 - No heavy borders, no drop shadows unless subtle, lots of white space
@@ -44,26 +44,32 @@ typologies like Insights Discovery. Do NOT use Insights Discovery vocabulary (Fi
 Sunshine Yellow / Earth Green / Cool Blue, or Director / Motivator / Inspirer / Helper /
 Supporter / Coordinator / Observer / Reformer).
 
+The four energies map Colour → Behaviour → Archetype:
+- **Red — Action-focused — Driver**
+- **Yellow — People-focused — Energizer**
+- **Green — Stability-focused — Supporter**
+- **Blue — Process-focused — Analyst**
+
 ```
-Drive (red):
+Driver (red):
   color: #E8402A
   bg: #FDF0EE
   text: #9B2A1A
   border: #FCCDC6
 
-Spark (yellow) — brand primary:
+Energizer (yellow) — brand primary:
   color: #F5A623
   bg: #FFFBF2
   text: #8B5A00
   border: #FAD98A
 
-Steady (green):
+Supporter (green):
   color: #2E8B57
   bg: #EEF7F2
   text: #1A5C38
   border: #9ED4B8
 
-Lens (blue):
+Analyst (blue):
   color: #1E6FA5
   bg: #EEF4FB
   text: #124A6E
@@ -71,14 +77,14 @@ Lens (blue):
 ```
 
 Wheel positions — eight positions across the four quadrants:
-- Pure Drive → **Driver**
-- Drive/Spark mix → **Catalyst** (e.g. "Catalysing Driver", "Driving Catalyst")
-- Pure Spark → **Connector**
-- Spark/Steady mix → **Carer** (e.g. "Connecting Carer", "Caring Connector")
-- Pure Steady → **Anchor**
-- Steady/Lens mix → **Builder** (e.g. "Building Anchor", "Anchored Builder")
-- Pure Lens → **Analyst**
-- Lens/Drive mix → **Refiner** (e.g. "Refining Analyst", "Analysing Refiner")
+- Pure red → **Driver**
+- Red/Yellow mix → "Energizing Driver" or "Driving Energizer" (primary first)
+- Pure yellow → **Energizer**
+- Yellow/Green mix → "Supportive Energizer" or "Energizing Supporter"
+- Pure green → **Supporter**
+- Green/Blue mix → "Analytical Supporter" or "Supportive Analyst"
+- Pure blue → **Analyst**
+- Blue/Red mix → "Driving Analyst" or "Analytical Driver"
 
 ### Valtech Brand Palette (chrome + surfaces)
 Humyn lives inside Valtech Nordic. Chrome (nav, buttons, surfaces, accents) follows the
@@ -111,9 +117,9 @@ Forest:       #0F2D1F   (very dark green)
 
 Brand usage rules:
 - **Coral** replaces yellow as the chrome accent. The wordmark `y`, the "+ New profile"
-  icon, and the team-count badge all use Coral (not Spark yellow).
-- **Spark yellow** is reserved for Pulse personality data only (energy badges, ring
-  segments, bars, spider fill when primary is Spark, etc.). Never use it for chrome.
+  icon, and the team-count badge all use Coral (not Energizer yellow).
+- **Energizer yellow** is reserved for Pulse personality data only (energy badges, ring
+  segments, bars, spider fill when primary is Energizer, etc.). Never use it for chrome.
 - **Page surfaces**: Off White for the page background, White for cards. Soft Black or
   Black for primary text. Shade Gray for secondary text.
 - **Typography** (Valtech Neue for display + headings, Sons for body + legal) is pending
@@ -164,12 +170,12 @@ Next.js font loader.
 ### Components — always build these consistently
 
 **Avatar**: Circular, coloured background from primary energy colour, initials, bordered
-**EnergyBadge**: Pill with colour dot + energy label (Drive / Spark / Steady / Lens), coloured bg/text
-**StatusBadge**: Pill — Steady green for available now, Spark yellow for soon, Drive red for allocated
+**EnergyBadge**: Pill with colour dot + energy label (Driver / Energizer / Supporter / Analyst), coloured bg/text
+**StatusBadge**: Pill — Supporter green for available now, Energizer yellow for soon, Driver red for allocated
 **UtilPill**: Small bar + percentage, colour-coded green/amber/red vs 80% target
 **Section label**: Uppercase, 11px, Ink3, letter-spacing 0.07em
 **RiskPill** (capacity dashboard): high / medium / watch / low; reuses the four energy colours
-  as risk tones (Drive red = high, Spark yellow = medium, neutral = watch, Steady green = low)
+  as risk tones (Driver red = high, Energizer yellow = medium, neutral = watch, Supporter green = low)
 
 ### Shared visualisations — never recreate, always import
 
@@ -214,7 +220,7 @@ interface Person {
   achievements: string[];     // 3 key achievements
   bestTrait: string;          // one-line strength
   vice: string;               // one-line watch-out
-  wheelPosition: string;      // Pulse Map position e.g. "Connector", "Driver", "Catalysing Driver"
+  wheelPosition: string;      // Pulse Map position e.g. "Energizer", "Driver", "Energizing Driver"
   drivers: string[];          // 4 things that motivate them
   detractors: string[];       // 4 things that drain them
   howToSpeak: string;         // paragraph on verbal communication style
@@ -342,7 +348,7 @@ The nav has four items: People, Teams, Capacity, Insights
 - Never use gradients — flat colours only
 - Never add animations beyond simple CSS transitions (0.15s)
 - Never make cards or sections feel heavy or cramped — white space is intentional
-- Always use the Pulse Map energy names in UI ("Drive", "Spark", "Steady", "Lens" — not "Red", "Yellow", "Green", "Blue")
+- Always use the Pulse Map archetype names in UI ("Driver", "Energizer", "Supporter", "Analyst" — not "Red", "Yellow", "Green", "Blue")
 
 ---
 

@@ -756,8 +756,8 @@ export default function InsightsPage() {
               }}
             >
               <span style={{ fontWeight: 600, color: "#5A5A5A" }}>Bench thresholds:</span>{" "}
-              Spark: risk at {benchThresholds.yellow}d · Steady: risk at {benchThresholds.green}d ·
-              Drive &amp; Lens: risk at {benchThresholds.red}d
+              Energizer: risk at {benchThresholds.yellow}d · Supporter: risk at{" "}
+              {benchThresholds.green}d · Driver &amp; Analyst: risk at {benchThresholds.red}d
             </div>
           </Card>
         </div>
@@ -788,8 +788,8 @@ export default function InsightsPage() {
               }}
             >
               <span style={{ fontWeight: 600, color: "#5A5A5A" }}>Energy mix across markets:</span>{" "}
-              Drive {energyMix.red} · Spark {energyMix.yellow} · Steady {energyMix.green} · Lens{" "}
-              {energyMix.blue}
+              Driver {energyMix.red} · Energizer {energyMix.yellow} · Supporter{" "}
+              {energyMix.green} · Analyst {energyMix.blue}
             </div>
           </Card>
         </div>

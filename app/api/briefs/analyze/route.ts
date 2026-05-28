@@ -11,7 +11,9 @@ three distinct, named team options drawn ONLY from the consultant pool provided
 below. The capacity manager will choose one to take to client.
 
 Voice rules:
-- Pulse Map vocabulary only — Drive / Spark / Steady / Lens. Never Insights
+- Pulse Map vocabulary only — the four archetypes are Driver (red,
+  action-focused), Energizer (yellow, people-focused), Supporter (green,
+  stability-focused), Analyst (blue, process-focused). Never Insights
   Discovery vocabulary.
 - Use real consultant names from the pool. Never invent.
 - Be specific and decisive, not hedging.
@@ -32,10 +34,10 @@ Rules:
 - For each member, give a one-sentence reason rooted in their actual data
   (energy, capability, availability, day rate, market).
 - Each proposal must include a one-sentence rationale that frames its
-  positioning (e.g. "Built for pace — front-load Drive energy and senior
+  positioning (e.g. "Built for pace — front-load Driver energy and senior
   presence; expect a richer day-rate.")
 - Each proposal should include a one-sentence "watch-out" naming the trade-off
-  it makes (e.g. "Light on Steady — risk of slow consensus on long phases.")
+  it makes (e.g. "Light on Supporter — risk of slow consensus on long phases.")
 - Prefer people whose availability is "now" or "soon" unless the brief
   explicitly needs an allocated specialist; in that case note the conflict.
 - If the brief mentions a specific client, location or skill, weight people
@@ -71,7 +73,7 @@ interface AnalyzeBody {
 }
 
 function personLine(p: PersonWithCapacity): string {
-  return `id ${p.id}: ${p.name} (${p.role}, ${p.location}). Primary ${energy[p.primary].label} (${p.scores[p.primary]}%), secondary ${energy[p.secondary].label}. All energies: Drive ${p.scores.red} / Spark ${p.scores.yellow} / Steady ${p.scores.green} / Lens ${p.scores.blue}. Capabilities: ${p.capabilities.join(", ") || "n/a"}. Availability: ${p.available}, ${p.utilisation}% util, ${p.capacity.benchDays}d bench, risk ${p.capacity.riskLevel}. Day rate €${p.dayRate || 1500}.`;
+  return `id ${p.id}: ${p.name} (${p.role}, ${p.location}). Primary ${energy[p.primary].label} (${p.scores[p.primary]}%), secondary ${energy[p.secondary].label}. All energies: Driver ${p.scores.red} / Energizer ${p.scores.yellow} / Supporter ${p.scores.green} / Analyst ${p.scores.blue}. Capabilities: ${p.capabilities.join(", ") || "n/a"}. Availability: ${p.available}, ${p.utilisation}% util, ${p.capacity.benchDays}d bench, risk ${p.capacity.riskLevel}. Day rate €${p.dayRate || 1500}.`;
 }
 
 export async function POST(req: Request) {

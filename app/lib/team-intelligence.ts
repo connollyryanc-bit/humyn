@@ -1,4 +1,4 @@
-import { EnergyKey, Person } from "./people-data";
+import { energy, EnergyKey, Person } from "./people-data";
 import { PersonWithCapacity, RiskLevel } from "./capacity-data";
 
 export interface TeamMember {
@@ -51,8 +51,8 @@ const HARMONY_BANDS: Array<{
 
 const POSITION_OF_PRIMARY: Record<EnergyKey, string> = {
   red: "Driver",
-  yellow: "Connector",
-  green: "Anchor",
+  yellow: "Energizer",
+  green: "Supporter",
   blue: "Analyst",
 };
 
@@ -124,7 +124,10 @@ export function detectFrictionPairs(team: Person[]): FrictionPair[] {
         reasons.push("Two pure Drivers — watch for pace and authority clashes");
       }
       if (a.primary === b.primary && a.primary === "yellow") {
-        reasons.push("Two pure Connectors — risk of low follow-through");
+        reasons.push("Two pure Energizers — risk of low follow-through");
+      }
+      if (a.primary === b.primary && a.primary === "green") {
+        reasons.push("Two pure Supporters — risk of slow decisions");
       }
       if (a.primary === b.primary && a.primary === "blue") {
         reasons.push("Two pure Analysts — risk of analysis paralysis");
@@ -146,13 +149,13 @@ export function detectEnergyGaps(team: Person[]): EnergyGap[] {
       gaps.push({
         energy: k,
         severity: "undersupplied",
-        detail: `Team average ${avg[k]}% — under the 35% threshold for healthy ${k === "red" ? "Drive" : k === "yellow" ? "Spark" : k === "green" ? "Steady" : "Lens"} representation.`,
+        detail: `Team average ${avg[k]}% — under the 35% threshold for healthy ${energy[k].label} representation.`,
       });
     } else if (avg[k] > 75) {
       gaps.push({
         energy: k,
         severity: "oversupplied",
-        detail: `Team average ${avg[k]}% — risks of ${k === "red" ? "drive overload (burnout, conflict)" : k === "yellow" ? "spark overload (low follow-through)" : k === "green" ? "steady overload (slow decisions)" : "lens overload (analysis paralysis)"}.`,
+        detail: `Team average ${avg[k]}% — risks of ${k === "red" ? "Driver overload (burnout, conflict)" : k === "yellow" ? "Energizer overload (low follow-through)" : k === "green" ? "Supporter overload (slow decisions)" : "Analyst overload (analysis paralysis)"}.`,
       });
     }
   });
@@ -275,10 +278,10 @@ export function suggestSwaps(
       gaps.forEach((g) => {
         if (p.primary === g.energy) {
           score += p.scores[g.energy];
-          reason = `Primary ${g.energy === "red" ? "Drive" : g.energy === "yellow" ? "Spark" : g.energy === "green" ? "Steady" : "Lens"} (${p.scores[g.energy]}%) — fills the missing energy directly.`;
+          reason = `Primary ${energy[g.energy].label} (${p.scores[g.energy]}%) — fills the missing energy directly.`;
         } else if (p.secondary === g.energy && !reason) {
           score += p.scores[g.energy] * 0.6;
-          reason = `Secondary ${g.energy === "red" ? "Drive" : g.energy === "yellow" ? "Spark" : g.energy === "green" ? "Steady" : "Lens"} (${p.scores[g.energy]}%) — broadens the missing energy without dominating.`;
+          reason = `Secondary ${energy[g.energy].label} (${p.scores[g.energy]}%) — broadens the missing energy without dominating.`;
         }
       });
       return { candidate: p, score, reason };
@@ -308,10 +311,10 @@ export interface MarketCulture {
 }
 
 function dominantLabel(k: EnergyKey): string {
-  if (k === "red") return "Drive";
-  if (k === "yellow") return "Spark";
-  if (k === "green") return "Steady";
-  return "Lens";
+  if (k === "red") return "Driver";
+  if (k === "yellow") return "Energizer";
+  if (k === "green") return "Supporter";
+  return "Analyst";
 }
 
 export function computeMarketCulture(
@@ -418,9 +421,9 @@ function buildSignature(
   return `${market} runs ${dominantLabel(dominant)}–${dominantLabel(second)} (avg ${dominantLabel(dominant)} ${avg[dominant]}%, ${dominantLabel(second)} ${avg[second]}%) across ${size} consultant${size === 1 ? "" : "s"}.`;
 }
 
-// Pulse Map wheel position (clockwise from top): Drive (0°) → Spark (90°) →
-// Steady (180°) → Lens (270°). Energies at 180° apart on the wheel feel like
-// opposites; neighbours feel close.
+// Pulse Map wheel position (clockwise from top): Driver (0°) → Energizer (90°)
+// → Supporter (180°) → Analyst (270°). Energies at 180° apart on the wheel
+// feel like opposites; neighbours feel close.
 const WHEEL_DEGREES: Record<EnergyKey, number> = {
   red: 0,
   yellow: 90,

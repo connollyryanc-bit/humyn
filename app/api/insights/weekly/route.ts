@@ -15,8 +15,8 @@ You are speaking to senior executives — be specific, calm, and decisive.
 
 Voice rules:
 - Real names, real numbers from the data below. No generic prose.
-- Reference the Humyn Pulse Map energies as Drive, Spark, Steady, Lens — never
-  Insights Discovery vocabulary.
+- Reference the Humyn Pulse Map energies as Driver (red), Energizer (yellow),
+  Supporter (green), Analyst (blue) — never Insights Discovery vocabulary.
 - 4–6 sentences of flowing prose, not bullet points.
 - Lead with the single most urgent decision this week.
 - Include one specific forward-looking action a leader could take by Friday.
@@ -51,7 +51,7 @@ function buildAnalystBrief(enriched: PersonWithCapacity[]): string {
 - Burnout-flagged: ${burnouts.length}
 - On bench: ${onBench.length} (${onBench.reduce((s, p) => s + p.capacity.benchDays, 0)} days combined)
 - Three-month revenue exposure from flight risks: €${(totalExposure / 1000).toFixed(0)}k
-- Energy-specific bench thresholds: Spark ${benchThresholds.yellow}d · Steady ${benchThresholds.green}d · Drive ${benchThresholds.red}d · Lens ${benchThresholds.blue}d`);
+- Energy-specific bench thresholds: Energizer ${benchThresholds.yellow}d · Supporter ${benchThresholds.green}d · Driver ${benchThresholds.red}d · Analyst ${benchThresholds.blue}d`);
 
   if (flightRisks.length > 0) {
     sections.push(`Flight risks needing decisions this week:

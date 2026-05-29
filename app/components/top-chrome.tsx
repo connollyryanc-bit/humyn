@@ -291,8 +291,15 @@ export function TopChrome({
             background: "#161311",
             color: "#F3F0EA",
             boxShadow: "0 20px 40px rgba(0,0,0,0.18)",
+            animation: "humyn-mega-in 220ms cubic-bezier(0.2, 0.6, 0.2, 1)",
           }}
         >
+          <style>{`
+            @keyframes humyn-mega-in {
+              from { opacity: 0; transform: translateY(-8px); }
+              to   { opacity: 1; transform: translateY(0); }
+            }
+          `}</style>
           <div
             style={{
               maxWidth: 1280,

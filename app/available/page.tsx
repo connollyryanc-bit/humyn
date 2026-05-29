@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { EnergyKey, Person, energy } from "../page";
 import { PersonWithCapacity } from "../lib/capacity-data";
 import { fetchEnrichedPeople } from "../lib/api-client";
+import { TopChrome } from "../components/top-chrome";
 
 const MARKETS = ["Stockholm", "Oslo", "Copenhagen", "Helsinki"] as const;
 type Market = (typeof MARKETS)[number];
@@ -417,132 +418,10 @@ export default function AvailablePage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
-      <header
-        style={{
-          height: 52,
-          background: "#FFFFFF",
-          borderBottom: "0.5px solid rgba(0,0,0,0.07)",
-          position: "sticky",
-          top: 0,
-          zIndex: 30,
-          display: "flex",
-          alignItems: "center",
-          padding: "0 32px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 28,
-            width: "100%",
-            maxWidth: 1280,
-            margin: "0 auto",
-          }}
-        >
-          <Link href="/">
-            <HumynWordmark />
-          </Link>
-          <nav style={{ display: "flex", gap: 4, marginLeft: 12 }}>
-            <Link
-              href="/"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-              }}
-            >
-              People
-            </Link>
-            <Link
-              href="/teams"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-              }}
-            >
-              Teams
-            </Link>
-            <Link
-              href="/available"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#FFFFFF",
-                background: "#161311",
-              }}
-            >
-              Available
-            </Link>
-            <Link
-              href="/capacity"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-              }}
-            >
-              Capacity
-            </Link>
-            <Link
-              href="/insights"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-              }}
-            >
-              Insights
-            </Link>
-            <Link
-              href="/board"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-              }}
-            >
-              Board
-            </Link>
-            <Link
-              href="/pipeline"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-              }}
-            >
-              Pipeline
-            </Link>
-            <Link
-              href="/settings/rate-card"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-              }}
-            >
-              Rates
-            </Link>
-          </nav>
-          <div style={{ flex: 1 }} />
+      <TopChrome
+        env="pipeline"
+        currentPath="/available"
+        rightSlot={
           <Link
             href="/briefs/new"
             style={{
@@ -553,12 +432,13 @@ export default function AvailablePage() {
               color: "#FFFFFF",
               fontSize: 12,
               fontWeight: 400,
+              textDecoration: "none",
             }}
           >
             Brief → Team
           </Link>
-        </div>
-      </header>
+        }
+      />
 
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "28px 32px 40px" }}>
         <div style={{ marginBottom: 20 }}>

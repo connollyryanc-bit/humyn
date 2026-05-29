@@ -7,35 +7,7 @@ import { DEFAULT_STAGES } from "../../../types";
 import { seedCandidates, seedJobs } from "../../../seed";
 import { energy } from "../../../../page";
 import type { EnergyKey } from "../../../../page";
-
-function HumynWordmark({ size = 22 }: { size?: number }) {
-  return (
-    <span
-      className="font-display"
-      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
-    >
-      hum<span style={{ color: "#FF5040" }}>y</span>n
-    </span>
-  );
-}
-
-function NavLink({ href, label, active }: { href: string; label: string; active?: boolean }) {
-  return (
-    <Link
-      href={href}
-      style={{
-        padding: "7px 14px",
-        borderRadius: 100,
-        fontSize: 13,
-        fontWeight: 400,
-        color: active ? "#FFFFFF" : "#4D4945",
-        background: active ? "#161311" : "transparent",
-      }}
-    >
-      {label}
-    </Link>
-  );
-}
+import { TopChrome } from "../../../../components/top-chrome";
 
 const PROFILE_TABS = [
   { key: "activity",   label: "Activity" },
@@ -70,35 +42,7 @@ export default function CandidateProfilePage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
-      <header
-        style={{
-          height: 52,
-          background: "#FFFFFF",
-          borderBottom: "0.5px solid rgba(0,0,0,0.07)",
-          position: "sticky",
-          top: 0,
-          zIndex: 30,
-          display: "flex",
-          alignItems: "center",
-          padding: "0 32px",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 28, width: "100%", maxWidth: 1280, margin: "0 auto" }}>
-          <Link href="/">
-            <HumynWordmark />
-          </Link>
-          <nav style={{ display: "flex", gap: 4, marginLeft: 12 }}>
-            <NavLink href="/" label="People" />
-            <NavLink href="/teams" label="Teams" />
-            <NavLink href="/available" label="Available" />
-            <NavLink href="/capacity" label="Capacity" />
-            <NavLink href="/insights" label="Insights" />
-            <NavLink href="/board" label="Board" />
-            <NavLink href="/pipeline" label="Pipeline" active />
-            <NavLink href="/settings/rate-card" label="Rates" />
-          </nav>
-        </div>
-      </header>
+      <TopChrome env="pipeline" currentPath="/pipeline" />
 
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "28px 32px 40px" }}>
         <div style={{ marginBottom: 22 }}>

@@ -6,17 +6,7 @@ import { useEffect, useState } from "react";
 import { Person } from "../../../page";
 import { PersonForm } from "../../../components/person-form";
 import { fetchPerson, updatePersonViaApi } from "../../../lib/api-client";
-
-function HumynWordmark({ size = 22 }: { size?: number }) {
-  return (
-    <span
-      className="font-display"
-      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
-    >
-      hum<span style={{ color: "#FF5040" }}>y</span>n
-    </span>
-  );
-}
+import { ENVIRONMENT_SURFACES, TopChrome } from "../../../components/top-chrome";
 
 export default function EditPersonPage() {
   const params = useParams<{ id: string }>();
@@ -48,8 +38,8 @@ export default function EditPersonPage() {
 
   if (!person) {
     return (
-      <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px" }}>Loading…</div>
+      <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pulse, padding: 32 }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>Loading…</div>
       </div>
     );
   }
@@ -66,109 +56,11 @@ export default function EditPersonPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
-      <header
-        style={{
-          height: 52,
-          background: "#FFFFFF",
-          borderBottom: "0.5px solid rgba(0,0,0,0.07)",
-          position: "sticky",
-          top: 0,
-          zIndex: 30,
-          display: "flex",
-          alignItems: "center",
-          padding: "0 32px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 28,
-            width: "100%",
-            maxWidth: 1280,
-            margin: "0 auto",
-          }}
-        >
-          <Link href="/">
-            <HumynWordmark />
-          </Link>
-          <nav style={{ display: "flex", gap: 4, marginLeft: 12 }}>
-            <Link
-              href="/"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#FFFFFF",
-                background: "#161311",
-              }}
-            >
-              People
-            </Link>
-            <Link
-              href="/teams"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              Teams
-            </Link>
-            <Link
-              href="/available"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              Available
-            </Link>
-            <Link
-              href="/capacity"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              Capacity
-            </Link>
-            <Link
-              href="/insights"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              Insights
-            </Link>
-            <Link
-              href="/board"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              Board
-            </Link>
-          </nav>
-          <div style={{ flex: 1 }} />
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pulse, transition: "background 0.25s ease" }}>
+      <TopChrome
+        env="pulse"
+        currentPath="/"
+        rightSlot={
           <Link
             href={`/people/${person.id}`}
             style={{
@@ -179,12 +71,13 @@ export default function EditPersonPage() {
               color: "#161311",
               fontSize: 12,
               fontWeight: 500,
+              textDecoration: "none",
             }}
           >
             ← Back to profile
           </Link>
-        </div>
-      </header>
+        }
+      />
 
       <main style={{ maxWidth: 960, margin: "0 auto", padding: "28px 32px 40px" }}>
         <div style={{ marginBottom: 24 }}>

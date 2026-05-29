@@ -16,7 +16,7 @@ import {
   dominantEnergy,
   teamCombinedDayRate,
 } from "../../lib/team-intelligence";
-import { TopChrome } from "../../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
 
 const SAMPLE_BRIEF = `Nordea is putting their omnichannel banking platform out to bid for Q3 2026. Eight-month engagement, kickoff September. They need a senior, client-facing engagement lead who can hold board-level conversations, a principal architect with deep event-driven systems experience (they're moving off mainframe), one or two product designers who can lead service-design workshops with senior bank stakeholders, and a delivery lead who has handled programmes in financial services.
 
@@ -580,7 +580,7 @@ export default function BriefsNewPage() {
   );
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pipeline, transition: "background 0.25s ease" }}>
       <TopChrome env="pipeline" currentPath="/briefs/new" />
 
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "28px 32px 40px" }}>

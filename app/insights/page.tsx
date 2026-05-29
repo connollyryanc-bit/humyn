@@ -12,7 +12,7 @@ import {
   riskTone,
 } from "../lib/capacity-data";
 import { fetchEnrichedPeople, fetchInsightsWeekly } from "../lib/api-client";
-import { TopChrome } from "../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../components/top-chrome";
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -405,14 +405,14 @@ export default function InsightsPage() {
 
   if (!loaded) {
     return (
-      <div style={{ minHeight: "100vh", background: "#F3F0EA", padding: 32 }}>
+      <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.compass, padding: 32 }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>Loading insights…</div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.compass, transition: "background 0.25s ease" }}>
       <TopChrome
         env="compass"
         currentPath="/insights"

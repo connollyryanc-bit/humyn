@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { TopChrome } from "../../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
 
 const STEPS = [
   { key: "details",     label: "Job details",        body: "Internal title, external title, department, location, market, status." },
@@ -13,7 +13,7 @@ const STEPS = [
 
 export default function NewJobPage() {
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pipeline, transition: "background 0.25s ease" }}>
       <TopChrome env="pipeline" currentPath="/pipeline" />
 
       <main style={{ maxWidth: 920, margin: "0 auto", padding: "28px 32px 40px" }}>

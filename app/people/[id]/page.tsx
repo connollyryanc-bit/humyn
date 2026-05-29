@@ -14,7 +14,7 @@ import {
 } from "../../page";
 import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
 import { fetchPerson } from "../../lib/api-client";
-import { TopChrome } from "../../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
 
 type TabKey = "overview" | "personality" | "engage" | "achievements";
 
@@ -260,7 +260,7 @@ export default function PersonProfilePage() {
 
   if (!person) {
     return (
-      <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+      <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pulse, transition: "background 0.25s ease" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>Loading…</div>
       </div>
     );
@@ -270,7 +270,7 @@ export default function PersonProfilePage() {
   const primaryColour = energy[person.primary];
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pulse, transition: "background 0.25s ease" }}>
       <TopChrome
         env="pulse"
         currentPath="/"

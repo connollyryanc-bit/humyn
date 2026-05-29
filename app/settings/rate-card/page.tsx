@@ -8,7 +8,7 @@ import {
   upsertRateCardViaApi,
   deleteRateCardViaApi,
 } from "../../lib/api-client";
-import { TopChrome } from "../../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
 
 const MARKETS = ["Stockholm", "Oslo", "Copenhagen", "Helsinki"] as const;
 
@@ -215,7 +215,7 @@ export default function RateCardPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.compass, transition: "background 0.25s ease" }}>
       <TopChrome
         env="compass"
         currentPath="/settings/rate-card"

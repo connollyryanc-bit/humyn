@@ -7,7 +7,7 @@ import { Person } from "../../page";
 import { PersonForm } from "../../components/person-form";
 import { emptyPerson } from "../../lib/people-store";
 import { createPersonViaApi } from "../../lib/api-client";
-import { TopChrome } from "../../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
 
 export default function NewPersonPage() {
   const router = useRouter();
@@ -25,7 +25,7 @@ export default function NewPersonPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pulse, transition: "background 0.25s ease" }}>
       <TopChrome
         env="pulse"
         currentPath="/people/new"

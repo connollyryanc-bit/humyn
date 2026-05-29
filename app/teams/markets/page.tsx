@@ -33,7 +33,7 @@ import {
   suggestSwaps,
   teamRiskMix,
 } from "../../lib/team-intelligence";
-import { TopChrome } from "../../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
 
 type TabKey = "saved" | "build" | "markets";
 
@@ -1718,7 +1718,7 @@ export default function TeamsPage() {
 
   if (!loaded) {
     return (
-      <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+      <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pipeline, transition: "background 0.25s ease" }}>
         <Header active="saved" />
         <main style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>Loading teams…</main>
       </div>
@@ -1726,7 +1726,7 @@ export default function TeamsPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pipeline, transition: "background 0.25s ease" }}>
       <Header active={tab} />
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "28px 32px 40px" }}>
         <div style={{ marginBottom: 20 }}>

@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { EnergyKey, Person, energy } from "../page";
 import { PersonWithCapacity } from "../lib/capacity-data";
 import { fetchEnrichedPeople } from "../lib/api-client";
-import { TopChrome } from "../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../components/top-chrome";
 
 const MARKETS = ["Stockholm", "Oslo", "Copenhagen", "Helsinki"] as const;
 type Market = (typeof MARKETS)[number];
@@ -417,7 +417,7 @@ export default function AvailablePage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pipeline, transition: "background 0.25s ease" }}>
       <TopChrome
         env="pipeline"
         currentPath="/available"

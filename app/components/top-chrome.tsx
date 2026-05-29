@@ -6,6 +6,18 @@ import { SignedInBadge } from "./signed-in-badge";
 
 export type Environment = "pulse" | "pipeline" | "compass";
 
+export const ENVIRONMENT_SURFACES: Record<Environment, string> = {
+  pulse:    "#F3F0EA",
+  pipeline: "#F7F6F3",
+  compass:  "#FAFAF8",
+};
+
+export const ENVIRONMENT_ACCENTS: Record<Environment, string> = {
+  pulse:    "#FF5040",
+  pipeline: "#6B9FCC",
+  compass:  "#5CAB82",
+};
+
 interface MenuItem {
   href: string;
   title: string;

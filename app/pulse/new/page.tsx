@@ -7,7 +7,7 @@ import { EnergyKey, Person, energy } from "../../page";
 import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
 import { initialsFromName } from "../../lib/people-store";
 import { createPersonViaApi } from "../../lib/api-client";
-import { TopChrome } from "../../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
 
 interface GeneratedProfile {
   name: string;
@@ -891,7 +891,7 @@ export default function PulseNewPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pulse, transition: "background 0.25s ease" }}>
       <TopChrome env="pulse" currentPath="/pulse/new" />
 
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "28px 32px" }}>

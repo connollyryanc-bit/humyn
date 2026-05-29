@@ -7,7 +7,7 @@ import { DEFAULT_STAGES } from "../../../types";
 import { seedCandidates, seedJobs } from "../../../seed";
 import { energy } from "../../../../page";
 import type { EnergyKey } from "../../../../page";
-import { TopChrome } from "../../../../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../../../../components/top-chrome";
 
 const PROFILE_TABS = [
   { key: "activity",   label: "Activity" },
@@ -41,7 +41,7 @@ export default function CandidateProfilePage() {
   );
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pipeline, transition: "background 0.25s ease" }}>
       <TopChrome env="pipeline" currentPath="/pipeline" />
 
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "28px 32px 40px" }}>

@@ -6,7 +6,7 @@ import { fetchAllPeople, fetchEnrichedPeople } from "../lib/api-client";
 import { energy, Person } from "../page";
 import type { PersonWithCapacity } from "../lib/capacity-data";
 import { usePersistedState } from "../lib/local-store";
-import { TopChrome } from "../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../components/top-chrome";
 import { BRIEF_STAGES, Brief, BriefStage, PitchRole, TEAMS_TABS, TeamsTabKey } from "./types";
 import { seedBriefs, seedPitchRoles } from "./seed";
 
@@ -188,7 +188,7 @@ export default function TeamsPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pipeline, transition: "background 0.25s ease" }}>
       <TopChrome env="pipeline" currentPath="/teams" />
 
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "28px 32px 40px" }}>

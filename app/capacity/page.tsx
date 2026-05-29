@@ -14,7 +14,7 @@ import {
   utilisationStatTone,
 } from "../lib/capacity-data";
 import { fetchEnrichedPeople } from "../lib/api-client";
-import { TopChrome } from "../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../components/top-chrome";
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -624,7 +624,7 @@ export default function CapacityPage() {
 
   if (loaded && enriched.length === 0) {
     return (
-      <div style={{ minHeight: "100vh", background: "#F3F0EA", padding: 32 }}>
+      <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.compass, padding: 32 }}>
         <div style={{ maxWidth: 720, margin: "60px auto", textAlign: "center" }}>
           <h1 className="font-display" style={{ fontSize: 24, color: "#161311" }}>
             No capacity data yet
@@ -640,14 +640,14 @@ export default function CapacityPage() {
 
   if (!loaded || !costEntry) {
     return (
-      <div style={{ minHeight: "100vh", background: "#F3F0EA", padding: 32 }}>
+      <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.compass, padding: 32 }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>Loading capacity…</div>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.compass, transition: "background 0.25s ease" }}>
       <TopChrome env="compass" currentPath="/capacity" />
 
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "28px 32px 40px" }}>

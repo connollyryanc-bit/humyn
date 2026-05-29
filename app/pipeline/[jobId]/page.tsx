@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMemo } from "react";
-import { TopChrome } from "../../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
 import { energy } from "../../page";
 import { usePersistedState } from "../../lib/local-store";
 import { BRIEF_STAGES, Brief, BriefRole } from "../../teams/types";
@@ -72,7 +72,7 @@ export default function BriefDetailPage() {
 
   if (!brief) {
     return (
-      <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+      <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pipeline, transition: "background 0.25s ease" }}>
         <TopChrome env="pipeline" currentPath="/pipeline" />
         <main style={{ maxWidth: 720, margin: "0 auto", padding: "60px 32px" }}>
           <Link href="/pipeline" style={{ fontSize: 12, color: "#5A5A5A", textDecoration: "none" }}>
@@ -97,7 +97,7 @@ export default function BriefDetailPage() {
   const totalOpenings = brief.roles.reduce((sum, r) => sum + r.openings, 0);
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pipeline, transition: "background 0.25s ease" }}>
       <TopChrome env="pipeline" currentPath="/pipeline" />
 
       <main style={{ maxWidth: 1080, margin: "0 auto", padding: "28px 32px 60px" }}>

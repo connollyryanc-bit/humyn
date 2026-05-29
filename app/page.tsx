@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { fetchAllPeople } from "./lib/api-client";
-import { TopChrome } from "./components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "./components/top-chrome";
 import {
   AvailKey,
   EnergyKey,
@@ -997,7 +997,7 @@ export default function PeoplePage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pulse, transition: "background 0.25s ease" }}>
       <TopChrome
         env="pulse"
         currentPath="/"

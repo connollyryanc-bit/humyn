@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { TopChrome } from "../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../components/top-chrome";
 import { energy } from "../page";
 import { Brief, BRIEF_STAGES, BriefStage } from "../teams/types";
 import { seedBriefs } from "../teams/seed";
@@ -228,7 +228,7 @@ export default function BriefBoardPage() {
   });
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pipeline, transition: "background 0.25s ease" }}>
       <TopChrome
         env="pipeline"
         currentPath="/pipeline"

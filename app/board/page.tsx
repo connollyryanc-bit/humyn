@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { EnergyKey, Person, energy } from "../page";
 import { PersonWithCapacity } from "../lib/capacity-data";
 import { EnergyRing } from "../components/energy";
-import { TopChrome } from "../components/top-chrome";
+import { ENVIRONMENT_SURFACES, TopChrome } from "../components/top-chrome";
 import {
   fetchEnrichedPeople,
   fetchInsightsBoard,
@@ -431,7 +431,7 @@ export default function BoardPage() {
         : { color: "#9B2A1A", bg: "#FDF0EE", border: "#FCCDC6" };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
+    <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.compass, transition: "background 0.25s ease" }}>
       <div className="board-no-print">
         <TopChrome
           env="compass"

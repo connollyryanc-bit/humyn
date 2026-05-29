@@ -254,11 +254,12 @@ export default function RateCardPage() {
           <h1
             className="font-display"
             style={{
-              fontSize: 32,
+              fontSize: 44,
               fontWeight: 600,
               color: "#161311",
-              letterSpacing: "-0.5px",
-              margin: "6px 0 4px",
+              letterSpacing: "-0.9px",
+              margin: "10px 0 8px",
+              lineHeight: 1.1,
             }}
           >
             Rate card

@@ -75,11 +75,12 @@ function HeroMetric({
       style={{
         background: tone.bg,
         border: `0.5px solid ${tone.border}`,
-        borderRadius: 12,
-        padding: "1.1rem 1.25rem",
+        borderRadius: 14,
+        padding: "1.5rem 1.6rem 1.4rem",
         display: "flex",
         flexDirection: "column",
-        gap: 6,
+        gap: 10,
+        minHeight: 148,
       }}
     >
       <div
@@ -87,8 +88,8 @@ function HeroMetric({
           fontSize: 10,
           color: "#9A9A9A",
           textTransform: "uppercase",
-          letterSpacing: "0.08em",
-          fontWeight: 500,
+          letterSpacing: "0.12em",
+          fontWeight: 600,
         }}
       >
         {label}
@@ -96,16 +97,19 @@ function HeroMetric({
       <div
         className="font-display"
         style={{
-          fontSize: 30,
-          fontWeight: 700,
+          fontSize: 44,
+          fontWeight: 600,
           color: tone.color,
-          letterSpacing: "-0.5px",
+          letterSpacing: "-0.8px",
+          lineHeight: 1.05,
         }}
       >
         {value}
       </div>
       {detail && (
-        <div style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.45 }}>{detail}</div>
+        <div style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.5, marginTop: "auto" }}>
+          {detail}
+        </div>
       )}
     </div>
   );
@@ -502,16 +506,17 @@ export default function BoardPage() {
           <h1
             className="font-display"
             style={{
-              fontSize: 32,
+              fontSize: 44,
               fontWeight: 600,
               color: "#161311",
-              letterSpacing: "-0.5px",
-              margin: "6px 0 4px",
+              letterSpacing: "-0.9px",
+              margin: "10px 0 8px",
+              lineHeight: 1.1,
             }}
           >
             Board dashboard
           </h1>
-          <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.6 }}>
+          <div style={{ fontSize: 14, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.65 }}>
             A 90-second read of where Valtech Nordic stands this week — strategic posture,
             financial exposure, capacity, and the Pulse Map of the workforce. Names are masked by
             default; toggle &ldquo;Show names&rdquo; for the operating team review.

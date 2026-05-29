@@ -106,8 +106,8 @@ function BriefCard({ brief }: { brief: Brief }) {
         display: "block",
         background: "#FFFFFF",
         border: "0.5px solid rgba(0,0,0,0.07)",
-        borderRadius: 14,
-        padding: "20px 22px",
+        borderRadius: 12,
+        padding: "16px 18px 14px",
         textDecoration: "none",
         color: "inherit",
         transition: "transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease",
@@ -122,31 +122,31 @@ function BriefCard({ brief }: { brief: Brief }) {
           top: 0,
           left: 0,
           right: 0,
-          height: 3,
+          height: 2,
           background: e.color,
           opacity: 0.55,
         }}
       />
 
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginBottom: 12 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginBottom: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 5, minWidth: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
             <StageBadge stage={brief.stage} />
             <PriorityBadge priority={brief.priority} />
           </div>
           <div
             className="font-display"
             style={{
-              fontSize: 18,
+              fontSize: 16,
               fontWeight: 600,
               color: "#161311",
-              letterSpacing: "-0.3px",
+              letterSpacing: "-0.25px",
               lineHeight: 1.25,
             }}
           >
             {brief.name}
           </div>
-          <div style={{ fontSize: 11, color: "#9A9A9A" }}>
+          <div style={{ fontSize: 10.5, color: "#9A9A9A" }}>
             {brief.client} · {brief.market} · {brief.duration}
           </div>
         </div>
@@ -154,10 +154,10 @@ function BriefCard({ brief }: { brief: Brief }) {
 
       <p
         style={{
-          fontSize: 13,
+          fontSize: 12,
           color: "#4D4945",
-          lineHeight: 1.55,
-          margin: "0 0 16px",
+          lineHeight: 1.5,
+          margin: "0 0 12px",
           display: "-webkit-box",
           WebkitLineClamp: 2,
           WebkitBoxOrient: "vertical",
@@ -171,10 +171,10 @@ function BriefCard({ brief }: { brief: Brief }) {
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 16,
-          paddingTop: 12,
+          gap: 12,
+          paddingTop: 10,
           borderTop: "0.5px solid rgba(0,0,0,0.06)",
-          fontSize: 11,
+          fontSize: 10.5,
           color: "#5A5A5A",
         }}
       >
@@ -267,10 +267,10 @@ export default function BriefBoardPage() {
           <h1
             className="font-display"
             style={{
-              fontSize: 32,
+              fontSize: 28,
               fontWeight: 600,
               color: "#161311",
-              letterSpacing: "-0.5px",
+              letterSpacing: "-0.4px",
               margin: "6px 0 4px",
             }}
           >

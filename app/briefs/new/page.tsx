@@ -599,10 +599,10 @@ export default function BriefsNewPage() {
           <h1
             className="font-display"
             style={{
-              fontSize: 32,
+              fontSize: 28,
               fontWeight: 600,
               color: "#161311",
-              letterSpacing: "-0.5px",
+              letterSpacing: "-0.4px",
               margin: "6px 0 4px",
             }}
           >

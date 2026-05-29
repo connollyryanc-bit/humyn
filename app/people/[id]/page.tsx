@@ -14,6 +14,7 @@ import {
 } from "../../page";
 import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
 import { fetchPerson } from "../../lib/api-client";
+import { TopChrome } from "../../components/top-chrome";
 
 type TabKey = "overview" | "personality" | "engage" | "achievements";
 
@@ -23,17 +24,6 @@ const tabs: { key: TabKey; label: string }[] = [
   { key: "engage", label: "How to Engage" },
   { key: "achievements", label: "Achievements" },
 ];
-
-function HumynWordmark({ size = 22 }: { size?: number }) {
-  return (
-    <span
-      className="font-display"
-      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
-    >
-      hum<span style={{ color: "#FF5040" }}>y</span>n
-    </span>
-  );
-}
 
 function Avatar({ person, size = 64 }: { person: Person; size?: number }) {
   const colour = energy[person.primary];
@@ -281,169 +271,44 @@ export default function PersonProfilePage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
-      <header
-        style={{
-          height: 52,
-          background: "#FFFFFF",
-          borderBottom: "1px solid rgba(0,0,0,0.07)",
-          position: "sticky",
-          top: 0,
-          zIndex: 30,
-          display: "flex",
-          alignItems: "center",
-          padding: "0 32px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 28,
-            width: "100%",
-            maxWidth: 1280,
-            margin: "0 auto",
-          }}
-        >
-          <Link href="/">
-            <HumynWordmark />
-          </Link>
-          <nav style={{ display: "flex", gap: 4, marginLeft: 12 }}>
+      <TopChrome
+        env="pulse"
+        currentPath="/"
+        rightSlot={
+          <>
+            <Link
+              href={`/people/${person.id}/edit`}
+              style={{
+                padding: "7px 14px",
+                borderRadius: 100,
+                border: "0.5px solid rgba(0,0,0,0.07)",
+                background: "#FFFFFF",
+                color: "#161311",
+                fontSize: 12,
+                fontWeight: 500,
+                textDecoration: "none",
+              }}
+            >
+              Edit profile
+            </Link>
             <Link
               href="/"
               style={{
                 padding: "7px 14px",
                 borderRadius: 100,
-                fontSize: 13,
+                border: "0.5px solid rgba(0,0,0,0.07)",
+                background: "#FFFFFF",
+                color: "#161311",
+                fontSize: 12,
                 fontWeight: 500,
-                color: "#FFFFFF",
-                background: "#161311",
+                textDecoration: "none",
               }}
             >
-              People
+              ← Back to People
             </Link>
-            <Link
-              href="/teams"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Teams
-            </Link>
-            <Link
-              href="/available"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Available
-            </Link>
-            <Link
-              href="/capacity"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Capacity
-            </Link>
-            <Link
-              href="/insights"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Insights
-            </Link>
-            <Link
-              href="/board"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Board
-            </Link>
-            <Link
-              href="/pipeline"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Pipeline
-            </Link>
-            <Link
-              href="/settings/rate-card"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Rates
-            </Link>
-          </nav>
-          <div style={{ flex: 1 }} />
-          <Link
-            href={`/people/${person.id}/edit`}
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              border: "0.5px solid rgba(0,0,0,0.07)",
-              background: "#FFFFFF",
-              color: "#161311",
-              fontSize: 12,
-              fontWeight: 500,
-            }}
-          >
-            Edit profile
-          </Link>
-          <Link
-            href="/"
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              border: "0.5px solid rgba(0,0,0,0.07)",
-              background: "#FFFFFF",
-              color: "#161311",
-              fontSize: 12,
-              fontWeight: 500,
-            }}
-          >
-            ← Back to People
-          </Link>
-        </div>
-      </header>
+          </>
+        }
+      />
 
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "28px 32px" }}>
         <section

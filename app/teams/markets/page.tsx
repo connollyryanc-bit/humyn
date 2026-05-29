@@ -33,6 +33,7 @@ import {
   suggestSwaps,
   teamRiskMix,
 } from "../../lib/team-intelligence";
+import { TopChrome } from "../../components/top-chrome";
 
 type TabKey = "saved" | "build" | "markets";
 
@@ -254,166 +255,30 @@ function HarmonyDial({ score, color }: { score: number; color: string }) {
 
 function Header({ active }: { active: TabKey }) {
   return (
-    <header
-      style={{
-        height: 52,
-        background: "#FFFFFF",
-        borderBottom: "0.5px solid rgba(0,0,0,0.07)",
-        position: "sticky",
-        top: 0,
-        zIndex: 30,
-        display: "flex",
-        alignItems: "center",
-        padding: "0 32px",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 28,
-          width: "100%",
-          maxWidth: 1280,
-          margin: "0 auto",
-        }}
-      >
-        <Link href="/">
-          <HumynWordmark />
-        </Link>
-        <nav style={{ display: "flex", gap: 4, marginLeft: 12 }}>
+    <>
+      <TopChrome
+        env="pipeline"
+        currentPath="/teams"
+        rightSlot={
           <Link
-            href="/"
+            href="/briefs/new"
             style={{
               padding: "7px 14px",
               borderRadius: 100,
-              fontSize: 13,
-              fontWeight: 500,
-              color: "#4D4945",
-            }}
-          >
-            People
-          </Link>
-          <Link
-            href="/teams"
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              fontSize: 13,
-              fontWeight: 500,
-              color: "#FFFFFF",
+              border: "none",
               background: "#161311",
-            }}
-          >
-            Teams
-          </Link>
-          <Link
-            href="/available"
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              fontSize: 13,
+              color: "#FFFFFF",
+              fontSize: 12,
               fontWeight: 500,
-              color: "#4D4945",
+              textDecoration: "none",
             }}
           >
-            Available
+            Brief → Team
           </Link>
-          <Link
-            href="/capacity"
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              fontSize: 13,
-              fontWeight: 500,
-              color: "#4D4945",
-            }}
-          >
-            Capacity
-          </Link>
-          <Link
-            href="/insights"
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              fontSize: 13,
-              fontWeight: 500,
-              color: "#4D4945",
-            }}
-          >
-            Insights
-          </Link>
-          <Link
-            href="/board"
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              fontSize: 13,
-              fontWeight: 500,
-              color: "#4D4945",
-            }}
-          >
-            Board
-          </Link>
-          <Link
-            href="/pipeline"
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              fontSize: 13,
-              fontWeight: 500,
-              color: "#4D4945",
-            }}
-          >
-            Pipeline
-          </Link>
-          <Link
-            href="/settings/rate-card"
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              fontSize: 13,
-              fontWeight: 500,
-              color: "#4D4945",
-            }}
-          >
-            Rates
-          </Link>
-        </nav>
-        <div style={{ flex: 1 }} />
-        <Link
-          href="/briefs/new"
-          style={{
-            padding: "7px 14px",
-            borderRadius: 100,
-            border: "none",
-            background: "#161311",
-            color: "#FFFFFF",
-            fontSize: 12,
-            fontWeight: 500,
-          }}
-        >
-          Brief → Team
-        </Link>
-        <Link
-          href="/pulse/new"
-          style={{
-            padding: "7px 14px",
-            borderRadius: 100,
-            border: "0.5px solid rgba(0,0,0,0.07)",
-            background: "#FFFFFF",
-            color: "#161311",
-            fontSize: 12,
-            fontWeight: 500,
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-          }}
-        >
-          <span style={{ fontSize: 14, lineHeight: 1, color: "#FF5040" }}>+</span> New profile
-        </Link>
-      </div>
+        }
+      />
       <span style={{ display: "none" }}>{active}</span>
-    </header>
+    </>
   );
 }
 

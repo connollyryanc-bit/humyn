@@ -16,23 +16,13 @@ import {
   dominantEnergy,
   teamCombinedDayRate,
 } from "../../lib/team-intelligence";
+import { TopChrome } from "../../components/top-chrome";
 
 const SAMPLE_BRIEF = `Nordea is putting their omnichannel banking platform out to bid for Q3 2026. Eight-month engagement, kickoff September. They need a senior, client-facing engagement lead who can hold board-level conversations, a principal architect with deep event-driven systems experience (they're moving off mainframe), one or two product designers who can lead service-design workshops with senior bank stakeholders, and a delivery lead who has handled programmes in financial services.
 
 The relationship is at risk — their existing supplier mishandled a regulatory project last quarter and there's no margin for delivery surprises. They've explicitly said they want a steady, considered team, not a high-pace pitch crew.
 
 Day-rate-sensitive — they want senior craft but expect us to be commercially competitive on the principal grades.`;
-
-function HumynWordmark({ size = 22 }: { size?: number }) {
-  return (
-    <span
-      className="font-display"
-      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
-    >
-      hum<span style={{ color: "#FF5040" }}>y</span>n
-    </span>
-  );
-}
 
 function Avatar({ person, size = 36 }: { person: Person; size?: number }) {
   const colour = energy[person.primary];
@@ -591,150 +581,7 @@ export default function BriefsNewPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
-      <header
-        style={{
-          height: 52,
-          background: "#FFFFFF",
-          borderBottom: "0.5px solid rgba(0,0,0,0.07)",
-          position: "sticky",
-          top: 0,
-          zIndex: 30,
-          display: "flex",
-          alignItems: "center",
-          padding: "0 32px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 28,
-            width: "100%",
-            maxWidth: 1280,
-            margin: "0 auto",
-          }}
-        >
-          <Link href="/">
-            <HumynWordmark />
-          </Link>
-          <nav style={{ display: "flex", gap: 4, marginLeft: 12 }}>
-            <Link
-              href="/"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              People
-            </Link>
-            <Link
-              href="/teams"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              Teams
-            </Link>
-            <Link
-              href="/available"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              Available
-            </Link>
-            <Link
-              href="/capacity"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              Capacity
-            </Link>
-            <Link
-              href="/insights"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              Insights
-            </Link>
-            <Link
-              href="/board"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              Board
-            </Link>
-            <Link
-              href="/pipeline"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              Pipeline
-            </Link>
-            <Link
-              href="/settings/rate-card"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 500,
-                color: "#4D4945",
-              }}
-            >
-              Rates
-            </Link>
-          </nav>
-          <div style={{ flex: 1 }} />
-          <Link
-            href="/pulse/new"
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              border: "0.5px solid rgba(0,0,0,0.07)",
-              background: "#FFFFFF",
-              color: "#161311",
-              fontSize: 12,
-              fontWeight: 500,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-            }}
-          >
-            <span style={{ fontSize: 14, lineHeight: 1, color: "#FF5040" }}>+</span> New profile
-          </Link>
-        </div>
-      </header>
+      <TopChrome env="pipeline" currentPath="/briefs/new" />
 
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "28px 32px 40px" }}>
         <div style={{ marginBottom: 20 }}>

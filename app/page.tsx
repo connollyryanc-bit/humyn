@@ -184,6 +184,16 @@ function PersonCard({
       : "0.5px solid #ccc";
   return (
     <div
+      onMouseEnter={(ev) => {
+        ev.currentTarget.style.transform = "translateY(-2px)";
+        ev.currentTarget.style.boxShadow = "0 6px 20px rgba(0,0,0,0.06)";
+        ev.currentTarget.style.borderColor = "rgba(0,0,0,0.12)";
+      }}
+      onMouseLeave={(ev) => {
+        ev.currentTarget.style.transform = "translateY(0)";
+        ev.currentTarget.style.boxShadow = "none";
+        ev.currentTarget.style.borderColor = "rgba(0,0,0,0.07)";
+      }}
       style={{
         position: "relative",
         background: "#FFFFFF",
@@ -196,7 +206,7 @@ function PersonCard({
         gap: 14,
         boxShadow: "none",
         overflow: "hidden",
-        transition: "box-shadow 0.15s ease",
+        transition: "box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease",
       }}
     >
       <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>

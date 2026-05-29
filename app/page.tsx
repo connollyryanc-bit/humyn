@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { fetchAllPeople } from "./lib/api-client";
 import { SignedInBadge } from "./components/signed-in-badge";
+import { TopChrome } from "./components/top-chrome";
 import {
   AvailKey,
   EnergyKey,
@@ -17,17 +18,6 @@ import {
 export type { AvailKey, EnergyKey, Person };
 export { availability, energy, people, utilTone };
 
-
-function HumynWordmark({ size = 22 }: { size?: number }) {
-  return (
-    <span
-      className="font-display"
-      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
-    >
-      hum<span style={{ color: "#FF5040" }}>y</span>n
-    </span>
-  );
-}
 
 function Avatar({ person, size = 38 }: { person: Person; size?: number }) {
   const colour = energy[person.primary];
@@ -999,219 +989,48 @@ export default function PeoplePage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#F3F0EA" }}>
-      <header
-        style={{
-          height: 52,
-          background: "#FFFFFF",
-          borderBottom: "1px solid rgba(0,0,0,0.07)",
-          position: "sticky",
-          top: 0,
-          zIndex: 30,
-          display: "flex",
-          alignItems: "center",
-          padding: "0 32px",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 28,
-            width: "100%",
-            maxWidth: 1280,
-            margin: "0 auto",
-          }}
-        >
-          <HumynWordmark />
-          <nav style={{ display: "flex", gap: 4, marginLeft: 12 }}>
-            <span
+      <TopChrome
+        env="pulse"
+        currentPath="/"
+        rightSlot={
+          <>
+            <button
+              onClick={() => setTeamOpen(true)}
               style={{
                 padding: "7px 14px",
                 borderRadius: 100,
-                fontSize: 13,
+                border: "0.5px solid rgba(0,0,0,0.07)",
+                background: team.length ? "#1A1A1A" : "#FFFFFF",
+                color: team.length ? "#FFFFFF" : "#1A1A1A",
+                fontSize: 12,
                 fontWeight: 400,
-                color: "#FFFFFF",
-                background: "#161311",
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                fontFamily: "inherit",
               }}
             >
-              People
-            </span>
-            <Link
-              href="/teams"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Teams
-            </Link>
-            <Link
-              href="/available"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Available
-            </Link>
-            <Link
-              href="/capacity"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Capacity
-            </Link>
-            <Link
-              href="/insights"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Insights
-            </Link>
-            <Link
-              href="/board"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Board
-            </Link>
-            <Link
-              href="/pipeline"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Pipeline
-            </Link>
-            <Link
-              href="/settings/rate-card"
-              style={{
-                padding: "7px 14px",
-                borderRadius: 100,
-                fontSize: 13,
-                fontWeight: 400,
-                color: "#4D4945",
-                background: "transparent",
-              }}
-            >
-              Rates
-            </Link>
-          </nav>
-          <div style={{ flex: 1 }} />
-          <Link
-            href="/people/new"
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              border: "0.5px solid rgba(0,0,0,0.07)",
-              background: "#FFFFFF",
-              color: "#161311",
-              fontSize: 12,
-              fontWeight: 400,
-            }}
-          >
-            Add manually
-          </Link>
-          <Link
-            href="/pulse/new"
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              border: "0.5px solid rgba(0,0,0,0.07)",
-              background: "#FFFFFF",
-              color: "#161311",
-              fontSize: 12,
-              fontWeight: 400,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-            }}
-          >
-            <span style={{ fontSize: 14, lineHeight: 1, color: "#FF5040" }}>+</span> New profile
-          </Link>
-          <Link
-            href="/briefs/new"
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              border: "none",
-              background: "#161311",
-              color: "#FFFFFF",
-              fontSize: 12,
-              fontWeight: 400,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-            }}
-          >
-            Brief → Team
-          </Link>
-          <button
-            onClick={() => setTeamOpen(true)}
-            style={{
-              padding: "7px 14px",
-              borderRadius: 100,
-              border: "1px solid rgba(0,0,0,0.07)",
-              background: team.length ? "#1A1A1A" : "#FFFFFF",
-              color: team.length ? "#FFFFFF" : "#1A1A1A",
-              fontSize: 12,
-              fontWeight: 400,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-            }}
-          >
-            Build team
-            {team.length > 0 && (
-              <span
-                style={{
-                  background: "#FF5040",
-                  color: "#FFFFFF",
-                  borderRadius: 100,
-                  fontSize: 10,
-                  fontWeight: 600,
-                  padding: "1px 7px",
-                }}
-              >
-                {team.length}
-              </span>
-            )}
-          </button>
-          <SignedInBadge />
-        </div>
-      </header>
+              Build team
+              {team.length > 0 && (
+                <span
+                  style={{
+                    background: "#FF5040",
+                    color: "#FFFFFF",
+                    borderRadius: 100,
+                    fontSize: 10,
+                    fontWeight: 600,
+                    padding: "1px 7px",
+                  }}
+                >
+                  {team.length}
+                </span>
+              )}
+            </button>
+            <SignedInBadge />
+          </>
+        }
+      />
 
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "28px 32px" }}>
         <div

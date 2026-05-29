@@ -1,13 +1,52 @@
 "use client";
 
 import Link from "next/link";
+import { SignedInBadge } from "./signed-in-badge";
 
 export type Environment = "pulse" | "pipeline" | "compass";
 
-const ENVIRONMENTS: { key: Environment; label: string; home: string; accent: string }[] = [
-  { key: "pulse",    label: "Pulse",    home: "/",          accent: "#FF5040" },
-  { key: "pipeline", label: "Pipeline", home: "/pipeline",  accent: "#6B9FCC" },
-  { key: "compass",  label: "Compass",  home: "/board",     accent: "#5CAB82" },
+interface EnvironmentMeta {
+  key: Environment;
+  label: string;
+  tagline: string;
+  description: string;
+  home: string;
+  accent: string;
+  accentBg: string;
+  accentBorder: string;
+}
+
+const ENVIRONMENTS: EnvironmentMeta[] = [
+  {
+    key: "pulse",
+    label: "Pulse",
+    tagline: "People intelligence",
+    description: "Profiles, personality and team composition.",
+    home: "/",
+    accent: "#FF5040",
+    accentBg: "#FDF3F2",
+    accentBorder: "#F0CECA",
+  },
+  {
+    key: "pipeline",
+    label: "Pipeline",
+    tagline: "Recruiting & staffing",
+    description: "Briefs, internal pitch board and hiring.",
+    home: "/pipeline",
+    accent: "#6B9FCC",
+    accentBg: "#F0F5FB",
+    accentBorder: "#C4D9EF",
+  },
+  {
+    key: "compass",
+    label: "Compass",
+    tagline: "Executive reporting",
+    description: "Utilisation, capacity and board narrative.",
+    home: "/board",
+    accent: "#5CAB82",
+    accentBg: "#EFF8F3",
+    accentBorder: "#B6E0CB",
+  },
 ];
 
 interface NavItem {
@@ -22,21 +61,21 @@ const NAVS: Record<Environment, NavItem[]> = {
     { href: "/people/new",  label: "Add manually" },
   ],
   pipeline: [
-    { href: "/teams",                label: "Teams" },
-    { href: "/available",            label: "Available" },
-    { href: "/pipeline",             label: "Jobs" },
-    { href: "/briefs/new",           label: "New brief" },
-    { href: "/pipeline/new",         label: "New job" },
+    { href: "/teams",        label: "Teams" },
+    { href: "/available",    label: "Available" },
+    { href: "/pipeline",     label: "Jobs" },
+    { href: "/briefs/new",   label: "New brief" },
+    { href: "/pipeline/new", label: "New job" },
   ],
   compass: [
-    { href: "/board",                label: "Board" },
-    { href: "/capacity",             label: "Capacity" },
-    { href: "/insights",             label: "Insights" },
-    { href: "/settings/rate-card",   label: "Rates" },
+    { href: "/board",              label: "Board" },
+    { href: "/capacity",           label: "Capacity" },
+    { href: "/insights",           label: "Insights" },
+    { href: "/settings/rate-card", label: "Rates" },
   ],
 };
 
-function HumynWordmark({ size = 22 }: { size?: number }) {
+function HumynWordmark({ size = 20 }: { size?: number }) {
   return (
     <span
       className="font-display"
@@ -51,6 +90,74 @@ function isPathActive(currentPath: string | null | undefined, href: string): boo
   if (!currentPath) return false;
   if (href === "/") return currentPath === "/";
   return currentPath === href || currentPath.startsWith(href + "/");
+}
+
+function EnvironmentTile({
+  env,
+  active,
+}: {
+  env: EnvironmentMeta;
+  active: boolean;
+}) {
+  return (
+    <Link
+      href={env.home}
+      style={{
+        display: "block",
+        flex: 1,
+        padding: "10px 16px",
+        borderRadius: 12,
+        border: active ? `0.5px solid ${env.accentBorder}` : "0.5px solid rgba(0,0,0,0.07)",
+        background: active ? env.accentBg : "#FFFFFF",
+        textDecoration: "none",
+        position: "relative",
+        transition: "background 0.12s ease, border-color 0.12s ease",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
+        <span
+          aria-hidden
+          style={{
+            width: 7,
+            height: 7,
+            borderRadius: "50%",
+            background: active ? env.accent : "transparent",
+            border: active ? "none" : `0.5px solid ${env.accent}`,
+            flexShrink: 0,
+          }}
+        />
+        <span
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            color: active ? "#161311" : "#4D4945",
+            letterSpacing: "0.08em",
+            textTransform: "uppercase",
+          }}
+        >
+          {env.label}
+        </span>
+        <span
+          style={{
+            fontSize: 11,
+            color: active ? "#5A5A5A" : "#9A9A9A",
+          }}
+        >
+          · {env.tagline}
+        </span>
+      </div>
+      <div
+        style={{
+          fontSize: 11,
+          color: active ? "#5A5A5A" : "#9A9A9A",
+          lineHeight: 1.45,
+          paddingLeft: 15,
+        }}
+      >
+        {env.description}
+      </div>
+    </Link>
+  );
 }
 
 export function TopChrome({
@@ -76,18 +183,17 @@ export function TopChrome({
     >
       <div
         style={{
-          height: 44,
+          height: 36,
           display: "flex",
           alignItems: "center",
           padding: "0 32px",
-          borderBottom: "0.5px solid rgba(0,0,0,0.05)",
+          borderBottom: "0.5px solid rgba(0,0,0,0.04)",
         }}
       >
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: 18,
             width: "100%",
             maxWidth: 1280,
             margin: "0 auto",
@@ -98,47 +204,43 @@ export function TopChrome({
           </Link>
           <div
             aria-hidden
-            style={{ width: 1, height: 18, background: "rgba(0,0,0,0.08)", marginLeft: 4 }}
+            style={{ width: 1, height: 16, background: "rgba(0,0,0,0.08)", margin: "0 14px" }}
           />
-          <div style={{ display: "flex", gap: 2 }}>
-            {ENVIRONMENTS.map((e) => {
-              const active = e.key === env;
-              return (
-                <Link
-                  key={e.key}
-                  href={e.home}
-                  style={{
-                    padding: "6px 12px",
-                    borderRadius: 100,
-                    fontSize: 12,
-                    fontWeight: 500,
-                    color: active ? "#161311" : "#9A9A9A",
-                    background: active ? "#F3F0EA" : "transparent",
-                    textDecoration: "none",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                  }}
-                >
-                  <span
-                    aria-hidden
-                    style={{
-                      width: 6,
-                      height: 6,
-                      borderRadius: "50%",
-                      background: active ? e.accent : "transparent",
-                      border: active ? "none" : `0.5px solid ${e.accent}`,
-                    }}
-                  />
-                  {e.label}
-                </Link>
-              );
-            })}
-          </div>
-          <div style={{ flex: 1 }} />
-          <div style={{ fontSize: 10, color: "#9A9A9A", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 500 }}>
+          <div
+            style={{
+              fontSize: 10,
+              color: "#9A9A9A",
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              fontWeight: 500,
+            }}
+          >
             {envMeta.label} environment
           </div>
+          <div style={{ flex: 1 }} />
+          <SignedInBadge />
+        </div>
+      </div>
+
+      <div
+        style={{
+          padding: "12px 32px",
+          background: "#FAFAF8",
+          borderBottom: "0.5px solid rgba(0,0,0,0.04)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+            width: "100%",
+            maxWidth: 1280,
+            margin: "0 auto",
+          }}
+        >
+          {ENVIRONMENTS.map((e) => (
+            <EnvironmentTile key={e.key} env={e} active={e.key === env} />
+          ))}
         </div>
       </div>
 

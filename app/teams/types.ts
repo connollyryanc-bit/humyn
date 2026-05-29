@@ -10,6 +10,22 @@ export type BriefStage =
 
 export type BriefPriority = "urgent" | "normal" | "low";
 
+export type BriefRoleLevel = "junior" | "mid" | "senior" | "lead";
+
+export interface BriefRole {
+  id: number;
+  title: string;
+  level: BriefRoleLevel;
+  requiredEnergy: EnergyKey;
+  skills: string[];
+  openings: number;
+  filled: number;
+  applicants: number;
+  duration: string;
+  dayRateBandEur: { min: number; max: number };
+  description: string;
+}
+
 export interface Brief {
   id: number;
   name: string;
@@ -23,12 +39,16 @@ export interface Brief {
   priority: BriefPriority;
   briefType: string;
   daysToStart: number | null;
+  scope: string;
+  context: string;
+  budget: string;
   requiredEnergy: {
     driver: "essential" | "high" | "medium" | "low";
     energizer: "essential" | "high" | "medium" | "low";
     supporter: "essential" | "high" | "medium" | "low";
     analyst: "essential" | "high" | "medium" | "low";
   };
+  roles: BriefRole[];
 }
 
 export type PitchRoleLevel = "junior" | "mid" | "senior" | "lead";

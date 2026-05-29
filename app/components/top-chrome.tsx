@@ -84,8 +84,8 @@ const ENVIRONMENTS: EnvironmentMeta[] = [
       },
       {
         href: "/pipeline",
-        title: "Open jobs",
-        body: "External hires. Every candidate gets a Pulse profile from day one.",
+        title: "Brief board",
+        body: "Every engagement on one screen. Each brief lists its open roles — apply directly.",
       },
       {
         href: "/teams",

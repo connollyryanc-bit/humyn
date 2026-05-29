@@ -27,20 +27,22 @@ Mixed positions can be expressed as e.g. "Energizing Driver" (a Driver with a st
 Energizer influence) when one energy is clearly primary and the second is a strong influence.
 
 Analyse the provided LinkedIn profile text and return ONLY a valid JSON object
-with no other text, no markdown, no backticks. The JSON must follow this exact structure:
+with no other text, no markdown, no backticks. The JSON must follow this exact structure
+(use the lowercase archetype names — driver, energizer, supporter, analyst — for the
+scores keys and the primary/secondary fields):
 
 {
   "name": "extracted or unknown",
   "bio": "2-3 sentence professional summary in third person",
   "scores": {
-    "red": 0-100,
-    "yellow": 0-100,
-    "green": 0-100,
-    "blue": 0-100
+    "driver": 0-100,
+    "energizer": 0-100,
+    "supporter": 0-100,
+    "analyst": 0-100
   },
   "wheelPosition": "one of the 8 positions above",
-  "primary": "red|yellow|green|blue",
-  "secondary": "red|yellow|green|blue",
+  "primary": "driver|energizer|supporter|analyst",
+  "secondary": "driver|energizer|supporter|analyst",
   "capabilities": ["capability 1", "capability 2", "capability 3", "capability 4", "capability 5"],
   "achievements": ["achievement 1", "achievement 2", "achievement 3"],
   "bestTrait": "one sentence describing their greatest professional strength",
@@ -67,7 +69,49 @@ function stripFences(raw: string): string {
   return s.trim();
 }
 
-const ENERGY_KEYS = ["red", "yellow", "green", "blue"] as const;
+const ENERGY_KEYS = ["driver", "energizer", "supporter", "analyst"] as const;
+type EnergyKey = (typeof ENERGY_KEYS)[number];
+
+// If Claude returns the old colour keys, translate to the archetype keys.
+const LEGACY_TO_CURRENT: Record<string, EnergyKey> = {
+  red: "driver",
+  yellow: "energizer",
+  green: "supporter",
+  blue: "analyst",
+  driver: "driver",
+  energizer: "energizer",
+  supporter: "supporter",
+  analyst: "analyst",
+};
+
+function normaliseEnergyKey(value: unknown): EnergyKey | null {
+  if (typeof value !== "string") return null;
+  const mapped = LEGACY_TO_CURRENT[value.toLowerCase()];
+  return mapped ?? null;
+}
+
+function normaliseProfile(p: any): any {
+  if (!p || typeof p !== "object") return p;
+  const out: any = { ...p };
+
+  // Translate primary / secondary
+  const primary = normaliseEnergyKey(p.primary);
+  const secondary = normaliseEnergyKey(p.secondary);
+  if (primary) out.primary = primary;
+  if (secondary) out.secondary = secondary;
+
+  // Translate scores object: { red, yellow, green, blue } -> { driver, energizer, supporter, analyst }
+  if (p.scores && typeof p.scores === "object") {
+    const nextScores: any = {};
+    for (const [k, v] of Object.entries(p.scores)) {
+      const target = LEGACY_TO_CURRENT[k.toLowerCase()];
+      if (target) nextScores[target] = v;
+    }
+    // Preserve any keys already in the new shape
+    out.scores = { ...p.scores, ...nextScores };
+  }
+  return out;
+}
 
 function validateProfile(p: any): string | null {
   if (!p || typeof p !== "object") return "Response was not an object.";
@@ -190,7 +234,9 @@ export async function POST(req: Request) {
     );
   }
 
-  const problem = validateProfile(parsed);
+  const normalised = normaliseProfile(parsed);
+
+  const problem = validateProfile(normalised);
   if (problem) {
     return NextResponse.json(
       { error: `Generated profile failed validation: ${problem}` },
@@ -198,5 +244,5 @@ export async function POST(req: Request) {
     );
   }
 
-  return NextResponse.json({ profile: parsed });
+  return NextResponse.json({ profile: normalised });
 }

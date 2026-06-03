@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ENVIRONMENT_ACCENTS,
   ENVIRONMENT_SURFACES,
@@ -15,6 +15,12 @@ import {
   ExecutiveKpi,
 } from "./seed";
 
+interface LiveExecutiveRead {
+  paragraphs: string[];
+  generatedAt: string;
+  source: string;
+}
+
 const REGIONS = ["Europe", "Nordics", "UK", "DACH", "France"] as const;
 type Region = (typeof REGIONS)[number];
 
@@ -24,6 +30,39 @@ const EXEC_INK_SECONDARY = "#3A3633";
 
 export default function ExecutivePage() {
   const [region, setRegion] = useState<Region>("Europe");
+  const [liveRead, setLiveRead] = useState<LiveExecutiveRead | null>(null);
+  const [loadingRead, setLoadingRead] = useState<boolean>(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoadingRead(true);
+    fetch("/api/insights/executive", { method: "GET" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (data && Array.isArray(data.paragraphs) && data.paragraphs.length > 0) {
+          setLiveRead({
+            paragraphs: data.paragraphs,
+            generatedAt: data.generatedAt ?? new Date().toISOString(),
+            source: data.source ?? "template",
+          });
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setLoadingRead(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const paragraphs = liveRead?.paragraphs ?? aiExecutiveRead.paragraphs;
+  const generatedAt = liveRead?.generatedAt
+    ? new Date(liveRead.generatedAt).toLocaleString()
+    : aiExecutiveRead.generatedAt;
+  const source = liveRead?.source ?? aiExecutiveRead.source;
+  const isLiveClaude = source === "claude";
 
   return (
     <div
@@ -139,8 +178,8 @@ export default function ExecutivePage() {
                   gap: 8,
                   padding: "4px 12px",
                   borderRadius: 100,
-                  background: "rgba(243,240,234,0.08)",
-                  border: "0.5px solid rgba(243,240,234,0.16)",
+                  background: isLiveClaude ? "rgba(26,46,170,0.15)" : "rgba(243,240,234,0.08)",
+                  border: `0.5px solid ${isLiveClaude ? "rgba(26,46,170,0.4)" : "rgba(243,240,234,0.16)"}`,
                   fontSize: 10,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
@@ -151,7 +190,7 @@ export default function ExecutivePage() {
                 <span
                   style={{ width: 6, height: 6, borderRadius: "50%", background: EXEC_ACCENT }}
                 />
-                Claude · This week
+                {loadingRead ? "Generating…" : isLiveClaude ? "Claude · Live read" : "Template read"}
               </span>
               <span
                 style={{
@@ -160,14 +199,20 @@ export default function ExecutivePage() {
                   marginLeft: "auto",
                 }}
               >
-                Generated {aiExecutiveRead.generatedAt}
+                Generated {generatedAt}
               </span>
             </div>
             <div
               className="font-display"
-              style={{ display: "flex", flexDirection: "column", gap: 18 }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 18,
+                opacity: loadingRead ? 0.65 : 1,
+                transition: "opacity 0.25s ease",
+              }}
             >
-              {aiExecutiveRead.paragraphs.map((p, i) => (
+              {paragraphs.map((p, i) => (
                 <p
                   key={i}
                   style={{

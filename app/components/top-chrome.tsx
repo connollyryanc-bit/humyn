@@ -4,18 +4,20 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { SignedInBadge } from "./signed-in-badge";
 
-export type Environment = "pulse" | "pipeline" | "compass";
+export type Environment = "pulse" | "pipeline" | "compass" | "executive";
 
 export const ENVIRONMENT_SURFACES: Record<Environment, string> = {
-  pulse:    "#F3F0EA",
-  pipeline: "#F7F6F3",
-  compass:  "#FAFAF8",
+  pulse:     "#F3F0EA",
+  pipeline:  "#F7F6F3",
+  compass:   "#FAFAF8",
+  executive: "#EDEBE5",
 };
 
 export const ENVIRONMENT_ACCENTS: Record<Environment, string> = {
-  pulse:    "#FF5040",
-  pipeline: "#6B9FCC",
-  compass:  "#5CAB82",
+  pulse:     "#FF5040",
+  pipeline:  "#6B9FCC",
+  compass:   "#5CAB82",
+  executive: "#1A2EAA",
 };
 
 interface MenuItem {
@@ -153,6 +155,63 @@ const ENVIRONMENTS: EnvironmentMeta[] = [
       body: "4 flight risks across the org. €420k of three-month revenue exposure. Two consultants approaching burnout threshold.",
       href: "/board",
       cta: "Open the board view",
+    },
+  },
+  {
+    key: "executive",
+    label: "Executive",
+    tagline: "Workforce intelligence",
+    headline: "Strategic workforce planning for the C-suite.",
+    accent: "#1A2EAA",
+    home: "/executive",
+    items: [
+      {
+        href: "/executive",
+        title: "Executive home",
+        body: "Revenue, margin, capacity, demand, skills gap — one screen for the week.",
+      },
+      {
+        href: "/executive/capacity-demand",
+        title: "Capacity vs demand",
+        body: "Workforce supply vs current and forecast demand across 30/60/90/180/365 days.",
+      },
+      {
+        href: "/executive/pipeline",
+        title: "Pipeline readiness",
+        body: "Can we deliver the upcoming wins? Skills, FTEs, delivery confidence per opportunity.",
+      },
+      {
+        href: "/executive/revenue-leakage",
+        title: "Revenue leakage",
+        body: "Bench cost, unused capacity, opportunity loss — where capacity isn't converting.",
+      },
+      {
+        href: "/executive/optimization",
+        title: "Workforce optimization",
+        body: "AI evaluates redeployment, upskilling and partners before hiring.",
+      },
+      {
+        href: "/executive/skills",
+        title: "Skills intelligence",
+        body: "Current inventory vs 6/12/24-month demand. Where the capability gaps are widening.",
+      },
+      {
+        href: "/executive/financial",
+        title: "Financial workforce",
+        body: "Revenue per employee, margin by region and practice, cost by skill group.",
+      },
+      {
+        href: "/executive/scenarios",
+        title: "Scenario planning",
+        body: "Simulate a major win, a lost client, a hiring freeze, an acquisition.",
+      },
+    ],
+    featured: {
+      label: "This quarter",
+      title: "Pipeline coverage at 1.4× — €11.2M of unstaffed wins in the next 90 days.",
+      body: "Skills gap on AI/ML widened to seven roles. Helsinki utilisation breaking 86%. Cross-Nordic redeployment unlocks €420k of bench cost before any hiring.",
+      href: "/executive",
+      cta: "Open the executive home",
     },
   },
 ];

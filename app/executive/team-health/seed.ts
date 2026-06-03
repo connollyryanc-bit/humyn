@@ -15,6 +15,7 @@ export interface TeamHealthSnapshot {
   team: string;
   client: string;
   market: string;
+  region: string;
   composite: HealthLevel;
   burnoutRisk: HealthLevel;
   leadershipBalance: HealthLevel;       // is one energy / decision-style dominating?
@@ -30,6 +31,7 @@ export const teamHealthSnapshots: TeamHealthSnapshot[] = [
     team: "Klarna CX Phase 2 — Stockholm",
     client: "Klarna",
     market: "Stockholm",
+    region: "Nordics",
     composite: "elevated",
     burnoutRisk: "elevated",
     leadershipBalance: "medium",
@@ -44,6 +46,7 @@ export const teamHealthSnapshots: TeamHealthSnapshot[] = [
     team: "Maersk Shipment Events v3 — Copenhagen",
     client: "Maersk",
     market: "Copenhagen",
+    region: "Nordics",
     composite: "low",
     burnoutRisk: "low",
     leadershipBalance: "low",
@@ -58,6 +61,7 @@ export const teamHealthSnapshots: TeamHealthSnapshot[] = [
     team: "OP Financial demand model — Helsinki",
     client: "OP Financial",
     market: "Helsinki",
+    region: "Nordics",
     composite: "elevated",
     burnoutRisk: "critical",
     leadershipBalance: "medium",
@@ -72,6 +76,7 @@ export const teamHealthSnapshots: TeamHealthSnapshot[] = [
     team: "DSB Digital Experience — Copenhagen",
     client: "DSB",
     market: "Copenhagen",
+    region: "Nordics",
     composite: "low",
     burnoutRisk: "low",
     leadershipBalance: "low",
@@ -86,6 +91,7 @@ export const teamHealthSnapshots: TeamHealthSnapshot[] = [
     team: "H&M Checkout Redesign — Stockholm",
     client: "H&M",
     market: "Stockholm",
+    region: "Nordics",
     composite: "medium",
     burnoutRisk: "medium",
     leadershipBalance: "elevated",
@@ -100,6 +106,7 @@ export const teamHealthSnapshots: TeamHealthSnapshot[] = [
     team: "Storebrand Member Portal — Oslo",
     client: "Storebrand",
     market: "Oslo",
+    region: "Nordics",
     composite: "low",
     burnoutRisk: "low",
     leadershipBalance: "low",
@@ -109,6 +116,81 @@ export const teamHealthSnapshots: TeamHealthSnapshot[] = [
     weeksAbove95: 0,
     contextSummary:
       "Ida + Magnus = Energizer/Driver pairing. Healthy. Some change-readiness softness around the legacy Angular -> Next.js stack but team is engaging.",
+  },
+  {
+    team: "Tesco Loyalty Rebuild — London",
+    client: "Tesco",
+    market: "London",
+    region: "UK",
+    composite: "medium",
+    burnoutRisk: "medium",
+    leadershipBalance: "low",
+    communicationFriction: "medium",
+    changeReadiness: "low",
+    utilisation: 88,
+    weeksAbove95: 0,
+    contextSummary:
+      "Healthy team. James + Priya pairing covering loyalty platform rebuild. Minor friction with Tesco product owner over backlog priority.",
+  },
+  {
+    team: "Lloyds Banking — Data discovery",
+    client: "Lloyds Banking Group",
+    market: "London",
+    region: "UK",
+    composite: "elevated",
+    burnoutRisk: "elevated",
+    leadershipBalance: "elevated",
+    communicationFriction: "medium",
+    changeReadiness: "medium",
+    utilisation: 94,
+    weeksAbove95: 4,
+    contextSummary:
+      "Priya carrying two ML engagements alone (Lloyds + Sainsbury's pilot). Burnout signal building. London ML hire decision is the operative unlock.",
+  },
+  {
+    team: "Allianz Claims Platform — Munich",
+    client: "Allianz",
+    market: "Munich",
+    region: "DACH",
+    composite: "low",
+    burnoutRisk: "low",
+    leadershipBalance: "low",
+    communicationFriction: "low",
+    changeReadiness: "low",
+    utilisation: 82,
+    weeksAbove95: 0,
+    contextSummary:
+      "Stefan-led team in strong shape. Healthy Analyst-led leadership balance, no friction signals, clean retrospectives.",
+  },
+  {
+    team: "Siemens Innovation Lab — Munich",
+    client: "Siemens",
+    market: "Munich",
+    region: "DACH",
+    composite: "low",
+    burnoutRisk: "low",
+    leadershipBalance: "low",
+    communicationFriction: "low",
+    changeReadiness: "medium",
+    utilisation: 76,
+    weeksAbove95: 0,
+    contextSummary:
+      "Innovation lab team operating with healthy headroom. Capacity available for one more strand.",
+  },
+  {
+    team: "BNP Paribas Wealth — Paris",
+    client: "BNP Paribas",
+    market: "Paris",
+    region: "France",
+    composite: "low",
+    burnoutRisk: "low",
+    leadershipBalance: "low",
+    communicationFriction: "low",
+    changeReadiness: "low",
+    utilisation: 74,
+    weeksAbove95: 0,
+    contextSummary:
+      "Discovery team — Camille leading. Light utilisation. Strong stakeholder rapport.",
   },
 ];
 

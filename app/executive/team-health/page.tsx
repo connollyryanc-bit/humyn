@@ -37,10 +37,12 @@ const HEALTH_DIMENSIONS: { key: keyof TeamHealthSnapshot; label: string }[] = [
 
 export default function TeamHealthPage() {
   const { scope } = useExecutiveScope();
-  const filteredTeams = useMemo(
-    () => (scope.market ? teamHealthSnapshots.filter((t) => t.market === scope.market) : teamHealthSnapshots),
-    [scope.market],
-  );
+  const filteredTeams = useMemo(() => {
+    let list = teamHealthSnapshots;
+    if (scope.region !== "Europe") list = list.filter((t) => t.region === scope.region);
+    if (scope.market) list = list.filter((t) => t.market === scope.market);
+    return list;
+  }, [scope.region, scope.market]);
 
   const totals = useMemo(() => {
     const elevatedOrCritical = filteredTeams.filter(

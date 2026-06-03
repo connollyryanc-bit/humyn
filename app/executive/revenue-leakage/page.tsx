@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   ENVIRONMENT_ACCENTS,
   ENVIRONMENT_SURFACES,
@@ -17,6 +17,7 @@ import {
 } from "./seed";
 import { ScopeBreadcrumb } from "../scope-breadcrumb";
 import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
+import { ChartIcons, ChartKind, ChartTypeToggle } from "../components/chart-toggle";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -345,6 +346,7 @@ function LeakageWaterfall({ items, total }: { items: LeakageItem[]; total: numbe
 }
 
 function MonthlyTrendChart() {
+  const [kind, setKind] = useState<ChartKind>("area");
   const W = 1200;
   const H = 240;
   const padding = { top: 24, right: 32, bottom: 36, left: 56 };
@@ -374,6 +376,17 @@ function MonthlyTrendChart() {
         padding: "24px 28px 22px",
       }}
     >
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
+        <ChartTypeToggle
+          value={kind}
+          onChange={setKind}
+          options={[
+            { key: "area", label: "Area", icon: ChartIcons.area },
+            { key: "line", label: "Line", icon: ChartIcons.line },
+            { key: "bar",  label: "Bar",  icon: ChartIcons.bar  },
+          ]}
+        />
+      </div>
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", overflow: "visible" }}>
         {tickValues.map((v, i) => {
           const y = padding.top + yScale(v);
@@ -391,19 +404,40 @@ function MonthlyTrendChart() {
             {m.month}
           </text>
         ))}
-        <path d={areaPath} fill="#C4534A" opacity={0.1} />
-        <path d={path} fill="none" stroke="#C4534A" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-        {monthlyLeakage.map((m, i) => (
-          <circle
-            key={i}
-            cx={padding.left + i * xStep}
-            cy={padding.top + yScale(m.value)}
-            r={3.5}
-            fill="#C4534A"
-            stroke="#FFFFFF"
-            strokeWidth={1.5}
-          />
-        ))}
+        {kind === "bar" && monthlyLeakage.map((m, i) => {
+          const barW = Math.min(28, xStep - 12);
+          const x = padding.left + i * xStep - barW / 2;
+          const h = (m.value / max) * innerH;
+          return (
+            <rect
+              key={i}
+              x={x}
+              y={padding.top + innerH - h}
+              width={barW}
+              height={h}
+              fill="#C4534A"
+              opacity={0.85}
+              rx={3}
+            />
+          );
+        })}
+        {kind === "area" && <path d={areaPath} fill="#C4534A" opacity={0.1} />}
+        {(kind === "area" || kind === "line") && (
+          <>
+            <path d={path} fill="none" stroke="#C4534A" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+            {monthlyLeakage.map((m, i) => (
+              <circle
+                key={i}
+                cx={padding.left + i * xStep}
+                cy={padding.top + yScale(m.value)}
+                r={3.5}
+                fill="#C4534A"
+                stroke="#FFFFFF"
+                strokeWidth={1.5}
+              />
+            ))}
+          </>
+        )}
       </svg>
     </div>
   );

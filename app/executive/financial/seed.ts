@@ -14,11 +14,24 @@ export interface PerEmployee {
   utilisationPct: number; // 0-100
 }
 
-export const regions: PerEmployee[] = [
+// Per-market (Nordic cities). Historically called "regions" — kept the export name
+// for back-compat with the page until the page is updated to use `markets`.
+export const markets: PerEmployee[] = [
   { scope: "Stockholm",  headcount: 64, revenuePerEmployee: 248000, grossProfitPerEmployee: 86000, marginPct: 34.7, utilisationPct: 80 },
   { scope: "Oslo",       headcount: 42, revenuePerEmployee: 254000, grossProfitPerEmployee: 92000, marginPct: 36.2, utilisationPct: 81 },
   { scope: "Copenhagen", headcount: 48, revenuePerEmployee: 232000, grossProfitPerEmployee: 76000, marginPct: 32.8, utilisationPct: 76 },
   { scope: "Helsinki",   headcount: 33, revenuePerEmployee: 218000, grossProfitPerEmployee: 68000, marginPct: 31.2, utilisationPct: 73 },
+  { scope: "London",     headcount: 32, revenuePerEmployee: 268000, grossProfitPerEmployee: 96000, marginPct: 35.8, utilisationPct: 82 },
+  { scope: "Munich",     headcount: 21, revenuePerEmployee: 262000, grossProfitPerEmployee: 92000, marginPct: 35.1, utilisationPct: 79 },
+  { scope: "Paris",      headcount: 14, revenuePerEmployee: 246000, grossProfitPerEmployee: 84000, marginPct: 34.1, utilisationPct: 76 },
+];
+
+// True region axis — the level above markets.
+export const regions: PerEmployee[] = [
+  { scope: "Nordics", headcount: 187, revenuePerEmployee: 240000, grossProfitPerEmployee: 82000, marginPct: 34.2, utilisationPct: 78 },
+  { scope: "UK",      headcount: 32,  revenuePerEmployee: 268000, grossProfitPerEmployee: 96000, marginPct: 35.8, utilisationPct: 82 },
+  { scope: "DACH",    headcount: 21,  revenuePerEmployee: 262000, grossProfitPerEmployee: 92000, marginPct: 35.1, utilisationPct: 79 },
+  { scope: "France",  headcount: 14,  revenuePerEmployee: 246000, grossProfitPerEmployee: 84000, marginPct: 34.1, utilisationPct: 76 },
 ];
 
 export const practices: PerEmployee[] = [

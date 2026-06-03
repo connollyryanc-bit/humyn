@@ -55,6 +55,7 @@ export default function PipelineReadinessPage() {
       list = list.filter((o) => o.stage !== "closed-won" && o.stage !== "closed-lost");
     }
     // Scope filtering
+    if (scope.region !== "Europe") list = list.filter((o) => o.region === scope.region);
     if (scope.market) list = list.filter((o) => o.market === scope.market);
     if (scope.practice) list = list.filter((o) => o.practice === scope.practice);
     return list;

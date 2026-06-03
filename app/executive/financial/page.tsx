@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   ENVIRONMENT_ACCENTS,
   ENVIRONMENT_SURFACES,
@@ -13,12 +13,14 @@ import {
   PerEmployee,
   costBySkillGroup,
   financialAiInsights,
+  markets,
   practices,
   quarterlyTrend,
   regions,
 } from "./seed";
 import { ScopeBreadcrumb } from "../scope-breadcrumb";
 import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
+import { ChartIcons, ChartKind, ChartTypeToggle } from "../components/chart-toggle";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -32,14 +34,28 @@ function fmtEur(value: number, opts?: { precise?: boolean }): string {
 
 export default function FinancialWorkforcePage() {
   const { scope } = useExecutiveScope();
+  const filteredRegions = useMemo(
+    () => (scope.region !== "Europe" ? regions.filter((r) => r.scope === scope.region) : regions),
+    [scope.region],
+  );
+  const filteredMarkets = useMemo(() => {
+    let list = markets;
+    if (scope.region === "Nordics") list = list.filter((m) => ["Stockholm", "Oslo", "Copenhagen", "Helsinki"].includes(m.scope));
+    else if (scope.region === "UK") list = list.filter((m) => m.scope === "London");
+    else if (scope.region === "DACH") list = list.filter((m) => m.scope === "Munich");
+    else if (scope.region === "France") list = list.filter((m) => m.scope === "Paris");
+    if (scope.market) list = list.filter((m) => m.scope === scope.market);
+    return list;
+  }, [scope.region, scope.market]);
+
   const totals = useMemo(() => {
-    const totalHeadcount = regions.reduce((s, r) => s + r.headcount, 0);
-    const totalRevenue = regions.reduce((s, r) => s + r.revenuePerEmployee * r.headcount, 0);
-    const totalProfit = regions.reduce((s, r) => s + r.grossProfitPerEmployee * r.headcount, 0);
+    const totalHeadcount = filteredRegions.reduce((s, r) => s + r.headcount, 0);
+    const totalRevenue = filteredRegions.reduce((s, r) => s + r.revenuePerEmployee * r.headcount, 0);
+    const totalProfit = filteredRegions.reduce((s, r) => s + r.grossProfitPerEmployee * r.headcount, 0);
     const blendedMargin = (totalProfit / totalRevenue) * 100;
     const revPerEmployee = totalRevenue / totalHeadcount;
     return { totalHeadcount, totalRevenue, totalProfit, blendedMargin, revPerEmployee };
-  }, []);
+  }, [filteredRegions]);
 
   return (
     <div
@@ -85,7 +101,7 @@ export default function FinancialWorkforcePage() {
 
         <section style={{ marginBottom: 44 }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: 14 }}>
-            <HeroStat label="Headcount" value={String(totals.totalHeadcount)} detail="Across the four Nordic markets" tone="neutral" />
+            <HeroStat label="Headcount" value={String(totals.totalHeadcount)} detail={scope.region === "Europe" ? "Across all European markets" : `Across ${scope.region}`} tone="neutral" />
             <HeroStat label="Annualised revenue" value={fmtEur(totals.totalRevenue, { precise: true })} detail="Run-rate across the workforce" tone="positive" />
             <HeroStat label="Revenue per employee" value={fmtEur(totals.revPerEmployee)} detail="Annualised blended average" tone="neutral" />
             <HeroStat label="Blended gross margin" value={`${totals.blendedMargin.toFixed(1)}%`} detail="Workforce-weighted across all practices" tone="positive" />
@@ -99,7 +115,12 @@ export default function FinancialWorkforcePage() {
 
         <section style={{ marginBottom: 44 }}>
           <SectionLabel>By region</SectionLabel>
-          <ScopeTable rows={regions} label="Region" highlight={scope.market} />
+          <ScopeTable rows={regions} label="Region" highlight={scope.region === "Europe" ? undefined : scope.region} />
+        </section>
+
+        <section style={{ marginBottom: 44 }}>
+          <SectionLabel>By market</SectionLabel>
+          <ScopeTable rows={filteredMarkets} label="Market" highlight={scope.market} />
         </section>
 
         <section style={{ marginBottom: 44 }}>
@@ -146,58 +167,112 @@ function HeroStat({ label, value, detail, tone }: { label: string; value: string
 }
 
 function QuarterlyTrend() {
+  const [kind, setKind] = useState<ChartKind>("bar");
   const W = 1200;
-  const H = 220;
-  const padding = { top: 24, right: 32, bottom: 36, left: 56 };
+  const H = 240;
+  const padding = { top: 28, right: 32, bottom: 36, left: 56 };
   const innerW = W - padding.left - padding.right;
   const innerH = H - padding.top - padding.bottom;
   const revMax = Math.max(...quarterlyTrend.map((q) => q.revenue));
   const xStep = innerW / (quarterlyTrend.length - 1);
   const yScaleRev = (v: number) => innerH - (v / revMax) * innerH * 0.85;
 
+  const revPath = quarterlyTrend
+    .map((q, i) => `${i === 0 ? "M" : "L"} ${padding.left + i * xStep} ${padding.top + yScaleRev(q.revenue)}`)
+    .join(" ");
+  const revAreaPath =
+    revPath +
+    ` L ${padding.left + (quarterlyTrend.length - 1) * xStep} ${padding.top + innerH}` +
+    ` L ${padding.left} ${padding.top + innerH} Z`;
+
   return (
     <div style={{ background: "#FFFFFF", border: "0.5px solid rgba(0,0,0,0.07)", borderRadius: 14, padding: "24px 28px 22px" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 18, fontSize: 11, color: EXEC_INK_SECONDARY, marginBottom: 8 }}>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-          <span style={{ width: 12, height: 6, borderRadius: 2, background: EXEC_ACCENT, opacity: 0.85 }} />
-          Revenue (€M)
-        </span>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-          <span style={{ width: 12, height: 6, borderRadius: 2, background: "#3D8A61" }} />
-          Gross margin (%)
-        </span>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 18, marginBottom: 10 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 18, fontSize: 11, color: EXEC_INK_SECONDARY }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span style={{ width: 12, height: 6, borderRadius: 2, background: EXEC_ACCENT, opacity: 0.85 }} />
+            Revenue (€M)
+          </span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span style={{ width: 12, height: 6, borderRadius: 2, background: "#3D8A61" }} />
+            Gross margin (%)
+          </span>
+        </div>
+        <ChartTypeToggle
+          value={kind}
+          onChange={setKind}
+          options={[
+            { key: "bar",  label: "Bar",  icon: ChartIcons.bar  },
+            { key: "line", label: "Line", icon: ChartIcons.line },
+            { key: "area", label: "Area", icon: ChartIcons.area },
+          ]}
+        />
       </div>
       <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", overflow: "visible" }}>
         {quarterlyTrend.map((q, i) => {
           const x = padding.left + i * xStep;
-          const barW = 36;
-          const barH = (q.revenue / revMax) * innerH * 0.85;
+          if (kind === "bar") {
+            const barW = 36;
+            const barH = (q.revenue / revMax) * innerH * 0.85;
+            return (
+              <g key={i}>
+                <rect
+                  x={x - barW / 2}
+                  y={padding.top + innerH - barH}
+                  width={barW}
+                  height={barH}
+                  fill={EXEC_ACCENT}
+                  opacity={0.85}
+                  rx={4}
+                />
+                <text
+                  x={x}
+                  y={padding.top + innerH - barH - 8}
+                  textAnchor="middle"
+                  className="font-display"
+                  style={{ fontSize: 12, fill: EXEC_INK, fontWeight: 600 }}
+                >
+                  €{q.revenue}M
+                </text>
+                <text x={x} y={H - 12} textAnchor="middle" style={{ fontSize: 11, fill: "#9A9A9A" }}>
+                  {q.q}
+                </text>
+              </g>
+            );
+          }
           return (
-            <g key={i}>
-              <rect
-                x={x - barW / 2}
-                y={padding.top + innerH - barH}
-                width={barW}
-                height={barH}
-                fill={EXEC_ACCENT}
-                opacity={0.85}
-                rx={4}
-              />
-              <text
-                x={x}
-                y={padding.top + innerH - barH - 8}
-                textAnchor="middle"
-                className="font-display"
-                style={{ fontSize: 12, fill: EXEC_INK, fontWeight: 600 }}
-              >
-                €{q.revenue}M
-              </text>
-              <text x={x} y={H - 12} textAnchor="middle" style={{ fontSize: 11, fill: "#9A9A9A" }}>
-                {q.q}
-              </text>
-            </g>
+            <text key={`xl-${i}`} x={x} y={H - 12} textAnchor="middle" style={{ fontSize: 11, fill: "#9A9A9A" }}>
+              {q.q}
+            </text>
           );
         })}
+
+        {kind === "area" && <path d={revAreaPath} fill={EXEC_ACCENT} opacity={0.14} />}
+
+        {(kind === "line" || kind === "area") && (
+          <>
+            <path d={revPath} fill="none" stroke={EXEC_ACCENT} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+            {quarterlyTrend.map((q, i) => {
+              const x = padding.left + i * xStep;
+              const y = padding.top + yScaleRev(q.revenue);
+              return (
+                <g key={`rp-${i}`}>
+                  <circle cx={x} cy={y} r={4} fill={EXEC_ACCENT} stroke="#FFFFFF" strokeWidth={1.5} />
+                  <text
+                    x={x}
+                    y={y - 10}
+                    textAnchor="middle"
+                    className="font-display"
+                    style={{ fontSize: 12, fill: EXEC_INK, fontWeight: 600 }}
+                  >
+                    €{q.revenue}M
+                  </text>
+                </g>
+              );
+            })}
+          </>
+        )}
+
         <path
           d={quarterlyTrend
             .map((q, i) => `${i === 0 ? "M" : "L"} ${padding.left + i * xStep} ${padding.top + yScaleRev(q.margin / 8)}`)

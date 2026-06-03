@@ -10,8 +10,10 @@ import {
 import {
   aiExecutiveRead,
   executiveKpis,
+  executiveKpisByRegion,
   executiveModules,
   executiveScope,
+  executiveScopeByRegion,
   ExecutiveKpi,
 } from "./seed";
 import { ScopeBreadcrumb } from "./scope-breadcrumb";
@@ -59,6 +61,9 @@ export default function ExecutivePage() {
       cancelled = true;
     };
   }, []);
+
+  const regionScopeShape = executiveScopeByRegion[scope.region] ?? executiveScope;
+  const regionKpis = executiveKpisByRegion[scope.region] ?? executiveKpis;
 
   const paragraphs = liveRead?.paragraphs ?? aiExecutiveRead.paragraphs;
   const generatedAt = liveRead?.generatedAt
@@ -123,8 +128,8 @@ export default function ExecutivePage() {
               margin: 0,
             }}
           >
-            {executiveScope.consultants} consultants across {executiveScope.markets} markets and{" "}
-            {executiveScope.practices} practices, delivering {executiveScope.revenue}. Drill down
+            {regionScopeShape.consultants} consultants across {regionScopeShape.markets} markets and{" "}
+            {regionScopeShape.practices} practices, delivering {regionScopeShape.revenue}. Drill down
             to country, practice, team or individual — every KPI updates as you go.
           </p>
         </section>
@@ -142,7 +147,7 @@ export default function ExecutivePage() {
               gap: 14,
             }}
           >
-            {executiveKpis.map((k) => (
+            {regionKpis.map((k) => (
               <KpiCard key={k.key} kpi={k} />
             ))}
           </div>

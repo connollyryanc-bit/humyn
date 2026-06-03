@@ -19,6 +19,7 @@ import {
 } from "./seed";
 import { ScopeBreadcrumb } from "../scope-breadcrumb";
 import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
+import { ChartIcons, ChartKind, ChartTypeToggle } from "../components/chart-toggle";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -36,14 +37,30 @@ export default function CapacityDemandPage() {
   const { scope } = useExecutiveScope();
 
   const allSnapshots = practiceSnapshots[horizon];
-  const snapshots = useMemo(
-    () =>
-      scope.practice
-        ? allSnapshots.filter((s) => s.practice === scope.practice)
-        : allSnapshots,
-    [allSnapshots, scope.practice],
-  );
-  const series = timeSeries[horizon];
+  const snapshots = useMemo(() => {
+    let list = allSnapshots;
+    if (scope.region !== "Europe") {
+      list = list.filter((s) => s.region === scope.region);
+    }
+    if (scope.practice) {
+      list = list.filter((s) => s.practice === scope.practice);
+    }
+    return list;
+  }, [allSnapshots, scope.region, scope.practice]);
+  const series = useMemo(() => {
+    const full = timeSeries[horizon];
+    const fullSnapshots = practiceSnapshots[horizon];
+    const fullCapacity = fullSnapshots.reduce((s, p) => s + p.capacity, 0);
+    const scopedCapacity = snapshots.reduce((s, p) => s + p.capacity, 0);
+    if (fullCapacity === 0 || scopedCapacity === fullCapacity) return full;
+    const ratio = scopedCapacity / fullCapacity;
+    return full.map((p) => ({
+      week: p.week,
+      capacity: Math.round(p.capacity * ratio),
+      confirmed: Math.round(p.confirmed * ratio),
+      pipeline: Math.round(p.pipeline * ratio),
+    }));
+  }, [horizon, snapshots]);
 
   const totals = useMemo(() => {
     const totalCapacity = snapshots.reduce((s, p) => s + p.capacity, 0);
@@ -180,7 +197,7 @@ export default function CapacityDemandPage() {
 
         <section style={{ marginBottom: 44 }}>
           <SectionLabel>Capacity vs demand · by practice</SectionLabel>
-          <PracticeBarChart snapshots={snapshots} />
+          <PracticeChart snapshots={snapshots} />
         </section>
 
         <section style={{ marginBottom: 44 }}>
@@ -352,14 +369,10 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ─── bar chart: per practice ───────────────────────────────────────────
+// ─── per-practice chart (bar / line / pie) ─────────────────────────────
 
-function PracticeBarChart({ snapshots }: { snapshots: PracticeSnapshot[] }) {
-  const maxValue = Math.max(
-    ...snapshots.map((s) =>
-      Math.max(s.capacity, s.confirmedDemand + s.weightedPipeline),
-    ),
-  );
+function PracticeChart({ snapshots }: { snapshots: PracticeSnapshot[] }) {
+  const [kind, setKind] = useState<ChartKind>("bar");
 
   return (
     <div
@@ -374,20 +387,61 @@ function PracticeBarChart({ snapshots }: { snapshots: PracticeSnapshot[] }) {
         style={{
           display: "flex",
           alignItems: "center",
+          justifyContent: "space-between",
           gap: 18,
           marginBottom: 22,
           flexWrap: "wrap",
-          fontSize: 11,
-          color: EXEC_INK_SECONDARY,
         }}
       >
-        <Legend swatch={EXEC_ACCENT} label="Capacity (available)" />
-        <Legend swatch="#161311" label="Confirmed demand" />
-        <Legend swatch="#161311" muted label="Weighted pipeline" />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 18,
+            flexWrap: "wrap",
+            fontSize: 11,
+            color: EXEC_INK_SECONDARY,
+          }}
+        >
+          {kind === "pie" ? (
+            <>
+              <Legend swatch={EXEC_ACCENT} label="Capacity share by practice" />
+            </>
+          ) : (
+            <>
+              <Legend swatch={EXEC_ACCENT} label="Capacity (available)" />
+              <Legend swatch="#161311" label="Confirmed demand" />
+              <Legend swatch="#161311" muted label="Weighted pipeline" />
+            </>
+          )}
+        </div>
+        <ChartTypeToggle
+          value={kind}
+          onChange={setKind}
+          options={[
+            { key: "bar",  label: "Bar",  icon: ChartIcons.bar },
+            { key: "line", label: "Line", icon: ChartIcons.line },
+            { key: "pie",  label: "Pie",  icon: ChartIcons.pie },
+          ]}
+        />
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        {snapshots.map((s) => {
+      {kind === "bar" && <PracticeBars snapshots={snapshots} />}
+      {kind === "line" && <PracticeLines snapshots={snapshots} />}
+      {kind === "pie" && <PracticePie snapshots={snapshots} />}
+    </div>
+  );
+}
+
+function PracticeBars({ snapshots }: { snapshots: PracticeSnapshot[] }) {
+  const maxValue = Math.max(
+    ...snapshots.map((s) =>
+      Math.max(s.capacity, s.confirmedDemand + s.weightedPipeline),
+    ),
+  );
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      {snapshots.map((s) => {
           const capacityPct = (s.capacity / maxValue) * 100;
           const confirmedPct = (s.confirmedDemand / maxValue) * 100;
           const pipelinePct = (s.weightedPipeline / maxValue) * 100;
@@ -497,6 +551,138 @@ function PracticeBarChart({ snapshots }: { snapshots: PracticeSnapshot[] }) {
             </div>
           );
         })}
+    </div>
+  );
+}
+
+function PracticeLines({ snapshots }: { snapshots: PracticeSnapshot[] }) {
+  const W = 1200;
+  const H = 320;
+  const padding = { top: 20, right: 24, bottom: 56, left: 56 };
+  const innerW = W - padding.left - padding.right;
+  const innerH = H - padding.top - padding.bottom;
+  const maxVal = Math.max(
+    ...snapshots.flatMap((s) => [s.capacity, s.confirmedDemand + s.weightedPipeline]),
+  );
+  const xStep = snapshots.length > 1 ? innerW / (snapshots.length - 1) : innerW;
+  const yScale = (v: number) => innerH - (v / Math.max(maxVal, 1)) * innerH;
+
+  const capacityPath = snapshots
+    .map((s, i) => `${i === 0 ? "M" : "L"} ${padding.left + i * xStep} ${padding.top + yScale(s.capacity)}`)
+    .join(" ");
+  const demandPath = snapshots
+    .map((s, i) => `${i === 0 ? "M" : "L"} ${padding.left + i * xStep} ${padding.top + yScale(s.confirmedDemand + s.weightedPipeline)}`)
+    .join(" ");
+
+  const ticks = 4;
+  const tickValues = Array.from({ length: ticks + 1 }, (_, i) => Math.round((maxVal / ticks) * i));
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: "auto", overflow: "visible" }}>
+      {tickValues.map((v, i) => {
+        const y = padding.top + yScale(v);
+        return (
+          <g key={i}>
+            <line x1={padding.left} x2={padding.left + innerW} y1={y} y2={y} stroke="rgba(0,0,0,0.06)" strokeWidth={1} />
+            <text x={padding.left - 10} y={y + 4} textAnchor="end" style={{ fontSize: 10, fill: "#9A9A9A" }}>
+              {v.toLocaleString()}
+            </text>
+          </g>
+        );
+      })}
+      <path d={capacityPath} fill="none" stroke={EXEC_ACCENT} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+      <path d={demandPath} fill="none" stroke="#161311" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+      {snapshots.map((s, i) => {
+        const x = padding.left + i * xStep;
+        return (
+          <g key={`pts-${i}`}>
+            <circle cx={x} cy={padding.top + yScale(s.capacity)} r={3.5} fill={EXEC_ACCENT} stroke="#FFFFFF" strokeWidth={1.5} />
+            <circle cx={x} cy={padding.top + yScale(s.confirmedDemand + s.weightedPipeline)} r={3.5} fill="#161311" stroke="#FFFFFF" strokeWidth={1.5} />
+            <text
+              x={x}
+              y={H - 28}
+              textAnchor="middle"
+              style={{ fontSize: 10, fill: "#5A5754", fontWeight: 500 }}
+            >
+              {s.practice.length > 14 ? s.practice.slice(0, 12) + "…" : s.practice}
+            </text>
+            <text x={x} y={H - 12} textAnchor="middle" style={{ fontSize: 9, fill: "#9A9A9A" }}>
+              {RISK_TONES[s.risk].label}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+function PracticePie({ snapshots }: { snapshots: PracticeSnapshot[] }) {
+  const total = snapshots.reduce((s, p) => s + p.capacity, 0) || 1;
+  const cx = 180;
+  const cy = 180;
+  const r = 150;
+  const innerR = 80;
+  const palette = [
+    EXEC_ACCENT,
+    "#161311",
+    "#3D8A61",
+    "#B87A2E",
+    "#6B9FCC",
+    "#9B7BC9",
+    "#C4534A",
+    "#5A5754",
+  ];
+
+  let cursor = -Math.PI / 2;
+  const arcs = snapshots.map((s, i) => {
+    const sliceAngle = (s.capacity / total) * Math.PI * 2;
+    const start = cursor;
+    const end = cursor + sliceAngle;
+    cursor = end;
+    const x1 = cx + r * Math.cos(start);
+    const y1 = cy + r * Math.sin(start);
+    const x2 = cx + r * Math.cos(end);
+    const y2 = cy + r * Math.sin(end);
+    const xi1 = cx + innerR * Math.cos(end);
+    const yi1 = cy + innerR * Math.sin(end);
+    const xi2 = cx + innerR * Math.cos(start);
+    const yi2 = cy + innerR * Math.sin(start);
+    const largeArc = sliceAngle > Math.PI ? 1 : 0;
+    const path = `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} L ${xi1} ${yi1} A ${innerR} ${innerR} 0 ${largeArc} 0 ${xi2} ${yi2} Z`;
+    return {
+      path,
+      fill: palette[i % palette.length],
+      label: s.practice,
+      value: s.capacity,
+      pct: (s.capacity / total) * 100,
+    };
+  });
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "360px 1fr", gap: 32, alignItems: "center" }}>
+      <svg viewBox="0 0 360 360" style={{ width: "100%", height: "auto", maxWidth: 360 }}>
+        {arcs.map((a, i) => (
+          <path key={i} d={a.path} fill={a.fill} opacity={0.92} stroke="#FFFFFF" strokeWidth={2} />
+        ))}
+        <text x={cx} y={cy - 4} textAnchor="middle" className="font-display" style={{ fontSize: 22, fontWeight: 600, fill: EXEC_INK }}>
+          {total.toLocaleString()}d
+        </text>
+        <text x={cx} y={cy + 16} textAnchor="middle" style={{ fontSize: 11, fill: "#6F6B66", letterSpacing: "0.05em" }}>
+          Total capacity
+        </text>
+      </svg>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 10 }}>
+        {arcs.map((a, i) => (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 12.5 }}>
+            <span style={{ width: 12, height: 12, borderRadius: 3, background: a.fill, flexShrink: 0 }} />
+            <span style={{ color: EXEC_INK, fontWeight: 500, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {a.label}
+            </span>
+            <span style={{ color: "#6F6B66", fontVariantNumeric: "tabular-nums" }}>
+              {a.pct.toFixed(1)}%
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -540,6 +726,7 @@ function TimeSeriesChart({
   series: { week: string; capacity: number; confirmed: number; pipeline: number }[];
   horizonLabel: string;
 }) {
+  const [kind, setKind] = useState<ChartKind>("area");
   const W = 1200;
   const H = 280;
   const padding = { top: 24, right: 32, bottom: 36, left: 56 };
@@ -549,7 +736,7 @@ function TimeSeriesChart({
   const maxVal = Math.max(
     ...series.map((p) => Math.max(p.capacity, p.confirmed + p.pipeline)),
   );
-  const yScale = (v: number) => innerH - (v / maxVal) * innerH;
+  const yScale = (v: number) => innerH - (v / Math.max(maxVal, 1)) * innerH;
   const xStep = innerW / Math.max(series.length - 1, 1);
 
   const capacityPath = series
@@ -565,6 +752,11 @@ function TimeSeriesChart({
 
   const demandAreaPath =
     demandPath +
+    ` L ${padding.left + (series.length - 1) * xStep} ${padding.top + innerH}` +
+    ` L ${padding.left} ${padding.top + innerH} Z`;
+
+  const capacityAreaPath =
+    capacityPath +
     ` L ${padding.left + (series.length - 1) * xStep} ${padding.top + innerH}` +
     ` L ${padding.left} ${padding.top + innerH} Z`;
 
@@ -593,8 +785,19 @@ function TimeSeriesChart({
       >
         <Legend swatch={EXEC_ACCENT} label="Capacity (weekly cap)" />
         <Legend swatch="#161311" label="Demand (confirmed + weighted pipeline)" />
-        <div style={{ marginLeft: "auto", fontSize: 11, color: "#6F6B66" }}>
-          Aggregated across {series.length} {horizonLabel.toLowerCase().includes("day") ? "weeks" : "periods"} · {horizonLabel}
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 14 }}>
+          <span style={{ fontSize: 11, color: "#6F6B66" }}>
+            {series.length} {horizonLabel.toLowerCase().includes("day") ? "weeks" : "periods"} · {horizonLabel}
+          </span>
+          <ChartTypeToggle
+            value={kind}
+            onChange={setKind}
+            options={[
+              { key: "area", label: "Area", icon: ChartIcons.area },
+              { key: "line", label: "Line", icon: ChartIcons.line },
+              { key: "bar",  label: "Bar",  icon: ChartIcons.bar  },
+            ]}
+          />
         </div>
       </div>
 
@@ -638,20 +841,75 @@ function TimeSeriesChart({
           </text>
         ))}
 
-        <path d={demandAreaPath} fill={EXEC_ACCENT} opacity={0.06} />
-
-        <path d={capacityPath} fill="none" stroke={EXEC_ACCENT} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" opacity={0.9} />
-        <path d={demandPath} fill="none" stroke="#161311" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-
-        {series.map((p, i) => {
-          const x = padding.left + i * xStep;
+        {kind === "bar" && series.map((p, i) => {
+          const groupX = padding.left + i * xStep;
+          const barW = Math.min(18, (xStep - 8) / 2);
+          const capH = (p.capacity / Math.max(maxVal, 1)) * innerH;
+          const demH = ((p.confirmed + p.pipeline) / Math.max(maxVal, 1)) * innerH;
+          const confH = (p.confirmed / Math.max(maxVal, 1)) * innerH;
           return (
-            <g key={`pts-${i}`}>
-              <circle cx={x} cy={padding.top + yScale(p.capacity)} r={3.5} fill={EXEC_ACCENT} stroke="#FFFFFF" strokeWidth={1.5} />
-              <circle cx={x} cy={padding.top + yScale(p.confirmed + p.pipeline)} r={3.5} fill="#161311" stroke="#FFFFFF" strokeWidth={1.5} />
+            <g key={`bar-${i}`}>
+              <rect
+                x={groupX - barW - 1}
+                y={padding.top + innerH - capH}
+                width={barW}
+                height={capH}
+                fill={EXEC_ACCENT}
+                opacity={0.85}
+                rx={2}
+              />
+              <rect
+                x={groupX + 1}
+                y={padding.top + innerH - demH}
+                width={barW}
+                height={demH - confH}
+                fill="url(#dem-hatch)"
+                opacity={0.85}
+                rx={2}
+              />
+              <rect
+                x={groupX + 1}
+                y={padding.top + innerH - confH}
+                width={barW}
+                height={confH}
+                fill="#161311"
+                rx={2}
+              />
             </g>
           );
         })}
+
+        {kind === "bar" && (
+          <defs>
+            <pattern id="dem-hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+              <rect width="6" height="6" fill="#161311" opacity={0.4} />
+              <line x1="0" y1="0" x2="0" y2="6" stroke="#161311" strokeWidth="3" />
+            </pattern>
+          </defs>
+        )}
+
+        {kind === "area" && (
+          <>
+            <path d={demandAreaPath} fill={EXEC_ACCENT} opacity={0.06} />
+            <path d={capacityAreaPath} fill={EXEC_ACCENT} opacity={0.14} />
+          </>
+        )}
+
+        {(kind === "line" || kind === "area") && (
+          <>
+            <path d={capacityPath} fill="none" stroke={EXEC_ACCENT} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" opacity={0.9} />
+            <path d={demandPath} fill="none" stroke="#161311" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+            {series.map((p, i) => {
+              const x = padding.left + i * xStep;
+              return (
+                <g key={`pts-${i}`}>
+                  <circle cx={x} cy={padding.top + yScale(p.capacity)} r={3.5} fill={EXEC_ACCENT} stroke="#FFFFFF" strokeWidth={1.5} />
+                  <circle cx={x} cy={padding.top + yScale(p.confirmed + p.pipeline)} r={3.5} fill="#161311" stroke="#FFFFFF" strokeWidth={1.5} />
+                </g>
+              );
+            })}
+          </>
+        )}
       </svg>
     </div>
   );

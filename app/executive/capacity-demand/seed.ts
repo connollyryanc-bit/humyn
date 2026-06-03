@@ -42,6 +42,17 @@ export const practiceSnapshots: Record<HorizonKey, PracticeSnapshot[]> = {
     { practice: "Programme Delivery",    region: "Nordics", headcount: 21, capacity: 420,  confirmedDemand: 380, weightedPipeline: 90,  risk: "neutral",  note: "Spread across Klarna, Maersk, DSB, Carlsberg." },
     { practice: "Cloud & Architecture",  region: "Nordics", headcount: 26, capacity: 520,  confirmedDemand: 460, weightedPipeline: 120, risk: "neutral",  note: "Capacity covers Maersk + SAS discovery in parallel." },
     { practice: "Insights & Analytics",  region: "Nordics", headcount: 14, capacity: 280,  confirmedDemand: 180, weightedPipeline: 70,  risk: "positive", note: "Bench available. Could absorb a pitch quickly." },
+    // UK
+    { practice: "Engineering",           region: "UK",      headcount: 12, capacity: 240,  confirmedDemand: 220, weightedPipeline: 70,  risk: "neutral",  note: "Tesco loyalty rebuild on plan." },
+    { practice: "Data & AI",             region: "UK",      headcount: 8,  capacity: 160,  confirmedDemand: 180, weightedPipeline: 90,  risk: "warning",  note: "Lloyds discovery + Sainsbury's pilot overlap." },
+    { practice: "Cloud & Architecture",  region: "UK",      headcount: 6,  capacity: 120,  confirmedDemand: 100, weightedPipeline: 40,  risk: "neutral",  note: "Capacity holds for the Bupa migration." },
+    // DACH
+    { practice: "Engineering",           region: "DACH",    headcount: 8,  capacity: 160,  confirmedDemand: 120, weightedPipeline: 50,  risk: "positive", note: "Allianz claim platform staffed comfortably." },
+    { practice: "Strategy & Innovation", region: "DACH",    headcount: 5,  capacity: 100,  confirmedDemand: 80,  weightedPipeline: 30,  risk: "neutral",  note: "Siemens innovation lab on plan." },
+    { practice: "Cloud & Architecture",  region: "DACH",    headcount: 4,  capacity: 80,   confirmedDemand: 60,  weightedPipeline: 20,  risk: "positive", note: "Daimler integration work absorbed in plan." },
+    // France
+    { practice: "Strategy & Innovation", region: "France",  headcount: 5,  capacity: 100,  confirmedDemand: 70,  weightedPipeline: 25,  risk: "positive", note: "BNP Paribas discovery — early days, healthy headroom." },
+    { practice: "Service Design",        region: "France",  headcount: 4,  capacity: 80,   confirmedDemand: 50,  weightedPipeline: 20,  risk: "positive", note: "Capacity to take on one more brief." },
   ],
   "60d": [
     { practice: "Engineering",           region: "Nordics", headcount: 38, capacity: 1520, confirmedDemand: 1380, weightedPipeline: 280, risk: "neutral",  note: "Volvo Cars extension unstaffed lead — biggest single gap." },
@@ -52,6 +63,17 @@ export const practiceSnapshots: Record<HorizonKey, PracticeSnapshot[]> = {
     { practice: "Programme Delivery",    region: "Nordics", headcount: 21, capacity: 840,  confirmedDemand: 760,  weightedPipeline: 200, risk: "neutral",  note: "Healthy spread, no single brief at risk." },
     { practice: "Cloud & Architecture",  region: "Nordics", headcount: 26, capacity: 1040, confirmedDemand: 920,  weightedPipeline: 240, risk: "neutral",  note: "Maersk v3 + Telia migration sit comfortably." },
     { practice: "Insights & Analytics",  region: "Nordics", headcount: 14, capacity: 560,  confirmedDemand: 360,  weightedPipeline: 140, risk: "positive", note: "Persistent bench — candidates for cross-practice redeployment." },
+    // UK
+    { practice: "Engineering",           region: "UK",      headcount: 12, capacity: 480,  confirmedDemand: 420,  weightedPipeline: 140, risk: "neutral",  note: "Tesco loyalty extension + BarclaysAPI work both ramping." },
+    { practice: "Data & AI",             region: "UK",      headcount: 8,  capacity: 320,  confirmedDemand: 360,  weightedPipeline: 180, risk: "critical", note: "UK ML demand outstripping supply. Hire or partner needed." },
+    { practice: "Cloud & Architecture",  region: "UK",      headcount: 6,  capacity: 240,  confirmedDemand: 200,  weightedPipeline: 80,  risk: "neutral",  note: "Bupa migration on plan, room for one more." },
+    // DACH
+    { practice: "Engineering",           region: "DACH",    headcount: 8,  capacity: 320,  confirmedDemand: 240,  weightedPipeline: 100, risk: "positive", note: "Allianz claim platform + Siemens prototyping." },
+    { practice: "Strategy & Innovation", region: "DACH",    headcount: 5,  capacity: 200,  confirmedDemand: 160,  weightedPipeline: 60,  risk: "neutral",  note: "Capacity matches confirmed work; pipeline thin." },
+    { practice: "Cloud & Architecture",  region: "DACH",    headcount: 4,  capacity: 160,  confirmedDemand: 120,  weightedPipeline: 50,  risk: "positive", note: "Daimler integration work absorbed." },
+    // France
+    { practice: "Strategy & Innovation", region: "France",  headcount: 5,  capacity: 200,  confirmedDemand: 140,  weightedPipeline: 50,  risk: "positive", note: "BNP discovery progressing." },
+    { practice: "Service Design",        region: "France",  headcount: 4,  capacity: 160,  confirmedDemand: 100,  weightedPipeline: 40,  risk: "positive", note: "Healthy headroom — could pitch into French luxury." },
   ],
   "90d": [
     { practice: "Engineering",           region: "Nordics", headcount: 38, capacity: 2280, confirmedDemand: 1960, weightedPipeline: 580, risk: "warning",  note: "Volvo Cars lead unstaffed for 12 days. If pipeline lands, 260-day shortage." },
@@ -62,6 +84,17 @@ export const practiceSnapshots: Record<HorizonKey, PracticeSnapshot[]> = {
     { practice: "Programme Delivery",    region: "Nordics", headcount: 21, capacity: 1260, confirmedDemand: 1180, weightedPipeline: 240, risk: "neutral",  note: "On the edge. Adding one programme tips this into shortage." },
     { practice: "Cloud & Architecture",  region: "Nordics", headcount: 26, capacity: 1560, confirmedDemand: 1320, weightedPipeline: 380, risk: "neutral",  note: "Strong utilisation. Volvo Cars work adds 280-day need if confirmed." },
     { practice: "Insights & Analytics",  region: "Nordics", headcount: 14, capacity: 840,  confirmedDemand: 540,  weightedPipeline: 280, risk: "positive", note: "Persistent bench — Saga + Aksel free in July." },
+    // UK
+    { practice: "Engineering",           region: "UK",      headcount: 12, capacity: 720,  confirmedDemand: 620,  weightedPipeline: 220, risk: "neutral",  note: "Tesco extension confirmed; Barclays API discovery in proposal." },
+    { practice: "Data & AI",             region: "UK",      headcount: 8,  capacity: 480,  confirmedDemand: 540,  weightedPipeline: 260, risk: "critical", note: "UK is the second AI/ML shortage hotspot after Helsinki." },
+    { practice: "Cloud & Architecture",  region: "UK",      headcount: 6,  capacity: 360,  confirmedDemand: 300,  weightedPipeline: 130, risk: "neutral",  note: "Bupa migration steady; London commerce pitch could add 80 days." },
+    // DACH
+    { practice: "Engineering",           region: "DACH",    headcount: 8,  capacity: 480,  confirmedDemand: 380,  weightedPipeline: 160, risk: "positive", note: "Healthy. Allianz core + Siemens phase 2." },
+    { practice: "Strategy & Innovation", region: "DACH",    headcount: 5,  capacity: 300,  confirmedDemand: 240,  weightedPipeline: 90,  risk: "neutral",  note: "Siemens innovation lab continues; pipeline thinner." },
+    { practice: "Cloud & Architecture",  region: "DACH",    headcount: 4,  capacity: 240,  confirmedDemand: 180,  weightedPipeline: 70,  risk: "positive", note: "Daimler steady. Capacity for one more." },
+    // France
+    { practice: "Strategy & Innovation", region: "France",  headcount: 5,  capacity: 300,  confirmedDemand: 220,  weightedPipeline: 70,  risk: "positive", note: "BNP discovery confirmed; second French bank in pitch." },
+    { practice: "Service Design",        region: "France",  headcount: 4,  capacity: 240,  confirmedDemand: 180,  weightedPipeline: 60,  risk: "positive", note: "Underutilised — investment for growth opportunity." },
   ],
   "180d": [
     { practice: "Engineering",           region: "Nordics", headcount: 38, capacity: 4560, confirmedDemand: 3800, weightedPipeline: 1380, risk: "warning",  note: "Major Volvo + Storebrand phases overlap H2." },
@@ -72,6 +105,17 @@ export const practiceSnapshots: Record<HorizonKey, PracticeSnapshot[]> = {
     { practice: "Programme Delivery",    region: "Nordics", headcount: 21, capacity: 2520, confirmedDemand: 2320, weightedPipeline: 540,  risk: "warning",  note: "Tight margin in Q4 — adding programmes pushes shortage." },
     { practice: "Cloud & Architecture",  region: "Nordics", headcount: 26, capacity: 3120, confirmedDemand: 2680, weightedPipeline: 820,  risk: "neutral",  note: "Strong but contractor reliance creeping up — margin risk." },
     { practice: "Insights & Analytics",  region: "Nordics", headcount: 14, capacity: 1680, confirmedDemand: 1140, weightedPipeline: 580,  risk: "positive", note: "Capacity for one more major analytics engagement." },
+    // UK
+    { practice: "Engineering",           region: "UK",      headcount: 12, capacity: 1440, confirmedDemand: 1220, weightedPipeline: 460, risk: "neutral",  note: "H2 demand strong — Tesco + Barclays both extending." },
+    { practice: "Data & AI",             region: "UK",      headcount: 8,  capacity: 960,  confirmedDemand: 1100, weightedPipeline: 560, risk: "critical", note: "UK AI/ML structurally short. London hiring case strong." },
+    { practice: "Cloud & Architecture",  region: "UK",      headcount: 6,  capacity: 720,  confirmedDemand: 580,  weightedPipeline: 280, risk: "neutral",  note: "Bupa + new commerce pitches." },
+    // DACH
+    { practice: "Engineering",           region: "DACH",    headcount: 8,  capacity: 960,  confirmedDemand: 740,  weightedPipeline: 320, risk: "positive", note: "Healthy H2 across automotive and banking." },
+    { practice: "Strategy & Innovation", region: "DACH",    headcount: 5,  capacity: 600,  confirmedDemand: 480,  weightedPipeline: 180, risk: "neutral",  note: "Siemens phase 2 + BMW innovation lab pitch." },
+    { practice: "Cloud & Architecture",  region: "DACH",    headcount: 4,  capacity: 480,  confirmedDemand: 360,  weightedPipeline: 150, risk: "positive", note: "Daimler stable; capacity for second client." },
+    // France
+    { practice: "Strategy & Innovation", region: "France",  headcount: 5,  capacity: 600,  confirmedDemand: 440,  weightedPipeline: 160, risk: "positive", note: "Two French banks now in active engagement." },
+    { practice: "Service Design",        region: "France",  headcount: 4,  capacity: 480,  confirmedDemand: 360,  weightedPipeline: 140, risk: "positive", note: "Luxury and retail pitches building." },
   ],
   "365d": [
     { practice: "Engineering",           region: "Nordics", headcount: 38, capacity: 9240, confirmedDemand: 6800, weightedPipeline: 3100, risk: "neutral",  note: "Full-year picture balanced. Q4 is the pressure point." },
@@ -82,6 +126,17 @@ export const practiceSnapshots: Record<HorizonKey, PracticeSnapshot[]> = {
     { practice: "Programme Delivery",    region: "Nordics", headcount: 21, capacity: 5120, confirmedDemand: 4620, weightedPipeline: 1240, risk: "neutral",  note: "Margin tight but holds across the year." },
     { practice: "Cloud & Architecture",  region: "Nordics", headcount: 26, capacity: 6340, confirmedDemand: 5320, weightedPipeline: 1860, risk: "neutral",  note: "Strong year. Watch contractor blend on margin." },
     { practice: "Insights & Analytics",  region: "Nordics", headcount: 14, capacity: 3380, confirmedDemand: 2240, weightedPipeline: 1260, risk: "positive", note: "Capacity to absorb two more major engagements." },
+    // UK
+    { practice: "Engineering",           region: "UK",      headcount: 12, capacity: 2880, confirmedDemand: 2380, weightedPipeline: 940, risk: "neutral",  note: "UK Engineering full year — balanced." },
+    { practice: "Data & AI",             region: "UK",      headcount: 8,  capacity: 1920, confirmedDemand: 2180, weightedPipeline: 1080, risk: "critical", note: "Structural full-year shortage in UK. London hire decision Q3." },
+    { practice: "Cloud & Architecture",  region: "UK",      headcount: 6,  capacity: 1440, confirmedDemand: 1180, weightedPipeline: 540, risk: "neutral",  note: "Steady. Cross-skill opportunity with London engineering." },
+    // DACH
+    { practice: "Engineering",           region: "DACH",    headcount: 8,  capacity: 1920, confirmedDemand: 1480, weightedPipeline: 620, risk: "positive", note: "Allianz + BMW continue. Healthy headroom." },
+    { practice: "Strategy & Innovation", region: "DACH",    headcount: 5,  capacity: 1200, confirmedDemand: 980,  weightedPipeline: 380, risk: "neutral",  note: "Stable across the year." },
+    { practice: "Cloud & Architecture",  region: "DACH",    headcount: 4,  capacity: 960,  confirmedDemand: 740,  weightedPipeline: 300, risk: "positive", note: "Daimler + one new automotive client expected." },
+    // France
+    { practice: "Strategy & Innovation", region: "France",  headcount: 5,  capacity: 1200, confirmedDemand: 880,  weightedPipeline: 320, risk: "positive", note: "BNP + Société Générale forming the year's spine." },
+    { practice: "Service Design",        region: "France",  headcount: 4,  capacity: 960,  confirmedDemand: 720,  weightedPipeline: 280, risk: "positive", note: "Two new accounts; capability scaling steadily." },
   ],
 };
 

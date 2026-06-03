@@ -14,6 +14,8 @@ import {
   ScenarioKey,
   scenarios,
 } from "./seed";
+import { ScopeBreadcrumb } from "../scope-breadcrumb";
+import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -43,6 +45,7 @@ const CATEGORY_LABELS: Record<Scenario["category"], { label: string; color: stri
 export default function ScenariosPage() {
   const [selectedKey, setSelectedKey] = useState<ScenarioKey>(scenarios[0].key);
   const selected = scenarios.find((s) => s.key === selectedKey)!;
+  const { scope } = useExecutiveScope();
 
   const [inputs, setInputs] = useState<Record<string, number>>(
     Object.fromEntries(selected.inputs.map((i) => [i.key, i.defaultValue])),
@@ -97,7 +100,17 @@ export default function ScenariosPage() {
             What-if simulator. Pick a scenario, adjust the inputs, see projected impact across
             financial, capacity, delivery and skill dimensions. Every projection runs live against
             current baseline numbers.
+            {!scopeIsRoot(scope) && (
+              <>
+                {" "}
+                Baselines from <strong style={{ color: EXEC_INK }}>{describeScope(scope)}</strong>.
+              </>
+            )}
           </p>
+        </section>
+
+        <section style={{ marginBottom: 24 }}>
+          <ScopeBreadcrumb />
         </section>
 
         <section

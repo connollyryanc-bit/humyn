@@ -14,6 +14,8 @@ import {
   executiveScope,
   ExecutiveKpi,
 } from "./seed";
+import { ScopeBreadcrumb } from "./scope-breadcrumb";
+import { describeScope, useExecutiveScope } from "./scope-context";
 
 interface LiveExecutiveRead {
   paragraphs: string[];
@@ -30,6 +32,7 @@ const EXEC_INK_SECONDARY = "#3A3633";
 
 export default function ExecutivePage() {
   const [region, setRegion] = useState<Region>("Europe");
+  const { scope } = useExecutiveScope();
   const [liveRead, setLiveRead] = useState<LiveExecutiveRead | null>(null);
   const [loadingRead, setLoadingRead] = useState<boolean>(true);
 
@@ -81,7 +84,7 @@ export default function ExecutivePage() {
       />
 
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 32px 80px" }}>
-        <section style={{ marginBottom: 44 }}>
+        <section style={{ marginBottom: 28 }}>
           <div
             style={{
               fontSize: 11,
@@ -91,7 +94,7 @@ export default function ExecutivePage() {
               fontWeight: 600,
             }}
           >
-            Executive · Workforce intelligence · {region}
+            Executive · Workforce intelligence · {describeScope(scope)}
           </div>
           <h1
             className="font-display"
@@ -107,7 +110,9 @@ export default function ExecutivePage() {
           >
             Strategic workforce intelligence
             <br />
-            for the {region.toLowerCase()} practice.
+            for {scope.practice
+              ? `${scope.practice} across ${scope.market ?? scope.region}`
+              : `the ${(scope.market ?? scope.region).toLowerCase()} practice`}.
           </h1>
           <p
             style={{
@@ -122,6 +127,10 @@ export default function ExecutivePage() {
             {executiveScope.practices} practices, delivering {executiveScope.revenue}. Drill down
             to country, practice, team or individual — every KPI updates as you go.
           </p>
+        </section>
+
+        <section style={{ marginBottom: 44 }}>
+          <ScopeBreadcrumb />
         </section>
 
         <section style={{ marginBottom: 44 }}>

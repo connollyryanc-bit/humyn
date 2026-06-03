@@ -14,6 +14,8 @@ import {
   teamHealthAiInsights,
   teamHealthSnapshots,
 } from "./seed";
+import { ScopeBreadcrumb } from "../scope-breadcrumb";
+import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -34,17 +36,25 @@ const HEALTH_DIMENSIONS: { key: keyof TeamHealthSnapshot; label: string }[] = [
 ];
 
 export default function TeamHealthPage() {
+  const { scope } = useExecutiveScope();
+  const filteredTeams = useMemo(
+    () => (scope.market ? teamHealthSnapshots.filter((t) => t.market === scope.market) : teamHealthSnapshots),
+    [scope.market],
+  );
+
   const totals = useMemo(() => {
-    const elevatedOrCritical = teamHealthSnapshots.filter(
+    const elevatedOrCritical = filteredTeams.filter(
       (t) => t.composite === "elevated" || t.composite === "critical",
     ).length;
-    const burnoutFlags = teamHealthSnapshots.filter(
+    const burnoutFlags = filteredTeams.filter(
       (t) => t.burnoutRisk === "elevated" || t.burnoutRisk === "critical",
     ).length;
-    const avgUtilisation = teamHealthSnapshots.reduce((s, t) => s + t.utilisation, 0) / teamHealthSnapshots.length;
-    const teamsAt95Plus = teamHealthSnapshots.filter((t) => t.weeksAbove95 >= 4).length;
+    const avgUtilisation = filteredTeams.length
+      ? filteredTeams.reduce((s, t) => s + t.utilisation, 0) / filteredTeams.length
+      : 0;
+    const teamsAt95Plus = filteredTeams.filter((t) => t.weeksAbove95 >= 4).length;
     return { elevatedOrCritical, burnoutFlags, avgUtilisation, teamsAt95Plus };
-  }, []);
+  }, [filteredTeams]);
 
   return (
     <div
@@ -75,7 +85,17 @@ export default function TeamHealthPage() {
             Humyn intelligence applied to delivery risk. Burnout, leadership balance, communication
             friction, change readiness — surfaced as supporting context for operational signals,
             never as the primary lens.
+            {!scopeIsRoot(scope) && (
+              <>
+                {" "}
+                Filtered to <strong style={{ color: EXEC_INK }}>{describeScope(scope)}</strong>.
+              </>
+            )}
           </p>
+        </section>
+
+        <section style={{ marginBottom: 24 }}>
+          <ScopeBreadcrumb />
         </section>
 
         <section style={{ marginBottom: 36 }}>
@@ -100,7 +120,7 @@ export default function TeamHealthPage() {
 
         <section style={{ marginBottom: 44 }}>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: 14 }}>
-            <HeroStat label="Teams at elevated risk" value={String(totals.elevatedOrCritical)} detail={`Out of ${teamHealthSnapshots.length} active teams`} tone={totals.elevatedOrCritical >= 2 ? "warning" : "neutral"} />
+            <HeroStat label="Teams at elevated risk" value={String(totals.elevatedOrCritical)} detail={`Out of ${filteredTeams.length} active team${filteredTeams.length === 1 ? "" : "s"}`} tone={totals.elevatedOrCritical >= 2 ? "warning" : "neutral"} />
             <HeroStat label="Burnout flags" value={String(totals.burnoutFlags)} detail="Individuals flagged above utilisation threshold" tone={totals.burnoutFlags >= 1 ? "critical" : "neutral"} />
             <HeroStat label="Avg utilisation" value={`${Math.round(totals.avgUtilisation)}%`} detail="Across active engagements" tone={totals.avgUtilisation >= 85 ? "warning" : "neutral"} />
             <HeroStat label="Teams >95% for 4+ weeks" value={String(totals.teamsAt95Plus)} detail="Persistent overrun threshold" tone={totals.teamsAt95Plus >= 1 ? "warning" : "positive"} />
@@ -109,13 +129,13 @@ export default function TeamHealthPage() {
 
         <section style={{ marginBottom: 44 }}>
           <SectionLabel>Team health matrix</SectionLabel>
-          <TeamMatrix snapshots={teamHealthSnapshots} />
+          <TeamMatrix snapshots={filteredTeams} />
         </section>
 
         <section style={{ marginBottom: 44 }}>
           <SectionLabel>Team narratives</SectionLabel>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {teamHealthSnapshots.map((t) => (
+            {filteredTeams.map((t) => (
               <TeamCard key={t.team} snapshot={t} />
             ))}
           </div>

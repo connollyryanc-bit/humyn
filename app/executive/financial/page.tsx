@@ -17,6 +17,8 @@ import {
   quarterlyTrend,
   regions,
 } from "./seed";
+import { ScopeBreadcrumb } from "../scope-breadcrumb";
+import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -29,6 +31,7 @@ function fmtEur(value: number, opts?: { precise?: boolean }): string {
 }
 
 export default function FinancialWorkforcePage() {
+  const { scope } = useExecutiveScope();
   const totals = useMemo(() => {
     const totalHeadcount = regions.reduce((s, r) => s + r.headcount, 0);
     const totalRevenue = regions.reduce((s, r) => s + r.revenuePerEmployee * r.headcount, 0);
@@ -66,7 +69,18 @@ export default function FinancialWorkforcePage() {
           <p style={{ fontSize: 15, color: EXEC_INK_SECONDARY, maxWidth: 760, lineHeight: 1.7, margin: 0 }}>
             The CFO view. Revenue per employee, gross-profit per employee, margin by region and
             practice, cost by skill group. The workforce profile behind the P&L.
+            {!scopeIsRoot(scope) && (
+              <>
+                {" "}
+                Showing highlights for{" "}
+                <strong style={{ color: EXEC_INK }}>{describeScope(scope)}</strong>.
+              </>
+            )}
           </p>
+        </section>
+
+        <section style={{ marginBottom: 24 }}>
+          <ScopeBreadcrumb />
         </section>
 
         <section style={{ marginBottom: 44 }}>
@@ -85,12 +99,12 @@ export default function FinancialWorkforcePage() {
 
         <section style={{ marginBottom: 44 }}>
           <SectionLabel>By region</SectionLabel>
-          <ScopeTable rows={regions} label="Region" />
+          <ScopeTable rows={regions} label="Region" highlight={scope.market} />
         </section>
 
         <section style={{ marginBottom: 44 }}>
           <SectionLabel>By practice</SectionLabel>
-          <ScopeTable rows={practices} label="Practice" />
+          <ScopeTable rows={practices} label="Practice" highlight={scope.practice} />
         </section>
 
         <section style={{ marginBottom: 44 }}>
@@ -211,7 +225,7 @@ function QuarterlyTrend() {
   );
 }
 
-function ScopeTable({ rows, label }: { rows: PerEmployee[]; label: string }) {
+function ScopeTable({ rows, label, highlight }: { rows: PerEmployee[]; label: string; highlight?: string }) {
   const maxRev = Math.max(...rows.map((r) => r.revenuePerEmployee));
   return (
     <div style={{ background: "#FFFFFF", border: "0.5px solid rgba(0,0,0,0.07)", borderRadius: 14, overflow: "hidden" }}>
@@ -243,6 +257,7 @@ function ScopeTable({ rows, label }: { rows: PerEmployee[]; label: string }) {
           r.marginPct >= 35 ? "#3D8A61" : r.marginPct >= 32 ? "#B87A2E" : "#C4534A";
         const utilTone =
           r.utilisationPct >= 80 ? "#3D8A61" : r.utilisationPct >= 73 ? "#B87A2E" : "#C4534A";
+        const isHighlighted = highlight === r.scope;
         return (
           <div
             key={r.scope}
@@ -255,6 +270,9 @@ function ScopeTable({ rows, label }: { rows: PerEmployee[]; label: string }) {
               alignItems: "center",
               fontSize: 13,
               color: EXEC_INK,
+              background: isHighlighted ? `${EXEC_ACCENT}10` : "transparent",
+              borderLeft: isHighlighted ? `3px solid ${EXEC_ACCENT}` : "3px solid transparent",
+              transition: "background 0.2s ease",
             }}
           >
             <div style={{ fontWeight: 600 }}>{r.scope}</div>

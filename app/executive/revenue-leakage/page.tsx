@@ -15,6 +15,8 @@ import {
   leakageItems,
   monthlyLeakage,
 } from "./seed";
+import { ScopeBreadcrumb } from "../scope-breadcrumb";
+import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -27,6 +29,7 @@ function fmtEur(value: number): string {
 }
 
 export default function RevenueLeakagePage() {
+  const { scope } = useExecutiveScope();
   const totals = useMemo(() => {
     const total = leakageItems.reduce((s, i) => s + i.costEur, 0);
     const recoverable = leakageItems.reduce(
@@ -100,7 +103,17 @@ export default function RevenueLeakagePage() {
             Where workforce capacity isn&apos;t converting to revenue. Bench days, sub-utilisation,
             scope absorption, contractor over-spend, lost pitches, rate-card erosion — six leakage
             streams, year-to-date.
+            {!scopeIsRoot(scope) && (
+              <>
+                {" "}
+                Context: <strong style={{ color: EXEC_INK }}>{describeScope(scope)}</strong>.
+              </>
+            )}
           </p>
+        </section>
+
+        <section style={{ marginBottom: 24 }}>
+          <ScopeBreadcrumb />
         </section>
 
         <section style={{ marginBottom: 44 }}>

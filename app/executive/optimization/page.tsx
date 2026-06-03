@@ -16,6 +16,8 @@ import {
   optimizationAiInsights,
   tierMeta,
 } from "./seed";
+import { ScopeBreadcrumb } from "../scope-breadcrumb";
+import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -35,9 +37,20 @@ export default function OptimizationPage() {
   // showAi reserved for future toggle; suppress unused warning
   void showAi;
   void setShowAi;
+  const { scope } = useExecutiveScope();
 
   const actions = useMemo(() => {
-    const list = tierFilter === "all" ? optimizationActions : optimizationActions.filter((a) => a.tier === tierFilter);
+    let list = tierFilter === "all" ? optimizationActions : optimizationActions.filter((a) => a.tier === tierFilter);
+    if (scope.practice) {
+      list = list.filter((a) =>
+        a.affects.some((aff) => aff.toLowerCase().includes((scope.practice ?? "").toLowerCase())),
+      );
+    }
+    if (scope.market) {
+      list = list.filter((a) =>
+        a.affects.some((aff) => aff.toLowerCase().includes((scope.market ?? "").toLowerCase())),
+      );
+    }
     return [...list].sort((a, b) => {
       // Sort by tier first (internal → partner → hire), then by impact/cost efficiency
       const tierOrder: Record<ActionTier, number> = { internal: 0, partner: 1, hire: 2 };
@@ -46,7 +59,7 @@ export default function OptimizationPage() {
       const bEff = b.costEur === 0 ? Infinity : b.impactEur / b.costEur;
       return bEff - aEff;
     });
-  }, [tierFilter]);
+  }, [tierFilter, scope]);
 
   const totals = useMemo(() => {
     const totalImpact = actions.reduce((s, a) => s + a.impactEur, 0);
@@ -119,7 +132,17 @@ export default function OptimizationPage() {
             <em style={{ fontStyle: "italic", color: EXEC_INK }}> before</em> recommending any
             hiring or workforce reduction. Every recommendation carries impact, cost, risk,
             time-to-value and a confidence score.
+            {!scopeIsRoot(scope) && (
+              <>
+                {" "}
+                Filtered to <strong style={{ color: EXEC_INK }}>{describeScope(scope)}</strong>.
+              </>
+            )}
           </p>
+        </section>
+
+        <section style={{ marginBottom: 24 }}>
+          <ScopeBreadcrumb />
         </section>
 
         <section style={{ marginBottom: 36 }}>

@@ -16,6 +16,8 @@ import {
   opportunities,
   pipelineAiInsights,
 } from "./seed";
+import { ScopeBreadcrumb } from "../scope-breadcrumb";
+import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -41,18 +43,22 @@ type StageFilter = "all" | "active" | "closing";
 
 export default function PipelineReadinessPage() {
   const [stageFilter, setStageFilter] = useState<StageFilter>("active");
+  const { scope } = useExecutiveScope();
 
   const filtered = useMemo(() => {
-    if (stageFilter === "all") return opportunities;
-    if (stageFilter === "closing") {
-      return opportunities.filter(
-        (o) => o.stage === "proposed" || o.stage === "negotiation",
-      );
+    let list = opportunities;
+    if (stageFilter === "all") {
+      // no stage filter
+    } else if (stageFilter === "closing") {
+      list = list.filter((o) => o.stage === "proposed" || o.stage === "negotiation");
+    } else {
+      list = list.filter((o) => o.stage !== "closed-won" && o.stage !== "closed-lost");
     }
-    return opportunities.filter(
-      (o) => o.stage !== "closed-won" && o.stage !== "closed-lost",
-    );
-  }, [stageFilter]);
+    // Scope filtering
+    if (scope.market) list = list.filter((o) => o.market === scope.market);
+    if (scope.practice) list = list.filter((o) => o.practice === scope.practice);
+    return list;
+  }, [stageFilter, scope]);
 
   const totals = useMemo(() => {
     const totalCount = filtered.length;
@@ -131,7 +137,17 @@ export default function PipelineReadinessPage() {
             Every opportunity, scored on whether we can actually deliver it. Win probability,
             required skills, FTE need, and a delivery-readiness score that says whether the team
             exists to staff the work.
+            {!scopeIsRoot(scope) && (
+              <>
+                {" "}
+                Filtered to <strong style={{ color: EXEC_INK }}>{describeScope(scope)}</strong>.
+              </>
+            )}
           </p>
+        </section>
+
+        <section style={{ marginBottom: 24 }}>
+          <ScopeBreadcrumb />
         </section>
 
         <section style={{ marginBottom: 32 }}>

@@ -17,6 +17,8 @@ import {
   practiceSnapshots,
   timeSeries,
 } from "./seed";
+import { ScopeBreadcrumb } from "../scope-breadcrumb";
+import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -31,8 +33,16 @@ const RISK_TONES: Record<RiskLevel, { color: string; bg: string; border: string;
 
 export default function CapacityDemandPage() {
   const [horizon, setHorizon] = useState<HorizonKey>("90d");
+  const { scope } = useExecutiveScope();
 
-  const snapshots = practiceSnapshots[horizon];
+  const allSnapshots = practiceSnapshots[horizon];
+  const snapshots = useMemo(
+    () =>
+      scope.practice
+        ? allSnapshots.filter((s) => s.practice === scope.practice)
+        : allSnapshots,
+    [allSnapshots, scope.practice],
+  );
   const series = timeSeries[horizon];
 
   const totals = useMemo(() => {
@@ -108,7 +118,17 @@ export default function CapacityDemandPage() {
           >
             Workforce supply against current and forecast demand across the eight Nordic practices.
             Switch horizons to see how the picture changes over 30, 60, 90, 180 and 365 days.
+            {!scopeIsRoot(scope) && (
+              <>
+                {" "}
+                Filtered to <strong style={{ color: EXEC_INK }}>{describeScope(scope)}</strong>.
+              </>
+            )}
           </p>
+        </section>
+
+        <section style={{ marginBottom: 24 }}>
+          <ScopeBreadcrumb />
         </section>
 
         <section style={{ marginBottom: 36 }}>

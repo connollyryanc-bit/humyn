@@ -13,6 +13,8 @@ import {
   skills,
   skillsAiInsights,
 } from "./seed";
+import { ScopeBreadcrumb } from "../scope-breadcrumb";
+import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -28,6 +30,7 @@ const HORIZONS: { key: HorizonKey; label: string; field: keyof Pick<Skill, "dema
 
 export default function SkillsIntelligencePage() {
   const [horizon, setHorizon] = useState<HorizonKey>("12m");
+  const { scope } = useExecutiveScope();
   const horizonMeta = HORIZONS.find((h) => h.key === horizon)!;
 
   const enriched = useMemo(() => {
@@ -93,7 +96,17 @@ export default function SkillsIntelligencePage() {
             Current capability inventory against forecast demand at 6, 12 and 24 months.
             Where the gaps are widening, which skills are declining, and which adjacencies make
             upskilling cheaper than hiring.
+            {!scopeIsRoot(scope) && (
+              <>
+                {" "}
+                Context: <strong style={{ color: EXEC_INK }}>{describeScope(scope)}</strong>.
+              </>
+            )}
           </p>
+        </section>
+
+        <section style={{ marginBottom: 24 }}>
+          <ScopeBreadcrumb />
         </section>
 
         <section style={{ marginBottom: 32 }}>

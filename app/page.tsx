@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { fetchAllPeople } from "./lib/api-client";
 import { ENVIRONMENT_SURFACES, TopChrome } from "./components/top-chrome";
+import { RoleGate, canSeeDayRate } from "./components/role-context";
 import {
   AvailKey,
   EnergyKey,
@@ -327,21 +328,23 @@ function PersonCard({
             {person.clients}
           </div>
         </div>
-        <div>
-          <div
-            style={{
-              fontSize: 10,
-              color: "#9A9A9A",
-              textTransform: "uppercase",
-              letterSpacing: "0.06em",
-            }}
-          >
-            Revenue
+        <RoleGate can={canSeeDayRate}>
+          <div>
+            <div
+              style={{
+                fontSize: 10,
+                color: "#9A9A9A",
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+              }}
+            >
+              Revenue
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#1A1A1A", marginTop: 2 }}>
+              {person.revenue}
+            </div>
           </div>
-          <div style={{ fontSize: 14, fontWeight: 600, color: "#1A1A1A", marginTop: 2 }}>
-            {person.revenue}
-          </div>
-        </div>
+        </RoleGate>
       </div>
 
       <div style={{ display: "flex", gap: 8 }}>

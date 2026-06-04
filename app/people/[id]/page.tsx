@@ -15,6 +15,7 @@ import {
 import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
 import { fetchPerson } from "../../lib/api-client";
 import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
+import { RoleGate, canSeeDayRate } from "../../components/role-context";
 
 type TabKey = "overview" | "personality" | "engage" | "achievements";
 
@@ -378,7 +379,9 @@ export default function PersonProfilePage() {
               color={tone.color}
             />
             <HeaderStat label="Active clients" value={String(person.clients)} />
-            <HeaderStat label="Revenue (12 mo)" value={person.revenue} />
+            <RoleGate can={canSeeDayRate}>
+              <HeaderStat label="Revenue (12 mo)" value={person.revenue} />
+            </RoleGate>
             <HeaderStat label="Availability" value={availability[person.available].label} />
           </div>
         </section>

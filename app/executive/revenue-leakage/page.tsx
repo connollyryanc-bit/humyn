@@ -18,6 +18,8 @@ import {
 import { ScopeBreadcrumb } from "../scope-breadcrumb";
 import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 import { ChartIcons, ChartKind, ChartTypeToggle } from "../components/chart-toggle";
+import { canSeeFinancials, useRole } from "../../components/role-context";
+import { RestrictedPage } from "../../components/restricted";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -31,6 +33,8 @@ function fmtEur(value: number): string {
 
 export default function RevenueLeakagePage() {
   const { scope } = useExecutiveScope();
+  const { role, ready } = useRole();
+  const restricted = ready && !canSeeFinancials(role);
   const totals = useMemo(() => {
     const total = leakageItems.reduce((s, i) => s + i.costEur, 0);
     const recoverable = leakageItems.reduce(
@@ -41,6 +45,21 @@ export default function RevenueLeakagePage() {
     const fastestGrowing = [...leakageItems].sort((a, b) => b.changePct - a.changePct)[0];
     return { total, recoverable, biggest, fastestGrowing };
   }, []);
+
+  if (restricted) {
+    return (
+      <RestrictedPage
+        env="executive"
+        currentPath="/executive/revenue-leakage"
+        module="Executive · Module 3"
+        title="Revenue Leakage"
+        reason="Leakage figures show where money is being lost across the practice. Reserved for the C-suite and Admin."
+        requiredRoles={["c-suite", "admin"]}
+        backHref="/executive"
+        backLabel="Executive home"
+      />
+    );
+  }
 
   return (
     <div

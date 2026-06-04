@@ -9,6 +9,8 @@ import {
   deleteRateCardViaApi,
 } from "../../lib/api-client";
 import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
+import { canEditRateCard, useRole } from "../../components/role-context";
+import { RestrictedPage } from "../../components/restricted";
 
 const MARKETS = ["Stockholm", "Oslo", "Copenhagen", "Helsinki"] as const;
 
@@ -129,6 +131,8 @@ function RateCell({
 }
 
 export default function RateCardPage() {
+  const { role, ready } = useRole();
+  const restricted = ready && !canEditRateCard(role);
   const [cards, setCards] = useState<RateCardRow[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string>("");
@@ -211,6 +215,21 @@ export default function RateCardPage() {
     }
     setCards((prev) =>
       prev.filter((c) => !(c.roleBand === roleBand && c.seniority === seniority)),
+    );
+  }
+
+  if (restricted) {
+    return (
+      <RestrictedPage
+        env="compass"
+        currentPath="/settings/rate-card"
+        module="Settings"
+        title="Rate card"
+        reason="Rate-card editing is restricted to Admin. The card values still drive Capacity, Financial Workforce and other modules for users who can see them."
+        requiredRoles={["admin"]}
+        backHref="/capacity"
+        backLabel="Capacity"
+      />
     );
   }
 

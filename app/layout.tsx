@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RoleProvider } from "./components/role-context";
 import { sons, valtechNeue } from "./fonts";
 import "./globals.css";
 
@@ -14,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${valtechNeue.variable} ${sons.variable}`}>
-      <body>{children}</body>
+      <body>
+        <RoleProvider>{children}</RoleProvider>
+      </body>
     </html>
   );
 }

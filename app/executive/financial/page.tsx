@@ -21,6 +21,8 @@ import {
 import { ScopeBreadcrumb } from "../scope-breadcrumb";
 import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 import { ChartIcons, ChartKind, ChartTypeToggle } from "../components/chart-toggle";
+import { canSeeFinancials, useRole } from "../../components/role-context";
+import { RestrictedPage } from "../../components/restricted";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
 const EXEC_INK = "#161311";
@@ -34,6 +36,9 @@ function fmtEur(value: number, opts?: { precise?: boolean }): string {
 
 export default function FinancialWorkforcePage() {
   const { scope } = useExecutiveScope();
+  const { role, ready } = useRole();
+  const restricted = ready && !canSeeFinancials(role);
+
   const filteredRegions = useMemo(
     () => (scope.region !== "Europe" ? regions.filter((r) => r.scope === scope.region) : regions),
     [scope.region],
@@ -56,6 +61,21 @@ export default function FinancialWorkforcePage() {
     const revPerEmployee = totalRevenue / totalHeadcount;
     return { totalHeadcount, totalRevenue, totalProfit, blendedMargin, revPerEmployee };
   }, [filteredRegions]);
+
+  if (restricted) {
+    return (
+      <RestrictedPage
+        env="executive"
+        currentPath="/executive/financial"
+        module="Executive · Module 6"
+        title="Financial Workforce"
+        reason="Per-employee revenue, gross-profit and margin data are reserved for the C-suite and Admin. Switch to an authorised role to view this module."
+        requiredRoles={["c-suite", "admin"]}
+        backHref="/executive"
+        backLabel="Executive home"
+      />
+    );
+  }
 
   return (
     <div

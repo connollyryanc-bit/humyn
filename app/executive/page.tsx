@@ -18,6 +18,8 @@ import {
 } from "./seed";
 import { ScopeBreadcrumb } from "./scope-breadcrumb";
 import { describeScope, useExecutiveScope } from "./scope-context";
+import { canAccessExecutive, useRole } from "../components/role-context";
+import { RestrictedPage } from "../components/restricted";
 
 interface LiveExecutiveRead {
   paragraphs: string[];
@@ -35,6 +37,8 @@ const EXEC_INK_SECONDARY = "#3A3633";
 export default function ExecutivePage() {
   const [region, setRegion] = useState<Region>("Europe");
   const { scope } = useExecutiveScope();
+  const { role, ready } = useRole();
+  const restricted = ready && !canAccessExecutive(role);
   const [liveRead, setLiveRead] = useState<LiveExecutiveRead | null>(null);
   const [loadingRead, setLoadingRead] = useState<boolean>(true);
 
@@ -71,6 +75,21 @@ export default function ExecutivePage() {
     : aiExecutiveRead.generatedAt;
   const source = liveRead?.source ?? aiExecutiveRead.source;
   const isLiveClaude = source === "claude";
+
+  if (restricted) {
+    return (
+      <RestrictedPage
+        env="executive"
+        currentPath="/executive"
+        module="Executive · Workforce intelligence"
+        title="Executive Workforce Intelligence"
+        reason="The executive environment is reserved for the C-suite and Admin. It surfaces firm-wide financial, workforce and strategic data that's outside the scope of operational roles."
+        requiredRoles={["c-suite", "admin"]}
+        backHref="/"
+        backLabel="Back to People"
+      />
+    );
+  }
 
   return (
     <div

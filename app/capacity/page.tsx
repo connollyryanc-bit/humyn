@@ -15,6 +15,7 @@ import {
 } from "../lib/capacity-data";
 import { fetchEnrichedPeople } from "../lib/api-client";
 import { ENVIRONMENT_SURFACES, TopChrome } from "../components/top-chrome";
+import { RoleGate, canSeeCosts } from "../components/role-context";
 
 function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
@@ -713,12 +714,24 @@ export default function CapacityPage() {
             detail={`${benchPeople.reduce((s, p) => s + p.capacity.benchDays, 0)} days combined`}
             tone={{ color: "#8B5A00", bg: "#FFFBF2", border: "#FAD98A" }}
           />
-          <StatCard
-            label="Revenue at risk"
-            value={formatEuros(revenueAtRisk)}
-            detail="3-month exposure"
-            tone={{ color: "#9B2A1A", bg: "#FDF0EE", border: "#FCCDC6" }}
-          />
+          <RoleGate
+            can={canSeeCosts}
+            fallback={
+              <StatCard
+                label="Revenue at risk"
+                value="—"
+                detail="Restricted to capacity manager + above"
+                tone={{ color: "#9A9A9A", bg: "#FAFAF8", border: "rgba(0,0,0,0.06)" }}
+              />
+            }
+          >
+            <StatCard
+              label="Revenue at risk"
+              value={formatEuros(revenueAtRisk)}
+              detail="3-month exposure"
+              tone={{ color: "#9B2A1A", bg: "#FDF0EE", border: "#FCCDC6" }}
+            />
+          </RoleGate>
         </div>
 
         <div
@@ -837,6 +850,27 @@ export default function CapacityPage() {
               </div>
             </Card>
 
+            <RoleGate
+              can={canSeeCosts}
+              fallback={
+                <Card>
+                  <SectionLabel>Cost of losing a consultant</SectionLabel>
+                  <div
+                    style={{
+                      padding: "16px 14px",
+                      background: "#FAFAF8",
+                      border: "0.5px solid rgba(0,0,0,0.07)",
+                      borderRadius: 10,
+                      fontSize: 12,
+                      color: "#5A5754",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Cost details are restricted to Capacity Manager, C-suite and Admin roles.
+                  </div>
+                </Card>
+              }
+            >
             <Card>
               <SectionLabel>Cost of losing a consultant</SectionLabel>
               {flightRisks.length === 0 ? (
@@ -952,6 +986,7 @@ export default function CapacityPage() {
                 </>
               )}
             </Card>
+            </RoleGate>
           </div>
         </div>
 

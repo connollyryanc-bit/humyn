@@ -1064,7 +1064,7 @@ export default function PeoplePage() {
                 fontWeight: 400,
               }}
             >
-              Pulse · Valtech Nordic
+              Pulse · Inceptions
             </div>
             <h1
               className="font-display"

@@ -5,7 +5,7 @@ import { PersonWithCapacity } from "../../../lib/capacity-data";
 
 export const runtime = "nodejs";
 
-const SYSTEM_PROMPT = `You are the Humyn Pulse team-composition AI for Valtech Nordic.
+const SYSTEM_PROMPT = `You are the Humyn Pulse team-composition AI for Inceptions.
 A capacity manager gives you an inbound brief / RFP and your job is to propose
 three distinct, named team options drawn ONLY from the consultant pool provided
 below. The capacity manager will choose one to take to client.

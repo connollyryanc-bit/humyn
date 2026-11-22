@@ -517,7 +517,7 @@ export default function BoardPage() {
             Board dashboard
           </h1>
           <div style={{ fontSize: 14, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.65 }}>
-            A 90-second read of where Valtech Nordic stands this week — strategic posture,
+            A 90-second read of where Inceptions stands this week — strategic posture,
             financial exposure, capacity, and the Pulse Map of the workforce. Names are masked by
             default; toggle &ldquo;Show names&rdquo; for the operating team review.
           </div>
@@ -693,7 +693,7 @@ export default function BoardPage() {
                         {energy[metrics.orgDominant].label}
                       </span>{" "}
                       ({metrics.orgEnergies[metrics.orgDominant]}%) across {enriched.length}{" "}
-                      consultants. The Pulse posture below shows the energy mix Valtech Nordic
+                      consultants. The Pulse posture below shows the energy mix Inceptions
                       brings to client engagements.
                     </div>
                   </div>

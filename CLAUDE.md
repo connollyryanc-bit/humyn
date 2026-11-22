@@ -6,7 +6,7 @@ Always read this file before making any changes to the project.
 
 ## What is Humyn?
 
-Humyn is a people intelligence platform built for Valtech Nordic. It is a proprietary alternative to Crystal Knows and Teamtailor — built from scratch, owned entirely by Valtech.
+Humyn is a people intelligence platform built for Inceptions. It is a proprietary alternative to Crystal Knows and Teamtailor — built from scratch, owned entirely by Inceptions.
 
 The platform has three stages:
 - **Stage 1 — Pulse**: Personality profiling and people intelligence (current build)
@@ -87,7 +87,7 @@ Wheel positions — eight positions across the four quadrants:
 - Blue/Red mix → "Driving Analyst" or "Analytical Driver"
 
 ### Valtech Brand Palette (chrome + surfaces)
-Humyn lives inside Valtech Nordic. Chrome (nav, buttons, surfaces, accents) follows the
+Humyn is built for Inceptions. Chrome (nav, buttons, surfaces, accents) follows the
 Valtech brand guidelines. The four Pulse Map energies above are a documented exception —
 they are personality data and stay as defined.
 
@@ -521,5 +521,5 @@ Next priorities:
 
 ## The Owner
 
-This platform is being built for and by the Nordic Capacity Manager at Valtech. They are not a developer. All code must be clean, well-structured, and easy to hand off to a developer later. Prioritise clarity over cleverness.
+This platform is being built for and by the Nordic Capacity Manager at Inceptions. They are not a developer. All code must be clean, well-structured, and easy to hand off to a developer later. Prioritise clarity over cleverness.
 

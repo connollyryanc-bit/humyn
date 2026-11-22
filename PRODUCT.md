@@ -4,11 +4,11 @@
 
 ## What is Humyn?
 
-Humyn is a people intelligence platform built for Valtech Nordic. It exists because the tools that manage people — HR platforms, personality tools, capacity spreadsheets, ATS systems — are all separate, shallow, and treat people as resources rather than as human beings with distinct personalities, values, relationships and potential.
+Humyn is a people intelligence platform built for Inceptions. It exists because the tools that manage people — HR platforms, personality tools, capacity spreadsheets, ATS systems — are all separate, shallow, and treat people as resources rather than as human beings with distinct personalities, values, relationships and potential.
 
 Humyn brings everything together in one place. It understands not just what someone can do, but how they think, what drives them, how they communicate, what teams they thrive in, and what value they bring to clients and the organisation.
 
-**The north star:** Every person at Valtech Nordic has a rich, living profile. Leaders make better decisions about teams, hiring, and capacity because they understand their people more deeply. Consultants feel valued as individuals, not just day rates.
+**The north star:** Every person at Inceptions has a rich, living profile. Leaders make better decisions about teams, hiring, and capacity because they understand their people more deeply. Consultants feel valued as individuals, not just day rates.
 
 ---
 
@@ -55,7 +55,7 @@ Profiles include:
 - Team compatibility scoring
 
 Who gets profiled:
-- All existing Valtech Nordic consultants
+- All existing Inceptions consultants
 - All new candidates (from LinkedIn URL)
 - Client stakeholders (for pitch and relationship intelligence)
 
@@ -128,7 +128,7 @@ Trigger automation per stage:
 
 Career site:
 - External job board showing all active roles
-- Branded per market (Valtech Nordic market sites)
+- Branded per market (Inceptions market sites)
 - Candidates apply directly or "connect" for future roles
 
 Nurture campaigns:
@@ -230,7 +230,7 @@ The wheel has eight positions — four pure, four mixed:
 ### Auth (Phase 2)
 - Role-based access control (RBAC)
 - Four tiers: Admin, HR, Hiring Manager, C-Suite
-- SSO via Valtech Microsoft credentials
+- SSO via Microsoft (Entra) credentials
 
 ### Integrations (Phase 2-3)
 - Microsoft 365 (calendar, email)
@@ -243,7 +243,7 @@ The wheel has eight positions — four pure, four mixed:
 ## Build Phases
 
 ### Phase 1 — Pulse MVP (Mostly shipped)
-**Goal:** Every Valtech Nordic consultant has a rich profile. The people directory is live and useful.
+**Goal:** Every Inceptions consultant has a rich profile. The people directory is live and useful.
 
 - [x] People directory with card and table views
 - [x] Flexible grouping (None / Availability / Energy / Location / Utilisation) and search across name, role, location, capabilities
@@ -325,7 +325,7 @@ First version of this is live at `/capacity`.
 ### 3. Brief and RFP → team AI (the dream feature)
 Upload an RFP or project brief. The AI reads it, infers the required skills, seniority
 band, personality types, and client context, and proposes three ranked team options drawn
-from every Valtech Nordic market. Each option shows skills fit, energy-harmony score,
+from every Inceptions market. Each option shows skills fit, energy-harmony score,
 combined availability, and projected day-rate. This requires ERP / OpenAir integration
 for live availability data — but once it exists, **this is the feature that makes Humyn
 irreplaceable.** No spreadsheet, no ATS, no capacity tool combines personality and
@@ -416,9 +416,9 @@ reactive capacity management, gut-feel hiring. Humyn is differentiated because:
 
 ### Expansion path
 
-1. **Valtech Nordic** — current build, real users in Stockholm, Oslo, Copenhagen, Helsinki
-2. **Pan-Nordic rollout** — all Valtech Nordic markets fully on platform
-3. **Other Valtech global markets** — UK, Netherlands, Germany, France, North America
+1. **Inceptions** — current build, real users in Stockholm, Oslo, Copenhagen, Helsinki
+2. **Pan-Nordic rollout** — all Inceptions markets fully on platform
+3. **Other Inceptions markets** — UK, Netherlands, Germany, France, North America
 4. **White-label SaaS product** — Humyn as a standalone product for other consultancies,
    priced per seat, with the Pulse Map as the trademarked core
 
@@ -428,17 +428,17 @@ The goal is to make Humyn the people-intelligence layer for the modern consultan
 
 ## Success Metrics
 
-- **Utilisation**: Valtech Nordic hits 80% average utilisation consistently
+- **Utilisation**: Inceptions hits 80% average utilisation consistently
 - **Time to profile**: Any consultant or candidate can be profiled in under 2 minutes
 - **Hiring velocity**: Time from application to offer decision reduced by 40%
 - **Team harmony**: Projects using Humyn team builder report lower interpersonal conflict
-- **Adoption**: 100% of Valtech Nordic staff have active Humyn profiles within 6 months
+- **Adoption**: 100% of Inceptions staff have active Humyn profiles within 6 months
 
 ---
 
 ## The Bigger Picture
 
-If Pulse proves its value at Valtech Nordic, the platform has a clear expansion path
+If Pulse proves its value at Inceptions, the platform has a clear expansion path
 (see Commercial Opportunity above for the full mechanics). Two further angles worth
 noting separately:
 
@@ -446,13 +446,13 @@ noting separately:
   extension, sales and pitch teams can profile a prospect's procurement panel and shape
   the pitch to their dominant energy mix. Early data suggests this materially shifts
   win-rate on close decisions.
-- **Alumni network** — when someone leaves Valtech, their Humyn profile follows them.
+- **Alumni network** — when someone leaves Inceptions, their Humyn profile follows them.
   Alumni become a referral and rehire pool, profiled and warm, rather than disappearing
   into LinkedIn.
 
 ---
 
 *Last updated: May 2026*
-*Owner: Nordic Capacity Manager, Valtech*
+*Owner: Nordic Capacity Manager, Inceptions*
 *Built with: Next.js, TypeScript, Vercel, Claude AI*
 

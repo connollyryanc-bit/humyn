@@ -15,7 +15,7 @@ export const seedBriefs: Brief[] = [
     briefType: "Delivery programme",
     daysToStart: null,
     scope: "Phase 2 of Klarna's customer-experience transformation. Re-platform the checkout, onboarding, and dispute resolution flows on a new event-driven backend, with refreshed design language and accessibility baseline.",
-    context: "Klarna's NPS dipped sharply during phase 1 of the migration. Phase 2 focuses on restoring trust through measurable UX improvement and operational stability. Programme reports into Klarna's CPO and the Valtech engagement director Linnea Sjöberg is the senior relationship lead.",
+    context: "Klarna's NPS dipped sharply during phase 1 of the migration. Phase 2 focuses on restoring trust through measurable UX improvement and operational stability. Programme reports into Klarna's CPO and the Inceptions engagement director Linnea Sjöberg is the senior relationship lead.",
     budget: "€2.4M",
     requiredEnergy: { driver: "essential", energizer: "high", supporter: "medium", analyst: "high" },
     roles: [
@@ -179,7 +179,7 @@ export const seedBriefs: Brief[] = [
     briefType: "Applied ML",
     daysToStart: 4,
     scope: "Build a customer demand-forecasting model for OP Financial's retail banking products. Pilot across three regional markets, target a 15% reduction in branch over/under-staffing.",
-    context: "OP has run two failed internal attempts at this. They want a Valtech-led model with a 16-week timebox, transparent methodology, and clear handover documentation. Henna Mäkinen is the data science lead.",
+    context: "OP has run two failed internal attempts at this. They want a Inceptions-led model with a 16-week timebox, transparent methodology, and clear handover documentation. Henna Mäkinen is the data science lead.",
     budget: "€420k",
     requiredEnergy: { driver: "medium", energizer: "low", supporter: "low", analyst: "essential" },
     roles: [
@@ -422,7 +422,7 @@ export const seedBriefs: Brief[] = [
     briefType: "Product design + engineering",
     daysToStart: 96,
     scope: "Major version bump of Telia's customer self-service portal. New design system, modernised tooling, simplified plan management and billing.",
-    context: "v1 was delivered by Valtech in 2024 and is now end-of-life on its tech stack. Saga Lindqvist designed v1 and is the natural continuity.",
+    context: "v1 was delivered by Inceptions in 2024 and is now end-of-life on its tech stack. Saga Lindqvist designed v1 and is the natural continuity.",
     budget: "€1.4M",
     requiredEnergy: { driver: "medium", energizer: "high", supporter: "medium", analyst: "high" },
     roles: [
@@ -468,7 +468,7 @@ export const seedBriefs: Brief[] = [
     briefType: "Delivery + UX",
     daysToStart: 79,
     scope: "Phase 3 of Carlsberg's consumer loyalty programme. Add gamification, refresh the mobile UI, integrate with three more partner brands.",
-    context: "Phases 1 and 2 went well. Carlsberg's marketing director wants the same Valtech team where possible. Tobias Krogh is the delivery lead.",
+    context: "Phases 1 and 2 went well. Carlsberg's marketing director wants the same Inceptions team where possible. Tobias Krogh is the delivery lead.",
     budget: "€680k",
     requiredEnergy: { driver: "medium", energizer: "medium", supporter: "essential", analyst: "medium" },
     roles: [

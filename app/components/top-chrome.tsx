@@ -57,7 +57,7 @@ const ENVIRONMENTS: EnvironmentMeta[] = [
       {
         href: "/",
         title: "People directory",
-        body: "Everyone in Valtech Nordic. Filter by energy, market, availability or capability.",
+        body: "Everyone in Inceptions. Filter by energy, market, availability or capability.",
       },
       {
         href: "/pulse/new",

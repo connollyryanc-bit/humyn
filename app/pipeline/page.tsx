@@ -277,7 +277,7 @@ export default function BriefBoardPage() {
             Briefs
           </h1>
           <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.6 }}>
-            Every active engagement at Valtech Nordic. Each brief contains the scope, the
+            Every active engagement at Inceptions. Each brief contains the scope, the
             client context, and the roles that still need staffing. Click any brief to read
             the detail and apply to a role.
           </div>

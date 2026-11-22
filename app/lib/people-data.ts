@@ -102,7 +102,7 @@ export const people: Person[] = [
     capabilities: ["Distributed systems", "Event sourcing", "AWS architecture", "Technical due diligence"],
     achievements: [
       "Re-architected Maersk shipment events platform — 99.99% uptime since go-live.",
-      "Authored the Valtech Nordic event-driven reference architecture.",
+      "Authored the Inceptions event-driven reference architecture.",
       "Speaker at GOTO Copenhagen 2025 on graceful degradation.",
     ],
     bestTrait: "Sees the second-order failure before anyone else does.",
@@ -160,7 +160,7 @@ export const people: Person[] = [
     capabilities: ["Innovation strategy", "C-suite facilitation", "Storytelling", "New venture design"],
     achievements: [
       "Designed Equinor's customer innovation lab from a blank page.",
-      "Top-rated facilitator on Valtech Nordic's exec leadership programme 2024 and 2025.",
+      "Top-rated facilitator on Inceptions' exec leadership programme 2024 and 2025.",
       "Hosted four Innovation Mondays bringing in 60+ client leaders.",
     ],
     bestTrait: "Gets a sceptical exec team excited and aligned in one workshop.",
@@ -218,7 +218,7 @@ export const people: Person[] = [
     capabilities: ["Enterprise architecture", "API design", "Cloud migration", "Technical writing"],
     achievements: [
       "Migrated SAS Group's customer platform off mainframe with zero downtime.",
-      "Authored the Valtech Nordic cloud migration playbook.",
+      "Authored the Inceptions cloud migration playbook.",
       "Trained 20+ engineers in solution-architecture fundamentals.",
     ],
     bestTrait: "Brings order to chaos without making anyone feel small.",
@@ -247,7 +247,7 @@ export const people: Person[] = [
     capabilities: ["Product design", "Design systems", "Prototyping", "Workshop facilitation"],
     achievements: [
       "Led the Telia self-service redesign — 22% drop in support tickets.",
-      "Built the Valtech Nordic design-system kit now used by 30+ designers.",
+      "Built the Inceptions design-system kit now used by 30+ designers.",
       "Hosted the Stockholm design meetup three years running.",
     ],
     bestTrait: "Makes complex flows feel inevitable — clients ask why it wasn't always like this.",
@@ -306,7 +306,7 @@ export const people: Person[] = [
     achievements: [
       "Led the Storebrand member portal rebuild — Lighthouse 98 on launch.",
       "Authored the Nordic frontend accessibility playbook.",
-      "Maintains three popular internal Valtech Nordic component libraries.",
+      "Maintains three popular internal Inceptions component libraries.",
     ],
     bestTrait: "Translates fluently between design and engineering — no information lost.",
     vice: "Can take critique of her code personally. Frame as 'how do we make it better' not 'this is wrong'.",
@@ -334,7 +334,7 @@ export const people: Person[] = [
     capabilities: ["Go & Rust", "API security", "Postgres performance", "Threat modelling"],
     achievements: [
       "Closed five critical CVEs in OP Financial's customer API in his first quarter.",
-      "Designed the auth service used across three Valtech Nordic engagements.",
+      "Designed the auth service used across three Inceptions engagements.",
       "Holds OSCP — runs our internal security book club.",
     ],
     bestTrait: "Spots the security or performance hole that every other reviewer missed.",

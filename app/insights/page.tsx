@@ -265,7 +265,7 @@ function buildOutlook(enriched: PersonWithCapacity[], avgUtil: number): string {
   const gap = 80 - avgUtil;
   const utilSentence =
     gap > 0
-      ? `Utilisation stands at ${avgUtil}% — ${gap} points below the 80% Valtech Nordic target. The shortfall is concentrated, not spread: ${benchPeople.length} people account for ${benchDays} bench days between them, and one tighter month of allocation closes most of the gap.`
+      ? `Utilisation stands at ${avgUtil}% — ${gap} points below the 80% Inceptions target. The shortfall is concentrated, not spread: ${benchPeople.length} people account for ${benchDays} bench days between them, and one tighter month of allocation closes most of the gap.`
       : `Utilisation stands at ${avgUtil}% — at or above the 80% target. The team is running tight; the watch is now on people sustaining well above 86% (currently ${burnoutNames.length ? burnoutNames.join(", ") : "none flagged"}).`;
 
   const exposureSentence =
@@ -465,7 +465,7 @@ export default function InsightsPage() {
             Insights
           </h1>
           <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720 }}>
-            The C-suite read of where Valtech Nordic stands this week — capacity, retention,
+            The C-suite read of where Inceptions stands this week — capacity, retention,
             burnout, and the opportunities the bench is currently giving us.
           </div>
         </div>

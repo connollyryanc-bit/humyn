@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "humyn — people intelligence",
-  description: "Valtech Nordic's people intelligence platform.",
+  description: "Inceptions' people intelligence platform.",
 };
 
 export default function RootLayout({

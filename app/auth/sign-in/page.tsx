@@ -152,7 +152,7 @@ function SignInForm() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@valtech.com"
+            placeholder="you@inceptions.com"
             style={{
               padding: "10px 12px",
               borderRadius: 8,
@@ -254,7 +254,7 @@ export default function SignInPage() {
             Sign in to Humyn
           </div>
           <div style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.55 }}>
-            People intelligence for Valtech Nordic. Use your work email — we&apos;ll send you a
+            People intelligence for Inceptions. Use your work email — we&apos;ll send you a
             one-tap sign-in link.
           </div>
         </div>
@@ -270,7 +270,7 @@ export default function SignInPage() {
             lineHeight: 1.6,
           }}
         >
-          Need help getting in? Ask your Valtech Nordic Capacity Manager.
+          Need help getting in? Ask your Inceptions Capacity Manager.
         </div>
       </div>
     </div>

@@ -9,7 +9,7 @@ import { energy } from "../../../lib/people-data";
 
 export const runtime = "nodejs";
 
-const SYSTEM_PROMPT = `You are the Humyn Pulse retention analyst for Valtech Nordic.
+const SYSTEM_PROMPT = `You are the Humyn Pulse retention analyst for Inceptions.
 Write the C-suite's weekly read on capacity, retention, burnout and team health.
 You are speaking to senior executives — be specific, calm, and decisive.
 

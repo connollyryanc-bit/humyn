@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "humyn Pulse for LinkedIn",
+  "version": "0.1.0",
+  "description": "Read a LinkedIn profile and get a Humyn Pulse personality profile with communication guidance.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://www.linkedin.com/*", "https://humyn-six.vercel.app/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://www.linkedin.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

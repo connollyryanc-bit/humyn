@@ -1853,7 +1853,7 @@ export default function TeamsPage() {
         {tab === "markets" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <Card>
-              <SectionLabel>Nordic Pulse mix · Valtech Nordic</SectionLabel>
+              <SectionLabel>Nordic Pulse mix · Inceptions</SectionLabel>
               <div
                 style={{
                   display: "grid",

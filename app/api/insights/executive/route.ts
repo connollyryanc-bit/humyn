@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-const SYSTEM_PROMPT = `You are the executive workforce intelligence analyst for Valtech
-Nordic — a 187-person professional-services firm operating across Stockholm, Oslo,
+const SYSTEM_PROMPT = `You are the executive workforce intelligence analyst for Inceptions,
+a 187-person professional-services firm operating across Stockholm, Oslo,
 Copenhagen and Helsinki. You write the weekly read for the C-suite (CEO, COO,
 CFO, CHRO, Head of Growth, board members).
 

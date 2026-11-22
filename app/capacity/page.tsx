@@ -662,7 +662,7 @@ export default function CapacityPage() {
               fontWeight: 500,
             }}
           >
-            Compass · Valtech Nordic · Live
+            Compass · Inceptions · Live
           </div>
           <h1
             className="font-display"
@@ -678,7 +678,7 @@ export default function CapacityPage() {
             Capacity &amp; retention
           </h1>
           <div style={{ fontSize: 13, color: "#5A5A5A" }}>
-            Valtech Nordic · {enriched.length} consultants · Live
+            Inceptions · {enriched.length} consultants · Live
           </div>
         </div>
 
@@ -699,7 +699,7 @@ export default function CapacityPage() {
           <StatCard
             label="Target"
             value="80%"
-            detail="Valtech Nordic standard"
+            detail="Inceptions standard"
             tone={{ color: "#1A5C38", bg: "#EEF7F2", border: "#9ED4B8" }}
           />
           <StatCard

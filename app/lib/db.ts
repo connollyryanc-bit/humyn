@@ -2,6 +2,7 @@ import "server-only";
 import { AvailKey, EnergyKey, Person } from "./people-data";
 import { CapacityData, PersonWithCapacity, RiskLevel } from "./capacity-data";
 import { getSupabaseAdmin } from "./supabase";
+import type { PersonInsights } from "./insights";
 
 type DbEnergyKey = "red" | "yellow" | "green" | "blue" | EnergyKey;
 
@@ -55,6 +56,7 @@ interface PersonRow {
   detractors: string[];
   how_to_speak: string;
   how_to_email: string;
+  insights?: PersonInsights | null;
 }
 
 interface CapacityRow {
@@ -102,6 +104,7 @@ function rowToPerson(row: PersonRow): Person {
     detractors: row.detractors ?? [],
     howToSpeak: row.how_to_speak,
     howToEmail: row.how_to_email,
+    insights: row.insights ?? null,
   };
 }
 
@@ -133,6 +136,7 @@ function personToRow(p: Person): Omit<PersonRow, "id"> & { id?: number } {
     how_to_speak: p.howToSpeak,
     how_to_email: p.howToEmail,
   };
+  if (p.insights !== undefined) row.insights = p.insights;
   if (p.id) row.id = p.id;
   return row;
 }
@@ -191,7 +195,12 @@ export async function createPerson(p: Person): Promise<Person> {
   const sb = getSupabaseAdmin();
   const row = personToRow(p);
   delete row.id;
-  const { data, error } = await sb.from("people").insert(row).select("*").single();
+  let { data, error } = await sb.from("people").insert(row).select("*").single();
+  if (error && /insights/i.test(error.message)) {
+    // Migration 0004 not applied yet: save without the deep-dive block.
+    const { insights: _omit, ...rest } = row;
+    ({ data, error } = await sb.from("people").insert(rest).select("*").single());
+  }
   if (error) throw new Error(`createPerson: ${error.message}`);
   return rowToPerson(data as PersonRow);
 }
@@ -200,12 +209,11 @@ export async function updatePerson(id: number, p: Person): Promise<Person> {
   const sb = getSupabaseAdmin();
   const row = personToRow(p);
   delete row.id;
-  const { data, error } = await sb
-    .from("people")
-    .update(row)
-    .eq("id", id)
-    .select("*")
-    .single();
+  let { data, error } = await sb.from("people").update(row).eq("id", id).select("*").single();
+  if (error && /insights/i.test(error.message)) {
+    const { insights: _omit, ...rest } = row;
+    ({ data, error } = await sb.from("people").update(rest).eq("id", id).select("*").single());
+  }
   if (error) throw new Error(`updatePerson(${id}): ${error.message}`);
   return rowToPerson(data as PersonRow);
 }

@@ -1,11 +1,38 @@
 (() => {
   const ENERGY = {
-    driver: { label: "Driver", color: "#E8402A", bg: "#FDF0EE", text: "#9B2A1A" },
-    energizer: { label: "Energizer", color: "#F5A623", bg: "#FFFBF2", text: "#8B5A00" },
-    supporter: { label: "Supporter", color: "#2E8B57", bg: "#EEF7F2", text: "#1A5C38" },
-    analyst: { label: "Analyst", color: "#1E6FA5", bg: "#EEF4FB", text: "#124A6E" },
+    driver: { label: "Driver", color: "#E8402A", bg: "#FDF0EE", text: "#9B2A1A", border: "#FCCDC6" },
+    energizer: { label: "Energizer", color: "#F5A623", bg: "#FFFBF2", text: "#8B5A00", border: "#FAD98A" },
+    supporter: { label: "Supporter", color: "#2E8B57", bg: "#EEF7F2", text: "#1A5C38", border: "#9ED4B8" },
+    analyst: { label: "Analyst", color: "#1E6FA5", bg: "#EEF4FB", text: "#124A6E", border: "#8DC2E8" },
   };
   const ORDER = ["driver", "energizer", "supporter", "analyst"];
+
+  const TRAITS = [
+    ["risk", "Risk-tolerant", "Risk-averse"],
+    ["trust", "Trusting", "Sceptical"],
+    ["outlook", "Optimistic", "Pragmatic"],
+    ["pace", "Deliberate", "Fast-paced"],
+    ["expression", "Matter-of-fact", "Expressive"],
+    ["autonomy", "Autonomous", "Collaborative"],
+    ["dominance", "Supporting", "Dominant"],
+  ];
+
+  const COACHING = [
+    ["firstImpression", "Making a great first impression"],
+    ["buildingTrust", "Building trust"],
+    ["givingFeedback", "Giving feedback"],
+    ["driveToAction", "Driving them to take action"],
+    ["negotiating", "Negotiating"],
+    ["followingUp", "Following up"],
+    ["meetings", "Running meetings with them"],
+  ];
+
+  const TABS = [
+    ["overview", "Overview"],
+    ["traits", "Traits"],
+    ["communicate", "Communicate"],
+    ["coaching", "Coaching"],
+  ];
 
   const NOISE = [
     /^(message|connect|follow|more|save in sales navigator|sales insights|contact info|pending|view in sales navigator)$/i,
@@ -15,7 +42,13 @@
     /^(show all|see more|…see more|\.\.\.see more|show more)$/i,
   ];
 
-  let state = { open: false, status: "idle", profile: null, saved: null, error: "", meta: {} };
+  const INK = "#161311";
+  const INK2 = "#4D4945";
+  const INK3 = "#9A9A9A";
+  const SURFACE = "#F3F0EA";
+  const LINE = "0.5px solid rgba(0,0,0,0.07)";
+
+  let state = { open: false, tab: "overview", status: "idle", profile: null, saved: null, error: "", meta: {} };
   let host = null;
   let root = null;
   let currentKey = "";
@@ -96,6 +129,7 @@
   async function analyse() {
     state.status = "loading";
     state.error = "";
+    state.tab = "overview";
     render();
     const page = await readProfile();
     state.meta = { name: page.name, headline: page.headline };
@@ -149,6 +183,7 @@
       detractors: p.detractors,
       howToSpeak: p.howToSpeak,
       howToEmail: p.howToEmail,
+      insights: p.insights || null,
     };
     state.status = "saving";
     render();
@@ -166,129 +201,425 @@
     render();
   }
 
-  function section(label, body) {
+  // ---------- visual pieces ----------
+
+  function label(text, color) {
     return (
-      '<div style="margin-top:16px"><div style="font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#9A9A9A;margin-bottom:6px">' +
-      esc(label) +
-      '</div><div style="font-size:13px;line-height:1.6;color:#4D4945">' +
-      body +
-      "</div></div>"
+      '<div style="display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:' +
+      INK3 +
+      ';margin-bottom:10px">' +
+      (color ? '<span style="width:8px;height:8px;border-radius:50%;background:' + color + '"></span>' : "") +
+      esc(text) +
+      "</div>"
     );
   }
 
-  function list(items) {
+  function card(inner, extra) {
+    return (
+      '<div style="background:#FFFFFF;border:' +
+      LINE +
+      ";border-radius:12px;padding:16px;margin-bottom:12px;" +
+      (extra || "") +
+      '">' +
+      inner +
+      "</div>"
+    );
+  }
+
+  function bullets(items, dot) {
     return (items || [])
-      .map((i) => '<div style="padding:2px 0">' + esc(i) + "</div>")
+      .map(
+        (i) =>
+          '<div style="display:flex;gap:10px;align-items:flex-start;margin:0 0 9px"><span style="width:6px;height:6px;border-radius:50%;background:' +
+          dot +
+          ';margin-top:7px;flex-shrink:0"></span><span style="font-size:13px;line-height:1.55;color:' +
+          INK2 +
+          '">' +
+          esc(i) +
+          "</span></div>",
+      )
       .join("");
   }
 
-  function bars(scores) {
+  function arrows(items, up) {
+    const col = up ? "#2E8B57" : "#E8402A";
+    const glyph = up ? "&#8593;" : "&#8595;";
+    return (items || [])
+      .map(
+        (i) =>
+          '<div style="display:flex;gap:10px;align-items:flex-start;margin:0 0 8px"><span style="color:' +
+          col +
+          ';font-size:13px;font-weight:700;width:12px">' +
+          glyph +
+          '</span><span style="font-size:13px;line-height:1.5;color:' +
+          INK2 +
+          '">' +
+          esc(i) +
+          "</span></div>",
+      )
+      .join("");
+  }
+
+  function ring(scores, centre, accentColor) {
+    const r = 42;
+    const c = 2 * Math.PI * r;
+    const total = ORDER.reduce((a, k) => a + Math.max(0, scores[k] || 0), 0) || 1;
+    let offset = 0;
+    const gap = 3;
+    const segs = ORDER.map((k) => {
+      const len = (Math.max(0, scores[k] || 0) / total) * c;
+      const dash = Math.max(0, len - gap);
+      const s =
+        '<circle cx="60" cy="60" r="' +
+        r +
+        '" fill="none" stroke="' +
+        ENERGY[k].color +
+        '" stroke-width="14" stroke-dasharray="' +
+        dash +
+        " " +
+        (c - dash) +
+        '" stroke-dashoffset="' +
+        -offset +
+        '" transform="rotate(-90 60 60)"/>';
+      offset += len;
+      return s;
+    }).join("");
+    return (
+      '<svg width="132" height="132" viewBox="0 0 120 120" style="flex-shrink:0">' +
+      segs +
+      '<text x="60" y="57" text-anchor="middle" font-size="9" fill="' +
+      INK3 +
+      '" letter-spacing="1">PULSE</text><text x="60" y="71" text-anchor="middle" font-size="10" font-weight="700" fill="' +
+      accentColor +
+      '">' +
+      esc(centre) +
+      "</text></svg>"
+    );
+  }
+
+  function legend(scores) {
     return ORDER.map((k) => {
       const e = ENERGY[k];
       const v = Math.max(0, Math.min(100, Math.round(scores[k] || 0)));
       return (
-        '<div style="display:flex;align-items:center;gap:10px;margin:7px 0"><span style="width:74px;font-size:12px;color:#4D4945">' +
+        '<div style="margin:0 0 9px"><div style="display:flex;justify-content:space-between;font-size:12px;color:' +
+        INK2 +
+        ';margin-bottom:4px"><span>' +
         e.label +
-        '</span><div style="flex:1;height:6px;background:#F3F0EA;border-radius:100px"><div style="width:' +
+        '</span><span style="color:' +
+        INK3 +
+        '">' +
         v +
-        "%;height:6px;background:" +
+        '</span></div><div style="height:5px;background:' +
+        SURFACE +
+        ';border-radius:100px"><div style="width:' +
+        v +
+        "%;height:5px;background:" +
         e.color +
-        ';border-radius:100px"></div></div><span style="width:34px;text-align:right;font-size:12px;color:#9A9A9A">' +
-        v +
-        "%</span></div>"
+        ';border-radius:100px"></div></div></div>'
       );
     }).join("");
   }
 
-  function btn(id, label, dark) {
+  function sliders(traits, accent) {
+    return TRAITS.map((t) => {
+      const v = Math.max(0, Math.min(100, Number(traits[t[0]]) || 50));
+      return (
+        '<div style="margin:0 0 16px"><div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:7px"><span style="color:' +
+        (v < 45 ? INK : INK3) +
+        ";font-weight:" +
+        (v < 45 ? 700 : 500) +
+        '">' +
+        t[1] +
+        '</span><span style="color:' +
+        (v > 55 ? INK : INK3) +
+        ";font-weight:" +
+        (v > 55 ? 700 : 500) +
+        '">' +
+        t[2] +
+        '</span></div><div style="position:relative;height:16px"><div style="position:absolute;left:0;right:0;top:7px;height:2px;background:' +
+        SURFACE +
+        ';border-radius:100px"></div><div style="position:absolute;left:50%;top:4px;width:1px;height:8px;background:rgba(0,0,0,0.12)"></div><div style="position:absolute;left:calc(' +
+        v +
+        '% - 8px);top:0;width:16px;height:16px;border-radius:50%;background:' +
+        accent +
+        ';border:2px solid #FFFFFF;box-sizing:border-box;box-shadow:0 0 0 1px rgba(0,0,0,0.1)"></div></div></div>'
+      );
+    }).join("");
+  }
+
+  function btn(id, text, dark) {
     return (
       '<button id="' +
       id +
-      '" style="all:unset;cursor:pointer;padding:9px 16px;border-radius:100px;font-size:13px;font-weight:500;' +
-      (dark
-        ? "background:#161311;color:#FFFFFF;"
-        : "background:#FFFFFF;color:#161311;border:0.5px solid rgba(0,0,0,0.15);") +
+      '" style="all:unset;cursor:pointer;padding:9px 16px;border-radius:100px;font-size:13px;font-weight:500;text-align:center;' +
+      (dark ? "background:" + INK + ";color:#FFFFFF;" : "background:#FFFFFF;color:" + INK + ";border:0.5px solid rgba(0,0,0,0.15);") +
       '">' +
-      label +
+      text +
       "</button>"
     );
   }
 
-  function panelBody() {
-    if (state.status === "loading") {
-      return '<div style="padding:32px 0;font-size:13px;color:#4D4945">Reading the profile and building the Pulse. This takes 15 to 40 seconds.</div>';
-    }
-    if (state.status === "idle" || (state.status === "error" && !state.profile)) {
-      return (
-        '<div style="font-size:13px;line-height:1.6;color:#4D4945;margin-bottom:16px">Build a Humyn Pulse profile from this LinkedIn page, with how to speak and write to them.</div>' +
-        btn("hm-analyse", "Analyse this profile", true) +
-        (state.error
-          ? '<div style="margin-top:14px;padding:12px;border-radius:8px;background:#FDF0EE;color:#9B2A1A;font-size:12px;line-height:1.5">' +
-            esc(state.error) +
-            "</div>"
-          : "")
-      );
-    }
-    const p = state.profile;
-    const e = ENERGY[p.primary] || ENERGY.driver;
+  function note(text) {
     return (
-      '<div style="display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:100px;background:' +
-      e.bg +
-      ";color:" +
-      e.text +
-      ';font-size:12px;font-weight:600"><span style="width:8px;height:8px;border-radius:50%;background:' +
-      e.color +
-      '"></span>' +
-      esc(p.wheelPosition) +
-      '</div><span style="margin-left:10px;font-size:12px;color:#9A9A9A">Confidence ' +
-      Math.round(p.confidence) +
-      "%</span>" +
-      '<div style="margin-top:14px">' +
-      bars(p.scores) +
+      '<div style="padding:12px;border-radius:8px;background:#FDF0EE;color:#9B2A1A;font-size:12px;line-height:1.5;margin-bottom:12px">' +
+      esc(text) +
+      "</div>"
+    );
+  }
+
+  // ---------- tab bodies ----------
+
+  function tabOverview(p, e) {
+    return (
+      card(
+        '<div style="display:flex;align-items:center;gap:16px">' +
+          ring(p.scores, e.label.toUpperCase(), e.color) +
+          '<div style="flex:1">' +
+          legend(p.scores) +
+          "</div></div>",
+      ) +
+      card(label("Summary", e.color) + '<div style="font-size:13px;line-height:1.6;color:' + INK2 + '">' + esc(p.bio) + "</div>") +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">' +
+      card(label("Best trait") + '<div style="font-size:13px;line-height:1.55;color:' + INK2 + '">' + esc(p.bestTrait) + "</div>", "margin:0") +
+      card(label("Watch-out") + '<div style="font-size:13px;line-height:1.55;color:' + INK2 + '">' + esc(p.vice) + "</div>", "margin:0") +
       "</div>" +
-      section("Summary", esc(p.bio)) +
-      section("Best trait", esc(p.bestTrait)) +
-      section("Watch-out", esc(p.vice)) +
-      section("How to speak with them", esc(p.howToSpeak)) +
-      section("How to write to them", esc(p.howToEmail)) +
-      section("Motivated by", list(p.drivers)) +
-      section("Drained by", list(p.detractors)) +
-      (state.error
-        ? '<div style="margin-top:14px;padding:12px;border-radius:8px;background:#FDF0EE;color:#9B2A1A;font-size:12px">' +
-          esc(state.error) +
-          "</div>"
-        : "") +
-      '<div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap">' +
-      (state.saved
-        ? '<a href="' +
-          esc(state.saved.url) +
-          '" target="_blank" rel="noopener" style="all:unset;cursor:pointer;padding:9px 16px;border-radius:100px;font-size:13px;font-weight:500;background:#2E8B57;color:#FFFFFF">Saved. Open in Humyn</a>'
-        : btn("hm-save", state.status === "saving" ? "Saving..." : "Save to Humyn", true)) +
-      btn("hm-redo", "Re-run", false) +
+      '<div style="height:12px"></div>' +
+      card(label("Energized by", "#2E8B57") + arrows(p.drivers, true)) +
+      card(label("Drained by", "#E8402A") + arrows(p.detractors, false))
+    );
+  }
+
+  function needsRerun() {
+    return card(
+      '<div style="font-size:13px;line-height:1.6;color:' +
+        INK2 +
+        '">This saved profile was made before deep-dive sections existed. Press <b>Re-run</b> below to generate them.</div>',
+    );
+  }
+
+  function tabTraits(p, e) {
+    const i = p.insights;
+    if (!i) return needsRerun();
+    return (
+      card(label("Personality traits", e.color) + sliders(i.traits || {}, e.color)) +
+      (i.behaviours && i.behaviours.length ? card(label("Typical behaviours", e.color) + bullets(i.behaviours, e.color)) : "") +
+      (i.strengths && i.strengths.length ? card(label("Strengths") + bullets(i.strengths, "#2E8B57")) : "") +
+      (i.blindSpots && i.blindSpots.length ? card(label("Blind spots") + bullets(i.blindSpots, "#E8402A")) : "")
+    );
+  }
+
+  function tabCommunicate(p, e) {
+    const i = p.insights;
+    let out = "";
+    if (i && ((i.doList && i.doList.length) || (i.dontList && i.dontList.length))) {
+      out +=
+        card(
+          label("How to communicate", e.color) +
+            '<div style="font-size:12px;font-weight:700;color:#2E8B57;margin-bottom:8px">Do</div>' +
+            bullets(i.doList, "#2E8B57") +
+            '<div style="font-size:12px;font-weight:700;color:#E8402A;margin:14px 0 8px">Don&#39;t</div>' +
+            bullets(i.dontList, "#E8402A"),
+        );
+    }
+    out +=
+      card(label("How to speak with them", e.color) + '<div style="font-size:13px;line-height:1.6;color:' + INK2 + '">' + esc(p.howToSpeak) + "</div>") +
+      card(label("How to write to them", e.color) + '<div style="font-size:13px;line-height:1.6;color:' + INK2 + '">' + esc(p.howToEmail) + "</div>");
+    return out;
+  }
+
+  function tabCoaching(p, e) {
+    const i = p.insights;
+    if (!i) return needsRerun();
+    return COACHING.filter((c) => i[c[0]])
+      .map((c) =>
+        card(
+          '<div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:' +
+            INK +
+            ';margin-bottom:8px"><span style="width:8px;height:8px;border-radius:50%;background:' +
+            e.color +
+            '"></span>' +
+            c[1] +
+            '</div><div style="font-size:13px;line-height:1.6;color:' +
+            INK2 +
+            '">' +
+            esc(i[c[0]]) +
+            "</div>",
+        ),
+      )
+      .join("");
+  }
+
+  function panel() {
+    const name = esc(state.meta.name || (state.profile && state.profile.name) || "");
+    const headline = esc(state.meta.headline || "");
+    const head = function (bg, border, inner) {
+      return (
+        '<div style="background:' +
+        bg +
+        ";border-bottom:0.5px solid " +
+        border +
+        ';padding:18px 20px 16px;position:relative"><button id="hm-close" style="all:unset;cursor:pointer;position:absolute;right:14px;top:12px;font-size:20px;color:' +
+        INK3 +
+        ';padding:0 4px">&times;</button>' +
+        '<div style="font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:' +
+        INK3 +
+        ';margin-bottom:6px">humy<span style="color:#FF5040">n</span> pulse</div>' +
+        inner +
+        "</div>"
+      );
+    };
+
+    let body = "";
+    let header = "";
+    let footer = "";
+
+    if (state.status === "loading") {
+      header = head(SURFACE, "rgba(0,0,0,0.07)", '<div style="font-size:19px;font-weight:600;color:' + INK + '">' + (name || "Reading profile") + "</div>");
+      body =
+        '<div style="padding:36px 20px;font-size:13px;line-height:1.6;color:' +
+        INK2 +
+        '">Reading the profile and building the Pulse with deep-dive insights. This takes 20 to 50 seconds.</div>';
+    } else if (!state.profile) {
+      header = head(SURFACE, "rgba(0,0,0,0.07)", '<div style="font-size:19px;font-weight:600;color:' + INK + '">' + (name || "This profile") + "</div>");
+      body =
+        '<div style="padding:20px">' +
+        '<div style="font-size:13px;line-height:1.6;color:' +
+        INK2 +
+        ';margin-bottom:16px">Build a Humyn Pulse profile from this LinkedIn page: energy mix, personality traits, strengths, blind spots, and how to communicate with them.</div>' +
+        (state.error ? note(state.error) : "") +
+        btn("hm-analyse", "Analyse this profile", true) +
+        "</div>";
+    } else {
+      const p = state.profile;
+      const e = ENERGY[p.primary] || ENERGY.driver;
+      const chips = (p.capabilities || [])
+        .slice(0, 3)
+        .map(
+          (c) =>
+            '<span style="display:inline-block;padding:3px 10px;margin:0 6px 6px 0;border-radius:100px;background:#FFFFFF;border:0.5px solid ' +
+            e.border +
+            ";font-size:11px;font-weight:500;color:" +
+            e.text +
+            '">' +
+            esc(c) +
+            "</span>",
+        )
+        .join("");
+      header = head(
+        e.bg,
+        e.border,
+        '<div style="display:flex;align-items:center;gap:12px"><div style="width:44px;height:44px;border-radius:50%;background:#FFFFFF;border:1px solid ' +
+          e.border +
+          ";color:" +
+          e.text +
+          ';display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0">' +
+          esc((name || "?").split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase()) +
+          '</div><div style="min-width:0"><div style="font-size:19px;font-weight:600;color:' +
+          INK +
+          ';letter-spacing:-0.3px">' +
+          name +
+          '</div><div style="font-size:12px;color:' +
+          INK2 +
+          ';margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:270px">' +
+          headline +
+          "</div></div></div>" +
+          '<div style="margin-top:14px;display:flex;align-items:center;gap:10px"><span style="display:inline-flex;align-items:center;gap:7px;padding:5px 12px;border-radius:100px;background:#FFFFFF;color:' +
+          e.text +
+          ';font-size:12px;font-weight:600"><span style="width:8px;height:8px;border-radius:50%;background:' +
+          e.color +
+          '"></span>' +
+          esc(p.wheelPosition) +
+          '</span><span style="font-size:11px;color:' +
+          INK3 +
+          '">Confidence ' +
+          Math.round(p.confidence) +
+          "% &middot; predicted from public text</span></div>" +
+          '<div style="margin-top:12px">' +
+          chips +
+          "</div>",
+      );
+
+      const tabs =
+        '<div style="display:flex;border-bottom:' +
+        LINE +
+        ';background:#FFFFFF;position:sticky;top:0;z-index:1">' +
+        TABS.map((t) => {
+          const on = state.tab === t[0];
+          return (
+            '<button data-tab="' +
+            t[0] +
+            '" style="all:unset;cursor:pointer;flex:1;text-align:center;padding:12px 4px;font-size:12px;font-weight:' +
+            (on ? 600 : 500) +
+            ";color:" +
+            (on ? INK : INK3) +
+            ";border-bottom:2px solid " +
+            (on ? e.color : "transparent") +
+            '">' +
+            t[1] +
+            "</button>"
+          );
+        }).join("") +
+        "</div>";
+
+      let content = "";
+      if (state.tab === "overview") content = tabOverview(p, e);
+      else if (state.tab === "traits") content = tabTraits(p, e);
+      else if (state.tab === "communicate") content = tabCommunicate(p, e);
+      else content = tabCoaching(p, e);
+
+      body = tabs + '<div style="padding:16px 16px 4px">' + (state.error ? note(state.error) : "") + content + "</div>";
+
+      footer =
+        '<div style="padding:12px 16px;border-top:' +
+        LINE +
+        ';background:#FFFFFF;display:flex;gap:8px;align-items:center">' +
+        (state.saved
+          ? '<a href="' +
+            esc(state.saved.url) +
+            '" target="_blank" rel="noopener" style="all:unset;cursor:pointer;padding:9px 16px;border-radius:100px;font-size:13px;font-weight:500;background:#2E8B57;color:#FFFFFF">Saved. Open in Humyn</a>'
+          : btn("hm-save", state.status === "saving" ? "Saving..." : "Save to Humyn", true)) +
+        btn("hm-redo", "Re-run", false) +
+        "</div>";
+    }
+
+    return (
+      '<div style="position:fixed;top:0;right:0;bottom:0;width:410px;max-width:100vw;background:' +
+      SURFACE +
+      ";border-left:" +
+      LINE +
+      ';box-shadow:-8px 0 28px rgba(0,0,0,0.08);display:flex;flex-direction:column">' +
+      header +
+      '<div style="flex:1;overflow-y:auto">' +
+      body +
+      "</div>" +
+      footer +
       "</div>"
     );
   }
 
   function render() {
     if (!root) return;
-    const nameLine = esc(state.meta.name || "");
+    const toggle =
+      '<button id="hm-toggle" style="all:unset;cursor:pointer;position:fixed;right:16px;bottom:16px;padding:11px 18px;border-radius:100px;background:' +
+      INK +
+      ';color:#FFFFFF;font-size:15px;font-weight:700;letter-spacing:-0.3px;box-shadow:0 4px 14px rgba(0,0,0,0.18)">hum<span style="color:#FF5040">y</span>n</button>';
     root.innerHTML =
-      '<div style="position:fixed;right:16px;bottom:16px;z-index:2147483646;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif">' +
-      (state.open
-        ? '<div style="position:absolute;right:0;bottom:52px;width:380px;max-height:78vh;overflow:auto;background:#FFFFFF;border:0.5px solid rgba(0,0,0,0.07);border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,0.12);padding:20px"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px"><div><div style="font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:#9A9A9A">Humyn Pulse</div>' +
-          (nameLine ? '<div style="font-size:18px;font-weight:600;color:#161311;margin-top:4px">' + nameLine + "</div>" : "") +
-          '</div><button id="hm-close" style="all:unset;cursor:pointer;font-size:18px;color:#9A9A9A;padding:0 4px">×</button></div>' +
-          panelBody() +
-          "</div>"
-        : "") +
-      '<button id="hm-toggle" style="all:unset;cursor:pointer;padding:11px 18px;border-radius:100px;background:#161311;color:#FFFFFF;font-size:15px;font-weight:700;letter-spacing:-0.3px;box-shadow:0 4px 14px rgba(0,0,0,0.18)">hum<span style="color:#FF5040">y</span>n</button></div>';
+      '<div style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;z-index:2147483646;position:fixed;inset:0;pointer-events:none"><div style="pointer-events:auto">' +
+      (state.open ? panel() : toggle) +
+      "</div></div>";
   }
 
   function onClick(e) {
     const t = e.target.closest("button, a");
     if (!t) return;
+    if (t.dataset && t.dataset.tab) {
+      state.tab = t.dataset.tab;
+      render();
+      return;
+    }
     if (t.id === "hm-toggle") {
-      state.open = !state.open;
+      state.open = true;
       render();
     } else if (t.id === "hm-close") {
       state.open = false;
@@ -325,7 +656,7 @@
     mount();
     if (key === currentKey) return;
     currentKey = key;
-    state = { open: state.open, status: "idle", profile: null, saved: null, error: "", meta: {} };
+    state = { open: state.open, tab: "overview", status: "idle", profile: null, saved: null, error: "", meta: {} };
     render();
     const cached = await storageGet("profile:" + key);
     if (cached && cached.profile && key === currentKey) {

@@ -13,15 +13,18 @@ import {
   utilTone,
 } from "../../page";
 import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
-import { fetchPerson } from "../../lib/api-client";
+import { fetchPerson, updatePersonViaApi } from "../../lib/api-client";
+import { InsightSections } from "../../components/insight-sections";
+import type { PersonInsights } from "../../lib/insights";
 import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
 import { RoleGate, canSeeDayRate } from "../../components/role-context";
 
-type TabKey = "overview" | "personality" | "engage" | "achievements";
+type TabKey = "overview" | "personality" | "deep" | "engage" | "achievements";
 
 const tabs: { key: TabKey; label: string }[] = [
   { key: "overview", label: "Overview" },
   { key: "personality", label: "Personality" },
+  { key: "deep", label: "Deep dive" },
   { key: "engage", label: "How to Engage" },
   { key: "achievements", label: "Achievements" },
 ];
@@ -235,6 +238,8 @@ export default function PersonProfilePage() {
     people.find((p) => p.id === Number(params?.id)),
   );
   const [resolved, setResolved] = useState<boolean>(false);
+  const [insightState, setInsightState] = useState<"idle" | "working">("idle");
+  const [insightError, setInsightError] = useState<string>("");
 
   const id = Number(params?.id);
 
@@ -254,6 +259,34 @@ export default function PersonProfilePage() {
       cancelled = true;
     };
   }, [id]);
+
+  async function generateInsights() {
+    if (!person) return;
+    setInsightState("working");
+    setInsightError("");
+    try {
+      const res = await fetch("/api/pulse/insights", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ person }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || "Could not generate insights.");
+      const insights = data.insights as PersonInsights;
+      setPerson({ ...person, insights });
+      try {
+        await updatePersonViaApi(person.id, { ...person, insights });
+      } catch {
+        setInsightError(
+          "Generated, but could not be saved to the database. Run migration 0004 in Supabase, then try again.",
+        );
+      }
+    } catch (err) {
+      setInsightError(err instanceof Error ? err.message : "Could not generate insights.");
+    } finally {
+      setInsightState("idle");
+    }
+  }
 
   if (resolved && !person) {
     notFound();
@@ -651,6 +684,76 @@ export default function PersonProfilePage() {
                 </ul>
               </div>
             </Card>
+          </div>
+        )}
+
+        {tab === "deep" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {person.insights ? (
+              <InsightSections
+                insights={person.insights}
+                firstName={person.name.split(" ")[0]}
+                accent={primaryColour}
+              />
+            ) : (
+              <Card>
+                <SectionLabel>Deep dive</SectionLabel>
+                <p style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.65, margin: "0 0 16px" }}>
+                  Personality traits, strengths, blind spots and practical guidance for working with{" "}
+                  {person.name.split(" ")[0]}. Built from their existing Pulse profile.
+                </p>
+                <button
+                  onClick={generateInsights}
+                  disabled={insightState === "working"}
+                  style={{
+                    padding: "9px 18px",
+                    borderRadius: 100,
+                    border: "none",
+                    background: "#161311",
+                    color: "#FFFFFF",
+                    fontSize: 13,
+                    fontWeight: 500,
+                    cursor: insightState === "working" ? "default" : "pointer",
+                    opacity: insightState === "working" ? 0.6 : 1,
+                  }}
+                >
+                  {insightState === "working" ? "Generating, about 20 seconds..." : "Generate deep dive"}
+                </button>
+              </Card>
+            )}
+            {insightError && (
+              <div
+                style={{
+                  padding: 12,
+                  borderRadius: 8,
+                  background: "#FDF0EE",
+                  color: "#9B2A1A",
+                  fontSize: 12,
+                  lineHeight: 1.5,
+                }}
+              >
+                {insightError}
+              </div>
+            )}
+            {person.insights && (
+              <div>
+                <button
+                  onClick={generateInsights}
+                  disabled={insightState === "working"}
+                  style={{
+                    padding: "7px 14px",
+                    borderRadius: 100,
+                    border: "0.5px solid rgba(0,0,0,0.15)",
+                    background: "#FFFFFF",
+                    color: "#4D4945",
+                    fontSize: 12,
+                    cursor: "pointer",
+                  }}
+                >
+                  {insightState === "working" ? "Regenerating..." : "Regenerate"}
+                </button>
+              </div>
+            )}
           </div>
         )}
 

@@ -1,3 +1,5 @@
+import type { PersonInsights } from "./insights";
+
 export type EnergyKey = "driver" | "energizer" | "supporter" | "analyst";
 export type AvailKey = "now" | "soon" | "allocated";
 
@@ -25,6 +27,7 @@ export interface Person {
   detractors: string[];
   howToSpeak: string;
   howToEmail: string;
+  insights?: PersonInsights | null;
 }
 
 export const energy: Record<

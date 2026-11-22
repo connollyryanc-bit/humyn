@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { INSIGHTS_JSON_SPEC, normaliseInsights } from "../../lib/insights";
+
 export const runtime = "nodejs";
 
 const SYSTEM_PROMPT = `You are a personality analyst specialising in the Humyn Pulse Map,
@@ -51,7 +53,8 @@ scores keys and the primary/secondary fields):
   "detractors": ["detractor 1", "detractor 2", "detractor 3", "detractor 4"],
   "howToSpeak": "paragraph on how to communicate verbally with this person based on their energy profile",
   "howToEmail": "paragraph on how to write to this person based on their energy profile",
-  "confidence": 0-100
+  "confidence": 0-100,
+  ${INSIGHTS_JSON_SPEC}
 }
 
 Base the confidence score on:
@@ -171,7 +174,7 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         model: "claude-sonnet-5-5",
-        max_tokens: 2000,
+        max_tokens: 5000,
         system: SYSTEM_PROMPT,
         messages: [
           {
@@ -235,6 +238,7 @@ export async function POST(req: Request) {
   }
 
   const normalised = normaliseProfile(parsed);
+  normalised.insights = normaliseInsights(parsed?.insights);
 
   const problem = validateProfile(normalised);
   if (problem) {

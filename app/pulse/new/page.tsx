@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { EnergyKey, Person, energy } from "../../page";
 import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
 import { initialsFromName } from "../../lib/people-store";
+import type { PersonInsights } from "../../lib/insights";
 import { createPersonViaApi } from "../../lib/api-client";
 import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
 
@@ -25,6 +26,7 @@ interface GeneratedProfile {
   howToSpeak: string;
   howToEmail: string;
   confidence: number;
+  insights?: PersonInsights | null;
 }
 
 const TEST_SAMPLE = `I am a strategic leader with 15 years of experience in digital transformation and organisational change. I have led complex, multi-stakeholder programmes across financial services, retail and public sector. I am direct and results-oriented, and I believe in making clear decisions based on evidence. I have built and scaled teams across Europe and am comfortable operating at board level. My focus is always on delivering measurable business outcomes, not just activity. I hold an MBA from London Business School and am a certified programme director.`;
@@ -866,6 +868,7 @@ export default function PulseNewPage() {
       detractors: profile.detractors,
       howToSpeak: profile.howToSpeak,
       howToEmail: profile.howToEmail,
+      insights: profile.insights ?? null,
     };
     try {
       const saved = await createPersonViaApi(draftPerson);

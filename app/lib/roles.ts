@@ -49,7 +49,7 @@ const DEFAULT_ROLE: Role = "capacity-manager";
 
 // Single source of truth until we wire a Supabase roles table.
 const EMAIL_TO_ROLE: Record<string, Role> = {
-  "ryan.connolly@valtech.com": "admin",
+  "connollyryanc@gmail.com": "admin",
 };
 
 export function roleForEmail(email: string | null | undefined): Role {

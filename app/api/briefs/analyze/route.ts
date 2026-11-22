@@ -13,7 +13,7 @@ below. The capacity manager will choose one to take to client.
 Voice rules:
 - Pulse Map vocabulary only — the four archetypes are Driver (red,
   action-focused), Energizer (yellow, people-focused), Supporter (green,
-  stability-focused), Analyst (blue, process-focused). Never Insights
+  harmony-focused), Analyst (blue, process-focused). Never Insights
   Discovery vocabulary.
 - Use real consultant names from the pool. Never invent.
 - Be specific and decisive, not hedging.

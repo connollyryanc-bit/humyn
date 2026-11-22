@@ -47,7 +47,7 @@ Supporter / Coordinator / Observer / Reformer).
 The four energies map Colour → Behaviour → Archetype:
 - **Red — Action-focused — Driver**
 - **Yellow — People-focused — Energizer**
-- **Green — Stability-focused — Supporter**
+- **Green — Harmony-focused — Supporter**
 - **Blue — Process-focused — Analyst**
 
 ```

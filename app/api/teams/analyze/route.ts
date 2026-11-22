@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 
 const SYSTEM_PROMPT = `You are a team-composition analyst specialising in the Humyn Pulse Map
 (four energies — Driver (red, action-focused), Energizer (yellow, people-focused),
-Supporter (green, stability-focused), Analyst (blue, process-focused)).
+Supporter (green, harmony-focused), Analyst (blue, process-focused)).
 You are given a composed team and must return a structured JSON analysis useful
 to a Nordic capacity manager.
 

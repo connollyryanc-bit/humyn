@@ -12,7 +12,7 @@ infer personality profiles.
 The Humyn Pulse Map uses four energies (Colour — Behaviour — Archetype):
 - Red — Action-focused — Driver: Decisive, driven, competitive, direct, strong-willed, purposeful
 - Yellow — People-focused — Energizer: Enthusiastic, sociable, dynamic, creative, persuasive, optimistic
-- Green — Stability-focused — Supporter: Caring, patient, reliable, empathetic, supportive
+- Green — Harmony-focused — Supporter: Caring, patient, reliable, empathetic, supportive
 - Blue — Process-focused — Analyst: Analytical, precise, deliberate, questioning, formal, methodical
 
 The 8 wheel positions are:

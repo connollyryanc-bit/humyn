@@ -43,7 +43,7 @@ The foundation. Every person gets a rich profile built from LinkedIn data and in
 Profiles include:
 - Humyn Pulse Map energy profile — four archetypes named Colour → Behaviour → Archetype:
   Driver (red, action-focused), Energizer (yellow, people-focused), Supporter (green,
-  stability-focused), Analyst (blue, process-focused)
+  harmony-focused), Analyst (blue, process-focused)
 - Wheel position placement across eight types — pure quadrants (Driver, Energizer,
   Supporter, Analyst) plus mixes (e.g. Energizing Driver, Supportive Energizer,
   Analytical Supporter, Driving Analyst)
@@ -197,7 +197,7 @@ matters for white-labelling and pan-Nordic rollout.
 |--------|--------------------|------------|-----------|-----------------------------------|---------------------------|
 | Red    | Action-focused     | Driver     | `#E8402A` | Decisive, driven, direct          | Dominant (D)              |
 | Yellow | People-focused     | Energizer  | `#F5A623` | Enthusiastic, sociable, creative  | Influential (I)           |
-| Green  | Stability-focused  | Supporter  | `#2E8B57` | Caring, patient, reliable         | Steady (S)                |
+| Green  | Harmony-focused  | Supporter  | `#2E8B57` | Caring, patient, reliable         | Steady (S)                |
 | Blue   | Process-focused    | Analyst    | `#1E6FA5` | Analytical, precise, careful      | Conscientious (C)         |
 
 The wheel has eight positions — four pure, four mixed:

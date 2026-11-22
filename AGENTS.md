@@ -240,7 +240,7 @@ about a person's energy mix, never as decorative chrome.
 - **Energizer (yellow, `#F5A623`)** — people-focused; enthusiasm signals, soft warnings,
   "below target" utilisation, medium risk in the capacity dashboard. **Never used for
   chrome** — that's Coral's job.
-- **Supporter (green, `#2E8B57`)** — stability-focused; calm, supportive signals, "on
+- **Supporter (green, `#2E8B57`)** — harmony-focused; calm, supportive signals, "on
   target" utilisation, low risk, available-now status
 - **Analyst (blue, `#1E6FA5`)** — process-focused; analytical signals, information,
   precise reads
@@ -263,7 +263,7 @@ Energizer yellow.
 - Using Insights Discovery vocabulary (Fiery Red, Sunshine Yellow, Director, Inspirer,
   72-position wheel). The framework is the Humyn Pulse Map — four archetypes named by
   colour and behaviour: **Driver** (red, action-focused), **Energizer** (yellow,
-  people-focused), **Supporter** (green, stability-focused), **Analyst** (blue,
+  people-focused), **Supporter** (green, harmony-focused), **Analyst** (blue,
   process-focused). Eight wheel positions: pure quadrants (Driver / Energizer / Supporter
   / Analyst) plus mixes (e.g. "Energizing Driver", "Supportive Energizer", "Analytical
   Supporter", "Driving Analyst").

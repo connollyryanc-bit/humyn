@@ -12,7 +12,13 @@ import {
   people,
   utilTone,
 } from "../../page";
-import { EnergyDynamics, EnergyRing, EnergySpider } from "../../components/energy";
+import {
+  EnergyBalance,
+  EnergyDynamics,
+  EnergyRing,
+  EnergySpider,
+  balanceGroups,
+} from "../../components/energy";
 import { fetchPerson, updatePersonViaApi } from "../../lib/api-client";
 import { InsightSections } from "../../components/insight-sections";
 import type { PersonInsights } from "../../lib/insights";
@@ -498,6 +504,46 @@ export default function PersonProfilePage() {
                 </div>
               </Card>
             </div>
+
+            <Card>
+              <SectionLabel>Leading and reserve energies</SectionLabel>
+              <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 32, alignItems: "center" }}>
+                <div style={{ padding: "8px 8px 0" }}>
+                  <EnergyBalance scores={person.scores} />
+                </div>
+                <div>
+                  {(() => {
+                    const { leading, reserve } = balanceGroups(person.scores);
+                    const first = person.name.split(" ")[0];
+                    const names = (list: EnergyKey[]) => list.map((k) => energy[k].label).join(" and ");
+                    return (
+                      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: "#161311", marginBottom: 4 }}>
+                            {leading.length > 0 ? `Leading: ${names(leading)}` : "No energy leads strongly"}
+                          </div>
+                          <p style={{ fontSize: 13, color: "#4D4945", lineHeight: 1.6, margin: 0 }}>
+                            {leading.length > 0
+                              ? `These sit above the midline. They are what ${first} reaches for first and shows most visibly at work.`
+                              : `Every energy sits below the midline, which points to a flexible profile that adapts to the situation.`}
+                          </p>
+                        </div>
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: "#161311", marginBottom: 4 }}>
+                            {reserve.length > 0 ? `In reserve: ${names(reserve)}` : "Nothing held in reserve"}
+                          </div>
+                          <p style={{ fontSize: 13, color: "#4D4945", lineHeight: 1.6, margin: 0 }}>
+                            {reserve.length > 0
+                              ? `These sit below the midline. ${first} can use them, but they take more conscious effort and are less visible day to day.`
+                              : `All four energies sit above the midline, so ${first} draws on the full range.`}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            </Card>
 
             <Card>
               <SectionLabel>Engagement signals</SectionLabel>

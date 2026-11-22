@@ -415,3 +415,98 @@ export function EnergyDynamics({
     </svg>
   );
 }
+
+/** Midpoint of the 0-100 scale: energies above it lead, energies below it sit in reserve. */
+export const BALANCE_MIDLINE = 50;
+
+export function balanceGroups(scores: EnergyScores): { leading: EnergyKey[]; reserve: EnergyKey[] } {
+  const sorted = [...ENERGIES].sort((a, b) => scores[b] - scores[a]);
+  return {
+    leading: sorted.filter((k) => scores[k] >= BALANCE_MIDLINE),
+    reserve: sorted.filter((k) => scores[k] < BALANCE_MIDLINE),
+  };
+}
+
+export function EnergyBalance({
+  scores,
+  height = 270,
+}: {
+  scores: EnergyScores;
+  height?: number;
+}) {
+  const barWidth = 54;
+  const gap = 22;
+  const width = ENERGIES.length * barWidth + (ENERGIES.length - 1) * gap;
+  const padTop = 24;
+  const padBottom = 30;
+  const half = (height - padTop - padBottom) / 2;
+  const mid = padTop + half;
+
+  return (
+    <svg
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      aria-label="Leading and reserve energies"
+      style={{ overflow: "visible" }}
+    >
+      <rect x={-8} y={mid} width={width + 16} height={half} fill="#FAFAF8" rx={6} />
+
+      <text
+        x={-8}
+        y={12}
+        style={{ fontSize: 10, fill: "#9A9A9A", fontWeight: 500, letterSpacing: "0.07em" }}
+      >
+        LEADING
+      </text>
+      <text
+        x={-8}
+        y={height - 12}
+        style={{ fontSize: 10, fill: "#9A9A9A", fontWeight: 500, letterSpacing: "0.07em" }}
+      >
+        RESERVE
+      </text>
+
+      {ENERGIES.map((k, i) => {
+        const value = Math.max(0, Math.min(100, scores[k]));
+        const delta = value - BALANCE_MIDLINE;
+        const h = Math.max(2, (Math.abs(delta) / BALANCE_MIDLINE) * half);
+        const x = i * (barWidth + gap);
+        const up = delta >= 0;
+        const y = up ? mid - h : mid;
+        return (
+          <g key={k}>
+            <rect
+              x={x}
+              y={y}
+              width={barWidth}
+              height={h}
+              fill={energy[k].color}
+              fillOpacity={up ? 1 : 0.5}
+              rx={4}
+              ry={4}
+            />
+            <text
+              x={x + barWidth / 2}
+              y={up ? y - 6 : y + h + 14}
+              textAnchor="middle"
+              style={{ fontSize: 11, fill: energy[k].text, fontWeight: 600 }}
+            >
+              {value}
+            </text>
+            <text
+              x={x + barWidth / 2}
+              y={height - 12}
+              textAnchor="middle"
+              style={{ fontSize: 10, fill: "#4D4945", fontWeight: 500 }}
+            >
+              {energy[k].label}
+            </text>
+          </g>
+        );
+      })}
+
+      <line x1={-8} x2={width + 8} y1={mid} y2={mid} stroke="#161311" strokeWidth={1.5} />
+    </svg>
+  );
+}

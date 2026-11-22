@@ -348,6 +348,76 @@
     }).join("");
   }
 
+  function balance(scores) {
+    const half = 70;
+    const cols = ORDER.map((k) => {
+      const e = ENERGY[k];
+      const v = Math.max(0, Math.min(100, Math.round(scores[k] || 0)));
+      const up = v >= 50;
+      const h = Math.max(2, (Math.abs(v - 50) / 50) * half);
+      const bar =
+        '<div style="position:absolute;left:50%;margin-left:-20px;width:40px;border-radius:4px;background:' +
+        e.color +
+        ";opacity:" +
+        (up ? 1 : 0.5) +
+        ";height:" +
+        h +
+        "px;" +
+        (up ? "bottom:" + half + "px" : "top:" + half + "px") +
+        '"></div>';
+      const num =
+        '<div style="position:absolute;left:0;right:0;text-align:center;font-size:11px;font-weight:600;color:' +
+        e.text +
+        ";" +
+        (up ? "bottom:" + (half + h + 4) + "px" : "top:" + (half + h + 4) + "px") +
+        '">' +
+        v +
+        "</div>";
+      return '<div style="position:relative;flex:1;height:' + half * 2 + 'px">' + bar + num + "</div>";
+    }).join("");
+    const names = ORDER.map(
+      (k) =>
+        '<div style="flex:1;text-align:center;font-size:10px;font-weight:500;color:' + INK2 + '">' + ENERGY[k].label + "</div>",
+    ).join("");
+    const sorted = ORDER.slice().sort((a, b) => (scores[b] || 0) - (scores[a] || 0));
+    const lead = sorted.filter((k) => (scores[k] || 0) >= 50).map((k) => ENERGY[k].label);
+    const res = sorted.filter((k) => (scores[k] || 0) < 50).map((k) => ENERGY[k].label);
+    return (
+      '<div style="position:relative;padding:22px 0 0"><div style="position:absolute;left:0;top:0;font-size:10px;font-weight:500;letter-spacing:0.07em;color:' +
+      INK3 +
+      '">LEADING</div><div style="position:relative;display:flex;gap:10px"><div style="position:absolute;left:0;right:0;top:' +
+      half +
+      'px;height:' +
+      half +
+      'px;background:#FAFAF8;border-radius:6px"></div><div style="position:absolute;left:0;right:0;top:' +
+      half +
+      'px;height:1.5px;background:' +
+      INK +
+      '"></div>' +
+      cols +
+      '</div><div style="display:flex;gap:10px;margin-top:6px">' +
+      names +
+      '</div><div style="font-size:10px;font-weight:500;letter-spacing:0.07em;color:' +
+      INK3 +
+      ';margin-top:6px">RESERVE</div></div>' +
+      '<div style="margin-top:14px;font-size:13px;line-height:1.55;color:' +
+      INK2 +
+      '"><b style="color:' +
+      INK +
+      '">' +
+      (lead.length ? "Leading: " + lead.join(" and ") : "No energy leads strongly") +
+      "</b><br>" +
+      (lead.length ? "Reached for first and most visible at work." : "A flexible profile that adapts to the situation.") +
+      '<div style="height:8px"></div><b style="color:' +
+      INK +
+      '">' +
+      (res.length ? "In reserve: " + res.join(" and ") : "Nothing held in reserve") +
+      "</b><br>" +
+      (res.length ? "Available, but takes more conscious effort." : "Draws on the full range.") +
+      "</div>"
+    );
+  }
+
   function btn(id, text, dark) {
     return (
       '<button id="' +
@@ -379,6 +449,7 @@
           legend(p.scores) +
           "</div></div>",
       ) +
+      card(label("Leading and reserve energies", e.color) + balance(p.scores)) +
       card(label("Summary", e.color) + '<div style="font-size:13px;line-height:1.6;color:' + INK2 + '">' + esc(p.bio) + "</div>") +
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">' +
       card(label("Best trait") + '<div style="font-size:13px;line-height:1.55;color:' + INK2 + '">' + esc(p.bestTrait) + "</div>", "margin:0") +

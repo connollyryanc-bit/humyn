@@ -519,6 +519,31 @@ Next priorities:
 
 ---
 
+## Humyn Reach (separate universe)
+
+Reach is the sales and BDM side of humyn: a separate section of the site (own layout,
+own navigation, no shared TopChrome) that profiles prospects, scores leads, writes
+personalised messages and runs outreach sequences. It is intended to become a
+multi-tenant SaaS sold globally; today it is a **demo with sample data**.
+
+- Lives under `app/reach/`. Chrome is `app/reach/chrome.tsx` (moss `Reach` pill, links
+  back to `/`). The HR side links in via a small "humyn Reach" pill in `TopChrome`.
+- Pages: `/reach` (dashboard), `/reach/prospects` + `/reach/prospects/[id]`,
+  `/reach/studio` (message studio), `/reach/sequences`, `/reach/analytics`,
+  `/reach/scoring`.
+- Data: `app/reach/seed.ts` (types + sample prospects, lists, sequences), scoring in
+  `app/reach/scoring.ts`. State persists in localStorage via `app/reach/store.ts`.
+  Nothing is in Supabase yet. A real version needs an `organisations` table and an
+  `org_id` on every row.
+- AI: `/api/reach/draft` (modes: questions, draft, rewrite). It must never mention
+  personality profiling in a message and must keep healthcare messages informational.
+- Reuses the Pulse visuals (`EnergyRing`, `EnergyBalance`) for prospect profiles.
+- Not built yet: real sending (Gmail or Outlook), CRM sync, Sales Navigator import,
+  LinkedIn automation (deliberately avoided: it breaks LinkedIn's terms), billing,
+  accounts. Cold outreach and profiling of prospects need GDPR review before launch.
+
+---
+
 ## The Owner
 
 This platform is being built for and by the Nordic Capacity Manager at Inceptions. They are not a developer. All code must be clean, well-structured, and easy to hand off to a developer later. Prioritise clarity over cleverness.

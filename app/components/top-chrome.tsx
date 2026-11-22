@@ -348,6 +348,24 @@ export function TopChrome({
           </nav>
           <div style={{ flex: 1 }} />
           {rightSlot}
+          <Link
+            href="/reach"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "6px 14px",
+              borderRadius: 100,
+              border: "0.5px solid rgba(0,0,0,0.15)",
+              fontSize: 12,
+              fontWeight: 500,
+              color: "#161311",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#9CFF40" }} />
+            humyn Reach &rarr;
+          </Link>
           <SignedInBadge />
         </div>
       </div>

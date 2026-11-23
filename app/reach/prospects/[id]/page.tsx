@@ -2,12 +2,20 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { energy } from "../../../lib/people-data";
-import { EnergyBalance, EnergyRing } from "../../../components/energy";
-import { ENERGY_STYLE, SEGMENT_PAIN, STAGES, type Stage } from "../../seed";
-import { scoreProspect } from "../../scoring";
+import { useState } from "react";
+import type { PersonInsights } from "../../../lib/insights";
+import {
+  EnergyBadge,
+  HeaderStat,
+  Pill,
+  ProfileHeader,
+  PulseProfileBody,
+} from "../../../components/pulse-profile";
+import { ENERGY_STYLE, SEGMENT_LABEL, SEGMENT_PAIN, STAGES, type Prospect, type Stage } from "../../seed";
+import { GRADE_STYLE, scoreProspect, type ScoreResult } from "../../scoring";
+import { prospectToPerson } from "../../prospect-person";
 import { useProspects, useScoring } from "../../store";
-import { Avatar, Bar, Btn, Card, EnergyPill, GradePill, Label, Page, Pill, R, SegmentPill, inputStyle } from "../../ui";
+import { Bar, Btn, Card, GradePill, Label, Page, R, inputStyle } from "../../ui";
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
@@ -20,7 +28,7 @@ function Stat({ label, value }: { label: string; value: number }) {
   );
 }
 
-function List({ items, dot }: { items: string[]; dot: string }) {
+function Bullets({ items, dot }: { items: string[]; dot: string }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
       {items.map((t) => (
@@ -33,10 +41,121 @@ function List({ items, dot }: { items: string[]; dot: string }) {
   );
 }
 
+function OutreachTab({
+  p,
+  s,
+  onStage,
+}: {
+  p: Prospect;
+  s: ScoreResult;
+  onStage: (stage: Stage) => void;
+}) {
+  const style = ENERGY_STYLE[p.primary];
+  const first = p.name.split(" ")[0];
+  const fitRows: { label: string; value: number }[] = [
+    { label: "Job title match", value: p.fit.title },
+    { label: "Industry match", value: p.fit.industry },
+    { label: "Company size", value: p.fit.size },
+    { label: "Region", value: p.fit.region },
+  ];
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 12 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <Card>
+          <Label>How to write to {first}</Label>
+          <p style={{ fontSize: 14, color: R.ink, lineHeight: 1.6, margin: "0 0 18px" }}>{style.summary}</p>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#2E8B57", marginBottom: 10 }}>Do</div>
+              <Bullets items={style.do} dot="#2E8B57" />
+            </div>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#E8402A", marginBottom: 10 }}>Don&apos;t</div>
+              <Bullets items={style.dont} dot="#E8402A" />
+            </div>
+          </div>
+        </Card>
+        <Card>
+          <Label>Suggested opening</Label>
+          <p style={{ fontSize: 13, color: R.ink2, lineHeight: 1.6, margin: 0 }}>{p.opener}</p>
+          <p style={{ fontSize: 12, color: R.ink3, lineHeight: 1.6, margin: "8px 0 0" }}>
+            Likely focus: {SEGMENT_PAIN[p.segment]}.
+          </p>
+          <div style={{ marginTop: 14 }}>
+            <Link href={`/reach/studio?prospect=${p.id}`}>
+              <Btn variant="moss">Write a message to {first}</Btn>
+            </Link>
+          </div>
+        </Card>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <Card>
+          <Label>Pipeline stage</Label>
+          <select
+            value={p.stage}
+            onChange={(ev) => onStage(ev.target.value as Stage)}
+            style={inputStyle}
+            aria-label="Pipeline stage"
+          >
+            {STAGES.map((st) => (
+              <option key={st.key} value={st.key}>
+                {st.label}
+              </option>
+            ))}
+            <option value="lost">Lost</option>
+          </select>
+        </Card>
+
+        <Card>
+          <Label>Lead score</Label>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 16 }}>
+            <span className="font-display" style={{ fontSize: 36, fontWeight: 600, letterSpacing: "-0.5px" }}>
+              {s.total}
+            </span>
+            <span style={{ fontSize: 12, color: R.ink3 }}>
+              fit {s.fit} &middot; engagement {s.engagement}
+            </span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {fitRows.map((r) => (
+              <div key={r.label}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: R.ink2, marginBottom: 5 }}>
+                  <span>{r.label}</span>
+                  <span style={{ color: R.ink3 }}>{r.value}</span>
+                </div>
+                <Bar value={r.value} color={R.ink} />
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card>
+          <Label>Outreach so far</Label>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 8 }}>
+            <Stat label="Sent" value={p.engagement.sent} />
+            <Stat label="Opens" value={p.engagement.opens} />
+            <Stat label="Clicks" value={p.engagement.clicks} />
+            <Stat label="Replies" value={p.engagement.replies} />
+            <Stat label="Meetings" value={p.engagement.meetings} />
+          </div>
+          <div style={{ fontSize: 12, color: R.ink3, marginTop: 14, lineHeight: 1.6 }}>
+            Last activity: {p.lastActivity}. Added {p.addedDaysAgo} days ago from {p.source}.
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
 export default function ProspectProfile() {
   const params = useParams<{ id: string }>();
   const [prospects, setProspects, hydrated] = useProspects();
   const [cfg] = useScoring();
+  const [insightState, setInsightState] = useState<"idle" | "working">("idle");
+  const [insightError, setInsightError] = useState("");
+
   const p = prospects.find((x) => x.id === Number(params?.id));
 
   if (!p) {
@@ -52,165 +171,109 @@ export default function ProspectProfile() {
     );
   }
 
-  const s = scoreProspect(p, cfg);
-  const e = energy[p.primary];
-  const style = ENERGY_STYLE[p.primary];
+  const prospect = p;
+  const s = scoreProspect(prospect, cfg);
+  const person = prospectToPerson(prospect);
+  const grade = GRADE_STYLE[s.grade];
 
   function setStage(stage: Stage) {
-    setProspects((prev) => prev.map((x) => (x.id === p!.id ? { ...x, stage } : x)));
+    setProspects((prev) => prev.map((x) => (x.id === prospect.id ? { ...x, stage } : x)));
   }
 
-  const fitRows: { label: string; value: number }[] = [
-    { label: "Job title match", value: p.fit.title },
-    { label: "Industry match", value: p.fit.industry },
-    { label: "Company size", value: p.fit.size },
-    { label: "Region", value: p.fit.region },
-  ];
+  async function generateInsights() {
+    setInsightState("working");
+    setInsightError("");
+    try {
+      const res = await fetch("/api/pulse/insights", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ person }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data?.error || "Could not generate the deep dive.");
+      const insights = data.insights as PersonInsights;
+      setProspects((prev) => prev.map((x) => (x.id === prospect.id ? { ...x, insights } : x)));
+    } catch (err) {
+      setInsightError(err instanceof Error ? err.message : "Could not generate the deep dive.");
+    } finally {
+      setInsightState("idle");
+    }
+  }
+
+  const stageLabel = prospect.doNotContact
+    ? "Do not contact"
+    : STAGES.find((x) => x.key === prospect.stage)?.label ?? "Lost";
 
   return (
     <Page>
-      <Link href="/reach/prospects" style={{ fontSize: 13, color: R.ink2 }}>
-        &larr; Prospects
-      </Link>
-
-      <div style={{ display: "flex", justifyContent: "space-between", gap: 24, margin: "16px 0 24px", flexWrap: "wrap" }}>
-        <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-          <Avatar initials={p.initials} k={p.primary} size={64} />
-          <div>
-            <h1 className="font-display" style={{ fontSize: 30, fontWeight: 600, letterSpacing: "-0.5px", margin: 0 }}>
-              {p.name}
-            </h1>
-            <div style={{ fontSize: 14, color: R.ink2, margin: "6px 0 10px" }}>
-              {p.title}, {p.company} &middot; {p.region}
-            </div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              <EnergyPill k={p.primary} />
-              <Pill>{p.wheelPosition}</Pill>
-              <SegmentPill s={p.segment} />
-              <GradePill grade={s.grade} score={s.total} />
-            </div>
-          </div>
-        </div>
-        <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
-          <select
-            value={p.stage}
-            onChange={(ev) => setStage(ev.target.value as Stage)}
-            style={{ ...inputStyle, width: "auto", padding: "9px 12px", fontSize: 12 }}
-            aria-label="Pipeline stage"
-          >
-            {STAGES.map((st) => (
-              <option key={st.key} value={st.key}>
-                {st.label}
-              </option>
-            ))}
-            <option value="lost">Lost</option>
-          </select>
-          <Link href={`/reach/studio?prospect=${p.id}`}>
-            <Btn variant="moss">Write a message</Btn>
-          </Link>
-        </div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+        <Link href="/reach/prospects" style={{ fontSize: 13, color: R.ink2 }}>
+          &larr; Back to prospects
+        </Link>
+        <Link href={`/reach/studio?prospect=${prospect.id}`}>
+          <Btn variant="moss">Write a message</Btn>
+        </Link>
       </div>
 
-      {(p.regulated || p.doNotContact) && (
+      {(prospect.regulated || prospect.doNotContact) && (
         <div
           style={{
             padding: "12px 16px",
             borderRadius: 10,
-            background: p.doNotContact ? "#FDF0EE" : "#FFFBF2",
-            border: `0.5px solid ${p.doNotContact ? "#FCCDC6" : "#FAD98A"}`,
-            color: p.doNotContact ? "#9B2A1A" : "#8B5A00",
+            background: prospect.doNotContact ? "#FDF0EE" : "#FFFBF2",
+            border: `0.5px solid ${prospect.doNotContact ? "#FCCDC6" : "#FAD98A"}`,
+            color: prospect.doNotContact ? "#9B2A1A" : "#8B5A00",
             fontSize: 13,
             lineHeight: 1.55,
             marginBottom: 12,
           }}
         >
-          {p.doNotContact
+          {prospect.doNotContact
             ? "This contact is on the do-not-contact list. Sequences will skip them."
             : "Regulated segment. Messages to healthcare professionals are limited to informational content with no clinical or promotional claims. Check local rules before sending."}
         </div>
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-        <Card>
-          <Label dot={e.color}>Pulse profile</Label>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <EnergyRing scores={p.scores} position={p.wheelPosition} primary={p.primary} size={260} />
-          </div>
-          <div style={{ fontSize: 12, color: R.ink3, textAlign: "center", marginTop: 4 }}>
-            Confidence {p.confidence}%. Predicted from public information, not their own result.
-          </div>
-        </Card>
+      <ProfileHeader
+        person={person}
+        eyebrow="Prospect profile"
+        subtitle={`${prospect.title}, ${prospect.company} · ${prospect.region}`}
+        badges={
+          <>
+            <EnergyBadge k={person.primary} />
+            <EnergyBadge k={person.secondary} small />
+            <Pill>{person.wheelPosition}</Pill>
+            <Pill>{SEGMENT_LABEL[prospect.segment]}</Pill>
+            <GradePill grade={s.grade} score={s.total} />
+          </>
+        }
+        stats={
+          <>
+            <HeaderStat label="Lead score" value={`${s.total} · ${grade.label}`} color={grade.color} />
+            <HeaderStat label="Stage" value={stageLabel} />
+            <HeaderStat label="Sector" value={SEGMENT_LABEL[prospect.segment]} />
+            <HeaderStat label="Company size" value={prospect.companySize} />
+            <HeaderStat label="Source" value={prospect.source} />
+          </>
+        }
+      />
 
-        <Card>
-          <Label dot={e.color}>Leading and reserve energies</Label>
-          <div style={{ display: "flex", justifyContent: "center", padding: "8px 8px 0" }}>
-            <EnergyBalance scores={p.scores} height={250} />
-          </div>
-        </Card>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: 12, marginBottom: 12 }}>
-        <Card>
-          <Label dot={e.color}>How to write to {p.name.split(" ")[0]}</Label>
-          <p style={{ fontSize: 14, color: R.ink, lineHeight: 1.6, margin: "0 0 18px" }}>{style.summary}</p>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-            <div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: "#2E8B57", marginBottom: 10 }}>Do</div>
-              <List items={style.do} dot="#2E8B57" />
-            </div>
-            <div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: "#E8402A", marginBottom: 10 }}>Don&apos;t</div>
-              <List items={style.dont} dot="#E8402A" />
-            </div>
-          </div>
-          <div style={{ marginTop: 20, paddingTop: 16, borderTop: R.line }}>
-            <Label>Suggested opening</Label>
-            <p style={{ fontSize: 13, color: R.ink2, lineHeight: 1.6, margin: 0 }}>{p.opener}</p>
-            <p style={{ fontSize: 12, color: R.ink3, lineHeight: 1.6, margin: "8px 0 0" }}>
-              Likely focus: {SEGMENT_PAIN[p.segment]}.
-            </p>
-          </div>
-        </Card>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <Card>
-            <Label>Lead score</Label>
-            <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 16 }}>
-              <span className="font-display" style={{ fontSize: 36, fontWeight: 600, letterSpacing: "-0.5px" }}>
-                {s.total}
-              </span>
-              <span style={{ fontSize: 12, color: R.ink3 }}>
-                fit {s.fit} &middot; engagement {s.engagement}
-              </span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {fitRows.map((r) => (
-                <div key={r.label}>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: R.ink2, marginBottom: 5 }}>
-                    <span>{r.label}</span>
-                    <span style={{ color: R.ink3 }}>{r.value}</span>
-                  </div>
-                  <Bar value={r.value} color={R.ink} />
-                </div>
-              ))}
-            </div>
-          </Card>
-
-          <Card>
-            <Label>Outreach so far</Label>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 8 }}>
-              <Stat label="Sent" value={p.engagement.sent} />
-              <Stat label="Opens" value={p.engagement.opens} />
-              <Stat label="Clicks" value={p.engagement.clicks} />
-              <Stat label="Replies" value={p.engagement.replies} />
-              <Stat label="Meetings" value={p.engagement.meetings} />
-            </div>
-            <div style={{ fontSize: 12, color: R.ink3, marginTop: 14, lineHeight: 1.6 }}>
-              Last activity: {p.lastActivity}. Added {p.addedDaysAgo} days ago from {p.source}.
-            </div>
-          </Card>
-        </div>
-      </div>
+      <PulseProfileBody
+        person={person}
+        insightState={insightState}
+        insightError={insightError}
+        onGenerateInsights={generateInsights}
+        composerPlaceholder="E.g. I would like to book a 20-minute call about reducing unplanned downtime across their plants."
+        capabilitiesLabel="Role and company"
+        showAchievements={false}
+        extraTabs={[
+          {
+            key: "outreach",
+            label: "Outreach",
+            content: <OutreachTab p={prospect} s={s} onStage={setStage} />,
+          },
+        ]}
+      />
     </Page>
   );
 }

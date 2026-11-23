@@ -1,4 +1,5 @@
 import type { EnergyKey } from "../lib/people-data";
+import type { PersonInsights } from "../lib/insights";
 
 export type Segment = "manufacturing" | "healthcare" | "finance" | "retail";
 export type Stage = "new" | "contacted" | "engaged" | "meeting" | "opportunity" | "won" | "lost";
@@ -58,6 +59,7 @@ export interface Prospect {
   opener: string;
   doNotContact?: boolean;
   regulated?: boolean;
+  insights?: PersonInsights | null;
 }
 
 export interface ListFilter {

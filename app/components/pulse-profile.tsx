@@ -3,7 +3,6 @@
 import { useState, type ReactNode } from "react";
 import { EnergyKey, Person, energy } from "../page";
 import {
-  EnergyBalance,
   EnergyDynamics,
   EnergyRing,
   EnergySpider,
@@ -33,8 +32,8 @@ export function Pill({ children }: { children: React.ReactNode }) {
         alignItems: "center",
         padding: "3px 9px",
         borderRadius: 100,
-        background: "#FAFAF8",
-        color: "#5A5A5A",
+        background: "#F7F7FA",
+        color: "#4B4C6B",
         border: "1px solid rgba(0,0,0,0.07)",
         fontSize: 11,
         fontWeight: 500,
@@ -51,7 +50,7 @@ export function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 11,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textTransform: "uppercase",
         letterSpacing: "0.07em",
         fontWeight: 500,
@@ -84,10 +83,10 @@ function EnergyBars({ person }: { person: Person }) {
       {(["driver", "energizer", "supporter", "analyst"] as EnergyKey[]).map((c) => (
         <div key={c} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
           <div style={{ width: 8, height: 8, borderRadius: "50%", background: energy[c].color, flexShrink: 0 }} />
-          <span style={{ fontSize: 12, color: "#5A5A5A", width: 130, fontWeight: 500 }}>
+          <span style={{ fontSize: 12, color: "#4B4C6B", width: 130, fontWeight: 500 }}>
             {energy[c].label}
           </span>
-          <div style={{ flex: 1, height: 6, background: "#EDEDEA", borderRadius: 4, overflow: "hidden" }}>
+          <div style={{ flex: 1, height: 6, background: "#ECEBF2", borderRadius: 4, overflow: "hidden" }}>
             <div
               style={{
                 width: `${person.scores[c]}%`,
@@ -185,7 +184,7 @@ export function HeaderStat({ label, value, color }: { label: string; value: stri
       <div
         style={{
           fontSize: 10,
-          color: "#9A9A9A",
+          color: "#6E7090",
           textTransform: "uppercase",
           letterSpacing: "0.07em",
           fontWeight: 500,
@@ -194,7 +193,7 @@ export function HeaderStat({ label, value, color }: { label: string; value: stri
       >
         {label}
       </div>
-      <div style={{ fontSize: 17, fontWeight: 600, color: color ?? "#1A1A1A", letterSpacing: "-0.2px" }}>
+      <div style={{ fontSize: 17, fontWeight: 600, color: color ?? "#0E0F26", letterSpacing: "-0.2px" }}>
         {value}
       </div>
     </div>
@@ -232,7 +231,7 @@ export function ProfileHeader({
               <div
                 style={{
                   fontSize: 11,
-                  color: "#9A9A9A",
+                  color: "#6E7090",
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
                   fontWeight: 500,
@@ -245,14 +244,14 @@ export function ProfileHeader({
                 style={{
                   fontSize: 32,
                   fontWeight: 600,
-                  color: "#161311",
+                  color: "#0E0F26",
                   letterSpacing: "-0.5px",
                   margin: "4px 0 4px",
                 }}
               >
                 {person.name}
               </h1>
-              <div style={{ fontSize: 13, color: "#5A5A5A" }}>
+              <div style={{ fontSize: 13, color: "#4B4C6B" }}>
                 {subtitle}
               </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 12 }}>
@@ -261,7 +260,7 @@ export function ProfileHeader({
             </div>
           </div>
 
-          <p style={{ fontSize: 14, color: "#5A5A5A", lineHeight: 1.6, margin: 0 }}>{person.bio}</p>
+          <p style={{ fontSize: 14, color: "#4B4C6B", lineHeight: 1.6, margin: 0 }}>{person.bio}</p>
 
           <div
             style={{
@@ -333,8 +332,8 @@ export function PulseProfileBody({
                 padding: "8px 14px",
                 borderRadius: 8,
                 border: "none",
-                background: tab === t.key ? "#1A1A1A" : "transparent",
-                color: tab === t.key ? "#FFFFFF" : "#5A5A5A",
+                background: tab === t.key ? "#0E0F26" : "transparent",
+                color: tab === t.key ? "#FFFFFF" : "#4B4C6B",
                 fontSize: 12,
                 fontWeight: 500,
                 cursor: "pointer",
@@ -365,6 +364,37 @@ export function PulseProfileBody({
                 <div style={{ display: "flex", justifyContent: "center", padding: "12px 0 4px" }}>
                   <EnergyDynamics scores={person.scores} />
                 </div>
+                <div style={{ marginTop: 14 }}>
+                  {(() => {
+                    const { leading, reserve } = balanceGroups(person.scores);
+                    const first = person.name.split(" ")[0];
+                    const names = (list: EnergyKey[]) => list.map((k) => energy[k].label).join(" and ");
+                    return (
+                      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26", marginBottom: 4 }}>
+                            {leading.length > 0 ? `Leading: ${names(leading)}` : "No energy leads strongly"}
+                          </div>
+                          <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.6, margin: 0 }}>
+                            {leading.length > 0
+                              ? `These sit above the midline. They are what ${first} reaches for first and shows most visibly at work.`
+                              : `Every energy sits below the midline, which points to a flexible profile that adapts to the situation.`}
+                          </p>
+                        </div>
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26", marginBottom: 4 }}>
+                            {reserve.length > 0 ? `In reserve: ${names(reserve)}` : "Nothing held in reserve"}
+                          </div>
+                          <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.6, margin: 0 }}>
+                            {reserve.length > 0
+                              ? `These sit below the midline. ${first} can use them, but they take more conscious effort and are less visible day to day.`
+                              : `All four energies sit above the midline, so ${first} draws on the full range.`}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
                 <div
                   style={{
                     marginTop: 14,
@@ -394,51 +424,11 @@ export function PulseProfileBody({
             </div>
 
             <Card>
-              <SectionLabel>Leading and reserve energies</SectionLabel>
-              <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 32, alignItems: "center" }}>
-                <div style={{ padding: "8px 8px 0" }}>
-                  <EnergyBalance scores={person.scores} />
-                </div>
-                <div>
-                  {(() => {
-                    const { leading, reserve } = balanceGroups(person.scores);
-                    const first = person.name.split(" ")[0];
-                    const names = (list: EnergyKey[]) => list.map((k) => energy[k].label).join(" and ");
-                    return (
-                      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                        <div>
-                          <div style={{ fontSize: 13, fontWeight: 600, color: "#161311", marginBottom: 4 }}>
-                            {leading.length > 0 ? `Leading: ${names(leading)}` : "No energy leads strongly"}
-                          </div>
-                          <p style={{ fontSize: 13, color: "#4D4945", lineHeight: 1.6, margin: 0 }}>
-                            {leading.length > 0
-                              ? `These sit above the midline. They are what ${first} reaches for first and shows most visibly at work.`
-                              : `Every energy sits below the midline, which points to a flexible profile that adapts to the situation.`}
-                          </p>
-                        </div>
-                        <div>
-                          <div style={{ fontSize: 13, fontWeight: 600, color: "#161311", marginBottom: 4 }}>
-                            {reserve.length > 0 ? `In reserve: ${names(reserve)}` : "Nothing held in reserve"}
-                          </div>
-                          <p style={{ fontSize: 13, color: "#4D4945", lineHeight: 1.6, margin: 0 }}>
-                            {reserve.length > 0
-                              ? `These sit below the midline. ${first} can use them, but they take more conscious effort and are less visible day to day.`
-                              : `All four energies sit above the midline, so ${first} draws on the full range.`}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })()}
-                </div>
-              </div>
-            </Card>
-
-            <Card>
               <SectionLabel>Engagement signals</SectionLabel>
               <div
                 style={{
                   fontSize: 12,
-                  color: "#9A9A9A",
+                  color: "#6E7090",
                   marginBottom: 12,
                   lineHeight: 1.5,
                   maxWidth: 520,
@@ -466,12 +456,12 @@ export function PulseProfileBody({
                 <SectionLabel>Best trait & watch-out</SectionLabel>
                 <div
                   style={{
-                    background: "#EEF7F2",
-                    border: "1px solid #9ED4B8",
+                    background: "#F1ECFF",
+                    border: "1px solid #D2C5FF",
                     borderRadius: 10,
                     padding: 14,
                     fontSize: 13,
-                    color: "#1A5C38",
+                    color: "#5B37D6",
                     lineHeight: 1.55,
                     marginBottom: 10,
                   }}
@@ -480,12 +470,12 @@ export function PulseProfileBody({
                 </div>
                 <div
                   style={{
-                    background: "#FDF0EE",
-                    border: "1px solid #FCCDC6",
+                    background: "#FFE8F0",
+                    border: "1px solid #FFC2D7",
                     borderRadius: 10,
                     padding: 14,
                     fontSize: 13,
-                    color: "#9B2A1A",
+                    color: "#B0154F",
                     lineHeight: 1.55,
                   }}
                 >
@@ -522,14 +512,14 @@ export function PulseProfileBody({
                 style={{
                   fontSize: 22,
                   fontWeight: 600,
-                  color: "#1A1A1A",
+                  color: "#0E0F26",
                   letterSpacing: "-0.4px",
                   marginBottom: 12,
                 }}
               >
                 {person.wheelPosition}
               </div>
-              <p style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.65, margin: 0 }}>
+              <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.65, margin: 0 }}>
                 {person.name.split(" ")[0]} sits primarily in the{" "}
                 <span style={{ color: primaryColour.text, fontWeight: 600 }}>
                   {primaryColour.label}
@@ -567,14 +557,14 @@ export function PulseProfileBody({
                       gap: 10,
                       alignItems: "flex-start",
                       fontSize: 13,
-                      color: "#1A5C38",
-                      background: "#EEF7F2",
-                      border: "1px solid #9ED4B8",
+                      color: "#5B37D6",
+                      background: "#F1ECFF",
+                      border: "1px solid #D2C5FF",
                       borderRadius: 8,
                       padding: "10px 12px",
                     }}
                   >
-                    <span style={{ fontSize: 11, color: "#1A5C38", fontWeight: 700, minWidth: 16 }}>
+                    <span style={{ fontSize: 11, color: "#5B37D6", fontWeight: 700, minWidth: 16 }}>
                       {i + 1}.
                     </span>
                     <span style={{ lineHeight: 1.5 }}>{d}</span>
@@ -602,14 +592,14 @@ export function PulseProfileBody({
                         gap: 10,
                         alignItems: "flex-start",
                         fontSize: 13,
-                        color: "#9B2A1A",
-                        background: "#FDF0EE",
-                        border: "1px solid #FCCDC6",
+                        color: "#B0154F",
+                        background: "#FFE8F0",
+                        border: "1px solid #FFC2D7",
                         borderRadius: 8,
                         padding: "10px 12px",
                       }}
                     >
-                      <span style={{ fontSize: 11, color: "#9B2A1A", fontWeight: 700, minWidth: 16 }}>
+                      <span style={{ fontSize: 11, color: "#B0154F", fontWeight: 700, minWidth: 16 }}>
                         {i + 1}.
                       </span>
                       <span style={{ lineHeight: 1.5 }}>{d}</span>
@@ -632,7 +622,7 @@ export function PulseProfileBody({
             ) : (
               <Card>
                 <SectionLabel>Deep dive</SectionLabel>
-                <p style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.65, margin: "0 0 16px" }}>
+                <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.65, margin: "0 0 16px" }}>
                   Personality traits, strengths, blind spots and practical guidance for working with{" "}
                   {person.name.split(" ")[0]}. Built from their existing Pulse profile.
                 </p>
@@ -643,7 +633,7 @@ export function PulseProfileBody({
                     padding: "9px 18px",
                     borderRadius: 100,
                     border: "none",
-                    background: "#161311",
+                    background: "#0E0F26",
                     color: "#FFFFFF",
                     fontSize: 13,
                     fontWeight: 500,
@@ -660,8 +650,8 @@ export function PulseProfileBody({
                 style={{
                   padding: 12,
                   borderRadius: 8,
-                  background: "#FDF0EE",
-                  color: "#9B2A1A",
+                  background: "#FFE8F0",
+                  color: "#B0154F",
                   fontSize: 12,
                   lineHeight: 1.5,
                 }}
@@ -679,7 +669,7 @@ export function PulseProfileBody({
                     borderRadius: 100,
                     border: "0.5px solid rgba(0,0,0,0.15)",
                     background: "#FFFFFF",
-                    color: "#4D4945",
+                    color: "#4B4C6B",
                     fontSize: 12,
                     cursor: "pointer",
                   }}
@@ -695,14 +685,14 @@ export function PulseProfileBody({
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <Card>
               <SectionLabel>How to speak with them</SectionLabel>
-              <p style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.65, margin: 0 }}>
+              <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.65, margin: 0 }}>
                 {person.howToSpeak}
               </p>
             </Card>
 
             <Card>
               <SectionLabel>How to email them</SectionLabel>
-              <p style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.65, margin: 0 }}>
+              <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.65, margin: 0 }}>
                 {person.howToEmail}
               </p>
             </Card>
@@ -710,7 +700,7 @@ export function PulseProfileBody({
             <div style={{ gridColumn: "1 / -1" }}>
               <Card>
                 <SectionLabel>AI message composer</SectionLabel>
-                <div style={{ fontSize: 12, color: "#9A9A9A", marginBottom: 10, lineHeight: 1.5 }}>
+                <div style={{ fontSize: 12, color: "#6E7090", marginBottom: 10, lineHeight: 1.5 }}>
                   Describe what you want to say. We&apos;ll rewrite it in a style that lands with{" "}
                   {person.name.split(" ")[0]}&apos;s {primaryColour.label.toLowerCase()} energy.
                 </div>
@@ -725,7 +715,7 @@ export function PulseProfileBody({
                     borderRadius: 8,
                     border: "1px solid rgba(0,0,0,0.07)",
                     background: "#FFFFFF",
-                    color: "#1A1A1A",
+                    color: "#0E0F26",
                     fontSize: 13,
                     outline: "none",
                     resize: "vertical",
@@ -742,8 +732,8 @@ export function PulseProfileBody({
                       padding: "8px 14px",
                       borderRadius: 8,
                       border: "none",
-                      background: draft.trim() ? "#1A1A1A" : "#EDEDEA",
-                      color: draft.trim() ? "#FFFFFF" : "#9A9A9A",
+                      background: draft.trim() ? "#0E0F26" : "#ECEBF2",
+                      color: draft.trim() ? "#FFFFFF" : "#6E7090",
                       fontSize: 12,
                       fontWeight: 500,
                       cursor: draft.trim() ? "pointer" : "not-allowed",
@@ -762,7 +752,7 @@ export function PulseProfileBody({
                         borderRadius: 8,
                         border: "1px solid rgba(0,0,0,0.07)",
                         background: "#FFFFFF",
-                        color: "#5A5A5A",
+                        color: "#4B4C6B",
                         fontSize: 12,
                         fontWeight: 500,
                         cursor: "pointer",
@@ -836,7 +826,7 @@ export function PulseProfileBody({
                     gap: 14,
                     alignItems: "flex-start",
                     padding: 14,
-                    background: "#FAFAF8",
+                    background: "#F7F7FA",
                     border: "1px solid rgba(0,0,0,0.06)",
                     borderRadius: 10,
                   }}
@@ -859,7 +849,7 @@ export function PulseProfileBody({
                   >
                     {i + 1}
                   </div>
-                  <div style={{ fontSize: 13, color: "#1A1A1A", lineHeight: 1.55 }}>{a}</div>
+                  <div style={{ fontSize: 13, color: "#0E0F26", lineHeight: 1.55 }}>{a}</div>
                 </li>
               ))}
             </ol>

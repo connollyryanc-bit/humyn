@@ -74,7 +74,7 @@ export function EnergyRing({
       aria-label="Energy mix ring"
       style={{ overflow: "visible" }}
     >
-      <circle cx={cx} cy={cy} r={rOuter} fill="#FAFAF8" />
+      <circle cx={cx} cy={cy} r={rOuter} fill="#F7F7FA" />
 
       {segments.map((s) =>
         s.value > 0 ? (
@@ -113,7 +113,7 @@ export function EnergyRing({
         textAnchor="middle"
         style={{
           fontSize: 11,
-          fill: "#9A9A9A",
+          fill: "#6E7090",
           textTransform: "uppercase",
           letterSpacing: "0.08em",
           fontWeight: 500,
@@ -299,7 +299,7 @@ export function EnergySpider({
               dominantBaseline="middle"
               style={{
                 fontSize: 11,
-                fill: "#1A1A1A",
+                fill: "#0E0F26",
                 fontWeight: 600,
               }}
             >
@@ -312,7 +312,7 @@ export function EnergySpider({
               dominantBaseline="middle"
               style={{
                 fontSize: 10,
-                fill: "#9A9A9A",
+                fill: "#6E7090",
                 fontWeight: 500,
               }}
             >
@@ -325,93 +325,121 @@ export function EnergySpider({
   );
 }
 
+const FOCUS_WORD: Record<EnergyKey, string> = {
+  driver: "Action",
+  energizer: "People",
+  supporter: "Harmony",
+  analyst: "Process",
+};
+
+/**
+ * Four energy bars growing up from the baseline, with a line across the middle.
+ * Energy above the line leads (shown solid); energy below it sits in reserve
+ * (shown lighter). The line sits at BALANCE_MIDLINE.
+ */
 export function EnergyDynamics({
   scores,
-  height = 180,
+  height = 270,
 }: {
   scores: EnergyScores;
   height?: number;
 }) {
-  const max = 100;
-  const barWidth = 44;
-  const gap = 18;
-  const width = ENERGIES.length * barWidth + (ENERGIES.length - 1) * gap;
-  const padBottom = 38;
-  const padTop = 16;
-  const plotHeight = height - padBottom - padTop;
+  const gutter = 74;
+  const barWidth = 62;
+  const gap = 20;
+  const width = gutter + ENERGIES.length * barWidth + (ENERGIES.length - 1) * gap;
+  const padTop = 22;
+  const padBottom = 40;
+  const plotHeight = height - padTop - padBottom;
+  const baseline = padTop + plotHeight;
+  const yFor = (v: number) => padTop + plotHeight * (1 - Math.max(0, Math.min(100, v)) / 100);
+  const mid = yFor(BALANCE_MIDLINE);
 
   return (
     <svg
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      aria-label="Energy dynamics bars"
+      aria-label="Energy bars with leading and reserve line"
       style={{ overflow: "visible" }}
     >
-      {[0.25, 0.5, 0.75, 1].map((p) => {
-        const y = padTop + plotHeight * (1 - p);
-        return (
-          <line
-            key={p}
-            x1={0}
-            x2={width}
-            y1={y}
-            y2={y}
-            stroke="rgba(0,0,0,0.05)"
-            strokeWidth={1}
-          />
-        );
-      })}
+      <rect x={gutter - 8} y={mid} width={width - gutter + 16} height={baseline - mid} fill="#F7F7FA" rx={6} />
+
+      {[25, 75].map((v) => (
+        <line
+          key={v}
+          x1={gutter - 8}
+          x2={width + 8}
+          y1={yFor(v)}
+          y2={yFor(v)}
+          stroke="rgba(0,0,0,0.05)"
+          strokeWidth={1}
+        />
+      ))}
 
       {ENERGIES.map((k, i) => {
-        const value = Math.max(0, Math.min(max, scores[k]));
-        const h = (value / max) * plotHeight;
-        const x = i * (barWidth + gap);
-        const y = padTop + (plotHeight - h);
+        const value = Math.max(0, Math.min(100, scores[k]));
+        const x = gutter + i * (barWidth + gap);
+        const top = yFor(value);
+        const lowerTop = Math.max(mid, top);
         return (
           <g key={k}>
-            <rect
-              x={x}
-              y={y}
-              width={barWidth}
-              height={h}
-              fill={energy[k].color}
-              rx={4}
-              ry={4}
-            />
+            <rect x={x} y={top} width={barWidth} height={baseline - top} fill={energy[k].color} rx={4} ry={4} />
+            {baseline > lowerTop && (
+              <rect
+                x={x}
+                y={lowerTop}
+                width={barWidth}
+                height={baseline - lowerTop}
+                fill="#FFFFFF"
+                fillOpacity={0.55}
+              />
+            )}
             <text
               x={x + barWidth / 2}
-              y={y - 6}
+              y={value < BALANCE_MIDLINE && baseline - top >= 28 ? top + 17 : top - 6}
               textAnchor="middle"
               style={{ fontSize: 11, fill: energy[k].text, fontWeight: 600 }}
             >
-              {value}%
+              {value}
             </text>
             <text
               x={x + barWidth / 2}
-              y={height - 18}
+              y={baseline + 16}
               textAnchor="middle"
-              style={{
-                fontSize: 10,
-                fill: "#1A1A1A",
-                fontWeight: 600,
-                textTransform: "uppercase",
-                letterSpacing: "0.07em",
-              }}
+              style={{ fontSize: 11, fill: "#0E0F26", fontWeight: 600 }}
             >
               {energy[k].label}
             </text>
             <text
               x={x + barWidth / 2}
-              y={height - 5}
+              y={baseline + 30}
               textAnchor="middle"
-              style={{ fontSize: 9, fill: "#9A9A9A" }}
+              style={{ fontSize: 9, fill: "#6E7090" }}
             >
-              {k}
+              {FOCUS_WORD[k]}
             </text>
           </g>
         );
       })}
+
+      <line x1={gutter - 8} x2={width + 8} y1={mid} y2={mid} stroke="#0E0F26" strokeWidth={1.5} />
+      <text
+        x={gutter - 14}
+        y={mid - 8}
+        textAnchor="end"
+        style={{ fontSize: 10, fill: "#4B4C6B", fontWeight: 600, letterSpacing: "0.07em" }}
+      >
+        LEADING
+      </text>
+      <text
+        x={gutter - 14}
+        y={mid + 17}
+        textAnchor="end"
+        style={{ fontSize: 10, fill: "#6E7090", fontWeight: 600, letterSpacing: "0.07em" }}
+      >
+        RESERVE
+      </text>
     </svg>
   );
 }
@@ -425,88 +453,4 @@ export function balanceGroups(scores: EnergyScores): { leading: EnergyKey[]; res
     leading: sorted.filter((k) => scores[k] >= BALANCE_MIDLINE),
     reserve: sorted.filter((k) => scores[k] < BALANCE_MIDLINE),
   };
-}
-
-export function EnergyBalance({
-  scores,
-  height = 270,
-}: {
-  scores: EnergyScores;
-  height?: number;
-}) {
-  const barWidth = 54;
-  const gap = 22;
-  const width = ENERGIES.length * barWidth + (ENERGIES.length - 1) * gap;
-  const padTop = 24;
-  const padBottom = 30;
-  const half = (height - padTop - padBottom) / 2;
-  const mid = padTop + half;
-
-  return (
-    <svg
-      width={width}
-      height={height}
-      viewBox={`0 0 ${width} ${height}`}
-      aria-label="Leading and reserve energies"
-      style={{ overflow: "visible" }}
-    >
-      <rect x={-8} y={mid} width={width + 16} height={half} fill="#FAFAF8" rx={6} />
-
-      <text
-        x={-8}
-        y={12}
-        style={{ fontSize: 10, fill: "#9A9A9A", fontWeight: 500, letterSpacing: "0.07em" }}
-      >
-        LEADING
-      </text>
-      <text
-        x={-8}
-        y={height - 12}
-        style={{ fontSize: 10, fill: "#9A9A9A", fontWeight: 500, letterSpacing: "0.07em" }}
-      >
-        RESERVE
-      </text>
-
-      {ENERGIES.map((k, i) => {
-        const value = Math.max(0, Math.min(100, scores[k]));
-        const delta = value - BALANCE_MIDLINE;
-        const h = Math.max(2, (Math.abs(delta) / BALANCE_MIDLINE) * half);
-        const x = i * (barWidth + gap);
-        const up = delta >= 0;
-        const y = up ? mid - h : mid;
-        return (
-          <g key={k}>
-            <rect
-              x={x}
-              y={y}
-              width={barWidth}
-              height={h}
-              fill={energy[k].color}
-              fillOpacity={up ? 1 : 0.5}
-              rx={4}
-              ry={4}
-            />
-            <text
-              x={x + barWidth / 2}
-              y={up ? y - 6 : y + h + 14}
-              textAnchor="middle"
-              style={{ fontSize: 11, fill: energy[k].text, fontWeight: 600 }}
-            >
-              {value}
-            </text>
-            <text
-              x={x + barWidth / 2}
-              y={height - 12}
-              textAnchor="middle"
-              style={{ fontSize: 10, fill: "#4D4945", fontWeight: 500 }}
-            >
-              {energy[k].label}
-            </text>
-          </g>
-        );
-      })}
-
-      <line x1={-8} x2={width + 8} y1={mid} y2={mid} stroke="#161311" strokeWidth={1.5} />
-    </svg>
-  );
 }

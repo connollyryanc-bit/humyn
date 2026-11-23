@@ -1,9 +1,9 @@
 (() => {
   const ENERGY = {
-    driver: { label: "Driver", color: "#E8402A", bg: "#FDF0EE", text: "#9B2A1A", border: "#FCCDC6" },
-    energizer: { label: "Energizer", color: "#F5A623", bg: "#FFFBF2", text: "#8B5A00", border: "#FAD98A" },
-    supporter: { label: "Supporter", color: "#2E8B57", bg: "#EEF7F2", text: "#1A5C38", border: "#9ED4B8" },
-    analyst: { label: "Analyst", color: "#1E6FA5", bg: "#EEF4FB", text: "#124A6E", border: "#8DC2E8" },
+    driver: { label: "Driver", color: "#F23D7A", bg: "#FFE8F0", text: "#B0154F", border: "#FFC2D7" },
+    energizer: { label: "Energizer", color: "#FF9F5A", bg: "#FFF0E4", text: "#A04A0C", border: "#FFD2B0" },
+    supporter: { label: "Harmoniser", color: "#9B7CFF", bg: "#F1ECFF", text: "#5B37D6", border: "#D2C5FF" },
+    analyst: { label: "Analyst", color: "#3355E8", bg: "#E9EEFF", text: "#2140C2", border: "#B9C7FF" },
   };
   const ORDER = ["driver", "energizer", "supporter", "analyst"];
 
@@ -42,10 +42,10 @@
     /^(show all|see more|…see more|\.\.\.see more|show more)$/i,
   ];
 
-  const INK = "#161311";
-  const INK2 = "#4D4945";
-  const INK3 = "#9A9A9A";
-  const SURFACE = "#F3F0EA";
+  const INK = "#0E0F26";
+  const INK2 = "#4B4C6B";
+  const INK3 = "#6E7090";
+  const SURFACE = "#F4F4F8";
   const LINE = "0.5px solid rgba(0,0,0,0.07)";
 
   let state = { open: false, tab: "overview", status: "idle", profile: null, saved: null, error: "", meta: {} };
@@ -242,7 +242,7 @@
   }
 
   function arrows(items, up) {
-    const col = up ? "#2E8B57" : "#E8402A";
+    const col = up ? "#9B7CFF" : "#F23D7A";
     const glyph = up ? "&#8593;" : "&#8595;";
     return (items || [])
       .map(
@@ -348,59 +348,87 @@
     }).join("");
   }
 
+  const FOCUS = { driver: "Action", energizer: "People", supporter: "Harmony", analyst: "Process" };
+
   function balance(scores) {
-    const half = 70;
+    const H = 150;
+    const gutter = 62;
     const cols = ORDER.map((k) => {
       const e = ENERGY[k];
       const v = Math.max(0, Math.min(100, Math.round(scores[k] || 0)));
-      const up = v >= 50;
-      const h = Math.max(2, (Math.abs(v - 50) / 50) * half);
-      const bar =
-        '<div style="position:absolute;left:50%;margin-left:-20px;width:40px;border-radius:4px;background:' +
-        e.color +
-        ";opacity:" +
-        (up ? 1 : 0.5) +
-        ";height:" +
+      const h = (v / 100) * H;
+      const lower = Math.min(h, H / 2);
+      return (
+        '<div style="position:relative;flex:1;height:' +
+        H +
+        'px"><div style="position:absolute;left:50%;margin-left:-22px;bottom:0;width:44px;height:' +
         h +
-        "px;" +
-        (up ? "bottom:" + half + "px" : "top:" + half + "px") +
-        '"></div>';
-      const num =
+        "px;background:" +
+        e.color +
+        ';border-radius:4px 4px 0 0"></div>' +
+        (lower > 0
+          ? '<div style="position:absolute;left:50%;margin-left:-22px;bottom:0;width:44px;height:' +
+            lower +
+            'px;background:rgba(255,255,255,0.55)"></div>'
+          : "") +
         '<div style="position:absolute;left:0;right:0;text-align:center;font-size:11px;font-weight:600;color:' +
         e.text +
-        ";" +
-        (up ? "bottom:" + (half + h + 4) + "px" : "top:" + (half + h + 4) + "px") +
-        '">' +
+        ";bottom:" +
+        (v < 50 && h >= 28 ? h - 20 : h + 4) +
+        'px">' +
         v +
-        "</div>";
-      return '<div style="position:relative;flex:1;height:' + half * 2 + 'px">' + bar + num + "</div>";
+        "</div></div>"
+      );
     }).join("");
     const names = ORDER.map(
       (k) =>
-        '<div style="flex:1;text-align:center;font-size:10px;font-weight:500;color:' + INK2 + '">' + ENERGY[k].label + "</div>",
+        '<div style="flex:1;text-align:center"><div style="font-size:11px;font-weight:600;color:' +
+        INK +
+        '">' +
+        ENERGY[k].label +
+        '</div><div style="font-size:9px;color:' +
+        INK3 +
+        '">' +
+        FOCUS[k] +
+        "</div></div>",
     ).join("");
     const sorted = ORDER.slice().sort((a, b) => (scores[b] || 0) - (scores[a] || 0));
     const lead = sorted.filter((k) => (scores[k] || 0) >= 50).map((k) => ENERGY[k].label);
     const res = sorted.filter((k) => (scores[k] || 0) < 50).map((k) => ENERGY[k].label);
     return (
-      '<div style="position:relative;padding:22px 0 0"><div style="position:absolute;left:0;top:0;font-size:10px;font-weight:500;letter-spacing:0.07em;color:' +
-      INK3 +
-      '">LEADING</div><div style="position:relative;display:flex;gap:10px"><div style="position:absolute;left:0;right:0;top:' +
-      half +
-      'px;height:' +
-      half +
-      'px;background:#FAFAF8;border-radius:6px"></div><div style="position:absolute;left:0;right:0;top:' +
-      half +
+      '<div style="position:relative;display:flex;margin-top:6px"><div style="width:' +
+      gutter +
+      'px;flex-shrink:0"></div><div style="position:relative;flex:1;display:flex;gap:12px"><div style="position:absolute;left:-8px;right:-8px;top:' +
+      H / 2 +
+      "px;height:" +
+      H / 2 +
+      'px;background:#F7F7FA;border-radius:6px"></div>' +
+      cols +
+      '</div><div style="position:absolute;left:' +
+      (gutter - 8) +
+      "px;right:0;top:" +
+      H / 2 +
       'px;height:1.5px;background:' +
       INK +
-      '"></div>' +
-      cols +
-      '</div><div style="display:flex;gap:10px;margin-top:6px">' +
-      names +
-      '</div><div style="font-size:10px;font-weight:500;letter-spacing:0.07em;color:' +
+      '"></div><div style="position:absolute;left:0;width:' +
+      (gutter - 12) +
+      "px;top:" +
+      (H / 2 - 18) +
+      "px;text-align:right;font-size:10px;font-weight:600;letter-spacing:0.07em;color:" +
+      INK2 +
+      '">LEADING</div><div style="position:absolute;left:0;width:' +
+      (gutter - 12) +
+      "px;top:" +
+      (H / 2 + 6) +
+      "px;text-align:right;font-size:10px;font-weight:600;letter-spacing:0.07em;color:" +
       INK3 +
-      ';margin-top:6px">RESERVE</div></div>' +
-      '<div style="margin-top:14px;font-size:13px;line-height:1.55;color:' +
+      '">RESERVE</div></div>' +
+      '<div style="display:flex;margin-top:8px"><div style="width:' +
+      gutter +
+      'px;flex-shrink:0"></div><div style="flex:1;display:flex;gap:12px">' +
+      names +
+      "</div></div>" +
+      '<div style="margin-top:16px;font-size:13px;line-height:1.55;color:' +
       INK2 +
       '"><b style="color:' +
       INK +
@@ -432,7 +460,7 @@
 
   function note(text) {
     return (
-      '<div style="padding:12px;border-radius:8px;background:#FDF0EE;color:#9B2A1A;font-size:12px;line-height:1.5;margin-bottom:12px">' +
+      '<div style="padding:12px;border-radius:8px;background:#FFE8F0;color:#B0154F;font-size:12px;line-height:1.5;margin-bottom:12px">' +
       esc(text) +
       "</div>"
     );
@@ -449,15 +477,15 @@
           legend(p.scores) +
           "</div></div>",
       ) +
-      card(label("Leading and reserve energies", e.color) + balance(p.scores)) +
+      card(label("Energy dynamics", e.color) + balance(p.scores)) +
       card(label("Summary", e.color) + '<div style="font-size:13px;line-height:1.6;color:' + INK2 + '">' + esc(p.bio) + "</div>") +
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">' +
       card(label("Best trait") + '<div style="font-size:13px;line-height:1.55;color:' + INK2 + '">' + esc(p.bestTrait) + "</div>", "margin:0") +
       card(label("Watch-out") + '<div style="font-size:13px;line-height:1.55;color:' + INK2 + '">' + esc(p.vice) + "</div>", "margin:0") +
       "</div>" +
       '<div style="height:12px"></div>' +
-      card(label("Energized by", "#2E8B57") + arrows(p.drivers, true)) +
-      card(label("Drained by", "#E8402A") + arrows(p.detractors, false))
+      card(label("Energized by", "#9B7CFF") + arrows(p.drivers, true)) +
+      card(label("Drained by", "#F23D7A") + arrows(p.detractors, false))
     );
   }
 
@@ -475,8 +503,8 @@
     return (
       card(label("Personality traits", e.color) + sliders(i.traits || {}, e.color)) +
       (i.behaviours && i.behaviours.length ? card(label("Typical behaviours", e.color) + bullets(i.behaviours, e.color)) : "") +
-      (i.strengths && i.strengths.length ? card(label("Strengths") + bullets(i.strengths, "#2E8B57")) : "") +
-      (i.blindSpots && i.blindSpots.length ? card(label("Blind spots") + bullets(i.blindSpots, "#E8402A")) : "")
+      (i.strengths && i.strengths.length ? card(label("Strengths") + bullets(i.strengths, "#9B7CFF")) : "") +
+      (i.blindSpots && i.blindSpots.length ? card(label("Blind spots") + bullets(i.blindSpots, "#F23D7A")) : "")
     );
   }
 
@@ -487,10 +515,10 @@
       out +=
         card(
           label("How to communicate", e.color) +
-            '<div style="font-size:12px;font-weight:700;color:#2E8B57;margin-bottom:8px">Do</div>' +
-            bullets(i.doList, "#2E8B57") +
-            '<div style="font-size:12px;font-weight:700;color:#E8402A;margin:14px 0 8px">Don&#39;t</div>' +
-            bullets(i.dontList, "#E8402A"),
+            '<div style="font-size:12px;font-weight:700;color:#9B7CFF;margin-bottom:8px">Do</div>' +
+            bullets(i.doList, "#9B7CFF") +
+            '<div style="font-size:12px;font-weight:700;color:#F23D7A;margin:14px 0 8px">Don&#39;t</div>' +
+            bullets(i.dontList, "#F23D7A"),
         );
     }
     out +=
@@ -535,7 +563,7 @@
         ';padding:0 4px">&times;</button>' +
         '<div style="font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:' +
         INK3 +
-        ';margin-bottom:6px">humy<span style="color:#FF5040">n</span> pulse</div>' +
+        ';margin-bottom:6px">humy<span style="color:#7B4DFF">n</span> pulse</div>' +
         inner +
         "</div>"
       );
@@ -648,7 +676,7 @@
         (state.saved
           ? '<a href="' +
             esc(state.saved.url) +
-            '" target="_blank" rel="noopener" style="all:unset;cursor:pointer;padding:9px 16px;border-radius:100px;font-size:13px;font-weight:500;background:#2E8B57;color:#FFFFFF">Saved. Open in Humyn</a>'
+            '" target="_blank" rel="noopener" style="all:unset;cursor:pointer;padding:9px 16px;border-radius:100px;font-size:13px;font-weight:500;background:#9B7CFF;color:#FFFFFF">Saved. Open in Humyn</a>'
           : btn("hm-save", state.status === "saving" ? "Saving..." : "Save to Humyn", true)) +
         btn("hm-redo", "Re-run", false) +
         "</div>";
@@ -674,7 +702,7 @@
     const toggle =
       '<button id="hm-toggle" style="all:unset;cursor:pointer;position:fixed;right:16px;bottom:16px;padding:11px 18px;border-radius:100px;background:' +
       INK +
-      ';color:#FFFFFF;font-size:15px;font-weight:700;letter-spacing:-0.3px;box-shadow:0 4px 14px rgba(0,0,0,0.18)">hum<span style="color:#FF5040">y</span>n</button>';
+      ';color:#FFFFFF;font-size:15px;font-weight:700;letter-spacing:-0.3px;box-shadow:0 4px 14px rgba(0,0,0,0.18)">hum<span style="color:#7B4DFF">y</span>n</button>';
     root.innerHTML =
       '<div style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,sans-serif;z-index:2147483646;position:fixed;inset:0;pointer-events:none"><div style="pointer-events:auto">' +
       (state.open ? panel() : toggle) +

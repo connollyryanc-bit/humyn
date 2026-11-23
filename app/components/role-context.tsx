@@ -38,7 +38,7 @@ interface RoleState {
 const RoleContext = createContext<RoleState | null>(null);
 
 const STORAGE_KEY = "humyn.view-as-role.v1";
-const DEFAULT_ROLE: Role = "capacity-manager";
+const DEFAULT_ROLE: Role = "c-suite"; // demo default; set back to "capacity-manager" before real users
 
 function readOverride(): Role | null {
   if (typeof window === "undefined") return null;

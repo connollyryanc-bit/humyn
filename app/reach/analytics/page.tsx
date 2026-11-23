@@ -65,7 +65,7 @@ export default function AnalyticsPage() {
                 </div>
                 <Bar value={e.personalised} max={maxEnergy} color={energy[e.energy].color} />
                 <div style={{ height: 4 }} />
-                <Bar value={e.generic} max={maxEnergy} color="#D7D4CC" />
+                <Bar value={e.generic} max={maxEnergy} color="#D9D8E3" />
               </div>
             ))}
           </div>
@@ -74,7 +74,7 @@ export default function AnalyticsPage() {
               <span style={{ width: 10, height: 10, background: R.ink, borderRadius: 2 }} /> Tailored to the person
             </span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 10, height: 10, background: "#D7D4CC", borderRadius: 2 }} /> Same message for everyone
+              <span style={{ width: 10, height: 10, background: "#D9D8E3", borderRadius: 2 }} /> Same message for everyone
             </span>
           </div>
         </Card>
@@ -149,7 +149,7 @@ export default function AnalyticsPage() {
                 <span>{s.stats.replied}</span>
                 <span>{s.stats.meetings}</span>
                 <span>{s.stats.sent > 0 ? `${rate.toFixed(1)}%` : "Not started"}</span>
-                <span style={{ color: rate > s.genericReplyRate ? "#2E8B57" : R.ink3 }}>
+                <span style={{ color: rate > s.genericReplyRate ? "#9B7CFF" : R.ink3 }}>
                   {s.stats.sent > 0 ? `+${(rate - s.genericReplyRate).toFixed(1)} pts` : "-"}
                 </span>
               </div>

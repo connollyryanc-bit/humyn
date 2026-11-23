@@ -18,7 +18,7 @@ import {
 } from "../../lib/team-intelligence";
 import { ENVIRONMENT_SURFACES, TopChrome } from "../../components/top-chrome";
 
-const SAMPLE_BRIEF = `Nordea is putting their omnichannel banking platform out to bid for Q3 2026. Eight-month engagement, kickoff September. They need a senior, client-facing engagement lead who can hold board-level conversations, a principal architect with deep event-driven systems experience (they're moving off mainframe), one or two product designers who can lead service-design workshops with senior bank stakeholders, and a delivery lead who has handled programmes in financial services.
+const SAMPLE_BRIEF = `Baltica Bank is putting their omnichannel banking platform out to bid for Q3 2026. Eight-month engagement, kickoff September. They need a senior, client-facing engagement lead who can hold board-level conversations, a principal architect with deep event-driven systems experience (they're moving off mainframe), one or two product designers who can lead service-design workshops with senior bank stakeholders, and a delivery lead who has handled programmes in financial services.
 
 The relationship is at risk — their existing supplier mishandled a regulatory project last quarter and there's no margin for delivery surprises. They've explicitly said they want a steady, considered team, not a high-pace pitch crew.
 
@@ -77,7 +77,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textTransform: "uppercase",
         letterSpacing: "0.08em",
         fontWeight: 500,
@@ -163,7 +163,7 @@ function ProposalCard({
           <div
             style={{
               fontSize: 10,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 600,
@@ -174,7 +174,7 @@ function ProposalCard({
           </div>
           <div
             className="font-display"
-            style={{ fontSize: 20, fontWeight: 600, color: "#161311", letterSpacing: "-0.3px" }}
+            style={{ fontSize: 20, fontWeight: 600, color: "#0E0F26", letterSpacing: "-0.3px" }}
           >
             {proposal.name}
           </div>
@@ -198,15 +198,15 @@ function ProposalCard({
         </span>
       </div>
 
-      <p style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.6, margin: "8px 0 4px" }}>
+      <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.6, margin: "8px 0 4px" }}>
         {proposal.rationale}
       </p>
       <div
         style={{
           fontSize: 12,
-          color: "#8B5A00",
-          background: "#FFFBF2",
-          border: "0.5px solid #FAD98A",
+          color: "#A04A0C",
+          background: "#FFF0E4",
+          border: "0.5px solid #FFD2B0",
           borderRadius: 10,
           padding: "8px 12px",
           lineHeight: 1.55,
@@ -227,7 +227,7 @@ function ProposalCard({
               alignItems: "flex-start",
               gap: 10,
               padding: 10,
-              background: "#FAFAF8",
+              background: "#F7F7FA",
               borderRadius: 10,
             }}
           >
@@ -236,7 +236,7 @@ function ProposalCard({
               <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                 <Link
                   href={`/people/${m.person.id}`}
-                  style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}
+                  style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}
                 >
                   {m.person.name}
                 </Link>
@@ -245,7 +245,7 @@ function ProposalCard({
                   <span
                     style={{
                       fontSize: 10,
-                      color: "#5A5A5A",
+                      color: "#4B4C6B",
                       background: "#FFFFFF",
                       border: "0.5px solid rgba(0,0,0,0.07)",
                       borderRadius: 100,
@@ -259,10 +259,10 @@ function ProposalCard({
                   </span>
                 )}
               </div>
-              <div style={{ fontSize: 11, color: "#9A9A9A", marginTop: 2 }}>
+              <div style={{ fontSize: 11, color: "#6E7090", marginTop: 2 }}>
                 {m.person.role} · {m.person.location} · €{m.person.dayRate || 1500}/day
               </div>
-              <div style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.5, marginTop: 4 }}>
+              <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.5, marginTop: 4 }}>
                 {m.reason}
               </div>
             </div>
@@ -280,7 +280,7 @@ function ProposalCard({
       >
         <div
           style={{
-            background: "#FAFAF8",
+            background: "#F7F7FA",
             border: "0.5px solid rgba(0,0,0,0.07)",
             borderRadius: 10,
             padding: "10px 12px",
@@ -289,7 +289,7 @@ function ProposalCard({
           <div
             style={{
               fontSize: 10,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 600,
@@ -303,7 +303,7 @@ function ProposalCard({
             style={{
               fontSize: 17,
               fontWeight: 700,
-              color: cost.euros > 0 ? "#9B2A1A" : "#1A5C38",
+              color: cost.euros > 0 ? "#B0154F" : "#5B37D6",
             }}
           >
             {cost.euros > 0 ? `€${(cost.euros / 1000).toFixed(0)}k` : "€0"}
@@ -311,7 +311,7 @@ function ProposalCard({
         </div>
         <div
           style={{
-            background: "#FAFAF8",
+            background: "#F7F7FA",
             border: "0.5px solid rgba(0,0,0,0.07)",
             borderRadius: 10,
             padding: "10px 12px",
@@ -320,7 +320,7 @@ function ProposalCard({
           <div
             style={{
               fontSize: 10,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 600,
@@ -331,14 +331,14 @@ function ProposalCard({
           </div>
           <div
             className="font-display"
-            style={{ fontSize: 17, fontWeight: 700, color: "#161311" }}
+            style={{ fontSize: 17, fontWeight: 700, color: "#0E0F26" }}
           >
             €{(dailyRate / 1000).toFixed(1)}k
           </div>
         </div>
         <div
           style={{
-            background: "#FAFAF8",
+            background: "#F7F7FA",
             border: "0.5px solid rgba(0,0,0,0.07)",
             borderRadius: 10,
             padding: "10px 12px",
@@ -347,7 +347,7 @@ function ProposalCard({
           <div
             style={{
               fontSize: 10,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 600,
@@ -358,7 +358,7 @@ function ProposalCard({
           </div>
           <div
             className="font-display"
-            style={{ fontSize: 17, fontWeight: 700, color: "#161311" }}
+            style={{ fontSize: 17, fontWeight: 700, color: "#0E0F26" }}
           >
             €{(projectBillable / 1000).toFixed(0)}k
           </div>
@@ -370,7 +370,7 @@ function ProposalCard({
           display: "flex",
           gap: 10,
           fontSize: 11,
-          color: "#5A5A5A",
+          color: "#4B4C6B",
           marginBottom: 14,
           flexWrap: "wrap",
         }}
@@ -389,7 +389,7 @@ function ProposalCard({
           </span>
         )}
         <span>
-          Driver {avg.driver}% · Energizer {avg.energizer}% · Supporter {avg.supporter}% · Analyst {avg.analyst}%
+          Driver {avg.driver}% · Energizer {avg.energizer}% · Harmoniser {avg.supporter}% · Analyst {avg.analyst}%
         </span>
         <span>Markets: {markets.join(" · ")}</span>
       </div>
@@ -398,11 +398,11 @@ function ProposalCard({
         <div
           style={{
             padding: 10,
-            background: "#FDF0EE",
-            border: "0.5px solid #FCCDC6",
+            background: "#FFE8F0",
+            border: "0.5px solid #FFC2D7",
             borderRadius: 10,
             fontSize: 12,
-            color: "#9B2A1A",
+            color: "#B0154F",
             marginBottom: 10,
           }}
         >
@@ -420,8 +420,8 @@ function ProposalCard({
             borderRadius: 8,
             border: "none",
             background:
-              savedId !== null ? "#2E8B57" : saving ? "#EDEDEA" : "#161311",
-            color: savedId !== null || !saving ? "#FFFFFF" : "#9A9A9A",
+              savedId !== null ? "#9B7CFF" : saving ? "#ECEBF2" : "#0E0F26",
+            color: savedId !== null || !saving ? "#FFFFFF" : "#6E7090",
             fontSize: 12,
             fontWeight: 500,
             cursor: saving || savedId !== null ? "default" : "pointer",
@@ -438,7 +438,7 @@ function ProposalCard({
               borderRadius: 8,
               border: "0.5px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#161311",
+              color: "#0E0F26",
               fontSize: 12,
               fontWeight: 500,
               display: "inline-flex",
@@ -465,7 +465,7 @@ function EmptyState() {
         flexDirection: "column",
         alignItems: "center",
         gap: 14,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textAlign: "center",
       }}
     >
@@ -474,11 +474,11 @@ function EmptyState() {
           width: 72,
           height: 72,
           borderRadius: "50%",
-          background: "#FAFAF8",
+          background: "#F7F7FA",
           border: "0.5px dashed rgba(0,0,0,0.12)",
         }}
       />
-      <div style={{ fontSize: 14, fontWeight: 600, color: "#5A5A5A" }}>Three proposals will appear here</div>
+      <div style={{ fontSize: 14, fontWeight: 600, color: "#4B4C6B" }}>Three proposals will appear here</div>
       <p style={{ fontSize: 12, lineHeight: 1.55, maxWidth: 360, margin: 0 }}>
         Paste an RFP, brief or pitch description on the left. Claude reads the brief, infers the
         required skills + seniority + energy mix, then proposes three distinct team compositions
@@ -500,7 +500,7 @@ function LoadingState() {
         flexDirection: "column",
         alignItems: "center",
         gap: 14,
-        color: "#5A5A5A",
+        color: "#4B4C6B",
         textAlign: "center",
       }}
     >
@@ -510,12 +510,12 @@ function LoadingState() {
           width: 72,
           height: 72,
           borderRadius: "50%",
-          background: "#FFFBF2",
-          border: "0.5px solid #FAD98A",
+          background: "#FFF0E4",
+          border: "0.5px solid #FFD2B0",
           animation: "humyn-brief-pulse 1.4s ease-in-out infinite",
         }}
       />
-      <div style={{ fontSize: 14, fontWeight: 600, color: "#161311" }}>
+      <div style={{ fontSize: 14, fontWeight: 600, color: "#0E0F26" }}>
         Reading the brief, scanning the pool, composing teams…
       </div>
       <div style={{ fontSize: 12, lineHeight: 1.55, maxWidth: 360 }}>
@@ -588,7 +588,7 @@ export default function BriefsNewPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 500,
@@ -601,14 +601,14 @@ export default function BriefsNewPage() {
             style={{
               fontSize: 28,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.4px",
               margin: "6px 0 4px",
             }}
           >
             Paste a brief, get a team
           </h1>
-          <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720 }}>
+          <div style={{ fontSize: 13, color: "#4B4C6B", maxWidth: 720 }}>
             Claude reads the RFP, infers the required skills, seniority and energy mix, then
             proposes three distinct team compositions from your Nordic pool of {people.length || "—"}{" "}
             consultants. Save any of them straight to /teams.
@@ -649,7 +649,7 @@ export default function BriefsNewPage() {
                   borderRadius: 10,
                   border: "0.5px solid rgba(0,0,0,0.07)",
                   background: "#FFFFFF",
-                  color: "#161311",
+                  color: "#0E0F26",
                   fontSize: 13,
                   outline: "none",
                   resize: "vertical",
@@ -666,7 +666,7 @@ export default function BriefsNewPage() {
                   alignItems: "center",
                   marginTop: 8,
                   fontSize: 11,
-                  color: "#9A9A9A",
+                  color: "#6E7090",
                 }}
               >
                 <span>
@@ -679,7 +679,7 @@ export default function BriefsNewPage() {
                     borderRadius: 100,
                     border: "0.5px solid rgba(0,0,0,0.07)",
                     background: "#FFFFFF",
-                    color: "#5A5A5A",
+                    color: "#4B4C6B",
                     fontSize: 11,
                     fontWeight: 500,
                     cursor: "pointer",
@@ -697,13 +697,13 @@ export default function BriefsNewPage() {
                 <input
                   value={client}
                   onChange={(e) => setClient(e.target.value)}
-                  placeholder="Client name (e.g. Nordea)"
+                  placeholder="Client name (e.g. Baltica Bank)"
                   style={{
                     padding: "8px 12px",
                     borderRadius: 8,
                     border: "0.5px solid rgba(0,0,0,0.07)",
                     background: "#FFFFFF",
-                    color: "#161311",
+                    color: "#0E0F26",
                     fontSize: 13,
                     outline: "none",
                     boxSizing: "border-box",
@@ -719,7 +719,7 @@ export default function BriefsNewPage() {
                       borderRadius: 8,
                       border: "0.5px solid rgba(0,0,0,0.07)",
                       background: "#FFFFFF",
-                      color: "#161311",
+                      color: "#0E0F26",
                       fontSize: 13,
                       cursor: "pointer",
                       outline: "none",
@@ -741,7 +741,7 @@ export default function BriefsNewPage() {
                       borderRadius: 8,
                       border: "0.5px solid rgba(0,0,0,0.07)",
                       background: "#FFFFFF",
-                      color: "#161311",
+                      color: "#0E0F26",
                       fontSize: 13,
                       cursor: "pointer",
                       outline: "none",
@@ -773,11 +773,11 @@ export default function BriefsNewPage() {
                 border: "none",
                 background:
                   status === "loading" || briefText.trim().length < 30 || people.length === 0
-                    ? "#EDEDEA"
-                    : "#161311",
+                    ? "#ECEBF2"
+                    : "#0E0F26",
                 color:
                   status === "loading" || briefText.trim().length < 30 || people.length === 0
-                    ? "#9A9A9A"
+                    ? "#6E7090"
                     : "#FFFFFF",
                 fontSize: 13,
                 fontWeight: 500,
@@ -798,8 +798,8 @@ export default function BriefsNewPage() {
             {status === "error" && (
               <div
                 style={{
-                  background: "#FDF0EE",
-                  border: "0.5px solid #FCCDC6",
+                  background: "#FFE8F0",
+                  border: "0.5px solid #FFC2D7",
                   borderRadius: 12,
                   padding: "1.5rem",
                 }}
@@ -807,7 +807,7 @@ export default function BriefsNewPage() {
                 <div
                   style={{
                     fontSize: 11,
-                    color: "#9B2A1A",
+                    color: "#B0154F",
                     textTransform: "uppercase",
                     letterSpacing: "0.08em",
                     fontWeight: 600,
@@ -816,7 +816,7 @@ export default function BriefsNewPage() {
                 >
                   Generation failed
                 </div>
-                <div style={{ fontSize: 13, color: "#9B2A1A", lineHeight: 1.55, marginBottom: 12 }}>
+                <div style={{ fontSize: 13, color: "#B0154F", lineHeight: 1.55, marginBottom: 12 }}>
                   {errorMessage}
                 </div>
                 <button
@@ -824,9 +824,9 @@ export default function BriefsNewPage() {
                   style={{
                     padding: "8px 14px",
                     borderRadius: 8,
-                    border: "0.5px solid #FCCDC6",
+                    border: "0.5px solid #FFC2D7",
                     background: "#FFFFFF",
-                    color: "#9B2A1A",
+                    color: "#B0154F",
                     fontSize: 12,
                     fontWeight: 500,
                     cursor: "pointer",
@@ -841,7 +841,7 @@ export default function BriefsNewPage() {
               <>
                 <Card>
                   <SectionLabel>What Claude read in the brief</SectionLabel>
-                  <p style={{ fontSize: 14, color: "#161311", lineHeight: 1.6, margin: 0 }}>
+                  <p style={{ fontSize: 14, color: "#0E0F26", lineHeight: 1.6, margin: 0 }}>
                     {analysis.briefSummary}
                   </p>
                   <div
@@ -857,7 +857,7 @@ export default function BriefsNewPage() {
                         <div
                           style={{
                             fontSize: 10,
-                            color: "#9A9A9A",
+                            color: "#6E7090",
                             textTransform: "uppercase",
                             letterSpacing: "0.08em",
                             fontWeight: 600,
@@ -873,8 +873,8 @@ export default function BriefsNewPage() {
                               style={{
                                 padding: "3px 9px",
                                 borderRadius: 100,
-                                background: "#FAFAF8",
-                                color: "#5A5A5A",
+                                background: "#F7F7FA",
+                                color: "#4B4C6B",
                                 border: "0.5px solid rgba(0,0,0,0.07)",
                                 fontSize: 11,
                                 fontWeight: 500,
@@ -890,10 +890,10 @@ export default function BriefsNewPage() {
                       <div
                         style={{
                           fontSize: 12,
-                          color: "#5A5A5A",
+                          color: "#4B4C6B",
                           lineHeight: 1.55,
                           padding: "8px 12px",
-                          background: "#FAFAF8",
+                          background: "#F7F7FA",
                           borderRadius: 8,
                           border: "0.5px solid rgba(0,0,0,0.07)",
                         }}
@@ -906,10 +906,10 @@ export default function BriefsNewPage() {
                       <div
                         style={{
                           fontSize: 12,
-                          color: "#5A5A5A",
+                          color: "#4B4C6B",
                           lineHeight: 1.55,
                           padding: "8px 12px",
-                          background: "#FAFAF8",
+                          background: "#F7F7FA",
                           borderRadius: 8,
                           border: "0.5px solid rgba(0,0,0,0.07)",
                         }}
@@ -938,17 +938,17 @@ export default function BriefsNewPage() {
                 <div
                   style={{
                     padding: "10px 14px",
-                    background: "#FAFAF8",
+                    background: "#F7F7FA",
                     border: "0.5px solid rgba(0,0,0,0.07)",
                     borderRadius: 10,
                     fontSize: 12,
-                    color: "#5A5A5A",
+                    color: "#4B4C6B",
                     lineHeight: 1.55,
                     textAlign: "center",
                   }}
                 >
                   Want to tweak a proposal? Click{" "}
-                  <Link href="/teams" style={{ color: "#1E6FA5", fontWeight: 600 }}>
+                  <Link href="/teams" style={{ color: "#3355E8", fontWeight: 600 }}>
                     /teams
                   </Link>{" "}
                   to swap members, run the AI deep read, and adjust before going to client.

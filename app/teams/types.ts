@@ -71,12 +71,12 @@ export interface PitchRole {
 }
 
 export const BRIEF_STAGES: { key: BriefStage; label: string; tone: string }[] = [
-  { key: "unstaffed", label: "Unstaffed",  tone: "#D97B73" },
-  { key: "analysing", label: "Analysing",  tone: "#D4974A" },
-  { key: "proposed",  label: "Proposed",   tone: "#6B9FCC" },
-  { key: "buyin",     label: "Buy-in",     tone: "#6B9FCC" },
-  { key: "confirmed", label: "Confirmed",  tone: "#5CAB82" },
-  { key: "active",    label: "Active",     tone: "#5CAB82" },
+  { key: "unstaffed", label: "Unstaffed",  tone: "#F2729E" },
+  { key: "analysing", label: "Analysing",  tone: "#FF9F5A" },
+  { key: "proposed",  label: "Proposed",   tone: "#5B7BFF" },
+  { key: "buyin",     label: "Buy-in",     tone: "#5B7BFF" },
+  { key: "confirmed", label: "Confirmed",  tone: "#A68BFF" },
+  { key: "active",    label: "Active",     tone: "#A68BFF" },
 ];
 
 export const TEAMS_TABS = [

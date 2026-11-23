@@ -17,9 +17,9 @@ function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
     <span
       className="font-display"
-      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
+      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#0E0F26" }}
     >
-      hum<span style={{ color: "#FF5040" }}>y</span>n
+      hum<span style={{ background: "linear-gradient(120deg, #3355E8 0%, #7B4DFF 34%, #F23D7A 68%, #FF9F5A 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>y</span>n
     </span>
   );
 }
@@ -196,14 +196,14 @@ function TimelineRow({
         <div style={{ flex: 1, minWidth: 0 }}>
           <Link
             href={`/people/${person.id}`}
-            style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}
+            style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}
           >
             {person.name}
           </Link>
           <div
             style={{
               fontSize: 11,
-              color: "#9A9A9A",
+              color: "#6E7090",
               fontWeight: 400,
               marginTop: 1,
               overflow: "hidden",
@@ -241,8 +241,8 @@ function TimelineRow({
           const bg = isAllocated
             ? e.color
             : isPartial
-              ? "#FAD98A"
-              : "#EFF8F3";
+              ? "#FFD2B0"
+              : "#F4F0FF";
           const fill = isAllocated
             ? 1
             : isPartial
@@ -267,7 +267,7 @@ function TimelineRow({
                   i < allocation.length - 1
                     ? "0.5px dashed rgba(0,0,0,0.05)"
                     : "none",
-                background: cell.pct === 0 ? "rgba(92,171,130,0.06)" : "transparent",
+                background: cell.pct === 0 ? "rgba(155,124,255,0.06)" : "transparent",
                 cursor: "default",
               }}
             >
@@ -279,14 +279,14 @@ function TimelineRow({
                   opacity: cell.pct === 0 ? 0.5 : fill,
                   border:
                     cell.pct === 0
-                      ? "0.5px dashed #B6E0CB"
+                      ? "0.5px dashed #DCD1FF"
                       : "0.5px solid rgba(0,0,0,0.06)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: 10,
                   fontWeight: 600,
-                  color: isAllocated ? "#FFFFFF" : isPartial ? "#8B5A00" : "#3D8A61",
+                  color: isAllocated ? "#FFFFFF" : isPartial ? "#A04A0C" : "#7C5CE6",
                   letterSpacing: "0.02em",
                 }}
               >
@@ -312,7 +312,7 @@ function FilterChip({
   tone?: { active: string; activeBg: string };
 }) {
   const activeColor = tone?.active ?? "#FFFFFF";
-  const activeBg = tone?.activeBg ?? "#161311";
+  const activeBg = tone?.activeBg ?? "#0E0F26";
   return (
     <button
       onClick={onClick}
@@ -321,7 +321,7 @@ function FilterChip({
         borderRadius: 100,
         border: active ? "none" : "0.5px solid rgba(0,0,0,0.07)",
         background: active ? activeBg : "#FFFFFF",
-        color: active ? activeColor : "#4D4945",
+        color: active ? activeColor : "#4B4C6B",
         fontSize: 12,
         fontWeight: 400,
         cursor: "pointer",
@@ -428,7 +428,7 @@ export default function AvailablePage() {
               padding: "7px 14px",
               borderRadius: 100,
               border: "none",
-              background: "#161311",
+              background: "#0E0F26",
               color: "#FFFFFF",
               fontSize: 12,
               fontWeight: 400,
@@ -445,7 +445,7 @@ export default function AvailablePage() {
           <div
             style={{
               fontSize: 11,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 400,
@@ -458,14 +458,14 @@ export default function AvailablePage() {
             style={{
               fontSize: 28,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.4px",
               margin: "6px 0 4px",
             }}
           >
             Available
           </h1>
-          <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.6 }}>
+          <div style={{ fontSize: 13, color: "#4B4C6B", maxWidth: 720, lineHeight: 1.6 }}>
             A {WEEK_COUNT}-week look at every consultant&apos;s engagement window — scroll
             horizontally for the far horizon. Coloured bars are current allocations, green cells
             are free capacity. Grouped by Nordic market — click a city header to collapse.
@@ -476,11 +476,11 @@ export default function AvailablePage() {
           <div
             style={{
               padding: 14,
-              background: "#FDF0EE",
-              border: "0.5px solid #FCCDC6",
+              background: "#FFE8F0",
+              border: "0.5px solid #FFC2D7",
               borderRadius: 10,
               fontSize: 13,
-              color: "#9B2A1A",
+              color: "#B0154F",
               marginBottom: 16,
             }}
           >
@@ -517,7 +517,7 @@ export default function AvailablePage() {
               <span
                 style={{
                   fontSize: 11,
-                  color: "#9A9A9A",
+                  color: "#6E7090",
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
                   fontWeight: 600,
@@ -550,7 +550,7 @@ export default function AvailablePage() {
               <FilterChip
                 active={availableNow2Wk}
                 onClick={() => setAvailableNow2Wk((v) => !v)}
-                tone={{ active: "#1A5C38", activeBg: "#EEF7F2" }}
+                tone={{ active: "#5B37D6", activeBg: "#F1ECFF" }}
               >
                 Available in next 2 weeks
               </FilterChip>
@@ -561,7 +561,7 @@ export default function AvailablePage() {
                   borderRadius: 100,
                   border: "0.5px solid rgba(0,0,0,0.07)",
                   background: "#FFFFFF",
-                  color: "#4D4945",
+                  color: "#4B4C6B",
                   fontSize: 12,
                   fontWeight: 400,
                   cursor: "pointer",
@@ -576,7 +576,7 @@ export default function AvailablePage() {
                   display: "flex",
                   gap: 12,
                   fontSize: 11,
-                  color: "#5A5A5A",
+                  color: "#4B4C6B",
                   flexWrap: "wrap",
                 }}
               >
@@ -586,7 +586,7 @@ export default function AvailablePage() {
                       width: 14,
                       height: 14,
                       borderRadius: 4,
-                      background: "#9A9A9A",
+                      background: "#6E7090",
                       opacity: 0.85,
                     }}
                   />
@@ -598,7 +598,7 @@ export default function AvailablePage() {
                       width: 14,
                       height: 14,
                       borderRadius: 4,
-                      background: "#FAD98A",
+                      background: "#FFD2B0",
                     }}
                   />
                   Partial
@@ -609,8 +609,8 @@ export default function AvailablePage() {
                       width: 14,
                       height: 14,
                       borderRadius: 4,
-                      background: "#EFF8F3",
-                      border: "0.5px dashed #B6E0CB",
+                      background: "#F4F0FF",
+                      border: "0.5px dashed #DCD1FF",
                     }}
                   />
                   Available
@@ -633,7 +633,7 @@ export default function AvailablePage() {
                     position: "absolute",
                     top: 8,
                     right: 14,
-                    background: "#161311",
+                    background: "#0E0F26",
                     color: "#FFFFFF",
                     padding: "6px 10px",
                     borderRadius: 6,
@@ -658,7 +658,7 @@ export default function AvailablePage() {
                 <div
                   style={{
                     display: "flex",
-                    background: "#FAFAF8",
+                    background: "#F7F7FA",
                     borderBottom: "0.5px solid rgba(0,0,0,0.06)",
                     position: "sticky",
                     top: 0,
@@ -670,12 +670,12 @@ export default function AvailablePage() {
                       position: "sticky",
                       left: 0,
                       zIndex: 4,
-                      background: "#FAFAF8",
+                      background: "#F7F7FA",
                       width: LEFT_COLUMN_WIDTH,
                       flexShrink: 0,
                       padding: "10px 14px",
                       fontSize: 10,
-                      color: "#9A9A9A",
+                      color: "#6E7090",
                       textTransform: "uppercase",
                       letterSpacing: "0.08em",
                       fontWeight: 600,
@@ -698,7 +698,7 @@ export default function AvailablePage() {
                         style={{
                           padding: "10px 4px",
                           fontSize: 10,
-                          color: "#9A9A9A",
+                          color: "#6E7090",
                           textTransform: "uppercase",
                           letterSpacing: "0.08em",
                           fontWeight: 600,
@@ -710,7 +710,7 @@ export default function AvailablePage() {
                         }}
                       >
                         <div>{w.label}</div>
-                        <div style={{ color: "#5A5A5A", fontWeight: 400, marginTop: 2 }}>
+                        <div style={{ color: "#4B4C6B", fontWeight: 400, marginTop: 2 }}>
                           {w.startLabel}
                         </div>
                       </div>
@@ -746,7 +746,7 @@ export default function AvailablePage() {
                             position: "sticky",
                             left: 0,
                             width: LEFT_COLUMN_WIDTH + weeks.length * WEEK_COLUMN_WIDTH,
-                            background: "#FAFAF8",
+                            background: "#F7F7FA",
                             padding: "10px 14px",
                             display: "flex",
                             alignItems: "center",
@@ -759,7 +759,7 @@ export default function AvailablePage() {
                             style={{
                               display: "inline-block",
                               fontSize: 10,
-                              color: "#5A5A5A",
+                              color: "#4B4C6B",
                               transform: collapsed ? "rotate(-90deg)" : "rotate(0deg)",
                               transition: "transform 0.15s ease",
                             }}
@@ -768,11 +768,11 @@ export default function AvailablePage() {
                           </span>
                           <span
                             className="font-display"
-                            style={{ fontSize: 15, fontWeight: 600, color: "#161311" }}
+                            style={{ fontSize: 15, fontWeight: 600, color: "#0E0F26" }}
                           >
                             {m}
                           </span>
-                          <span style={{ fontSize: 11, color: "#9A9A9A" }}>
+                          <span style={{ fontSize: 11, color: "#6E7090" }}>
                             {list.length} {list.length === 1 ? "consultant" : "consultants"}
                           </span>
                         </div>
@@ -793,7 +793,7 @@ export default function AvailablePage() {
                           style={{
                             padding: "14px 14px",
                             fontSize: 12,
-                            color: "#9A9A9A",
+                            color: "#6E7090",
                             borderTop: "0.5px solid rgba(0,0,0,0.05)",
                           }}
                         >
@@ -810,7 +810,7 @@ export default function AvailablePage() {
               style={{
                 marginTop: 14,
                 fontSize: 11,
-                color: "#9A9A9A",
+                color: "#6E7090",
                 lineHeight: 1.55,
                 maxWidth: 720,
               }}

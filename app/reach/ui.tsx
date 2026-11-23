@@ -6,13 +6,13 @@ import { ENERGY_LABEL, SEGMENT_LABEL, type Segment } from "./seed";
 import { GRADE_STYLE, type Grade } from "./scoring";
 
 export const R = {
-  surface: "#F1F3EE",
-  ink: "#161311",
-  ink2: "#4D4945",
-  ink3: "#9A9A9A",
+  surface: "#F4F4F8",
+  ink: "#0E0F26",
+  ink2: "#4B4C6B",
+  ink3: "#6E7090",
   line: "0.5px solid rgba(0,0,0,0.07)",
-  moss: "#9CFF40",
-  subtle: "#FAFAF8",
+  moss: "#C4B2FF",
+  subtle: "#F7F7FA",
 };
 
 export function Page({ children, narrow = false }: { children: ReactNode; narrow?: boolean }) {
@@ -144,7 +144,7 @@ export function Btn({
 
 export function Pill({
   children,
-  bg = "#FAFAF8",
+  bg = "#F7F7FA",
   color = R.ink2,
   border = "rgba(0,0,0,0.07)",
 }: {

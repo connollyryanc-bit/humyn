@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { RoleProvider } from "./components/role-context";
-import { sons, valtechNeue } from "./fonts";
+import { body, display } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "humyn — people intelligence",
-  description: "Inceptions' people intelligence platform.",
+  description: "People intelligence for the AI era.",
 };
 
 export default function RootLayout({
@@ -14,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${valtechNeue.variable} ${sons.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body>
         <RoleProvider>{children}</RoleProvider>
       </body>

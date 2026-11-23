@@ -41,9 +41,9 @@ function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
     <span
       className="font-display"
-      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
+      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#0E0F26" }}
     >
-      hum<span style={{ color: "#FF5040" }}>y</span>n
+      hum<span style={{ background: "linear-gradient(120deg, #3355E8 0%, #7B4DFF 34%, #F23D7A 68%, #FF9F5A 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>y</span>n
     </span>
   );
 }
@@ -100,7 +100,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textTransform: "uppercase",
         letterSpacing: "0.08em",
         fontWeight: 500,
@@ -155,7 +155,7 @@ function StatBlock({
       <div
         style={{
           fontSize: 10,
-          color: "#9A9A9A",
+          color: "#6E7090",
           textTransform: "uppercase",
           letterSpacing: "0.08em",
           fontWeight: 500,
@@ -176,7 +176,7 @@ function StatBlock({
         {value}
       </div>
       {detail && (
-        <div style={{ fontSize: 11, color: "#5A5A5A", lineHeight: 1.45, marginTop: 4 }}>
+        <div style={{ fontSize: 11, color: "#4B4C6B", lineHeight: 1.45, marginTop: 4 }}>
           {detail}
         </div>
       )}
@@ -189,10 +189,10 @@ function MiniEnergyBars({ scores }: { scores: Record<EnergyKey, number> }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
       {(["driver", "energizer", "supporter", "analyst"] as EnergyKey[]).map((c) => (
         <div key={c} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 10, color: "#5A5A5A", width: 56, fontWeight: 500 }}>
+          <span style={{ fontSize: 10, color: "#4B4C6B", width: 56, fontWeight: 500 }}>
             {energy[c].label}
           </span>
-          <div style={{ flex: 1, height: 4, background: "#EDEDEA", borderRadius: 2 }}>
+          <div style={{ flex: 1, height: 4, background: "#ECEBF2", borderRadius: 2 }}>
             <div
               style={{
                 width: `${Math.min(scores[c], 100)}%`,
@@ -217,7 +217,7 @@ function HarmonyDial({ score, color }: { score: number; color: string }) {
   const offset = circumference - (score / 100) * circumference;
   return (
     <svg width={96} height={96} viewBox="0 0 96 96">
-      <circle cx={48} cy={48} r={radius} stroke="#EDEDEA" strokeWidth={8} fill="none" />
+      <circle cx={48} cy={48} r={radius} stroke="#ECEBF2" strokeWidth={8} fill="none" />
       <circle
         cx={48}
         cy={48}
@@ -235,7 +235,7 @@ function HarmonyDial({ score, color }: { score: number; color: string }) {
         y={47}
         textAnchor="middle"
         dominantBaseline="middle"
-        style={{ fontSize: 22, fontWeight: 700, fill: "#161311" }}
+        style={{ fontSize: 22, fontWeight: 700, fill: "#0E0F26" }}
         className="font-display"
       >
         {score}
@@ -245,7 +245,7 @@ function HarmonyDial({ score, color }: { score: number; color: string }) {
         y={64}
         textAnchor="middle"
         dominantBaseline="middle"
-        style={{ fontSize: 9, fill: "#9A9A9A", letterSpacing: 0.5, textTransform: "uppercase", fontWeight: 600 }}
+        style={{ fontSize: 9, fill: "#6E7090", letterSpacing: 0.5, textTransform: "uppercase", fontWeight: 600 }}
       >
         out of 100
       </text>
@@ -266,7 +266,7 @@ function Header({ active }: { active: TabKey }) {
               padding: "7px 14px",
               borderRadius: 100,
               border: "none",
-              background: "#161311",
+              background: "#0E0F26",
               color: "#FFFFFF",
               fontSize: 12,
               fontWeight: 500,
@@ -309,8 +309,8 @@ function Tabs({ tab, setTab }: { tab: TabKey; setTab: (t: TabKey) => void }) {
             padding: "8px 16px",
             borderRadius: 8,
             border: "none",
-            background: tab === t.key ? "#161311" : "transparent",
-            color: tab === t.key ? "#FFFFFF" : "#4D4945",
+            background: tab === t.key ? "#0E0F26" : "transparent",
+            color: tab === t.key ? "#FFFFFF" : "#4B4C6B",
             fontSize: 12,
             fontWeight: 500,
             cursor: "pointer",
@@ -349,15 +349,15 @@ function SavedTeamCard({
         <div style={{ flex: 1, minWidth: 0 }}>
           <div
             className="font-display"
-            style={{ fontSize: 18, fontWeight: 600, color: "#161311", letterSpacing: "-0.3px" }}
+            style={{ fontSize: 18, fontWeight: 600, color: "#0E0F26", letterSpacing: "-0.3px" }}
           >
             {team.name}
           </div>
           {team.client && (
-            <div style={{ fontSize: 12, color: "#5A5A5A", marginTop: 2 }}>{team.client}</div>
+            <div style={{ fontSize: 12, color: "#4B4C6B", marginTop: 2 }}>{team.client}</div>
           )}
           {team.description && (
-            <p style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.5, margin: "8px 0 0" }}>
+            <p style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.5, margin: "8px 0 0" }}>
               {team.description}
             </p>
           )}
@@ -398,7 +398,7 @@ function SavedTeamCard({
           ))}
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <span style={{ fontSize: 11, color: "#9A9A9A" }}>
+          <span style={{ fontSize: 11, color: "#6E7090" }}>
             {teamPeople.length} {teamPeople.length === 1 ? "person" : "people"}
           </span>
           {dom && (
@@ -412,7 +412,7 @@ function SavedTeamCard({
           <div
             style={{
               fontSize: 10,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 600,
@@ -425,7 +425,7 @@ function SavedTeamCard({
             style={{
               fontSize: 16,
               fontWeight: 700,
-              color: cost.euros > 0 ? "#9B2A1A" : "#1A5C38",
+              color: cost.euros > 0 ? "#B0154F" : "#5B37D6",
               marginTop: 2,
             }}
           >
@@ -442,7 +442,7 @@ function SavedTeamCard({
             padding: "8px 14px",
             borderRadius: 8,
             border: "none",
-            background: "#161311",
+            background: "#0E0F26",
             color: "#FFFFFF",
             fontSize: 12,
             fontWeight: 500,
@@ -461,7 +461,7 @@ function SavedTeamCard({
             borderRadius: 8,
             border: "0.5px solid rgba(0,0,0,0.07)",
             background: "#FFFFFF",
-            color: "#9B2A1A",
+            color: "#B0154F",
             fontSize: 12,
             fontWeight: 500,
             cursor: "pointer",
@@ -492,8 +492,8 @@ function PersonPickerRow({
         alignItems: "center",
         gap: 10,
         padding: "8px 10px",
-        background: inTeam ? "#EEF7F2" : "#FFFFFF",
-        border: `0.5px solid ${inTeam ? "#9ED4B8" : "rgba(0,0,0,0.07)"}`,
+        background: inTeam ? "#F1ECFF" : "#FFFFFF",
+        border: `0.5px solid ${inTeam ? "#D2C5FF" : "rgba(0,0,0,0.07)"}`,
         borderRadius: 10,
         cursor: "pointer",
         fontFamily: "inherit",
@@ -503,8 +503,8 @@ function PersonPickerRow({
     >
       <Avatar person={person} size={28} />
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>{person.name}</div>
-        <div style={{ fontSize: 11, color: "#9A9A9A" }}>
+        <div style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>{person.name}</div>
+        <div style={{ fontSize: 11, color: "#6E7090" }}>
           {person.role} · {person.location}
         </div>
       </div>
@@ -514,9 +514,9 @@ function PersonPickerRow({
           width: 24,
           height: 24,
           borderRadius: 6,
-          background: inTeam ? "#2E8B57" : "#FFFFFF",
-          color: inTeam ? "#FFFFFF" : "#9A9A9A",
-          border: `0.5px solid ${inTeam ? "#2E8B57" : "rgba(0,0,0,0.1)"}`,
+          background: inTeam ? "#9B7CFF" : "#FFFFFF",
+          color: inTeam ? "#FFFFFF" : "#6E7090",
+          border: `0.5px solid ${inTeam ? "#9B7CFF" : "rgba(0,0,0,0.1)"}`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -539,11 +539,11 @@ function MarketCard({ market }: { market: MarketCulture }) {
         <div>
           <div
             className="font-display"
-            style={{ fontSize: 20, fontWeight: 600, color: "#161311", letterSpacing: "-0.3px" }}
+            style={{ fontSize: 20, fontWeight: 600, color: "#0E0F26", letterSpacing: "-0.3px" }}
           >
             {market.name}
           </div>
-          <div style={{ fontSize: 12, color: "#5A5A5A", marginTop: 2 }}>
+          <div style={{ fontSize: 12, color: "#4B4C6B", marginTop: 2 }}>
             {market.count} consultant{market.count === 1 ? "" : "s"}
           </div>
         </div>
@@ -575,7 +575,7 @@ function MarketCard({ market }: { market: MarketCulture }) {
                 <div
                   style={{
                     fontSize: 10,
-                    color: "#9A9A9A",
+                    color: "#6E7090",
                     textTransform: "uppercase",
                     letterSpacing: "0.08em",
                     fontWeight: 600,
@@ -585,7 +585,7 @@ function MarketCard({ market }: { market: MarketCulture }) {
                 </div>
                 <div
                   className="font-display"
-                  style={{ fontSize: 17, fontWeight: 700, color: "#161311" }}
+                  style={{ fontSize: 17, fontWeight: 700, color: "#0E0F26" }}
                 >
                   {market.averageUtilisation}%
                 </div>
@@ -594,7 +594,7 @@ function MarketCard({ market }: { market: MarketCulture }) {
                 <div
                   style={{
                     fontSize: 10,
-                    color: "#9A9A9A",
+                    color: "#6E7090",
                     textTransform: "uppercase",
                     letterSpacing: "0.08em",
                     fontWeight: 600,
@@ -604,7 +604,7 @@ function MarketCard({ market }: { market: MarketCulture }) {
                 </div>
                 <div
                   className="font-display"
-                  style={{ fontSize: 17, fontWeight: 700, color: "#161311" }}
+                  style={{ fontSize: 17, fontWeight: 700, color: "#0E0F26" }}
                 >
                   {market.averageLoyalty}
                 </div>
@@ -615,7 +615,7 @@ function MarketCard({ market }: { market: MarketCulture }) {
           <p
             style={{
               fontSize: 13,
-              color: "#161311",
+              color: "#0E0F26",
               lineHeight: 1.6,
               margin: "16px 0 14px",
               fontStyle: "italic",
@@ -627,8 +627,8 @@ function MarketCard({ market }: { market: MarketCulture }) {
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <div
               style={{
-                background: "#EEF7F2",
-                border: "0.5px solid #9ED4B8",
+                background: "#F1ECFF",
+                border: "0.5px solid #D2C5FF",
                 borderRadius: 10,
                 padding: "10px 12px",
               }}
@@ -636,7 +636,7 @@ function MarketCard({ market }: { market: MarketCulture }) {
               <div
                 style={{
                   fontSize: 10,
-                  color: "#1A5C38",
+                  color: "#5B37D6",
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
                   fontWeight: 600,
@@ -645,12 +645,12 @@ function MarketCard({ market }: { market: MarketCulture }) {
               >
                 Best for
               </div>
-              <div style={{ fontSize: 12, color: "#1A5C38", lineHeight: 1.5 }}>{market.bestFor}</div>
+              <div style={{ fontSize: 12, color: "#5B37D6", lineHeight: 1.5 }}>{market.bestFor}</div>
             </div>
             <div
               style={{
-                background: "#FFFBF2",
-                border: "0.5px solid #FAD98A",
+                background: "#FFF0E4",
+                border: "0.5px solid #FFD2B0",
                 borderRadius: 10,
                 padding: "10px 12px",
               }}
@@ -658,7 +658,7 @@ function MarketCard({ market }: { market: MarketCulture }) {
               <div
                 style={{
                   fontSize: 10,
-                  color: "#8B5A00",
+                  color: "#A04A0C",
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
                   fontWeight: 600,
@@ -667,7 +667,7 @@ function MarketCard({ market }: { market: MarketCulture }) {
               >
                 Watch for
               </div>
-              <div style={{ fontSize: 12, color: "#8B5A00", lineHeight: 1.5 }}>{market.watchFor}</div>
+              <div style={{ fontSize: 12, color: "#A04A0C", lineHeight: 1.5 }}>{market.watchFor}</div>
             </div>
             {market.topCapabilities.length > 0 && (
               <div>
@@ -679,8 +679,8 @@ function MarketCard({ market }: { market: MarketCulture }) {
                       style={{
                         padding: "3px 9px",
                         borderRadius: 100,
-                        background: "#FAFAF8",
-                        color: "#5A5A5A",
+                        background: "#F7F7FA",
+                        color: "#4B4C6B",
                         border: "0.5px solid rgba(0,0,0,0.07)",
                         fontSize: 11,
                         fontWeight: 500,
@@ -695,7 +695,7 @@ function MarketCard({ market }: { market: MarketCulture }) {
           </div>
         </>
       ) : (
-        <div style={{ fontSize: 13, color: "#9A9A9A" }}>No consultants in {market.name} yet.</div>
+        <div style={{ fontSize: 13, color: "#6E7090" }}>No consultants in {market.name} yet.</div>
       )}
     </Card>
   );
@@ -715,7 +715,7 @@ function CrossMarketMatrix({ markets }: { markets: MarketCulture[] }) {
   return (
     <Card>
       <SectionLabel>Cross-market collaboration friction</SectionLabel>
-      <div style={{ fontSize: 12, color: "#5A5A5A", marginBottom: 14, lineHeight: 1.55, maxWidth: 640 }}>
+      <div style={{ fontSize: 12, color: "#4B4C6B", marginBottom: 14, lineHeight: 1.55, maxWidth: 640 }}>
         Computed from the weighted Pulse-wheel distance between each market's full energy mix —
         not a hardcoded score. 0° = identical temperament, 180° = wheel opposites. Higher numbers
         mean more explicit handoffs and pair-coaching needed at kickoff. Hover any cell to see the
@@ -731,7 +731,7 @@ function CrossMarketMatrix({ markets }: { markets: MarketCulture[] }) {
                   key={m.name}
                   style={{
                     fontSize: 11,
-                    color: "#5A5A5A",
+                    color: "#4B4C6B",
                     fontWeight: 600,
                     padding: 8,
                     textTransform: "uppercase",
@@ -749,7 +749,7 @@ function CrossMarketMatrix({ markets }: { markets: MarketCulture[] }) {
                 <th
                   style={{
                     fontSize: 11,
-                    color: "#5A5A5A",
+                    color: "#4B4C6B",
                     fontWeight: 600,
                     padding: 8,
                     textAlign: "right",
@@ -765,12 +765,12 @@ function CrossMarketMatrix({ markets }: { markets: MarketCulture[] }) {
                       <td
                         key={col.name}
                         style={{
-                          background: "#FAFAF8",
+                          background: "#F7F7FA",
                           borderRadius: 6,
                           padding: "12px 8px",
                           textAlign: "center",
                           fontSize: 11,
-                          color: "#9A9A9A",
+                          color: "#6E7090",
                         }}
                       >
                         —
@@ -779,9 +779,9 @@ function CrossMarketMatrix({ markets }: { markets: MarketCulture[] }) {
                   }
                   const f = crossMarketFriction(row, col);
                   const colour =
-                    f.label === "Low" ? "#2E8B57" : f.label === "Moderate" ? "#F5A623" : "#E8402A";
+                    f.label === "Low" ? "#9B7CFF" : f.label === "Moderate" ? "#FF9F5A" : "#F23D7A";
                   const bg =
-                    f.label === "Low" ? "#EEF7F2" : f.label === "Moderate" ? "#FFFBF2" : "#FDF0EE";
+                    f.label === "Low" ? "#F1ECFF" : f.label === "Moderate" ? "#FFF0E4" : "#FFE8F0";
                   const isHover = hover && hover.row === row.name && hover.col === col.name;
                   return (
                     <td
@@ -827,7 +827,7 @@ function CrossMarketMatrix({ markets }: { markets: MarketCulture[] }) {
         style={{
           marginTop: 14,
           padding: 12,
-          background: "#FAFAF8",
+          background: "#F7F7FA",
           border: "0.5px solid rgba(0,0,0,0.07)",
           borderRadius: 10,
           minHeight: 56,
@@ -838,7 +838,7 @@ function CrossMarketMatrix({ markets }: { markets: MarketCulture[] }) {
             <div
               style={{
                 fontSize: 10,
-                color: "#9A9A9A",
+                color: "#6E7090",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
                 fontWeight: 600,
@@ -847,13 +847,13 @@ function CrossMarketMatrix({ markets }: { markets: MarketCulture[] }) {
             >
               {hover.row} ↔ {hover.col} · {hovered.label} friction · {hovered.pct}
             </div>
-            <div style={{ fontSize: 13, color: "#161311", lineHeight: 1.55, marginBottom: 4 }}>
+            <div style={{ fontSize: 13, color: "#0E0F26", lineHeight: 1.55, marginBottom: 4 }}>
               {hovered.note}
             </div>
-            <div style={{ fontSize: 11, color: "#5A5A5A", lineHeight: 1.5 }}>{hovered.why}</div>
+            <div style={{ fontSize: 11, color: "#4B4C6B", lineHeight: 1.5 }}>{hovered.why}</div>
           </>
         ) : (
-          <div style={{ fontSize: 12, color: "#9A9A9A", lineHeight: 1.55 }}>
+          <div style={{ fontSize: 12, color: "#6E7090", lineHeight: 1.55 }}>
             Hover any matrix cell to see the underlying calculation and the cross-market collaboration note.
           </div>
         )}
@@ -947,7 +947,7 @@ function BuildTab({
             borderRadius: 8,
             border: "0.5px solid rgba(0,0,0,0.07)",
             background: "#FFFFFF",
-            color: "#161311",
+            color: "#0E0F26",
             fontSize: 13,
             outline: "none",
             marginBottom: 10,
@@ -974,13 +974,13 @@ function BuildTab({
             <input
               value={draft.name}
               onChange={(e) => setDraft({ ...draft, name: e.target.value })}
-              placeholder="Team name (e.g. Nordea omnichannel)"
+              placeholder="Team name (e.g. Baltica Bank omnichannel)"
               style={{
                 padding: "9px 12px",
                 borderRadius: 8,
                 border: "0.5px solid rgba(0,0,0,0.07)",
                 background: "#FFFFFF",
-                color: "#161311",
+                color: "#0E0F26",
                 fontSize: 13,
                 outline: "none",
                 fontFamily: "inherit",
@@ -996,7 +996,7 @@ function BuildTab({
                 borderRadius: 8,
                 border: "0.5px solid rgba(0,0,0,0.07)",
                 background: "#FFFFFF",
-                color: "#161311",
+                color: "#0E0F26",
                 fontSize: 13,
                 outline: "none",
                 fontFamily: "inherit",
@@ -1016,7 +1016,7 @@ function BuildTab({
               borderRadius: 8,
               border: "0.5px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#161311",
+              color: "#0E0F26",
               fontSize: 13,
               outline: "none",
               fontFamily: "inherit",
@@ -1025,7 +1025,7 @@ function BuildTab({
               lineHeight: 1.5,
             }}
           />
-          <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 10, fontSize: 12, color: "#5A5A5A" }}>
+          <div style={{ marginTop: 10, display: "flex", alignItems: "center", gap: 10, fontSize: 12, color: "#4B4C6B" }}>
             <span style={{ fontWeight: 600 }}>Project duration:</span>
             <select
               value={draft.duration}
@@ -1035,7 +1035,7 @@ function BuildTab({
                 borderRadius: 6,
                 border: "0.5px solid rgba(0,0,0,0.07)",
                 background: "#FFFFFF",
-                color: "#161311",
+                color: "#0E0F26",
                 fontSize: 12,
                 cursor: "pointer",
                 fontFamily: "inherit",
@@ -1046,7 +1046,7 @@ function BuildTab({
               <option value={6}>6 months</option>
               <option value={12}>12 months</option>
             </select>
-            <span style={{ color: "#9A9A9A" }}>Used for the friction-cost projection.</span>
+            <span style={{ color: "#6E7090" }}>Used for the friction-cost projection.</span>
           </div>
         </Card>
 
@@ -1056,11 +1056,11 @@ function BuildTab({
             <div
               style={{
                 padding: 18,
-                background: "#FAFAF8",
+                background: "#F7F7FA",
                 border: "0.5px dashed rgba(0,0,0,0.12)",
                 borderRadius: 10,
                 fontSize: 13,
-                color: "#9A9A9A",
+                color: "#6E7090",
                 textAlign: "center",
               }}
             >
@@ -1077,14 +1077,14 @@ function BuildTab({
                     alignItems: "center",
                     gap: 10,
                     padding: 8,
-                    background: "#FAFAF8",
+                    background: "#F7F7FA",
                     borderRadius: 10,
                   }}
                 >
                   <Avatar person={p} size={28} />
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>{p.name}</div>
-                    <div style={{ fontSize: 11, color: "#9A9A9A" }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>{p.name}</div>
+                    <div style={{ fontSize: 11, color: "#6E7090" }}>
                       {p.role} · {p.location}
                     </div>
                   </div>
@@ -1097,7 +1097,7 @@ function BuildTab({
                       borderRadius: 6,
                       border: "0.5px solid rgba(0,0,0,0.07)",
                       background: "#FFFFFF",
-                      color: "#9B2A1A",
+                      color: "#B0154F",
                       cursor: "pointer",
                       fontSize: 13,
                       lineHeight: 1,
@@ -1135,17 +1135,17 @@ function BuildTab({
                   label={`Friction cost · ${draft.duration} mo`}
                   value={cost.euros > 0 ? `€${(cost.euros / 1000).toFixed(0)}k` : "€0"}
                   detail={cost.rationale}
-                  color={cost.euros > 0 ? "#9B2A1A" : "#1A5C38"}
-                  bg={cost.euros > 0 ? "#FDF0EE" : "#EEF7F2"}
-                  border={cost.euros > 0 ? "#FCCDC6" : "#9ED4B8"}
+                  color={cost.euros > 0 ? "#B0154F" : "#5B37D6"}
+                  bg={cost.euros > 0 ? "#FFE8F0" : "#F1ECFF"}
+                  border={cost.euros > 0 ? "#FFC2D7" : "#D2C5FF"}
                 />
                 <StatBlock
                   label="Risk-tier mix"
                   value={`${riskMix.high + riskMix.medium}`}
                   detail={`${riskMix.high} high · ${riskMix.medium} medium · ${riskMix.watch} watch (out of ${selected.length})`}
-                  color={riskMix.high + riskMix.medium > 0 ? "#9B2A1A" : "#1A5C38"}
-                  bg={riskMix.high + riskMix.medium > 0 ? "#FDF0EE" : "#EEF7F2"}
-                  border={riskMix.high + riskMix.medium > 0 ? "#FCCDC6" : "#9ED4B8"}
+                  color={riskMix.high + riskMix.medium > 0 ? "#B0154F" : "#5B37D6"}
+                  bg={riskMix.high + riskMix.medium > 0 ? "#FFE8F0" : "#F1ECFF"}
+                  border={riskMix.high + riskMix.medium > 0 ? "#FFC2D7" : "#D2C5FF"}
                 />
               </div>
 
@@ -1161,14 +1161,14 @@ function BuildTab({
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <HarmonyDial score={harmony.score} color={harmony.bandColor} />
                   <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                    <span style={{ fontSize: 11, color: "#9A9A9A", textTransform: "uppercase", letterSpacing: "0.07em", fontWeight: 600 }}>
+                    <span style={{ fontSize: 11, color: "#6E7090", textTransform: "uppercase", letterSpacing: "0.07em", fontWeight: 600 }}>
                       Markets in this team
                     </span>
-                    <span style={{ fontSize: 13, color: "#161311", fontWeight: 600 }}>
+                    <span style={{ fontSize: 13, color: "#0E0F26", fontWeight: 600 }}>
                       {marketsRepresented.join(" · ")}
                     </span>
                     {marketsRepresented.length > 1 && (
-                      <span style={{ fontSize: 11, color: "#8B5A00" }}>
+                      <span style={{ fontSize: 11, color: "#A04A0C" }}>
                         Cross-market team — plan explicit handoffs.
                       </span>
                     )}
@@ -1190,7 +1190,7 @@ function BuildTab({
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12, marginBottom: 10 }}>
                 <div>
                   <SectionLabel>AI deep read · Claude</SectionLabel>
-                  <div style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.55, maxWidth: 520 }}>
+                  <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.55, maxWidth: 520 }}>
                     Semantic pass over the team's drivers, detractors and energy mix. Catches frictions the heuristic misses and adds dynamics + missing-angle observations.
                   </div>
                 </div>
@@ -1215,15 +1215,15 @@ function BuildTab({
                     borderRadius: 8,
                     background:
                       aiLoading || selected.length < 2
-                        ? "#EDEDEA"
+                        ? "#ECEBF2"
                         : aiAnalysis && !aiStale
                           ? "#FFFFFF"
-                          : "#161311",
+                          : "#0E0F26",
                     color:
                       aiLoading || selected.length < 2
-                        ? "#9A9A9A"
+                        ? "#6E7090"
                         : aiAnalysis && !aiStale
-                          ? "#161311"
+                          ? "#0E0F26"
                           : "#FFFFFF",
                     fontSize: 12,
                     fontWeight: 600,
@@ -1249,11 +1249,11 @@ function BuildTab({
                 <div
                   style={{
                     padding: 12,
-                    background: "#FAFAF8",
+                    background: "#F7F7FA",
                     border: "0.5px dashed rgba(0,0,0,0.12)",
                     borderRadius: 10,
                     fontSize: 12,
-                    color: "#9A9A9A",
+                    color: "#6E7090",
                     textAlign: "center",
                   }}
                 >
@@ -1265,11 +1265,11 @@ function BuildTab({
                 <div
                   style={{
                     padding: 12,
-                    background: "#FDF0EE",
-                    border: "0.5px solid #FCCDC6",
+                    background: "#FFE8F0",
+                    border: "0.5px solid #FFC2D7",
                     borderRadius: 10,
                     fontSize: 12,
-                    color: "#9B2A1A",
+                    color: "#B0154F",
                   }}
                 >
                   {aiError}
@@ -1282,11 +1282,11 @@ function BuildTab({
                     <div
                       style={{
                         padding: "8px 12px",
-                        background: "#FFFBF2",
-                        border: "0.5px solid #FAD98A",
+                        background: "#FFF0E4",
+                        border: "0.5px solid #FFD2B0",
                         borderRadius: 10,
                         fontSize: 11,
-                        color: "#8B5A00",
+                        color: "#A04A0C",
                       }}
                     >
                       Team has changed since the last analysis. Re-run to refresh.
@@ -1296,7 +1296,7 @@ function BuildTab({
                   <p
                     style={{
                       fontSize: 14,
-                      color: "#161311",
+                      color: "#0E0F26",
                       lineHeight: 1.6,
                       margin: 0,
                       fontStyle: "italic",
@@ -1308,7 +1308,7 @@ function BuildTab({
                   {aiAnalysis.strengths.length > 0 && (
                     <div>
                       <SectionLabel>Strengths</SectionLabel>
-                      <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: "#1A5C38", lineHeight: 1.65 }}>
+                      <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: "#5B37D6", lineHeight: 1.65 }}>
                         {aiAnalysis.strengths.map((s, i) => (
                           <li key={i}>{s}</li>
                         ))}
@@ -1323,10 +1323,10 @@ function BuildTab({
                         {aiAnalysis.frictionPairs.map((fp, i) => {
                           const tone =
                             fp.severity === "high"
-                              ? { bg: "#FDF0EE", border: "#FCCDC6", text: "#9B2A1A" }
+                              ? { bg: "#FFE8F0", border: "#FFC2D7", text: "#B0154F" }
                               : fp.severity === "medium"
-                                ? { bg: "#FFFBF2", border: "#FAD98A", text: "#8B5A00" }
-                                : { bg: "#FAFAF8", border: "rgba(0,0,0,0.07)", text: "#5A5A5A" };
+                                ? { bg: "#FFF0E4", border: "#FFD2B0", text: "#A04A0C" }
+                                : { bg: "#F7F7FA", border: "rgba(0,0,0,0.07)", text: "#4B4C6B" };
                           return (
                             <div
                               key={i}
@@ -1338,7 +1338,7 @@ function BuildTab({
                               }}
                             >
                               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                                <span style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>
+                                <span style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>
                                   {fp.a} ↔ {fp.b}
                                 </span>
                                 <span
@@ -1367,7 +1367,7 @@ function BuildTab({
                   {aiAnalysis.dynamicsRisks.length > 0 && (
                     <div>
                       <SectionLabel>Team-dynamic risks</SectionLabel>
-                      <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: "#8B5A00", lineHeight: 1.65 }}>
+                      <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: "#A04A0C", lineHeight: 1.65 }}>
                         {aiAnalysis.dynamicsRisks.map((r, i) => (
                           <li key={i}>{r}</li>
                         ))}
@@ -1379,15 +1379,15 @@ function BuildTab({
                     <div
                       style={{
                         padding: 12,
-                        background: "#EEF4FB",
-                        border: "0.5px solid #8DC2E8",
+                        background: "#E9EEFF",
+                        border: "0.5px solid #B9C7FF",
                         borderRadius: 10,
                       }}
                     >
                       <div
                         style={{
                           fontSize: 10,
-                          color: "#124A6E",
+                          color: "#2140C2",
                           textTransform: "uppercase",
                           letterSpacing: "0.08em",
                           fontWeight: 600,
@@ -1396,7 +1396,7 @@ function BuildTab({
                       >
                         Missing angle
                       </div>
-                      <div style={{ fontSize: 13, color: "#124A6E", lineHeight: 1.55 }}>{aiAnalysis.missingAngle}</div>
+                      <div style={{ fontSize: 13, color: "#2140C2", lineHeight: 1.55 }}>{aiAnalysis.missingAngle}</div>
                     </div>
                   )}
 
@@ -1404,7 +1404,7 @@ function BuildTab({
                     <div
                       style={{
                         padding: 12,
-                        background: "#161311",
+                        background: "#0E0F26",
                         color: "#FFFFFF",
                         borderRadius: 10,
                       }}
@@ -1441,8 +1441,8 @@ function BuildTab({
                       <div
                         key={`${g.energy}-${g.severity}`}
                         style={{
-                          background: isUnder ? "#FDF0EE" : "#FFFBF2",
-                          border: `0.5px solid ${isUnder ? "#FCCDC6" : "#FAD98A"}`,
+                          background: isUnder ? "#FFE8F0" : "#FFF0E4",
+                          border: `0.5px solid ${isUnder ? "#FFC2D7" : "#FFD2B0"}`,
                           borderRadius: 10,
                           padding: "10px 12px",
                           display: "flex",
@@ -1464,7 +1464,7 @@ function BuildTab({
                           <div
                             style={{
                               fontSize: 12,
-                              color: isUnder ? "#9B2A1A" : "#8B5A00",
+                              color: isUnder ? "#B0154F" : "#A04A0C",
                               fontWeight: 700,
                               textTransform: "uppercase",
                               letterSpacing: "0.07em",
@@ -1473,7 +1473,7 @@ function BuildTab({
                           >
                             {e.label} {isUnder ? "undersupplied" : "oversupplied"}
                           </div>
-                          <div style={{ fontSize: 12, color: isUnder ? "#9B2A1A" : "#8B5A00" }}>
+                          <div style={{ fontSize: 12, color: isUnder ? "#B0154F" : "#A04A0C" }}>
                             {g.detail}
                           </div>
                         </div>
@@ -1492,20 +1492,20 @@ function BuildTab({
                     <div
                       key={`${f.a.id}-${f.b.id}`}
                       style={{
-                        background: "#FFFBF2",
-                        border: "0.5px solid #FAD98A",
+                        background: "#FFF0E4",
+                        border: "0.5px solid #FFD2B0",
                         borderRadius: 10,
                         padding: "10px 12px",
                       }}
                     >
                       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
                         <Avatar person={f.a} size={24} />
-                        <span style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>{f.a.name}</span>
-                        <span style={{ fontSize: 11, color: "#8B5A00" }}>↔</span>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>{f.a.name}</span>
+                        <span style={{ fontSize: 11, color: "#A04A0C" }}>↔</span>
                         <Avatar person={f.b} size={24} />
-                        <span style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>{f.b.name}</span>
+                        <span style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>{f.b.name}</span>
                       </div>
-                      <div style={{ fontSize: 12, color: "#8B5A00", lineHeight: 1.5 }}>{f.reason}</div>
+                      <div style={{ fontSize: 12, color: "#A04A0C", lineHeight: 1.5 }}>{f.reason}</div>
                     </div>
                   ))}
                 </div>
@@ -1524,17 +1524,17 @@ function BuildTab({
                         alignItems: "center",
                         gap: 10,
                         padding: 10,
-                        background: "#EEF4FB",
-                        border: "0.5px solid #8DC2E8",
+                        background: "#E9EEFF",
+                        border: "0.5px solid #B9C7FF",
                         borderRadius: 10,
                       }}
                     >
                       <Avatar person={s.candidate} size={32} />
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>
+                        <div style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>
                           {s.candidate.name}
                         </div>
-                        <div style={{ fontSize: 11, color: "#124A6E", lineHeight: 1.5, marginTop: 2 }}>
+                        <div style={{ fontSize: 11, color: "#2140C2", lineHeight: 1.5, marginTop: 2 }}>
                           {s.reason}
                         </div>
                       </div>
@@ -1543,9 +1543,9 @@ function BuildTab({
                         style={{
                           padding: "6px 12px",
                           borderRadius: 8,
-                          border: "0.5px solid #8DC2E8",
+                          border: "0.5px solid #B9C7FF",
                           background: "#FFFFFF",
-                          color: "#124A6E",
+                          color: "#2140C2",
                           fontSize: 11,
                           fontWeight: 600,
                           cursor: "pointer",
@@ -1571,7 +1571,7 @@ function BuildTab({
               borderRadius: 8,
               border: "0.5px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#5A5A5A",
+              color: "#4B4C6B",
               fontSize: 13,
               fontWeight: 500,
               cursor: saving ? "not-allowed" : "pointer",
@@ -1588,8 +1588,8 @@ function BuildTab({
               borderRadius: 8,
               border: "none",
               background:
-                saving || selected.length === 0 || !draft.name.trim() ? "#EDEDEA" : "#161311",
-              color: saving || selected.length === 0 || !draft.name.trim() ? "#9A9A9A" : "#FFFFFF",
+                saving || selected.length === 0 || !draft.name.trim() ? "#ECEBF2" : "#0E0F26",
+              color: saving || selected.length === 0 || !draft.name.trim() ? "#6E7090" : "#FFFFFF",
               fontSize: 13,
               fontWeight: 500,
               cursor:
@@ -1733,7 +1733,7 @@ export default function TeamsPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 500,
@@ -1746,14 +1746,14 @@ export default function TeamsPage() {
             style={{
               fontSize: 32,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.5px",
               margin: "6px 0 4px",
             }}
           >
             Teams
           </h1>
-          <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720 }}>
+          <div style={{ fontSize: 13, color: "#4B4C6B", maxWidth: 720 }}>
             Compose teams that perform. Culture-fit scoring, conflict-cost projection, energy
             balance warnings — and a market-by-market view of how Stockholm, Oslo, Copenhagen and
             Helsinki differ.
@@ -1764,11 +1764,11 @@ export default function TeamsPage() {
           <div
             style={{
               padding: 14,
-              background: "#FDF0EE",
-              border: "0.5px solid #FCCDC6",
+              background: "#FFE8F0",
+              border: "0.5px solid #FFC2D7",
               borderRadius: 10,
               fontSize: 13,
-              color: "#9B2A1A",
+              color: "#B0154F",
               marginBottom: 16,
             }}
           >
@@ -1785,11 +1785,11 @@ export default function TeamsPage() {
                 <div style={{ textAlign: "center", padding: "20px 0" }}>
                   <div
                     className="font-display"
-                    style={{ fontSize: 18, fontWeight: 600, color: "#161311", marginBottom: 6 }}
+                    style={{ fontSize: 18, fontWeight: 600, color: "#0E0F26", marginBottom: 6 }}
                   >
                     No teams saved yet
                   </div>
-                  <div style={{ fontSize: 13, color: "#5A5A5A", marginBottom: 14 }}>
+                  <div style={{ fontSize: 13, color: "#4B4C6B", marginBottom: 14 }}>
                     Switch to the Build tab to compose your first team.
                   </div>
                   <button
@@ -1801,7 +1801,7 @@ export default function TeamsPage() {
                       padding: "9px 18px",
                       borderRadius: 8,
                       border: "none",
-                      background: "#161311",
+                      background: "#0E0F26",
                       color: "#FFFFFF",
                       fontSize: 13,
                       fontWeight: 500,
@@ -1853,7 +1853,7 @@ export default function TeamsPage() {
         {tab === "markets" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <Card>
-              <SectionLabel>Nordic Pulse mix · Inceptions</SectionLabel>
+              <SectionLabel>Nordic Pulse mix · Fjord & Co</SectionLabel>
               <div
                 style={{
                   display: "grid",
@@ -1871,9 +1871,9 @@ export default function TeamsPage() {
                   />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  <div style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.6 }}>
+                  <div style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.6 }}>
                     Average across {people.length} consultants — Driver {overallAverage.driver}%{" "}
-                    · Energizer {overallAverage.energizer}% · Supporter {overallAverage.supporter}%{" "}
+                    · Energizer {overallAverage.energizer}% · Harmoniser {overallAverage.supporter}%{" "}
                     · Analyst {overallAverage.analyst}%. The market cards below show how each office
                     leans against this average.
                   </div>

@@ -11,9 +11,9 @@ function HumynWordmark({ size = 28 }: { size?: number }) {
   return (
     <span
       className="font-display"
-      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
+      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#0E0F26" }}
     >
-      hum<span style={{ color: "#FF5040" }}>y</span>n
+      hum<span style={{ background: "linear-gradient(120deg, #3355E8 0%, #7B4DFF 34%, #F23D7A 68%, #FF9F5A 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>y</span>n
     </span>
   );
 }
@@ -79,8 +79,8 @@ function SignInForm() {
           padding: "11px 14px",
           borderRadius: 10,
           border: "0.5px solid rgba(0,0,0,0.07)",
-          background: MICROSOFT_ENABLED ? "#FFFFFF" : "#FAFAF8",
-          color: MICROSOFT_ENABLED ? "#161311" : "#9A9A9A",
+          background: MICROSOFT_ENABLED ? "#FFFFFF" : "#F7F7FA",
+          color: MICROSOFT_ENABLED ? "#0E0F26" : "#6E7090",
           fontSize: 13,
           fontWeight: 600,
           cursor: MICROSOFT_ENABLED ? "pointer" : "not-allowed",
@@ -97,7 +97,7 @@ function SignInForm() {
             display: "inline-flex",
             width: 20,
             height: 20,
-            background: MICROSOFT_ENABLED ? "#1A2EAA" : "#C8C5BD",
+            background: MICROSOFT_ENABLED ? "#3355E8" : "#D3D2DE",
             color: "#FFFFFF",
             borderRadius: 4,
             alignItems: "center",
@@ -117,7 +117,7 @@ function SignInForm() {
                 display: "block",
                 fontSize: 11,
                 fontWeight: 500,
-                color: "#9A9A9A",
+                color: "#6E7090",
                 marginTop: 2,
               }}
             >
@@ -132,7 +132,7 @@ function SignInForm() {
           display: "flex",
           alignItems: "center",
           gap: 10,
-          color: "#9A9A9A",
+          color: "#6E7090",
           fontSize: 11,
           textTransform: "uppercase",
           letterSpacing: "0.1em",
@@ -146,19 +146,19 @@ function SignInForm() {
 
       <form onSubmit={sendMagicLink} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <span style={{ fontSize: 12, fontWeight: 600, color: "#161311" }}>Work email</span>
+          <span style={{ fontSize: 12, fontWeight: 600, color: "#0E0F26" }}>Work email</span>
           <input
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@inceptions.com"
+            placeholder="you@fjordco.example"
             style={{
               padding: "10px 12px",
               borderRadius: 8,
               border: "0.5px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#161311",
+              color: "#0E0F26",
               fontSize: 13,
               outline: "none",
               boxSizing: "border-box",
@@ -174,9 +174,9 @@ function SignInForm() {
             borderRadius: 8,
             border: "none",
             background:
-              status === "sending" || !email.trim() ? "#EDEDEA" : "#161311",
+              status === "sending" || !email.trim() ? "#ECEBF2" : "#0E0F26",
             color:
-              status === "sending" || !email.trim() ? "#9A9A9A" : "#FFFFFF",
+              status === "sending" || !email.trim() ? "#6E7090" : "#FFFFFF",
             fontSize: 13,
             fontWeight: 500,
             cursor:
@@ -191,12 +191,12 @@ function SignInForm() {
       {status === "sent" && (
         <div
           style={{
-            background: "#EEF7F2",
-            border: "0.5px solid #9ED4B8",
+            background: "#F1ECFF",
+            border: "0.5px solid #D2C5FF",
             borderRadius: 10,
             padding: "12px 14px",
             fontSize: 12,
-            color: "#1A5C38",
+            color: "#5B37D6",
             lineHeight: 1.55,
           }}
         >
@@ -208,12 +208,12 @@ function SignInForm() {
       {status === "error" && error && (
         <div
           style={{
-            background: "#FDF0EE",
-            border: "0.5px solid #FCCDC6",
+            background: "#FFE8F0",
+            border: "0.5px solid #FFC2D7",
             borderRadius: 10,
             padding: "12px 14px",
             fontSize: 12,
-            color: "#9B2A1A",
+            color: "#B0154F",
             lineHeight: 1.55,
           }}
         >
@@ -229,7 +229,7 @@ export default function SignInPage() {
     <div
       style={{
         minHeight: "100vh",
-        background: "#F3F0EA",
+        background: "#F4F4F8",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -246,15 +246,15 @@ export default function SignInPage() {
             style={{
               fontSize: 22,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.4px",
               marginBottom: 6,
             }}
           >
             Sign in to Humyn
           </div>
-          <div style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.55 }}>
-            People intelligence for Inceptions. Use your work email — we&apos;ll send you a
+          <div style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.55 }}>
+            People intelligence for your organisation. Use your work email — we&apos;ll send you a
             one-tap sign-in link.
           </div>
         </div>
@@ -265,12 +265,12 @@ export default function SignInPage() {
           style={{
             marginTop: 18,
             fontSize: 11,
-            color: "#9A9A9A",
+            color: "#6E7090",
             textAlign: "center",
             lineHeight: 1.6,
           }}
         >
-          Need help getting in? Ask your Inceptions Capacity Manager.
+          Need help getting in? Ask your Fjord & Co Capacity Manager.
         </div>
       </div>
     </div>

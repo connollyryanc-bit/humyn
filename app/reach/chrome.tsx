@@ -48,7 +48,7 @@ export function ReachChrome() {
             className="font-display"
             style={{ fontWeight: 700, fontSize: 22, letterSpacing: "-0.5px", color: R.ink }}
           >
-            hum<span style={{ color: "#FF5040" }}>y</span>n
+            hum<span style={{ background: "linear-gradient(120deg, #3355E8 0%, #7B4DFF 34%, #F23D7A 68%, #FF9F5A 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>y</span>n
           </span>
           <span
             style={{

@@ -9,14 +9,14 @@ import { energy } from "../../../lib/people-data";
 
 export const runtime = "nodejs";
 
-const SYSTEM_PROMPT = `You are the Humyn Pulse retention analyst for Inceptions.
-Write the C-suite's weekly read on capacity, retention, burnout and team health.
+const SYSTEM_PROMPT = `You are the Humyn Pulse retention analyst for Fjord & Co.
+Write the C-suite's weekly read on capacity, retention, overload and team health.
 You are speaking to senior executives — be specific, calm, and decisive.
 
 Voice rules:
 - Real names, real numbers from the data below. No generic prose.
 - Reference the Humyn Pulse Map energies as Driver (red), Energizer (yellow),
-  Supporter (green), Analyst (blue) — never Insights Discovery vocabulary.
+  Harmoniser (green), Analyst (blue) — never Insights Discovery vocabulary.
 - 4–6 sentences of flowing prose, not bullet points.
 - Lead with the single most urgent decision this week.
 - Include one specific forward-looking action a leader could take by Friday.
@@ -29,7 +29,7 @@ function buildAnalystBrief(enriched: PersonWithCapacity[]): string {
     (p) => p.capacity.riskLevel === "high" || p.capacity.riskLevel === "medium",
   );
   const watch = enriched.filter((p) => p.capacity.riskLevel === "watch");
-  const burnouts = enriched.filter((p) => p.capacity.burnoutRisk);
+  const overloads = enriched.filter((p) => p.capacity.overloadRisk);
   const onBench = enriched.filter((p) => p.capacity.benchDays > 0);
   const totalExposure = enriched
     .filter((p) => p.capacity.riskLevel === "high" || p.capacity.riskLevel === "medium")
@@ -39,7 +39,7 @@ function buildAnalystBrief(enriched: PersonWithCapacity[]): string {
   );
 
   function summary(p: PersonWithCapacity): string {
-    return `- ${p.name} (${p.role}, ${p.location}, ${energy[p.primary].label} primary, util ${p.utilisation}%, loyalty ${p.capacity.loyaltyScore}, bench ${p.capacity.benchDays}d, risk ${p.capacity.riskLevel}${p.capacity.burnoutRisk ? ", burnout-flagged" : ""}${p.capacity.keyClientAtRisk ? `, client at risk: ${p.capacity.keyClientAtRisk}` : ""}). Recommended action: ${p.capacity.recommendedAction}`;
+    return `- ${p.name} (${p.role}, ${p.location}, ${energy[p.primary].label} primary, util ${p.utilisation}%, loyalty ${p.capacity.loyaltyScore}, bench ${p.capacity.benchDays}d, risk ${p.capacity.riskLevel}${p.capacity.overloadRisk ? ", over-allocated" : ""}${p.capacity.keyClientAtRisk ? `, client at risk: ${p.capacity.keyClientAtRisk}` : ""}). Recommended action: ${p.capacity.recommendedAction}`;
   }
 
   const sections: string[] = [];
@@ -48,10 +48,10 @@ function buildAnalystBrief(enriched: PersonWithCapacity[]): string {
 - Average utilisation: ${avgUtil}% (target 80%, gap ${80 - avgUtil}pp)
 - Flight risks (high or medium tier): ${flightRisks.length}
 - Watch tier: ${watch.length}
-- Burnout-flagged: ${burnouts.length}
+- Over-allocated: ${overloads.length}
 - On bench: ${onBench.length} (${onBench.reduce((s, p) => s + p.capacity.benchDays, 0)} days combined)
 - Three-month revenue exposure from flight risks: €${(totalExposure / 1000).toFixed(0)}k
-- Energy-specific bench thresholds: Energizer ${benchThresholds.energizer}d · Supporter ${benchThresholds.supporter}d · Driver ${benchThresholds.driver}d · Analyst ${benchThresholds.analyst}d`);
+- Energy-specific bench thresholds: Energizer ${benchThresholds.energizer}d · Harmoniser ${benchThresholds.supporter}d · Driver ${benchThresholds.driver}d · Analyst ${benchThresholds.analyst}d`);
 
   if (flightRisks.length > 0) {
     sections.push(`Flight risks needing decisions this week:
@@ -63,9 +63,9 @@ ${flightRisks.sort((a, b) => a.capacity.loyaltyScore - b.capacity.loyaltyScore).
 ${watch.map(summary).join("\n")}`);
   }
 
-  if (burnouts.length > 0) {
-    sections.push(`Burnout-flagged (sustained above 86% utilisation):
-${burnouts.map(summary).join("\n")}`);
+  if (overloads.length > 0) {
+    sections.push(`Over-allocated (sustained above 86% utilisation):
+${overloads.map(summary).join("\n")}`);
   }
 
   return sections.join("\n\n");

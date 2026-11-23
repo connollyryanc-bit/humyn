@@ -22,14 +22,14 @@ import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context"
 import { ChartIcons, ChartKind, ChartTypeToggle } from "../components/chart-toggle";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
-const EXEC_INK = "#161311";
-const EXEC_INK_SECONDARY = "#3A3633";
+const EXEC_INK = "#0E0F26";
+const EXEC_INK_SECONDARY = "#2A2B45";
 
 const RISK_TONES: Record<RiskLevel, { color: string; bg: string; border: string; label: string }> = {
-  critical: { color: "#C4534A", bg: "#FDF3F2", border: "#F0CECA", label: "Critical" },
-  warning:  { color: "#B87A2E", bg: "#FEF8EE", border: "#F2DCB0", label: "Warning" },
-  neutral:  { color: "#5A5754", bg: "#F3F0EA", border: "rgba(0,0,0,0.08)", label: "On track" },
-  positive: { color: "#3D8A61", bg: "#EFF8F3", border: "#B6E0CB", label: "Surplus" },
+  critical: { color: "#D93670", bg: "#FFEEF4", border: "#FFCADB", label: "Critical" },
+  warning:  { color: "#D9782F", bg: "#FFF5EC", border: "#FFDCC2", label: "Warning" },
+  neutral:  { color: "#4B4C6B", bg: "#F4F4F8", border: "rgba(0,0,0,0.08)", label: "On track" },
+  positive: { color: "#7C5CE6", bg: "#F4F0FF", border: "#DCD1FF", label: "Surplus" },
 };
 
 export default function CapacityDemandPage() {
@@ -102,7 +102,7 @@ export default function CapacityDemandPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#6F6B66",
+              color: "#5F6080",
               textTransform: "uppercase",
               letterSpacing: "0.14em",
               fontWeight: 600,
@@ -258,7 +258,7 @@ function HorizonPicker({
             borderRadius: 8,
             border: "none",
             background: horizon === h.key ? EXEC_INK : "transparent",
-            color: horizon === h.key ? "#F3F0EA" : EXEC_INK_SECONDARY,
+            color: horizon === h.key ? "#F4F4F8" : EXEC_INK_SECONDARY,
             fontSize: 12.5,
             fontWeight: horizon === h.key ? 500 : 400,
             cursor: "pointer",
@@ -288,11 +288,11 @@ function HeroStat({
 }) {
   const stripe =
     tone === "critical"
-      ? "#C4534A"
+      ? "#D93670"
       : tone === "warning"
-        ? "#B87A2E"
+        ? "#D9782F"
         : tone === "positive"
-          ? "#3D8A61"
+          ? "#7C5CE6"
           : EXEC_ACCENT;
   return (
     <div
@@ -325,7 +325,7 @@ function HeroStat({
       <div
         style={{
           fontSize: 10,
-          color: "#6F6B66",
+          color: "#5F6080",
           textTransform: "uppercase",
           letterSpacing: "0.14em",
           fontWeight: 600,
@@ -345,7 +345,7 @@ function HeroStat({
       >
         {value}
       </div>
-      <div style={{ fontSize: 12, color: "#5A5754", lineHeight: 1.5, marginTop: "auto" }}>
+      <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.5, marginTop: "auto" }}>
         {detail}
       </div>
     </div>
@@ -357,7 +357,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#6F6B66",
+        color: "#5F6080",
         textTransform: "uppercase",
         letterSpacing: "0.16em",
         fontWeight: 600,
@@ -410,8 +410,8 @@ function PracticeChart({ snapshots }: { snapshots: PracticeSnapshot[] }) {
           ) : (
             <>
               <Legend swatch={EXEC_ACCENT} label="Capacity (available)" />
-              <Legend swatch="#161311" label="Confirmed demand" />
-              <Legend swatch="#161311" muted label="Weighted pipeline" />
+              <Legend swatch="#0E0F26" label="Confirmed demand" />
+              <Legend swatch="#0E0F26" muted label="Weighted pipeline" />
             </>
           )}
         </div>
@@ -447,7 +447,7 @@ function PracticeBars({ snapshots }: { snapshots: PracticeSnapshot[] }) {
           const pipelinePct = (s.weightedPipeline / maxValue) * 100;
           const tone = RISK_TONES[s.risk];
           return (
-            <div key={s.practice} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <div key={`${s.practice}-${s.region}`} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               <div
                 style={{
                   display: "flex",
@@ -466,7 +466,7 @@ function PracticeBars({ snapshots }: { snapshots: PracticeSnapshot[] }) {
                 >
                   {s.practice}
                 </div>
-                <div style={{ fontSize: 11, color: "#6F6B66" }}>
+                <div style={{ fontSize: 11, color: "#5F6080" }}>
                   {s.capacity.toLocaleString()}d capacity ·{" "}
                   {(s.confirmedDemand + s.weightedPipeline).toLocaleString()}d demand
                   <span
@@ -497,7 +497,7 @@ function PracticeBars({ snapshots }: { snapshots: PracticeSnapshot[] }) {
                   style={{
                     height: 14,
                     borderRadius: 4,
-                    background: "#F3F0EA",
+                    background: "#F4F4F8",
                     position: "relative",
                     overflow: "hidden",
                   }}
@@ -520,7 +520,7 @@ function PracticeBars({ snapshots }: { snapshots: PracticeSnapshot[] }) {
                   style={{
                     height: 14,
                     borderRadius: 4,
-                    background: "#F3F0EA",
+                    background: "#F4F4F8",
                     position: "relative",
                     overflow: "hidden",
                     display: "flex",
@@ -530,7 +530,7 @@ function PracticeBars({ snapshots }: { snapshots: PracticeSnapshot[] }) {
                     title={`Confirmed ${s.confirmedDemand.toLocaleString()}d`}
                     style={{
                       width: `${confirmedPct}%`,
-                      background: "#161311",
+                      background: "#0E0F26",
                       borderTopLeftRadius: 4,
                       borderBottomLeftRadius: 4,
                     }}
@@ -540,7 +540,7 @@ function PracticeBars({ snapshots }: { snapshots: PracticeSnapshot[] }) {
                     style={{
                       width: `${pipelinePct}%`,
                       background:
-                        "repeating-linear-gradient(45deg, #161311 0 4px, #2A2724 4px 8px)",
+                        "repeating-linear-gradient(45deg, #0E0F26 0 4px, #1E1F3A 4px 8px)",
                       opacity: 0.85,
                       borderTopRightRadius: 4,
                       borderBottomRightRadius: 4,
@@ -584,29 +584,29 @@ function PracticeLines({ snapshots }: { snapshots: PracticeSnapshot[] }) {
         return (
           <g key={i}>
             <line x1={padding.left} x2={padding.left + innerW} y1={y} y2={y} stroke="rgba(0,0,0,0.06)" strokeWidth={1} />
-            <text x={padding.left - 10} y={y + 4} textAnchor="end" style={{ fontSize: 10, fill: "#9A9A9A" }}>
+            <text x={padding.left - 10} y={y + 4} textAnchor="end" style={{ fontSize: 10, fill: "#6E7090" }}>
               {v.toLocaleString()}
             </text>
           </g>
         );
       })}
       <path d={capacityPath} fill="none" stroke={EXEC_ACCENT} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-      <path d={demandPath} fill="none" stroke="#161311" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+      <path d={demandPath} fill="none" stroke="#0E0F26" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
       {snapshots.map((s, i) => {
         const x = padding.left + i * xStep;
         return (
           <g key={`pts-${i}`}>
             <circle cx={x} cy={padding.top + yScale(s.capacity)} r={3.5} fill={EXEC_ACCENT} stroke="#FFFFFF" strokeWidth={1.5} />
-            <circle cx={x} cy={padding.top + yScale(s.confirmedDemand + s.weightedPipeline)} r={3.5} fill="#161311" stroke="#FFFFFF" strokeWidth={1.5} />
+            <circle cx={x} cy={padding.top + yScale(s.confirmedDemand + s.weightedPipeline)} r={3.5} fill="#0E0F26" stroke="#FFFFFF" strokeWidth={1.5} />
             <text
               x={x}
               y={H - 28}
               textAnchor="middle"
-              style={{ fontSize: 10, fill: "#5A5754", fontWeight: 500 }}
+              style={{ fontSize: 10, fill: "#4B4C6B", fontWeight: 500 }}
             >
               {s.practice.length > 14 ? s.practice.slice(0, 12) + "…" : s.practice}
             </text>
-            <text x={x} y={H - 12} textAnchor="middle" style={{ fontSize: 9, fill: "#9A9A9A" }}>
+            <text x={x} y={H - 12} textAnchor="middle" style={{ fontSize: 9, fill: "#6E7090" }}>
               {RISK_TONES[s.risk].label}
             </text>
           </g>
@@ -624,13 +624,13 @@ function PracticePie({ snapshots }: { snapshots: PracticeSnapshot[] }) {
   const innerR = 80;
   const palette = [
     EXEC_ACCENT,
-    "#161311",
-    "#3D8A61",
-    "#B87A2E",
-    "#6B9FCC",
-    "#9B7BC9",
-    "#C4534A",
-    "#5A5754",
+    "#0E0F26",
+    "#7C5CE6",
+    "#D9782F",
+    "#5B7BFF",
+    "#9B7CFF",
+    "#D93670",
+    "#4B4C6B",
   ];
 
   let cursor = -Math.PI / 2;
@@ -667,7 +667,7 @@ function PracticePie({ snapshots }: { snapshots: PracticeSnapshot[] }) {
         <text x={cx} y={cy - 4} textAnchor="middle" className="font-display" style={{ fontSize: 22, fontWeight: 600, fill: EXEC_INK }}>
           {total.toLocaleString()}d
         </text>
-        <text x={cx} y={cy + 16} textAnchor="middle" style={{ fontSize: 11, fill: "#6F6B66", letterSpacing: "0.05em" }}>
+        <text x={cx} y={cy + 16} textAnchor="middle" style={{ fontSize: 11, fill: "#5F6080", letterSpacing: "0.05em" }}>
           Total capacity
         </text>
       </svg>
@@ -678,7 +678,7 @@ function PracticePie({ snapshots }: { snapshots: PracticeSnapshot[] }) {
             <span style={{ color: EXEC_INK, fontWeight: 500, flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
               {a.label}
             </span>
-            <span style={{ color: "#6F6B66", fontVariantNumeric: "tabular-nums" }}>
+            <span style={{ color: "#5F6080", fontVariantNumeric: "tabular-nums" }}>
               {a.pct.toFixed(1)}%
             </span>
           </div>
@@ -706,7 +706,7 @@ function Legend({
           height: 6,
           borderRadius: 2,
           background: muted
-            ? "repeating-linear-gradient(45deg, #161311 0 3px, #2A2724 3px 6px)"
+            ? "repeating-linear-gradient(45deg, #0E0F26 0 3px, #1E1F3A 3px 6px)"
             : swatch,
           display: "inline-block",
           opacity: muted ? 0.85 : 0.85,
@@ -784,9 +784,9 @@ function TimeSeriesChart({
         }}
       >
         <Legend swatch={EXEC_ACCENT} label="Capacity (weekly cap)" />
-        <Legend swatch="#161311" label="Demand (confirmed + weighted pipeline)" />
+        <Legend swatch="#0E0F26" label="Demand (confirmed + weighted pipeline)" />
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 14 }}>
-          <span style={{ fontSize: 11, color: "#6F6B66" }}>
+          <span style={{ fontSize: 11, color: "#5F6080" }}>
             {series.length} {horizonLabel.toLowerCase().includes("day") ? "weeks" : "periods"} · {horizonLabel}
           </span>
           <ChartTypeToggle
@@ -821,7 +821,7 @@ function TimeSeriesChart({
                 x={padding.left - 10}
                 y={y + 4}
                 textAnchor="end"
-                style={{ fontSize: 10, fill: "#9A9A9A" }}
+                style={{ fontSize: 10, fill: "#6E7090" }}
               >
                 {v.toLocaleString()}
               </text>
@@ -835,7 +835,7 @@ function TimeSeriesChart({
             x={padding.left + i * xStep}
             y={H - 12}
             textAnchor="middle"
-            style={{ fontSize: 10, fill: "#9A9A9A" }}
+            style={{ fontSize: 10, fill: "#6E7090" }}
           >
             {p.week}
           </text>
@@ -872,7 +872,7 @@ function TimeSeriesChart({
                 y={padding.top + innerH - confH}
                 width={barW}
                 height={confH}
-                fill="#161311"
+                fill="#0E0F26"
                 rx={2}
               />
             </g>
@@ -882,8 +882,8 @@ function TimeSeriesChart({
         {kind === "bar" && (
           <defs>
             <pattern id="dem-hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
-              <rect width="6" height="6" fill="#161311" opacity={0.4} />
-              <line x1="0" y1="0" x2="0" y2="6" stroke="#161311" strokeWidth="3" />
+              <rect width="6" height="6" fill="#0E0F26" opacity={0.4} />
+              <line x1="0" y1="0" x2="0" y2="6" stroke="#0E0F26" strokeWidth="3" />
             </pattern>
           </defs>
         )}
@@ -898,13 +898,13 @@ function TimeSeriesChart({
         {(kind === "line" || kind === "area") && (
           <>
             <path d={capacityPath} fill="none" stroke={EXEC_ACCENT} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" opacity={0.9} />
-            <path d={demandPath} fill="none" stroke="#161311" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+            <path d={demandPath} fill="none" stroke="#0E0F26" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
             {series.map((p, i) => {
               const x = padding.left + i * xStep;
               return (
                 <g key={`pts-${i}`}>
                   <circle cx={x} cy={padding.top + yScale(p.capacity)} r={3.5} fill={EXEC_ACCENT} stroke="#FFFFFF" strokeWidth={1.5} />
-                  <circle cx={x} cy={padding.top + yScale(p.confirmed + p.pipeline)} r={3.5} fill="#161311" stroke="#FFFFFF" strokeWidth={1.5} />
+                  <circle cx={x} cy={padding.top + yScale(p.confirmed + p.pipeline)} r={3.5} fill="#0E0F26" stroke="#FFFFFF" strokeWidth={1.5} />
                 </g>
               );
             })}
@@ -933,10 +933,10 @@ function PracticeTable({ snapshots }: { snapshots: PracticeSnapshot[] }) {
           gridTemplateColumns: "minmax(0, 2fr) 88px 96px 96px 96px 100px",
           gap: 12,
           padding: "12px 22px",
-          background: "#FAFAF8",
+          background: "#F7F7FA",
           borderBottom: "0.5px solid rgba(0,0,0,0.06)",
           fontSize: 10,
-          color: "#6F6B66",
+          color: "#5F6080",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
           fontWeight: 600,
@@ -953,7 +953,7 @@ function PracticeTable({ snapshots }: { snapshots: PracticeSnapshot[] }) {
         const tone = RISK_TONES[s.risk];
         return (
           <div
-            key={s.practice}
+            key={`${s.practice}-${s.region}`}
             style={{
               display: "grid",
               gridTemplateColumns: "minmax(0, 2fr) 88px 96px 96px 96px 100px",
@@ -967,11 +967,11 @@ function PracticeTable({ snapshots }: { snapshots: PracticeSnapshot[] }) {
           >
             <div>
               <div style={{ fontWeight: 600, marginBottom: 3 }}>{s.practice}</div>
-              <div style={{ fontSize: 11, color: "#6F6B66", lineHeight: 1.5 }}>
+              <div style={{ fontSize: 11, color: "#5F6080", lineHeight: 1.5 }}>
                 {s.note}
               </div>
             </div>
-            <div style={{ textAlign: "right", fontSize: 12, color: "#5A5754" }}>
+            <div style={{ textAlign: "right", fontSize: 12, color: "#4B4C6B" }}>
               {s.headcount}
             </div>
             <div style={{ textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
@@ -984,7 +984,7 @@ function PracticeTable({ snapshots }: { snapshots: PracticeSnapshot[] }) {
               style={{
                 textAlign: "right",
                 fontVariantNumeric: "tabular-nums",
-                color: "#6F6B66",
+                color: "#5F6080",
               }}
             >
               {s.weightedPipeline.toLocaleString()}

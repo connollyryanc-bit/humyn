@@ -31,8 +31,8 @@ const REGIONS = ["Europe", "Nordics", "UK", "DACH", "France"] as const;
 type Region = (typeof REGIONS)[number];
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
-const EXEC_INK = "#161311";
-const EXEC_INK_SECONDARY = "#3A3633";
+const EXEC_INK = "#0E0F26";
+const EXEC_INK_SECONDARY = "#2A2B45";
 
 export default function ExecutivePage() {
   const [region, setRegion] = useState<Region>("Europe");
@@ -112,7 +112,7 @@ export default function ExecutivePage() {
           <div
             style={{
               fontSize: 11,
-              color: "#6F6B66",
+              color: "#5F6080",
               textTransform: "uppercase",
               letterSpacing: "0.14em",
               fontWeight: 600,
@@ -176,8 +176,8 @@ export default function ExecutivePage() {
           <SectionLabel>AI executive copilot</SectionLabel>
           <div
             style={{
-              background: "#161311",
-              color: "#F3F0EA",
+              background: "#0E0F26",
+              color: "#F4F4F8",
               borderRadius: 16,
               padding: "32px 36px 30px",
               position: "relative",
@@ -211,8 +211,8 @@ export default function ExecutivePage() {
                   gap: 8,
                   padding: "4px 12px",
                   borderRadius: 100,
-                  background: isLiveClaude ? "rgba(26,46,170,0.15)" : "rgba(243,240,234,0.08)",
-                  border: `0.5px solid ${isLiveClaude ? "rgba(26,46,170,0.4)" : "rgba(243,240,234,0.16)"}`,
+                  background: isLiveClaude ? "rgba(51,85,232,0.15)" : "rgba(244,244,248,0.08)",
+                  border: `0.5px solid ${isLiveClaude ? "rgba(51,85,232,0.4)" : "rgba(244,244,248,0.16)"}`,
                   fontSize: 10,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
@@ -228,7 +228,7 @@ export default function ExecutivePage() {
               <span
                 style={{
                   fontSize: 11,
-                  color: "rgba(243,240,234,0.55)",
+                  color: "rgba(244,244,248,0.55)",
                   marginLeft: "auto",
                 }}
               >
@@ -254,7 +254,7 @@ export default function ExecutivePage() {
                     letterSpacing: i === 0 ? "-0.3px" : "-0.2px",
                     margin: 0,
                     fontWeight: i === 0 ? 500 : 400,
-                    color: i === 0 ? "#F3F0EA" : "rgba(243,240,234,0.78)",
+                    color: i === 0 ? "#F4F4F8" : "rgba(244,244,248,0.78)",
                   }}
                 >
                   {p}
@@ -299,7 +299,7 @@ function RegionPicker({
         borderRadius: 100,
         border: "0.5px solid rgba(0,0,0,0.12)",
         background: "#FFFFFF",
-        color: "#161311",
+        color: "#0E0F26",
         fontSize: 12,
         fontWeight: 500,
         cursor: "pointer",
@@ -320,7 +320,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#6F6B66",
+        color: "#5F6080",
         textTransform: "uppercase",
         letterSpacing: "0.16em",
         fontWeight: 600,
@@ -336,11 +336,11 @@ function KpiCard({ kpi }: { kpi: ExecutiveKpi }) {
   const tone = kpi.tone ?? "neutral";
   const accentLine =
     tone === "critical"
-      ? "#C4534A"
+      ? "#D93670"
       : tone === "warning"
-        ? "#B87A2E"
+        ? "#D9782F"
         : tone === "positive"
-          ? "#3D8A61"
+          ? "#7C5CE6"
           : EXEC_ACCENT;
   const arrow = kpi.trend.direction === "up" ? "↑" : kpi.trend.direction === "down" ? "↓" : "→";
   const trendSign = kpi.trend.value > 0 ? "+" : "";
@@ -385,7 +385,7 @@ function KpiCard({ kpi }: { kpi: ExecutiveKpi }) {
       <div
         style={{
           fontSize: 10,
-          color: "#6F6B66",
+          color: "#5F6080",
           textTransform: "uppercase",
           letterSpacing: "0.14em",
           fontWeight: 600,
@@ -409,7 +409,7 @@ function KpiCard({ kpi }: { kpi: ExecutiveKpi }) {
       <div
         style={{
           fontSize: 12,
-          color: "#5A5754",
+          color: "#4B4C6B",
           lineHeight: 1.5,
         }}
       >
@@ -433,7 +433,7 @@ function KpiCard({ kpi }: { kpi: ExecutiveKpi }) {
           {kpi.trend.value}
           {typeof kpi.trend.value === "number" && Math.abs(kpi.trend.value) < 10 ? "pp" : ""}
         </span>
-        <span style={{ color: "#9A9A9A", fontWeight: 400 }}>vs last period</span>
+        <span style={{ color: "#6E7090", fontWeight: 400 }}>vs last period</span>
       </div>
     </div>
   );
@@ -446,12 +446,12 @@ function ModuleCard({
 }) {
   const statusTone =
     module.statusTone === "critical"
-      ? { color: "#C4534A", bg: "#FDF3F2", border: "#F0CECA" }
+      ? { color: "#D93670", bg: "#FFEEF4", border: "#FFCADB" }
       : module.statusTone === "warning"
-        ? { color: "#B87A2E", bg: "#FEF8EE", border: "#F2DCB0" }
+        ? { color: "#D9782F", bg: "#FFF5EC", border: "#FFDCC2" }
         : module.statusTone === "positive"
-          ? { color: "#3D8A61", bg: "#EFF8F3", border: "#B6E0CB" }
-          : { color: "#5A5754", bg: "#F3F0EA", border: "rgba(0,0,0,0.08)" };
+          ? { color: "#7C5CE6", bg: "#F4F0FF", border: "#DCD1FF" }
+          : { color: "#4B4C6B", bg: "#F4F4F8", border: "rgba(0,0,0,0.08)" };
 
   return (
     <Link

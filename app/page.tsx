@@ -96,7 +96,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 11,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textTransform: "uppercase",
         letterSpacing: "0.07em",
         fontWeight: 400,
@@ -116,8 +116,8 @@ function Pill({ children }: { children: React.ReactNode }) {
         alignItems: "center",
         padding: "3px 9px",
         borderRadius: 100,
-        background: "#FAFAF8",
-        color: "#5A5A5A",
+        background: "#F7F7FA",
+        color: "#4B4C6B",
         border: "1px solid rgba(0,0,0,0.07)",
         fontSize: 11,
         fontWeight: 400,
@@ -135,8 +135,8 @@ function EnergyBars({ person }: { person: Person }) {
       {(["driver", "energizer", "supporter", "analyst"] as EnergyKey[]).map((c) => (
         <div key={c} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
           <div style={{ width: 6, height: 6, borderRadius: "50%", background: energy[c].color, flexShrink: 0 }} />
-          <span style={{ fontSize: 11, color: "#5A5A5A", width: 110 }}>{energy[c].label}</span>
-          <div style={{ flex: 1, height: 4, background: "#EDEDEA", borderRadius: 2, overflow: "hidden" }}>
+          <span style={{ fontSize: 11, color: "#4B4C6B", width: 110 }}>{energy[c].label}</span>
+          <div style={{ flex: 1, height: 4, background: "#ECEBF2", borderRadius: 2, overflow: "hidden" }}>
             <div
               style={{
                 width: `${person.scores[c]}%`,
@@ -146,7 +146,7 @@ function EnergyBars({ person }: { person: Person }) {
               }}
             />
           </div>
-          <span style={{ fontSize: 11, color: "#9A9A9A", width: 28, textAlign: "right" }}>
+          <span style={{ fontSize: 11, color: "#6E7090", width: 28, textAlign: "right" }}>
             {person.scores[c]}%
           </span>
         </div>
@@ -169,16 +169,16 @@ function PersonCard({
   const tone = utilTone(person.utilisation);
   const availAccent =
     person.available === "now"
-      ? "#5CAB82"
+      ? "#A68BFF"
       : person.available === "soon"
-        ? "#D4974A"
+        ? "#FF9F5A"
         : "transparent";
   const statusDotBg =
     person.available === "now"
-      ? "#5CAB82"
+      ? "#A68BFF"
       : person.available === "soon"
-        ? "#D4974A"
-        : "#E0DDD8";
+        ? "#FF9F5A"
+        : "#E1E0EA";
   const statusDotBorder =
     person.available === "now" || person.available === "soon"
       ? "none"
@@ -213,11 +213,11 @@ function PersonCard({
       <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
         <Avatar person={person} size={42} />
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 15, fontWeight: 600, color: "#161311", letterSpacing: "-0.2px" }}>
+          <div style={{ fontSize: 15, fontWeight: 600, color: "#0E0F26", letterSpacing: "-0.2px" }}>
             {person.name}
           </div>
-          <div style={{ fontSize: 12, color: "#9A9A9A", marginTop: 2, fontWeight: 500 }}>
-            {person.role} · <span style={{ color: "#5A5A5A" }}>{person.location}</span>
+          <div style={{ fontSize: 12, color: "#6E7090", marginTop: 2, fontWeight: 500 }}>
+            {person.role} · <span style={{ color: "#4B4C6B" }}>{person.location}</span>
           </div>
         </div>
         <span
@@ -241,8 +241,8 @@ function PersonCard({
             height: 28,
             borderRadius: 8,
             border: "1px solid rgba(0,0,0,0.07)",
-            background: inTeam ? "#1A1A1A" : "#FFFFFF",
-            color: inTeam ? "#FFFFFF" : "#1A1A1A",
+            background: inTeam ? "#0E0F26" : "#FFFFFF",
+            color: inTeam ? "#FFFFFF" : "#0E0F26",
             cursor: "pointer",
             fontSize: 16,
             lineHeight: 1,
@@ -259,7 +259,7 @@ function PersonCard({
       <p
         style={{
           fontSize: 13,
-          color: "#5A5A5A",
+          color: "#4B4C6B",
           lineHeight: 1.55,
           margin: 0,
           display: "-webkit-box",
@@ -289,7 +289,7 @@ function PersonCard({
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <div style={{ flex: 1, height: 5, background: "#EDEDEA", borderRadius: 3, overflow: "hidden" }}>
+        <div style={{ flex: 1, height: 5, background: "#ECEBF2", borderRadius: 3, overflow: "hidden" }}>
           <div
             style={{
               width: `${Math.min(person.utilisation, 100)}%`,
@@ -317,14 +317,14 @@ function PersonCard({
           <div
             style={{
               fontSize: 10,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.06em",
             }}
           >
             Clients
           </div>
-          <div style={{ fontSize: 14, fontWeight: 600, color: "#1A1A1A", marginTop: 2 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: "#0E0F26", marginTop: 2 }}>
             {person.clients}
           </div>
         </div>
@@ -333,14 +333,14 @@ function PersonCard({
             <div
               style={{
                 fontSize: 10,
-                color: "#9A9A9A",
+                color: "#6E7090",
                 textTransform: "uppercase",
                 letterSpacing: "0.06em",
               }}
             >
               Revenue
             </div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: "#1A1A1A", marginTop: 2 }}>
+            <div style={{ fontSize: 14, fontWeight: 600, color: "#0E0F26", marginTop: 2 }}>
               {person.revenue}
             </div>
           </div>
@@ -356,7 +356,7 @@ function PersonCard({
             borderRadius: 8,
             border: "1px solid rgba(0,0,0,0.07)",
             background: "#FFFFFF",
-            color: "#1A1A1A",
+            color: "#0E0F26",
             fontSize: 12,
             fontWeight: 400,
             cursor: "pointer",
@@ -370,7 +370,7 @@ function PersonCard({
             flex: 1,
             padding: "8px 12px",
             borderRadius: 8,
-            background: "#161311",
+            background: "#0E0F26",
             color: "#FFFFFF",
             fontSize: 12,
             fontWeight: 400,
@@ -414,12 +414,12 @@ function PersonRow({
         <Avatar person={person} size={32} />
       </td>
       <td style={{ padding: "10px 14px" }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>{person.name}</div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>{person.name}</div>
       </td>
-      <td style={{ padding: "10px 14px", fontSize: 12, color: "#9A9A9A", fontWeight: 500 }}>
+      <td style={{ padding: "10px 14px", fontSize: 12, color: "#6E7090", fontWeight: 500 }}>
         {person.role}
       </td>
-      <td style={{ padding: "10px 14px", fontSize: 12, color: "#5A5A5A" }}>{person.location}</td>
+      <td style={{ padding: "10px 14px", fontSize: 12, color: "#4B4C6B" }}>{person.location}</td>
       <td style={{ padding: "10px 14px" }}>
         <EnergyBadge k={person.primary} small />
       </td>
@@ -429,7 +429,7 @@ function PersonRow({
             style={{
               flex: 1,
               height: 5,
-              background: "#EDEDEA",
+              background: "#ECEBF2",
               borderRadius: 3,
               overflow: "hidden",
             }}
@@ -468,7 +468,7 @@ function PersonRow({
               borderRadius: 8,
               border: "0.5px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#161311",
+              color: "#0E0F26",
               fontSize: 11,
               fontWeight: 400,
               cursor: "pointer",
@@ -482,7 +482,7 @@ function PersonRow({
             style={{
               padding: "6px 10px",
               borderRadius: 8,
-              background: "#161311",
+              background: "#0E0F26",
               color: "#FFFFFF",
               fontSize: 11,
               fontWeight: 400,
@@ -498,8 +498,8 @@ function PersonRow({
               height: 28,
               borderRadius: 8,
               border: "0.5px solid rgba(0,0,0,0.07)",
-              background: inTeam ? "#161311" : "#FFFFFF",
-              color: inTeam ? "#FFFFFF" : "#161311",
+              background: inTeam ? "#0E0F26" : "#FFFFFF",
+              color: inTeam ? "#FFFFFF" : "#0E0F26",
               cursor: "pointer",
               fontSize: 14,
               lineHeight: 1,
@@ -533,7 +533,7 @@ function QuickViewDrawer({ person, onClose }: { person: Person; onClose: () => v
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Link
             href={`/people/${person.id}`}
-            style={{ fontSize: 12, color: "#1E6FA5", fontWeight: 500 }}
+            style={{ fontSize: 12, color: "#3355E8", fontWeight: 500 }}
           >
             Full profile →
           </Link>
@@ -546,7 +546,7 @@ function QuickViewDrawer({ person, onClose }: { person: Person; onClose: () => v
               borderRadius: 8,
               border: "1px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#1A1A1A",
+              color: "#0E0F26",
               cursor: "pointer",
               fontSize: 14,
               lineHeight: 1,
@@ -559,10 +559,10 @@ function QuickViewDrawer({ person, onClose }: { person: Person; onClose: () => v
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <Avatar person={person} size={56} />
           <div>
-            <div style={{ fontSize: 18, fontWeight: 600, color: "#1A1A1A", letterSpacing: "-0.3px" }}>
+            <div style={{ fontSize: 18, fontWeight: 600, color: "#0E0F26", letterSpacing: "-0.3px" }}>
               {person.name}
             </div>
-            <div style={{ fontSize: 12, color: "#5A5A5A", marginTop: 2 }}>
+            <div style={{ fontSize: 12, color: "#4B4C6B", marginTop: 2 }}>
               {person.role} · {person.location}
             </div>
           </div>
@@ -576,7 +576,7 @@ function QuickViewDrawer({ person, onClose }: { person: Person; onClose: () => v
 
         <div>
           <SectionLabel>About</SectionLabel>
-          <p style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.6, margin: 0 }}>{person.bio}</p>
+          <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.6, margin: 0 }}>{person.bio}</p>
         </div>
 
         <div>
@@ -587,8 +587,8 @@ function QuickViewDrawer({ person, onClose }: { person: Person; onClose: () => v
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
           <div
             style={{
-              background: "#EEF7F2",
-              border: "1px solid #9ED4B8",
+              background: "#F1ECFF",
+              border: "1px solid #D2C5FF",
               borderRadius: 10,
               padding: 12,
             }}
@@ -596,7 +596,7 @@ function QuickViewDrawer({ person, onClose }: { person: Person; onClose: () => v
             <div
               style={{
                 fontSize: 10,
-                color: "#1A5C38",
+                color: "#5B37D6",
                 textTransform: "uppercase",
                 letterSpacing: "0.06em",
                 fontWeight: 600,
@@ -605,12 +605,12 @@ function QuickViewDrawer({ person, onClose }: { person: Person; onClose: () => v
             >
               Best trait
             </div>
-            <div style={{ fontSize: 12, color: "#1A5C38", lineHeight: 1.5 }}>{person.bestTrait}</div>
+            <div style={{ fontSize: 12, color: "#5B37D6", lineHeight: 1.5 }}>{person.bestTrait}</div>
           </div>
           <div
             style={{
-              background: "#FDF0EE",
-              border: "1px solid #FCCDC6",
+              background: "#FFE8F0",
+              border: "1px solid #FFC2D7",
               borderRadius: 10,
               padding: 12,
             }}
@@ -618,7 +618,7 @@ function QuickViewDrawer({ person, onClose }: { person: Person; onClose: () => v
             <div
               style={{
                 fontSize: 10,
-                color: "#9B2A1A",
+                color: "#B0154F",
                 textTransform: "uppercase",
                 letterSpacing: "0.06em",
                 fontWeight: 600,
@@ -627,7 +627,7 @@ function QuickViewDrawer({ person, onClose }: { person: Person; onClose: () => v
             >
               Watch-out
             </div>
-            <div style={{ fontSize: 12, color: "#9B2A1A", lineHeight: 1.5 }}>{person.vice}</div>
+            <div style={{ fontSize: 12, color: "#B0154F", lineHeight: 1.5 }}>{person.vice}</div>
           </div>
         </div>
 
@@ -651,7 +651,7 @@ function QuickViewDrawer({ person, onClose }: { person: Person; onClose: () => v
 
         <div>
           <SectionLabel>How to speak with them</SectionLabel>
-          <p style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.6, margin: 0 }}>
+          <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.6, margin: 0 }}>
             {person.howToSpeak}
           </p>
         </div>
@@ -716,7 +716,7 @@ function TeamBuilderDrawer({
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ fontSize: 18, fontWeight: 600, color: "#1A1A1A", letterSpacing: "-0.3px" }}>
+          <div style={{ fontSize: 18, fontWeight: 600, color: "#0E0F26", letterSpacing: "-0.3px" }}>
             Team builder
           </div>
           <button
@@ -728,7 +728,7 @@ function TeamBuilderDrawer({
               borderRadius: 8,
               border: "1px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#1A1A1A",
+              color: "#0E0F26",
               cursor: "pointer",
               fontSize: 14,
               lineHeight: 1,
@@ -742,10 +742,10 @@ function TeamBuilderDrawer({
           <div
             style={{
               padding: 24,
-              background: "#FAFAF8",
+              background: "#F7F7FA",
               border: "1px dashed rgba(0,0,0,0.1)",
               borderRadius: 10,
-              color: "#9A9A9A",
+              color: "#6E7090",
               fontSize: 13,
               textAlign: "center",
               lineHeight: 1.5,
@@ -767,14 +767,14 @@ function TeamBuilderDrawer({
                       alignItems: "center",
                       gap: 10,
                       padding: 10,
-                      background: "#FAFAF8",
+                      background: "#F7F7FA",
                       borderRadius: 10,
                     }}
                   >
                     <Avatar person={p} size={32} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: "#1A1A1A" }}>{p.name}</div>
-                      <div style={{ fontSize: 11, color: "#9A9A9A" }}>{p.role}</div>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>{p.name}</div>
+                      <div style={{ fontSize: 11, color: "#6E7090" }}>{p.role}</div>
                     </div>
                     <EnergyBadge k={p.primary} small />
                     <button
@@ -803,8 +803,8 @@ function TeamBuilderDrawer({
               {(["driver", "energizer", "supporter", "analyst"] as EnergyKey[]).map((c) => (
                 <div key={c} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
                   <div style={{ width: 6, height: 6, borderRadius: "50%", background: energy[c].color }} />
-                  <span style={{ fontSize: 11, color: "#5A5A5A", width: 110 }}>{energy[c].label}</span>
-                  <div style={{ flex: 1, height: 4, background: "#EDEDEA", borderRadius: 2, overflow: "hidden" }}>
+                  <span style={{ fontSize: 11, color: "#4B4C6B", width: 110 }}>{energy[c].label}</span>
+                  <div style={{ flex: 1, height: 4, background: "#ECEBF2", borderRadius: 2, overflow: "hidden" }}>
                     <div
                       style={{
                         width: `${combined[c]}%`,
@@ -814,7 +814,7 @@ function TeamBuilderDrawer({
                       }}
                     />
                   </div>
-                  <span style={{ fontSize: 11, color: "#9A9A9A", width: 28, textAlign: "right" }}>
+                  <span style={{ fontSize: 11, color: "#6E7090", width: 28, textAlign: "right" }}>
                     {combined[c]}%
                   </span>
                 </div>
@@ -849,7 +849,7 @@ function TeamBuilderDrawer({
 
               <div
                 style={{
-                  background: "#FAFAF8",
+                  background: "#F7F7FA",
                   border: "1px solid rgba(0,0,0,0.07)",
                   borderRadius: 10,
                   padding: 12,
@@ -858,7 +858,7 @@ function TeamBuilderDrawer({
                 <div
                   style={{
                     fontSize: 10,
-                    color: "#9A9A9A",
+                    color: "#6E7090",
                     textTransform: "uppercase",
                     letterSpacing: "0.06em",
                     fontWeight: 600,
@@ -876,8 +876,8 @@ function TeamBuilderDrawer({
             {gaps.length > 0 && (
               <div
                 style={{
-                  background: "#FFFBF2",
-                  border: "1px solid #FAD98A",
+                  background: "#FFF0E4",
+                  border: "1px solid #FFD2B0",
                   borderRadius: 10,
                   padding: 12,
                 }}
@@ -885,7 +885,7 @@ function TeamBuilderDrawer({
                 <div
                   style={{
                     fontSize: 10,
-                    color: "#8B5A00",
+                    color: "#A04A0C",
                     textTransform: "uppercase",
                     letterSpacing: "0.06em",
                     fontWeight: 600,
@@ -894,7 +894,7 @@ function TeamBuilderDrawer({
                 >
                   Energy gap warning
                 </div>
-                <div style={{ fontSize: 12, color: "#8B5A00", lineHeight: 1.5 }}>
+                <div style={{ fontSize: 12, color: "#A04A0C", lineHeight: 1.5 }}>
                   This team is light on {gaps.join(", ")}. Consider balancing before kickoff.
                 </div>
               </div>
@@ -1012,8 +1012,8 @@ export default function PeoplePage() {
                 padding: "7px 14px",
                 borderRadius: 100,
                 border: "0.5px solid rgba(0,0,0,0.07)",
-                background: team.length ? "#1A1A1A" : "#FFFFFF",
-                color: team.length ? "#FFFFFF" : "#1A1A1A",
+                background: team.length ? "#0E0F26" : "#FFFFFF",
+                color: team.length ? "#FFFFFF" : "#0E0F26",
                 fontSize: 12,
                 fontWeight: 400,
                 cursor: "pointer",
@@ -1027,7 +1027,7 @@ export default function PeoplePage() {
               {team.length > 0 && (
                 <span
                   style={{
-                    background: "#FF5040",
+                    background: "#7B4DFF",
                     color: "#FFFFFF",
                     borderRadius: 100,
                     fontSize: 10,
@@ -1058,27 +1058,27 @@ export default function PeoplePage() {
             <div
               style={{
                 fontSize: 11,
-                color: "#9A9A9A",
+                color: "#6E7090",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
                 fontWeight: 400,
               }}
             >
-              Pulse · Inceptions
+              Pulse · Fjord & Co
             </div>
             <h1
               className="font-display"
               style={{
                 fontSize: 32,
                 fontWeight: 600,
-                color: "#161311",
+                color: "#0E0F26",
                 letterSpacing: "-0.5px",
                 margin: "6px 0 0",
               }}
             >
               People
             </h1>
-            <div style={{ fontSize: 13, color: "#5A5A5A", marginTop: 4 }}>
+            <div style={{ fontSize: 13, color: "#4B4C6B", marginTop: 4 }}>
               {filtered.length} {filtered.length === 1 ? "person" : "people"} · {mergedPeople.length} total
             </div>
           </div>
@@ -1093,7 +1093,7 @@ export default function PeoplePage() {
                 borderRadius: 8,
                 border: "1px solid rgba(0,0,0,0.07)",
                 background: "#FFFFFF",
-                color: "#1A1A1A",
+                color: "#0E0F26",
                 fontSize: 12,
                 width: 280,
                 outline: "none",
@@ -1108,7 +1108,7 @@ export default function PeoplePage() {
                 borderRadius: 8,
                 border: "1px solid rgba(0,0,0,0.07)",
                 background: "#FFFFFF",
-                color: "#1A1A1A",
+                color: "#0E0F26",
                 fontSize: 12,
                 cursor: "pointer",
                 outline: "none",
@@ -1140,8 +1140,8 @@ export default function PeoplePage() {
                     padding: "6px 12px",
                     borderRadius: 6,
                     border: "none",
-                    background: view === v ? "#161311" : "transparent",
-                    color: view === v ? "#FFFFFF" : "#5A5A5A",
+                    background: view === v ? "#0E0F26" : "transparent",
+                    color: view === v ? "#FFFFFF" : "#4B4C6B",
                     fontSize: 12,
                     fontWeight: 400,
                     cursor: "pointer",
@@ -1169,7 +1169,7 @@ export default function PeoplePage() {
                   <div
                     style={{
                       fontSize: 11,
-                      color: "#9A9A9A",
+                      color: "#6E7090",
                       textTransform: "uppercase",
                       letterSpacing: "0.07em",
                       fontWeight: 400,
@@ -1177,7 +1177,7 @@ export default function PeoplePage() {
                   >
                     {g.label}
                   </div>
-                  <div style={{ fontSize: 11, color: "#9A9A9A" }}>· {g.people.length}</div>
+                  <div style={{ fontSize: 11, color: "#6E7090" }}>· {g.people.length}</div>
                 </div>
               )}
 
@@ -1210,7 +1210,7 @@ export default function PeoplePage() {
                 >
                   <table style={{ width: "100%", borderCollapse: "collapse" }}>
                     <thead>
-                      <tr style={{ background: "#FAFAF8" }}>
+                      <tr style={{ background: "#F7F7FA" }}>
                         {["", "Name", "Role", "Location", "Energy", "Utilisation", "Availability", ""].map(
                           (h, i) => (
                             <th
@@ -1219,7 +1219,7 @@ export default function PeoplePage() {
                                 textAlign: i === 7 ? "right" : "left",
                                 padding: "10px 14px",
                                 fontSize: 10,
-                                color: "#9A9A9A",
+                                color: "#6E7090",
                                 textTransform: "uppercase",
                                 letterSpacing: "0.06em",
                                 fontWeight: 400,
@@ -1257,7 +1257,7 @@ export default function PeoplePage() {
                 borderRadius: 12,
                 padding: 48,
                 textAlign: "center",
-                color: "#9A9A9A",
+                color: "#6E7090",
                 fontSize: 13,
               }}
             >

@@ -34,10 +34,10 @@ export const energy: Record<
   EnergyKey,
   { color: string; bg: string; text: string; border: string; label: string }
 > = {
-  driver:    { color: "#D97B73", bg: "#FDF3F2", text: "#C4534A", border: "#F0CECA", label: "Driver" },
-  energizer: { color: "#D4974A", bg: "#FEF8EE", text: "#B87A2E", border: "#F2DCB0", label: "Energizer" },
-  supporter: { color: "#5CAB82", bg: "#EFF8F3", text: "#3D8A61", border: "#B6E0CB", label: "Supporter" },
-  analyst:   { color: "#6B9FCC", bg: "#F0F5FB", text: "#4A80B0", border: "#C4D9EF", label: "Analyst" },
+  driver:    { color: "#F2729E", bg: "#FFEEF4", text: "#D93670", border: "#FFCADB", label: "Driver" },
+  energizer: { color: "#FF9F5A", bg: "#FFF5EC", text: "#D9782F", border: "#FFDCC2", label: "Energizer" },
+  supporter: { color: "#A68BFF", bg: "#F4F0FF", text: "#7C5CE6", border: "#DCD1FF", label: "Harmoniser" },
+  analyst:   { color: "#5B7BFF", bg: "#EEF2FF", text: "#3355E8", border: "#C9D4FF", label: "Analyst" },
 };
 
 export const ENERGIES: EnergyKey[] = ["driver", "energizer", "supporter", "analyst"];
@@ -46,15 +46,15 @@ export const availability: Record<
   AvailKey,
   { color: string; bg: string; text: string; border: string; label: string }
 > = {
-  now:       { color: "#5CAB82", bg: "#EFF8F3", text: "#3D8A61", border: "#B6E0CB", label: "Available now" },
-  soon:      { color: "#D4974A", bg: "#FEF8EE", text: "#B87A2E", border: "#F2DCB0", label: "Available soon" },
-  allocated: { color: "#D97B73", bg: "#FDF3F2", text: "#C4534A", border: "#F0CECA", label: "Allocated" },
+  now:       { color: "#A68BFF", bg: "#F4F0FF", text: "#7C5CE6", border: "#DCD1FF", label: "Available now" },
+  soon:      { color: "#FF9F5A", bg: "#FFF5EC", text: "#D9782F", border: "#FFDCC2", label: "Available soon" },
+  allocated: { color: "#F2729E", bg: "#FFEEF4", text: "#D93670", border: "#FFCADB", label: "Allocated" },
 };
 
 export function utilTone(u: number): { color: string; label: string } {
-  if (u >= 80) return { color: "#5CAB82", label: "On target" };
-  if (u >= 65) return { color: "#D4974A", label: "Below target" };
-  return { color: "#D97B73", label: "At risk" };
+  if (u >= 80) return { color: "#A68BFF", label: "On target" };
+  if (u >= 65) return { color: "#FF9F5A", label: "Below target" };
+  return { color: "#F2729E", label: "At risk" };
 }
 
 export const people: Person[] = [
@@ -75,8 +75,8 @@ export const people: Person[] = [
     bio: "Senior delivery lead with 14 years across financial services and retail. Known for landing big-ticket pitches and turning around stalled engagements without burning the team out.",
     capabilities: ["Engagement leadership", "Pitch & sales", "Digital strategy", "Stakeholder management"],
     achievements: [
-      "Closed €4.2M Nordea omnichannel programme — largest Nordic win of 2025.",
-      "Stabilised the H&M loyalty rebuild after a six-month delivery slip.",
+      "Closed €4.2M Baltica Bank omnichannel programme — largest Nordic win of 2025.",
+      "Stabilised the Nordmode loyalty rebuild after a six-month delivery slip.",
       "Mentor to four senior consultants now leading their own engagements.",
     ],
     bestTrait: "Cuts through noise — makes the hard call when no one else will.",
@@ -104,13 +104,13 @@ export const people: Person[] = [
     bio: "Backend architect specialising in event-driven systems. The person we send in when an engagement is technically off the rails and needs a calm hand to redesign without drama.",
     capabilities: ["Distributed systems", "Event sourcing", "AWS architecture", "Technical due diligence"],
     achievements: [
-      "Re-architected Maersk shipment events platform — 99.99% uptime since go-live.",
-      "Authored the Inceptions event-driven reference architecture.",
+      "Re-architected Tidewater Shipping shipment events platform — 99.99% uptime since go-live.",
+      "Authored the Fjord & Co event-driven reference architecture.",
       "Speaker at GOTO Copenhagen 2025 on graceful degradation.",
     ],
     bestTrait: "Sees the second-order failure before anyone else does.",
     vice: "Will over-engineer if left unsupervised on a quiet sprint.",
-    wheelPosition: "Supportive Analyst",
+    wheelPosition: "Harmonising Analyst",
     drivers: ["Hard technical problems", "Quiet focus time", "Written specs", "Clean abstractions"],
     detractors: ["Hand-wavy requirements", "Pressure to ship without review", "Open-plan noise", "Status theatre"],
     howToSpeak: "Bring the data. Mathias wants the constraint, the trade-off, and the failure mode. Speak slower than you think you should and leave space for him to think before he answers.",
@@ -133,13 +133,13 @@ export const people: Person[] = [
     bio: "User research and service design lead. Builds psychologically safe teams where junior designers do their best work. Clients ask for her by name three years after engagements end.",
     capabilities: ["Service design", "Qualitative research", "Workshop facilitation", "Team coaching"],
     achievements: [
-      "Led the Danske Bank onboarding redesign — NPS up 31 points.",
+      "Led the Baltica Bank onboarding redesign — NPS up 31 points.",
       "Founded the Nordic UX guild; 40+ members across four offices.",
       "Promoted three designers to senior in the last 18 months.",
     ],
     bestTrait: "Holds the room — gets the quietest voice talking by minute ten.",
     vice: "Avoids hard conversations longer than she should.",
-    wheelPosition: "Energizing Supporter",
+    wheelPosition: "Energizing Harmoniser",
     drivers: ["Healthy team dynamics", "Long-term client relationships", "Mentoring juniors", "Real user contact"],
     detractors: ["Conflict left to fester", "Last-minute scope changes", "Cynicism", "Being asked to choose between people"],
     howToSpeak: "Slow down and ask about the team before the work. Pernille reads tone first, content second. If something's hard, name it gently — she'll meet you there.",
@@ -162,8 +162,8 @@ export const people: Person[] = [
     bio: "Strategy and innovation consultant. The face in the room at C-suite workshops — turns abstract ambition into a roadmap clients can actually start on Monday.",
     capabilities: ["Innovation strategy", "C-suite facilitation", "Storytelling", "New venture design"],
     achievements: [
-      "Designed Equinor's customer innovation lab from a blank page.",
-      "Top-rated facilitator on Inceptions' exec leadership programme 2024 and 2025.",
+      "Designed Northsea Energy's customer innovation lab from a blank page.",
+      "Top-rated facilitator on Fjord & Co's exec leadership programme 2024 and 2025.",
       "Hosted four Innovation Mondays bringing in 60+ client leaders.",
     ],
     bestTrait: "Gets a sceptical exec team excited and aligned in one workshop.",
@@ -191,7 +191,7 @@ export const people: Person[] = [
     bio: "Applied ML lead with a stats PhD. Builds production models that survive contact with real data. Direct, occasionally blunt, deeply respected by engineering.",
     capabilities: ["Applied ML", "MLOps", "Causal inference", "Forecasting"],
     achievements: [
-      "Shipped Kesko's demand forecasting model — 14% inventory reduction in pilot stores.",
+      "Shipped Kauppa Group's demand forecasting model — 14% inventory reduction in pilot stores.",
       "Built the Nordic MLOps reference stack now used on six engagements.",
       "Published two papers on time-series uncertainty in retail.",
     ],
@@ -220,13 +220,13 @@ export const people: Person[] = [
     bio: "Cross-functional architect who bridges product, engineering and ops. Calm in escalations, thorough in writeups, the person clients trust when stakes are high.",
     capabilities: ["Enterprise architecture", "API design", "Cloud migration", "Technical writing"],
     achievements: [
-      "Migrated SAS Group's customer platform off mainframe with zero downtime.",
-      "Authored the Inceptions cloud migration playbook.",
+      "Migrated Polar Air's customer platform off mainframe with zero downtime.",
+      "Authored the Fjord & Co cloud migration playbook.",
       "Trained 20+ engineers in solution-architecture fundamentals.",
     ],
     bestTrait: "Brings order to chaos without making anyone feel small.",
     vice: "Can overthink first drafts. Time-box his exploratory phases.",
-    wheelPosition: "Supportive Analyst",
+    wheelPosition: "Harmonising Analyst",
     drivers: ["Well-scoped problems", "Cross-team collaboration", "Documentation", "Mentoring engineers"],
     detractors: ["Crisis-mode escalations", "Politics", "Shipping before review", "Ambiguous ownership"],
     howToSpeak: "Be patient and precise. Erik thinks before he answers — silence isn't disagreement. Give him the constraints and the success criteria upfront.",
@@ -249,13 +249,13 @@ export const people: Person[] = [
     bio: "Product designer with a service-design heart. Pairs effortlessly with engineering, runs lightweight workshops that move decisions forward instead of generating Post-its.",
     capabilities: ["Product design", "Design systems", "Prototyping", "Workshop facilitation"],
     achievements: [
-      "Led the Telia self-service redesign — 22% drop in support tickets.",
-      "Built the Inceptions design-system kit now used by 30+ designers.",
+      "Led the Northlink Telecom self-service redesign — 22% drop in support tickets.",
+      "Built the Fjord & Co design-system kit now used by 30+ designers.",
       "Hosted the Stockholm design meetup three years running.",
     ],
     bestTrait: "Makes complex flows feel inevitable — clients ask why it wasn't always like this.",
     vice: "Sometimes resists pushback she'd benefit from. Frame critique as collaboration.",
-    wheelPosition: "Supportive Energizer",
+    wheelPosition: "Harmonising Energizer",
     drivers: ["Cross-discipline collaboration", "Real users in the room", "Craft pride", "A clear product vision"],
     detractors: ["HiPPO decisions", "Design by committee", "Endless rounds without users", "Politics dressed as feedback"],
     howToSpeak: "Be curious, not corrective. Saga responds to 'what if we tried X?' more than 'we need X'. Bring her into the framing, not just the build.",
@@ -278,13 +278,13 @@ export const people: Person[] = [
     bio: "Programme manager who keeps engagements healthy. Quietly unblocks two things before standup that no one knew were stuck. Loved by both clients and engineers.",
     capabilities: ["Programme management", "Agile delivery", "Risk management", "Client governance"],
     achievements: [
-      "Recovered the Carlsberg loyalty programme on the original launch date.",
+      "Recovered the Brygg & Co loyalty programme on the original launch date.",
       "Coached two team leads through their first major client escalation.",
       "Built the delivery health-check now used across every Nordic engagement.",
     ],
     bestTrait: "Stays calm in a storm — the team trusts him because he never panics.",
     vice: "Will absorb pressure himself rather than escalate. Check in regularly.",
-    wheelPosition: "Analytical Supporter",
+    wheelPosition: "Analytical Harmoniser",
     drivers: ["Team wellbeing", "Predictable cadence", "Clear roles", "Long-term partnerships"],
     detractors: ["Last-minute scope swings", "Heroics culture", "Skipped retros", "Manufactured urgency"],
     howToSpeak: "Be steady. Tobias reads tone — if you're agitated, he'll first calm the room and then ask what's actually wrong. Bring facts, not vibes.",
@@ -307,9 +307,9 @@ export const people: Person[] = [
     bio: "React specialist who pairs design sensibility with type-system rigour. Brings energy into the engineering team — the rare frontend clients want in the workshop.",
     capabilities: ["React & Next.js", "TypeScript", "Accessibility", "Design-engineering bridge"],
     achievements: [
-      "Led the Storebrand member portal rebuild — Lighthouse 98 on launch.",
+      "Led the Fjellvik Pension member portal rebuild — Lighthouse 98 on launch.",
       "Authored the Nordic frontend accessibility playbook.",
-      "Maintains three popular internal Inceptions component libraries.",
+      "Maintains three popular internal Fjord & Co component libraries.",
     ],
     bestTrait: "Translates fluently between design and engineering — no information lost.",
     vice: "Can take critique of her code personally. Frame as 'how do we make it better' not 'this is wrong'.",
@@ -336,8 +336,8 @@ export const people: Person[] = [
     bio: "Backend engineer with a security mindset. Quietly precise, asks the question that exposes the shaky assumption. Coming off a long engagement and ready for the next hard problem.",
     capabilities: ["Go & Rust", "API security", "Postgres performance", "Threat modelling"],
     achievements: [
-      "Closed five critical CVEs in OP Financial's customer API in his first quarter.",
-      "Designed the auth service used across three Inceptions engagements.",
+      "Closed five critical CVEs in Kestrel Bank's customer API in his first quarter.",
+      "Designed the auth service used across three Fjord & Co engagements.",
       "Holds OSCP — runs our internal security book club.",
     ],
     bestTrait: "Spots the security or performance hole that every other reviewer missed.",
@@ -365,8 +365,8 @@ export const people: Person[] = [
     bio: "Senior client partner owning the top three Nordic accounts. Reads a room in seconds, negotiates hard, leaves the relationship stronger than she found it.",
     capabilities: ["Account leadership", "Negotiation", "Executive coaching", "Pipeline building"],
     achievements: [
-      "Renewed the Nordea master agreement at +18% on prior commercials.",
-      "Built the Volvo Cars relationship from a single statement of work into a programme.",
+      "Renewed the Baltica Bank master agreement at +18% on prior commercials.",
+      "Built the Ardent Motors relationship from a single statement of work into a programme.",
       "Coached two seniors into client-partner roles.",
     ],
     bestTrait: "Walks into a tough client meeting and walks out with a bigger relationship.",
@@ -394,8 +394,8 @@ export const people: Person[] = [
     bio: "Engineering manager with a deep technical bench. Sets a high bar, runs tight engagements, and grows engineers fast. The person clients ask for when timelines look impossible.",
     capabilities: ["Engineering management", "Technical strategy", "Hiring", "Performance coaching"],
     achievements: [
-      "Built the Equinor data-platform team from 2 to 14 in 18 months.",
-      "Led the rescue of the Posten Norge logistics rebuild on the original deadline.",
+      "Built the Northsea Energy data-platform team from 2 to 14 in 18 months.",
+      "Led the rescue of the Nordpost logistics rebuild on the original deadline.",
       "Coached six engineers into senior in the last two years.",
     ],
     bestTrait: "Drives outcomes without dropping people. Engineers stay because of him.",

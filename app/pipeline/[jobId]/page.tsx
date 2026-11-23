@@ -20,10 +20,10 @@ function StageBadge({ stage }: { stage: Brief["stage"] }) {
         gap: 6,
         padding: "3px 9px",
         borderRadius: 100,
-        background: "#FAFAF8",
+        background: "#F7F7FA",
         border: "0.5px solid rgba(0,0,0,0.07)",
         fontSize: 11,
-        color: "#4D4945",
+        color: "#4B4C6B",
         whiteSpace: "nowrap",
       }}
     >
@@ -36,9 +36,9 @@ function StageBadge({ stage }: { stage: Brief["stage"] }) {
 function PriorityBadge({ priority }: { priority: Brief["priority"] }) {
   const tone =
     priority === "urgent"
-      ? { bg: "#FDF3F2", color: "#C4534A", label: "Urgent" }
+      ? { bg: "#FFEEF4", color: "#D93670", label: "Urgent" }
       : priority === "low"
-        ? { bg: "#F3F0EA", color: "#5A5A5A", label: "Low" }
+        ? { bg: "#F4F4F8", color: "#4B4C6B", label: "Low" }
         : null;
   if (!tone) return null;
   return (
@@ -75,10 +75,10 @@ export default function BriefDetailPage() {
       <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.pipeline, transition: "background 0.25s ease" }}>
         <TopChrome env="pipeline" currentPath="/pipeline" />
         <main style={{ maxWidth: 720, margin: "0 auto", padding: "60px 32px" }}>
-          <Link href="/pipeline" style={{ fontSize: 12, color: "#5A5A5A", textDecoration: "none" }}>
+          <Link href="/pipeline" style={{ fontSize: 12, color: "#4B4C6B", textDecoration: "none" }}>
             ← Back to briefs
           </Link>
-          <h1 className="font-display" style={{ fontSize: 24, color: "#161311", marginTop: 12 }}>
+          <h1 className="font-display" style={{ fontSize: 24, color: "#0E0F26", marginTop: 12 }}>
             Brief not found
           </h1>
         </main>
@@ -105,7 +105,7 @@ export default function BriefDetailPage() {
           href="/pipeline"
           style={{
             fontSize: 12,
-            color: "#5A5A5A",
+            color: "#4B4C6B",
             textDecoration: "none",
             display: "inline-block",
             marginBottom: 18,
@@ -126,7 +126,7 @@ export default function BriefDetailPage() {
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
             <StageBadge stage={brief.stage} />
             <PriorityBadge priority={brief.priority} />
-            <div style={{ fontSize: 11, color: "#9A9A9A", marginLeft: "auto" }}>
+            <div style={{ fontSize: 11, color: "#6E7090", marginLeft: "auto" }}>
               Brief #{brief.id}
             </div>
           </div>
@@ -135,7 +135,7 @@ export default function BriefDetailPage() {
             style={{
               fontSize: 34,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.6px",
               margin: "0 0 12px",
               lineHeight: 1.15,
@@ -149,7 +149,7 @@ export default function BriefDetailPage() {
               gap: 14,
               flexWrap: "wrap",
               fontSize: 12,
-              color: "#5A5A5A",
+              color: "#4B4C6B",
               marginBottom: 20,
             }}
           >
@@ -167,11 +167,11 @@ export default function BriefDetailPage() {
           <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1.4fr) minmax(0, 1fr)", gap: 32 }}>
             <div>
               <SectionLabel>Scope</SectionLabel>
-              <p style={{ fontSize: 15, color: "#161311", lineHeight: 1.65, margin: "0 0 22px" }}>
+              <p style={{ fontSize: 15, color: "#0E0F26", lineHeight: 1.65, margin: "0 0 22px" }}>
                 {brief.scope}
               </p>
               <SectionLabel>Context</SectionLabel>
-              <p style={{ fontSize: 14, color: "#4D4945", lineHeight: 1.65, margin: 0 }}>
+              <p style={{ fontSize: 14, color: "#4B4C6B", lineHeight: 1.65, margin: 0 }}>
                 {brief.context}
               </p>
             </div>
@@ -196,13 +196,13 @@ export default function BriefDetailPage() {
                         aria-hidden
                         style={{ width: 8, height: 8, borderRadius: "50%", background: e.color }}
                       />
-                      <span style={{ fontSize: 12, color: "#4D4945", fontWeight: 500 }}>
+                      <span style={{ fontSize: 12, color: "#4B4C6B", fontWeight: 500 }}>
                         {e.label}
                       </span>
                       <div
                         style={{
                           height: 4,
-                          background: "#EDEDEA",
+                          background: "#ECEBF2",
                           borderRadius: 2,
                           overflow: "hidden",
                         }}
@@ -250,7 +250,7 @@ export default function BriefDetailPage() {
 
         <div style={{ marginBottom: 14 }}>
           <SectionLabel>Roles · {brief.roles.length}</SectionLabel>
-          <div style={{ fontSize: 12, color: "#9A9A9A", marginTop: -4 }}>
+          <div style={{ fontSize: 12, color: "#6E7090", marginTop: -4 }}>
             Apply to any open role. Your application earns credits and goes to the capacity
             manager for review.
           </div>
@@ -283,7 +283,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textTransform: "uppercase",
         letterSpacing: "0.12em",
         fontWeight: 600,
@@ -302,10 +302,10 @@ function Pill({ children }: { children: React.ReactNode }) {
         display: "inline-flex",
         padding: "4px 10px",
         borderRadius: 100,
-        background: "#FAFAF8",
+        background: "#F7F7FA",
         border: "0.5px solid rgba(0,0,0,0.07)",
         fontSize: 11,
-        color: "#4D4945",
+        color: "#4B4C6B",
       }}
     >
       {children}
@@ -319,14 +319,14 @@ function StatBlock({ label, value }: { label: string; value: string }) {
       style={{
         padding: "12px 14px",
         borderRadius: 10,
-        background: "#FAFAF8",
+        background: "#F7F7FA",
         border: "0.5px solid rgba(0,0,0,0.06)",
       }}
     >
       <div
         style={{
           fontSize: 10,
-          color: "#9A9A9A",
+          color: "#6E7090",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
           fontWeight: 600,
@@ -337,7 +337,7 @@ function StatBlock({ label, value }: { label: string; value: string }) {
       </div>
       <div
         className="font-display"
-        style={{ fontSize: 18, fontWeight: 600, color: "#161311", letterSpacing: "-0.3px" }}
+        style={{ fontSize: 18, fontWeight: 600, color: "#0E0F26", letterSpacing: "-0.3px" }}
       >
         {value}
       </div>
@@ -365,12 +365,12 @@ function RoleRow({
       }}
       onMouseLeave={(ev) => {
         ev.currentTarget.style.borderColor = applied
-          ? "#5CAB82"
+          ? "#A68BFF"
           : "rgba(0,0,0,0.07)";
       }}
       style={{
-        background: applied ? "#EFF8F3" : "#FFFFFF",
-        border: applied ? "0.5px solid #5CAB82" : "0.5px solid rgba(0,0,0,0.07)",
+        background: applied ? "#F4F0FF" : "#FFFFFF",
+        border: applied ? "0.5px solid #A68BFF" : "0.5px solid rgba(0,0,0,0.07)",
         borderRadius: 14,
         padding: "18px 22px",
         transition: "border-color 0.2s ease",
@@ -401,7 +401,7 @@ function RoleRow({
                 style={{
                   fontSize: 10,
                   fontWeight: 600,
-                  color: "#3D8A61",
+                  color: "#7C5CE6",
                   letterSpacing: "0.06em",
                   textTransform: "uppercase",
                 }}
@@ -413,7 +413,7 @@ function RoleRow({
                 style={{
                   fontSize: 10,
                   fontWeight: 600,
-                  color: "#9A9A9A",
+                  color: "#6E7090",
                   letterSpacing: "0.06em",
                   textTransform: "uppercase",
                 }}
@@ -427,14 +427,14 @@ function RoleRow({
             style={{
               fontSize: 18,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.2px",
               marginBottom: 8,
             }}
           >
             {role.title}
           </div>
-          <p style={{ fontSize: 13, color: "#4D4945", lineHeight: 1.55, margin: "0 0 12px" }}>
+          <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.55, margin: "0 0 12px" }}>
             {role.description}
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
@@ -443,8 +443,8 @@ function RoleRow({
                 key={s}
                 style={{
                   fontSize: 10,
-                  color: "#5A5A5A",
-                  background: "#FAFAF8",
+                  color: "#4B4C6B",
+                  background: "#F7F7FA",
                   border: "0.5px solid rgba(0,0,0,0.07)",
                   padding: "3px 9px",
                   borderRadius: 100,
@@ -466,24 +466,24 @@ function RoleRow({
             minWidth: 200,
           }}
         >
-          <div style={{ display: "flex", gap: 12, fontSize: 11, color: "#5A5A5A" }}>
+          <div style={{ display: "flex", gap: 12, fontSize: 11, color: "#4B4C6B" }}>
             <div>
-              <div style={{ fontSize: 10, color: "#9A9A9A", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              <div style={{ fontSize: 10, color: "#6E7090", textTransform: "uppercase", letterSpacing: "0.08em" }}>
                 Duration
               </div>
-              <div style={{ fontSize: 12, color: "#161311", marginTop: 2 }}>{role.duration}</div>
+              <div style={{ fontSize: 12, color: "#0E0F26", marginTop: 2 }}>{role.duration}</div>
             </div>
             <div>
-              <div style={{ fontSize: 10, color: "#9A9A9A", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              <div style={{ fontSize: 10, color: "#6E7090", textTransform: "uppercase", letterSpacing: "0.08em" }}>
                 Day rate
               </div>
-              <div style={{ fontSize: 12, color: "#161311", marginTop: 2 }}>
+              <div style={{ fontSize: 12, color: "#0E0F26", marginTop: 2 }}>
                 €{role.dayRateBandEur.min}–{role.dayRateBandEur.max}
               </div>
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4 }}>
-            <span style={{ fontSize: 11, color: "#9A9A9A" }}>
+            <span style={{ fontSize: 11, color: "#6E7090" }}>
               {role.applicants + (applied ? 1 : 0)} applicant
               {role.applicants + (applied ? 1 : 0) === 1 ? "" : "s"}
             </span>
@@ -493,9 +493,9 @@ function RoleRow({
                 style={{
                   padding: "8px 18px",
                   borderRadius: 100,
-                  border: applied ? "0.5px solid #5CAB82" : "none",
-                  background: applied ? "#FFFFFF" : "#161311",
-                  color: applied ? "#3D8A61" : "#FFFFFF",
+                  border: applied ? "0.5px solid #A68BFF" : "none",
+                  background: applied ? "#FFFFFF" : "#0E0F26",
+                  color: applied ? "#7C5CE6" : "#FFFFFF",
                   fontSize: 12,
                   fontWeight: 500,
                   cursor: "pointer",
@@ -509,8 +509,8 @@ function RoleRow({
                 style={{
                   padding: "8px 18px",
                   borderRadius: 100,
-                  background: "#F3F0EA",
-                  color: "#9A9A9A",
+                  background: "#F4F4F8",
+                  color: "#6E7090",
                   fontSize: 12,
                   fontWeight: 500,
                 }}

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-const SYSTEM_PROMPT = `You are the executive workforce intelligence analyst for Inceptions,
+const SYSTEM_PROMPT = `You are the executive workforce intelligence analyst for Fjord & Co,
 a 187-person professional-services firm operating across Stockholm, Oslo,
 Copenhagen and Helsinki. You write the weekly read for the C-suite (CEO, COO,
 CFO, CHRO, Head of Growth, board members).
@@ -45,9 +45,9 @@ function defaultBrief(): ExecutiveBrief {
       { label: "Skills Gap", value: "7 critical gaps", detail: "Most acute: LLM/Gen AI, Mobile React Native, Applied ML", trendValue: 2 },
     ],
     notes: [
-      "Volvo Cars connected platform extension (€3.8M, 75% probability) still has unstaffed Engineering Lead — 12 days open.",
-      "Helsinki Data & AI in critical shortage; Henna Mäkinen at 96% utilisation for 6 weeks, burnout-flagged.",
-      "Klarna Phase 2 team at 96%+ utilisation for 8 weeks with communication friction signals.",
+      "Ardent Motors connected platform extension (€3.8M, 75% probability) still has unstaffed Engineering Lead — 12 days open.",
+      "Helsinki Data & AI in critical shortage; Henna Mäkinen at 96% utilisation for 6 weeks, over-allocated.",
+      "Payflow Phase 2 team at 96%+ utilisation for 8 weeks with communication friction signals.",
       "Cross-Nordic redeployment unlocks €420k of bench cost before any hiring.",
       "AI/ML skills gap widened: 4 FTEs vs 24 needed in 24 months. Upskilling delivers 6.5× cost efficiency vs hiring.",
     ],
@@ -68,7 +68,7 @@ function buildBriefText(brief: ExecutiveBrief): string {
 function fallbackParagraphs(): string[] {
   return [
     "Pipeline coverage at 1.4× is healthy and trending up, but Q3 revenue forecast remains €0.3M below target with gross margin slipping 0.8 points on higher contractor utilisation in Stockholm and Oslo.",
-    "Critical exposure: the AI/ML skills gap widened to seven roles after three confirmed Q4 starts that need specialists we don't currently have internally. Helsinki utilisation breaking 86% raises burnout risk on the OP Financial programme — two consultants flagged amber.",
+    "Critical exposure: the AI/ML skills gap widened to seven roles after three confirmed Q4 starts that need specialists we don't currently have internally. Helsinki utilisation breaking 86% raises overload risk on the Kestrel Bank programme — two consultants flagged amber.",
     "Cross-Nordic redeployment unlocks an estimated €420k of bench cost before any hiring decision. The Workforce Optimization Engine recommends upskilling four mid-level consultants into the AI/ML capability over the next 90 days; estimated cost-to-value ratio is materially better than external hires.",
   ];
 }

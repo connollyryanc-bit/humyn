@@ -15,7 +15,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textTransform: "uppercase",
         letterSpacing: "0.1em",
         fontWeight: 600,
@@ -46,10 +46,10 @@ function Card({ children, padding = "20px 22px", style }: { children: React.Reac
 function PriorityPill({ priority, onClick }: { priority: Brief["priority"]; onClick?: () => void }) {
   const tone =
     priority === "urgent"
-      ? { bg: "#FDF3F2", color: "#C4534A", label: "Urgent" }
+      ? { bg: "#FFEEF4", color: "#D93670", label: "Urgent" }
       : priority === "low"
-        ? { bg: "#F3F0EA", color: "#5A5A5A", label: "Low" }
-        : { bg: "#FEF8EE", color: "#B87A2E", label: "Normal" };
+        ? { bg: "#F4F4F8", color: "#4B4C6B", label: "Low" }
+        : { bg: "#FFF5EC", color: "#D9782F", label: "Normal" };
   return (
     <button
       onClick={(ev) => {
@@ -89,10 +89,10 @@ function StageBadge({ stage }: { stage: BriefStage }) {
         gap: 6,
         padding: "3px 9px",
         borderRadius: 100,
-        background: "#FAFAF8",
+        background: "#F7F7FA",
         border: "0.5px solid rgba(0,0,0,0.07)",
         fontSize: 11,
-        color: "#4D4945",
+        color: "#4B4C6B",
       }}
     >
       <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", background: meta.tone }} />
@@ -102,10 +102,10 @@ function StageBadge({ stage }: { stage: BriefStage }) {
 }
 
 function HarmonyDot({ score }: { score: number | null }) {
-  if (score === null) return <span style={{ color: "#9A9A9A", fontSize: 11 }}>—</span>;
-  const color = score >= 80 ? "#5CAB82" : score >= 65 ? "#D4974A" : "#D97B73";
+  if (score === null) return <span style={{ color: "#6E7090", fontSize: 11 }}>—</span>;
+  const color = score >= 80 ? "#A68BFF" : score >= 65 ? "#FF9F5A" : "#F2729E";
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 11, color: "#4D4945" }}>
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 11, color: "#4B4C6B" }}>
       <span style={{ width: 8, height: 8, borderRadius: "50%", background: color }} />
       {score}
     </span>
@@ -196,7 +196,7 @@ export default function TeamsPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 500,
@@ -209,14 +209,14 @@ export default function TeamsPage() {
             style={{
               fontSize: 28,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.4px",
               margin: "6px 0 4px",
             }}
           >
             Teams
           </h1>
-          <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.6 }}>
+          <div style={{ fontSize: 13, color: "#4B4C6B", maxWidth: 720, lineHeight: 1.6 }}>
             Brief portfolio across the four Nordic markets. {briefs.length} briefs on the board.
             Move them across stages, change priority, and apply to open roles — every change
             saves to this browser.
@@ -243,8 +243,8 @@ export default function TeamsPage() {
                 padding: "8px 14px",
                 borderRadius: 8,
                 border: "none",
-                background: tab === t.key ? "#161311" : "transparent",
-                color: tab === t.key ? "#FFFFFF" : "#4D4945",
+                background: tab === t.key ? "#0E0F26" : "transparent",
+                color: tab === t.key ? "#FFFFFF" : "#4B4C6B",
                 fontSize: 12,
                 fontWeight: 400,
                 cursor: "pointer",
@@ -323,14 +323,14 @@ function PortfolioTab({
                   gap: 12,
                   padding: "10px 12px",
                   borderRadius: 10,
-                  background: "#FDF3F2",
-                  border: "0.5px solid #F0CECA",
+                  background: "#FFEEF4",
+                  border: "0.5px solid #FFCADB",
                 }}
               >
                 <PriorityPill priority={b.priority} onClick={() => onCyclePriority(b.id)} />
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>{b.name}</div>
-                  <div style={{ fontSize: 11, color: "#5A5A5A", marginTop: 2 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>{b.name}</div>
+                  <div style={{ fontSize: 11, color: "#4B4C6B", marginTop: 2 }}>
                     {b.client} · {b.market} · starts {b.startDate}
                     {b.daysToStart !== null && ` · ${b.daysToStart}d to start`}
                   </div>
@@ -360,8 +360,8 @@ function PortfolioTab({
                 }}
               >
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontWeight: 600, color: "#161311", marginBottom: 2 }}>{b.name}</div>
-                  <div style={{ fontSize: 11, color: "#9A9A9A" }}>
+                  <div style={{ fontWeight: 600, color: "#0E0F26", marginBottom: 2 }}>{b.name}</div>
+                  <div style={{ fontSize: 11, color: "#6E7090" }}>
                     {b.client} · {b.market} · {b.briefType}
                   </div>
                 </div>
@@ -379,7 +379,7 @@ function PortfolioTab({
           <SectionLabel>Available now · {nowAvailable.length}</SectionLabel>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {nowAvailable.length === 0 && (
-              <div style={{ fontSize: 12, color: "#9A9A9A" }}>No one is on the bench this week.</div>
+              <div style={{ fontSize: 12, color: "#6E7090" }}>No one is on the bench this week.</div>
             )}
             {nowAvailable.slice(0, 6).map((p) => {
               const e = energy[p.primary];
@@ -397,10 +397,10 @@ function PortfolioTab({
                   }}
                 >
                   <span aria-hidden style={{ width: 8, height: 8, borderRadius: "50%", background: e.color }} />
-                  <span style={{ fontSize: 12, fontWeight: 500, color: "#161311", flex: 1, minWidth: 0 }}>
+                  <span style={{ fontSize: 12, fontWeight: 500, color: "#0E0F26", flex: 1, minWidth: 0 }}>
                     {p.name}
                   </span>
-                  <span style={{ fontSize: 11, color: "#9A9A9A" }}>{p.location}</span>
+                  <span style={{ fontSize: 11, color: "#6E7090" }}>{p.location}</span>
                 </Link>
               );
             })}
@@ -424,9 +424,9 @@ function PortfolioTab({
                     fontSize: 12,
                   }}
                 >
-                  <div style={{ color: "#161311", fontWeight: 500 }}>{m}</div>
-                  <div style={{ color: "#9A9A9A" }}>{briefsHere} briefs</div>
-                  <div style={{ color: benchHere > 0 ? "#B87A2E" : "#9A9A9A" }}>{benchHere} on bench</div>
+                  <div style={{ color: "#0E0F26", fontWeight: 500 }}>{m}</div>
+                  <div style={{ color: "#6E7090" }}>{briefsHere} briefs</div>
+                  <div style={{ color: benchHere > 0 ? "#D9782F" : "#6E7090" }}>{benchHere} on bench</div>
                 </div>
               );
             })}
@@ -435,7 +435,7 @@ function PortfolioTab({
 
         <Card>
           <SectionLabel>This week’s read</SectionLabel>
-          <p style={{ fontSize: 12.5, color: "#4D4945", lineHeight: 1.6, margin: 0 }}>
+          <p style={{ fontSize: 12.5, color: "#4B4C6B", lineHeight: 1.6, margin: 0 }}>
             {urgent.length} urgent brief{urgent.length === 1 ? "" : "s"} flagged. Click any
             priority pill on the list to cycle between urgent / normal / low. Move briefs
             between stages on the Kanban tab; everything you do here saves locally.
@@ -491,9 +491,9 @@ function KanbanTab({
             style={{
               flexShrink: 0,
               width: 280,
-              background: isDropTarget ? "#EFF8F3" : "#FFFFFF",
+              background: isDropTarget ? "#F4F0FF" : "#FFFFFF",
               border: isDropTarget
-                ? "1px dashed #5CAB82"
+                ? "1px dashed #A68BFF"
                 : "0.5px solid rgba(0,0,0,0.07)",
               borderRadius: 12,
               padding: "14px 14px 18px",
@@ -512,12 +512,12 @@ function KanbanTab({
               }}
             >
               <span aria-hidden style={{ width: 8, height: 8, borderRadius: "50%", background: s.tone }} />
-              <div style={{ fontSize: 12, fontWeight: 600, color: "#161311", flex: 1 }}>{s.label}</div>
-              <div style={{ fontSize: 11, color: "#9A9A9A" }}>{inStage.length}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#0E0F26", flex: 1 }}>{s.label}</div>
+              <div style={{ fontSize: 11, color: "#6E7090" }}>{inStage.length}</div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {inStage.length === 0 && (
-                <div style={{ fontSize: 11, color: "#9A9A9A", textAlign: "center", padding: "16px 4px" }}>
+                <div style={{ fontSize: 11, color: "#6E7090", textAlign: "center", padding: "16px 4px" }}>
                   {isDropTarget ? "Release to move here" : "Drag briefs here or use the arrows."}
                 </div>
               )}
@@ -574,7 +574,7 @@ function BriefCard({
         border: "0.5px solid rgba(0,0,0,0.07)",
         borderRadius: 10,
         padding: 12,
-        background: "#FAFAF8",
+        background: "#F7F7FA",
         display: "flex",
         flexDirection: "column",
         gap: 8,
@@ -587,8 +587,8 @@ function BriefCard({
         <PriorityPill priority={brief.priority} onClick={() => onCyclePriority(brief.id)} />
         <HarmonyDot score={brief.harmonyScore} />
       </div>
-      <div style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>{brief.name}</div>
-      <div style={{ fontSize: 11, color: "#9A9A9A", lineHeight: 1.5 }}>
+      <div style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>{brief.name}</div>
+      <div style={{ fontSize: 11, color: "#6E7090", lineHeight: 1.5 }}>
         {brief.client} · {brief.market}
         <br />
         Starts {brief.startDate}
@@ -612,8 +612,8 @@ function BriefCard({
             padding: "4px 8px",
             borderRadius: 6,
             border: "0.5px solid rgba(0,0,0,0.08)",
-            background: canBack ? "#FFFFFF" : "#FAFAF8",
-            color: canBack ? "#4D4945" : "#D1CDC4",
+            background: canBack ? "#FFFFFF" : "#F7F7FA",
+            color: canBack ? "#4B4C6B" : "#D3D2DE",
             fontSize: 11,
             cursor: canBack ? "pointer" : "not-allowed",
             fontFamily: "inherit",
@@ -629,8 +629,8 @@ function BriefCard({
             padding: "4px 8px",
             borderRadius: 6,
             border: "none",
-            background: canFwd ? "#161311" : "#E0DDD8",
-            color: canFwd ? "#FFFFFF" : "#9A9A9A",
+            background: canFwd ? "#0E0F26" : "#E1E0EA",
+            color: canFwd ? "#FFFFFF" : "#6E7090",
             fontSize: 11,
             cursor: canFwd ? "pointer" : "not-allowed",
             fontFamily: "inherit",
@@ -650,7 +650,7 @@ function TimelineTab({ briefs, people }: { briefs: Brief[]; people: Person[] }) 
   return (
     <Card>
       <SectionLabel>Next 8 weeks · {people.length} consultants</SectionLabel>
-      <div style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.6, marginBottom: 16 }}>
+      <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.6, marginBottom: 16 }}>
         Snapshot of confirmed and active engagements. Drag-and-drop scheduling and the full Gantt
         come once we wire engagement plans.
       </div>
@@ -665,19 +665,19 @@ function TimelineTab({ briefs, people }: { briefs: Brief[]; people: Person[] }) 
               alignItems: "center",
               padding: "10px 12px",
               borderRadius: 10,
-              background: "#FAFAF8",
+              background: "#F7F7FA",
               border: "0.5px solid rgba(0,0,0,0.05)",
               fontSize: 13,
             }}
           >
             <div>
-              <div style={{ fontWeight: 600, color: "#161311" }}>{b.name}</div>
-              <div style={{ fontSize: 11, color: "#9A9A9A" }}>
+              <div style={{ fontWeight: 600, color: "#0E0F26" }}>{b.name}</div>
+              <div style={{ fontSize: 11, color: "#6E7090" }}>
                 {b.client} · {b.market}
               </div>
             </div>
-            <div style={{ fontSize: 11, color: "#5A5A5A" }}>Start {b.startDate}</div>
-            <div style={{ fontSize: 11, color: "#5A5A5A" }}>{b.duration}</div>
+            <div style={{ fontSize: 11, color: "#4B4C6B" }}>Start {b.startDate}</div>
+            <div style={{ fontSize: 11, color: "#4B4C6B" }}>{b.duration}</div>
             <StageBadge stage={b.stage} />
           </div>
         ))}
@@ -708,12 +708,12 @@ function PitchTab({
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
           <div>
             <SectionLabel>Your activity</SectionLabel>
-            <div style={{ fontSize: 13, color: "#4D4945" }}>
+            <div style={{ fontSize: 13, color: "#4B4C6B" }}>
               {applications.length} active application{applications.length === 1 ? "" : "s"} ·{" "}
-              <span style={{ color: "#3D8A61", fontWeight: 600 }}>{totalCredits} credits earned for applying</span>
+              <span style={{ color: "#7C5CE6", fontWeight: 600 }}>{totalCredits} credits earned for applying</span>
             </div>
           </div>
-          <div style={{ fontSize: 11, color: "#9A9A9A", maxWidth: 360, lineHeight: 1.5 }}>
+          <div style={{ fontSize: 11, color: "#6E7090", maxWidth: 360, lineHeight: 1.5 }}>
             Applying earns 25% of the role&apos;s credits up front. Shortlisting earns 50% more.
             Selection earns the full amount.
           </div>
@@ -739,10 +739,10 @@ function PitchTab({
               <div
                 key={r.id}
                 style={{
-                  border: applied ? "0.5px solid #5CAB82" : "0.5px solid rgba(0,0,0,0.07)",
+                  border: applied ? "0.5px solid #A68BFF" : "0.5px solid rgba(0,0,0,0.07)",
                   borderRadius: 12,
                   padding: 16,
-                  background: applied ? "#EFF8F3" : "#FFFFFF",
+                  background: applied ? "#F4F0FF" : "#FFFFFF",
                   display: "flex",
                   flexDirection: "column",
                   gap: 10,
@@ -766,11 +766,11 @@ function PitchTab({
                     <span style={{ width: 6, height: 6, borderRadius: "50%", background: e.color }} />
                     {e.label} · {r.level}
                   </span>
-                  <span style={{ fontSize: 11, color: "#9A9A9A" }}>+{r.creditsOnSelection} credits</span>
+                  <span style={{ fontSize: 11, color: "#6E7090" }}>+{r.creditsOnSelection} credits</span>
                 </div>
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: "#161311", lineHeight: 1.3 }}>{r.title}</div>
-                  <div style={{ fontSize: 11, color: "#9A9A9A", marginTop: 2 }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: "#0E0F26", lineHeight: 1.3 }}>{r.title}</div>
+                  <div style={{ fontSize: 11, color: "#6E7090", marginTop: 2 }}>
                     {r.briefName} · {r.market}
                   </div>
                 </div>
@@ -780,8 +780,8 @@ function PitchTab({
                       key={s}
                       style={{
                         fontSize: 10,
-                        color: "#5A5A5A",
-                        background: "#FAFAF8",
+                        color: "#4B4C6B",
+                        background: "#F7F7FA",
                         border: "0.5px solid rgba(0,0,0,0.07)",
                         padding: "2px 8px",
                         borderRadius: 100,
@@ -802,7 +802,7 @@ function PitchTab({
                     gap: 12,
                   }}
                 >
-                  <div style={{ fontSize: 11, color: "#9A9A9A" }}>
+                  <div style={{ fontSize: 11, color: "#6E7090" }}>
                     {r.duration} · starts {r.startDate}
                     <br />
                     {r.applicantCount + (applied ? 1 : 0)} applicant{r.applicantCount + (applied ? 1 : 0) === 1 ? "" : "s"}
@@ -812,9 +812,9 @@ function PitchTab({
                     style={{
                       padding: "7px 14px",
                       borderRadius: 100,
-                      border: applied ? "0.5px solid #5CAB82" : "none",
-                      background: applied ? "#FFFFFF" : "#161311",
-                      color: applied ? "#3D8A61" : "#FFFFFF",
+                      border: applied ? "0.5px solid #A68BFF" : "none",
+                      background: applied ? "#FFFFFF" : "#0E0F26",
+                      color: applied ? "#7C5CE6" : "#FFFFFF",
                       fontSize: 12,
                       fontWeight: 500,
                       cursor: "pointer",
@@ -860,7 +860,7 @@ function AvailabilityTab({ people, enriched }: { people: Person[]; enriched: Per
                 const cap = enrichedById.get(p.id);
                 const benchDays = cap?.capacity.benchDays ?? 0;
                 const statusBg =
-                  p.available === "now" ? "#5CAB82" : p.available === "soon" ? "#D4974A" : "#E0DDD8";
+                  p.available === "now" ? "#A68BFF" : p.available === "soon" ? "#FF9F5A" : "#E1E0EA";
                 return (
                   <Link
                     key={p.id}
@@ -872,14 +872,14 @@ function AvailabilityTab({ people, enriched }: { people: Person[]; enriched: Per
                       padding: "8px 10px",
                       borderRadius: 10,
                       border: "0.5px solid rgba(0,0,0,0.06)",
-                      background: "#FAFAF8",
+                      background: "#F7F7FA",
                       textDecoration: "none",
                     }}
                   >
                     <span aria-hidden style={{ width: 8, height: 8, borderRadius: "50%", background: e.color }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 12, fontWeight: 500, color: "#161311" }}>{p.name}</div>
-                      <div style={{ fontSize: 10, color: "#9A9A9A" }}>{p.role}</div>
+                      <div style={{ fontSize: 12, fontWeight: 500, color: "#0E0F26" }}>{p.name}</div>
+                      <div style={{ fontSize: 10, color: "#6E7090" }}>{p.role}</div>
                     </div>
                     <span
                       aria-hidden
@@ -949,21 +949,21 @@ function ScaffoldCard({ title, body, bullets, cta }: { title: string; body: stri
         style={{
           fontSize: 22,
           fontWeight: 600,
-          color: "#161311",
+          color: "#0E0F26",
           letterSpacing: "-0.3px",
           margin: "0 0 10px",
         }}
       >
         {title}
       </h2>
-      <p style={{ fontSize: 14, color: "#4D4945", lineHeight: 1.65, margin: "0 0 16px" }}>{body}</p>
+      <p style={{ fontSize: 14, color: "#4B4C6B", lineHeight: 1.65, margin: "0 0 16px" }}>{body}</p>
       <ul style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 8 }}>
         {bullets.map((b, i) => (
           <li
             key={i}
             style={{
               fontSize: 13,
-              color: "#5A5A5A",
+              color: "#4B4C6B",
               lineHeight: 1.55,
               paddingLeft: 18,
               position: "relative",
@@ -978,7 +978,7 @@ function ScaffoldCard({ title, body, bullets, cta }: { title: string; body: stri
                 width: 6,
                 height: 6,
                 borderRadius: "50%",
-                background: "#D4974A",
+                background: "#FF9F5A",
               }}
             />
             {b}
@@ -993,7 +993,7 @@ function ScaffoldCard({ title, body, bullets, cta }: { title: string; body: stri
             marginTop: 18,
             padding: "8px 14px",
             borderRadius: 100,
-            background: "#161311",
+            background: "#0E0F26",
             color: "#FFFFFF",
             fontSize: 12,
             fontWeight: 400,

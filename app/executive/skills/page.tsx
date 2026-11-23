@@ -17,8 +17,8 @@ import { ScopeBreadcrumb } from "../scope-breadcrumb";
 import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
-const EXEC_INK = "#161311";
-const EXEC_INK_SECONDARY = "#3A3633";
+const EXEC_INK = "#0E0F26";
+const EXEC_INK_SECONDARY = "#2A2B45";
 
 type HorizonKey = "6m" | "12m" | "24m";
 
@@ -75,7 +75,7 @@ export default function SkillsIntelligencePage() {
         </Link>
 
         <section style={{ marginBottom: 32 }}>
-          <div style={{ fontSize: 11, color: "#6F6B66", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 600 }}>
+          <div style={{ fontSize: 11, color: "#5F6080", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 600 }}>
             Executive · Module 5
           </div>
           <h1
@@ -155,7 +155,7 @@ export default function SkillsIntelligencePage() {
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ fontSize: 10, color: "#6F6B66", textTransform: "uppercase", letterSpacing: "0.16em", fontWeight: 600, marginBottom: 14 }}>
+    <div style={{ fontSize: 10, color: "#5F6080", textTransform: "uppercase", letterSpacing: "0.16em", fontWeight: 600, marginBottom: 14 }}>
       {children}
     </div>
   );
@@ -173,7 +173,7 @@ function HorizonPicker({ horizon, setHorizon }: { horizon: HorizonKey; setHorizo
             borderRadius: 8,
             border: "none",
             background: horizon === h.key ? EXEC_INK : "transparent",
-            color: horizon === h.key ? "#F3F0EA" : EXEC_INK_SECONDARY,
+            color: horizon === h.key ? "#F4F4F8" : EXEC_INK_SECONDARY,
             fontSize: 12.5,
             fontWeight: horizon === h.key ? 500 : 400,
             cursor: "pointer",
@@ -188,13 +188,13 @@ function HorizonPicker({ horizon, setHorizon }: { horizon: HorizonKey; setHorizo
 }
 
 function HeroStat({ label, value, detail, tone }: { label: string; value: string; detail: string; tone: "neutral" | "positive" | "warning" | "critical" }) {
-  const stripe = tone === "critical" ? "#C4534A" : tone === "warning" ? "#B87A2E" : tone === "positive" ? "#3D8A61" : EXEC_ACCENT;
+  const stripe = tone === "critical" ? "#D93670" : tone === "warning" ? "#D9782F" : tone === "positive" ? "#7C5CE6" : EXEC_ACCENT;
   return (
     <div style={{ background: "#FFFFFF", border: "0.5px solid rgba(0,0,0,0.07)", borderRadius: 14, padding: "22px 22px 20px", display: "flex", flexDirection: "column", gap: 10, minHeight: 168, position: "relative", overflow: "hidden", boxShadow: "0 1px 2px rgba(0,0,0,0.03)" }}>
       <span aria-hidden style={{ position: "absolute", top: 0, left: 0, width: 2, height: "100%", background: stripe, opacity: 0.85 }} />
-      <div style={{ fontSize: 10, color: "#6F6B66", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 600 }}>{label}</div>
+      <div style={{ fontSize: 10, color: "#5F6080", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 600 }}>{label}</div>
       <div className="font-display" style={{ fontSize: 38, fontWeight: 600, color: EXEC_INK, letterSpacing: "-0.8px", lineHeight: 1.0 }}>{value}</div>
-      <div style={{ fontSize: 12, color: "#5A5754", lineHeight: 1.5, marginTop: "auto" }}>{detail}</div>
+      <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.5, marginTop: "auto" }}>{detail}</div>
     </div>
   );
 }
@@ -209,10 +209,10 @@ function SkillsTable({ enriched, horizonLabel }: { enriched: ReturnType<typeof g
           gridTemplateColumns: "minmax(0, 2fr) 100px 100px 110px 1fr 110px",
           gap: 12,
           padding: "12px 22px",
-          background: "#FAFAF8",
+          background: "#F7F7FA",
           borderBottom: "0.5px solid rgba(0,0,0,0.06)",
           fontSize: 10,
-          color: "#6F6B66",
+          color: "#5F6080",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
           fontWeight: 600,
@@ -227,7 +227,7 @@ function SkillsTable({ enriched, horizonLabel }: { enriched: ReturnType<typeof g
       </div>
       {categories.map((category) => (
         <div key={category}>
-          <div style={{ padding: "12px 22px 6px", fontSize: 10, color: "#9A9A9A", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, background: "#FCFCFA", borderTop: "0.5px solid rgba(0,0,0,0.05)" }}>
+          <div style={{ padding: "12px 22px 6px", fontSize: 10, color: "#6E7090", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, background: "#FCFCFE", borderTop: "0.5px solid rgba(0,0,0,0.05)" }}>
             {category}
           </div>
           {enriched
@@ -245,7 +245,7 @@ function SkillRow({ skill }: { skill: ReturnType<typeof getEnriched>[number] }) 
   const supplyPct = Math.min(100, (skill.currentSupply / Math.max(skill.demand, 1)) * 100);
   const isGap = skill.gap > 0;
   const isShortage = skill.gap > 0 && skill.criticalityScore >= 60;
-  const gapColor = isShortage ? "#C4534A" : isGap ? "#B87A2E" : "#3D8A61";
+  const gapColor = isShortage ? "#D93670" : isGap ? "#D9782F" : "#7C5CE6";
   return (
     <div
       style={{
@@ -262,7 +262,7 @@ function SkillRow({ skill }: { skill: ReturnType<typeof getEnriched>[number] }) 
       <div>
         <div style={{ fontWeight: 600 }}>{skill.name}</div>
         {skill.certifiedCount > 0 && (
-          <div style={{ fontSize: 11, color: "#6F6B66", marginTop: 2 }}>
+          <div style={{ fontSize: 11, color: "#5F6080", marginTop: 2 }}>
             {skill.certifiedCount} certified
           </div>
         )}
@@ -272,7 +272,7 @@ function SkillRow({ skill }: { skill: ReturnType<typeof getEnriched>[number] }) 
       <div style={{ textAlign: "right", fontVariantNumeric: "tabular-nums", color: gapColor, fontWeight: 600 }}>
         {skill.gap > 0 ? `−${skill.gap}` : skill.gap === 0 ? "0" : `+${Math.abs(skill.gap)}`}
       </div>
-      <div style={{ height: 8, background: "#F3F0EA", borderRadius: 4, overflow: "hidden", display: "flex" }}>
+      <div style={{ height: 8, background: "#F4F4F8", borderRadius: 4, overflow: "hidden", display: "flex" }}>
         <div style={{ width: `${supplyPct}%`, background: EXEC_ACCENT, opacity: 0.85, borderRadius: 4 }} />
       </div>
       <div style={{ textAlign: "right", fontSize: 11 }}>
@@ -281,9 +281,9 @@ function SkillRow({ skill }: { skill: ReturnType<typeof getEnriched>[number] }) 
             display: "inline-block",
             padding: "2px 9px",
             borderRadius: 100,
-            background: skill.trend === "rising" ? "#FEF8EE" : skill.trend === "declining" ? "#F3F0EA" : "#FAFAF8",
-            border: `0.5px solid ${skill.trend === "rising" ? "#F2DCB0" : skill.trend === "declining" ? "rgba(0,0,0,0.08)" : "rgba(0,0,0,0.07)"}`,
-            color: skill.trend === "rising" ? "#B87A2E" : skill.trend === "declining" ? "#6F6B66" : "#5A5754",
+            background: skill.trend === "rising" ? "#FFF5EC" : skill.trend === "declining" ? "#F4F4F8" : "#F7F7FA",
+            border: `0.5px solid ${skill.trend === "rising" ? "#FFDCC2" : skill.trend === "declining" ? "rgba(0,0,0,0.08)" : "rgba(0,0,0,0.07)"}`,
+            color: skill.trend === "rising" ? "#D9782F" : skill.trend === "declining" ? "#5F6080" : "#4B4C6B",
             fontSize: 10,
             fontWeight: 600,
             letterSpacing: "0.04em",
@@ -313,8 +313,8 @@ function CriticalGapCard({ skill, horizonLabel }: { skill: ReturnType<typeof get
         boxShadow: "0 1px 2px rgba(0,0,0,0.03)",
       }}
     >
-      <span aria-hidden style={{ position: "absolute", top: 0, left: 0, width: 3, height: "100%", background: "#C4534A", opacity: 0.85 }} />
-      <div style={{ fontSize: 10, color: "#9A9A9A", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>
+      <span aria-hidden style={{ position: "absolute", top: 0, left: 0, width: 3, height: "100%", background: "#D93670", opacity: 0.85 }} />
+      <div style={{ fontSize: 10, color: "#6E7090", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>
         {skill.category} · {horizonLabel}
       </div>
       <div className="font-display" style={{ fontSize: 17, fontWeight: 600, color: EXEC_INK, letterSpacing: "-0.2px", lineHeight: 1.25 }}>
@@ -335,10 +335,10 @@ function CriticalGapCard({ skill, horizonLabel }: { skill: ReturnType<typeof get
 function Cell({ label, value, tone }: { label: string; value: string; tone?: "critical" }) {
   return (
     <div>
-      <div style={{ fontSize: 10, color: "#9A9A9A", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 3 }}>
+      <div style={{ fontSize: 10, color: "#6E7090", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 3 }}>
         {label}
       </div>
-      <div className="font-display" style={{ fontSize: 16, fontWeight: 600, color: tone === "critical" ? "#C4534A" : EXEC_INK, letterSpacing: "-0.2px" }}>
+      <div className="font-display" style={{ fontSize: 16, fontWeight: 600, color: tone === "critical" ? "#D93670" : EXEC_INK, letterSpacing: "-0.2px" }}>
         {value}
       </div>
     </div>
@@ -348,10 +348,10 @@ function Cell({ label, value, tone }: { label: string; value: string; tone?: "cr
 function InsightCard({ insight }: { insight: SkillsAiInsight }) {
   const tone =
     insight.category === "critical-gap"
-      ? { color: "#C4534A", bg: "#FDF3F2", border: "#F0CECA" }
+      ? { color: "#D93670", bg: "#FFEEF4", border: "#FFCADB" }
       : insight.category === "upskill"
-        ? { color: "#3D8A61", bg: "#EFF8F3", border: "#B6E0CB" }
-        : { color: "#B87A2E", bg: "#FEF8EE", border: "#F2DCB0" };
+        ? { color: "#7C5CE6", bg: "#F4F0FF", border: "#DCD1FF" }
+        : { color: "#D9782F", bg: "#FFF5EC", border: "#FFDCC2" };
   return (
     <div style={{ background: "#FFFFFF", border: "0.5px solid rgba(0,0,0,0.07)", borderRadius: 14, padding: "20px 22px 18px", display: "flex", flexDirection: "column", gap: 10, position: "relative", overflow: "hidden" }}>
       <span aria-hidden style={{ position: "absolute", top: 0, left: 0, width: 3, height: "100%", background: tone.color, opacity: 0.85 }} />

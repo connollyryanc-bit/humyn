@@ -30,10 +30,10 @@ function StageBadge({ stage }: { stage: BriefStage }) {
         gap: 6,
         padding: "3px 9px",
         borderRadius: 100,
-        background: "#FAFAF8",
+        background: "#F7F7FA",
         border: "0.5px solid rgba(0,0,0,0.07)",
         fontSize: 11,
-        color: "#4D4945",
+        color: "#4B4C6B",
         whiteSpace: "nowrap",
       }}
     >
@@ -46,9 +46,9 @@ function StageBadge({ stage }: { stage: BriefStage }) {
 function PriorityBadge({ priority }: { priority: Brief["priority"] }) {
   const tone =
     priority === "urgent"
-      ? { bg: "#FDF3F2", color: "#C4534A", label: "Urgent" }
+      ? { bg: "#FFEEF4", color: "#D93670", label: "Urgent" }
       : priority === "low"
-        ? { bg: "#F3F0EA", color: "#5A5A5A", label: "Low" }
+        ? { bg: "#F4F4F8", color: "#4B4C6B", label: "Low" }
         : null;
   if (!tone) return null;
   return (
@@ -139,14 +139,14 @@ function BriefCard({ brief }: { brief: Brief }) {
             style={{
               fontSize: 16,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.25px",
               lineHeight: 1.25,
             }}
           >
             {brief.name}
           </div>
-          <div style={{ fontSize: 10.5, color: "#9A9A9A" }}>
+          <div style={{ fontSize: 10.5, color: "#6E7090" }}>
             {brief.client} · {brief.market} · {brief.duration}
           </div>
         </div>
@@ -155,7 +155,7 @@ function BriefCard({ brief }: { brief: Brief }) {
       <p
         style={{
           fontSize: 12,
-          color: "#4D4945",
+          color: "#4B4C6B",
           lineHeight: 1.5,
           margin: "0 0 12px",
           display: "-webkit-box",
@@ -175,21 +175,21 @@ function BriefCard({ brief }: { brief: Brief }) {
           paddingTop: 10,
           borderTop: "0.5px solid rgba(0,0,0,0.06)",
           fontSize: 10.5,
-          color: "#5A5A5A",
+          color: "#4B4C6B",
         }}
       >
         <div>
-          <span style={{ color: "#161311", fontWeight: 600 }}>{open}</span>{" "}
-          <span style={{ color: "#9A9A9A" }}>of {total} roles open</span>
+          <span style={{ color: "#0E0F26", fontWeight: 600 }}>{open}</span>{" "}
+          <span style={{ color: "#6E7090" }}>of {total} roles open</span>
         </div>
         <span style={{ color: "rgba(0,0,0,0.15)" }}>·</span>
         <div>
-          <span style={{ color: "#161311", fontWeight: 600 }}>{applicants}</span>{" "}
-          <span style={{ color: "#9A9A9A" }}>
+          <span style={{ color: "#0E0F26", fontWeight: 600 }}>{applicants}</span>{" "}
+          <span style={{ color: "#6E7090" }}>
             applicant{applicants === 1 ? "" : "s"}
           </span>
         </div>
-        <div style={{ marginLeft: "auto", color: "#9A9A9A" }}>
+        <div style={{ marginLeft: "auto", color: "#6E7090" }}>
           Starts {brief.startDate}
           {brief.daysToStart !== null && ` · in ${brief.daysToStart}d`}
         </div>
@@ -239,7 +239,7 @@ export default function BriefBoardPage() {
               padding: "8px 16px",
               borderRadius: 100,
               border: "none",
-              background: "#161311",
+              background: "#0E0F26",
               color: "#FFFFFF",
               fontSize: 12,
               fontWeight: 500,
@@ -256,7 +256,7 @@ export default function BriefBoardPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 500,
@@ -269,15 +269,15 @@ export default function BriefBoardPage() {
             style={{
               fontSize: 28,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.4px",
               margin: "6px 0 4px",
             }}
           >
             Briefs
           </h1>
-          <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.6 }}>
-            Every active engagement at Inceptions. Each brief contains the scope, the
+          <div style={{ fontSize: 13, color: "#4B4C6B", maxWidth: 720, lineHeight: 1.6 }}>
+            Every active engagement at Fjord & Co. Each brief contains the scope, the
             client context, and the roles that still need staffing. Click any brief to read
             the detail and apply to a role.
           </div>
@@ -310,8 +310,8 @@ export default function BriefBoardPage() {
                   padding: "6px 12px",
                   borderRadius: 8,
                   border: "none",
-                  background: filter === f.key ? "#161311" : "transparent",
-                  color: filter === f.key ? "#FFFFFF" : "#4D4945",
+                  background: filter === f.key ? "#0E0F26" : "transparent",
+                  color: filter === f.key ? "#FFFFFF" : "#4B4C6B",
                   fontSize: 12,
                   fontWeight: 400,
                   cursor: "pointer",
@@ -341,8 +341,8 @@ export default function BriefBoardPage() {
                 padding: "6px 12px",
                 borderRadius: 8,
                 border: "none",
-                background: marketFilter === "all" ? "#161311" : "transparent",
-                color: marketFilter === "all" ? "#FFFFFF" : "#4D4945",
+                background: marketFilter === "all" ? "#0E0F26" : "transparent",
+                color: marketFilter === "all" ? "#FFFFFF" : "#4B4C6B",
                 fontSize: 12,
                 fontWeight: 400,
                 cursor: "pointer",
@@ -359,8 +359,8 @@ export default function BriefBoardPage() {
                   padding: "6px 12px",
                   borderRadius: 8,
                   border: "none",
-                  background: marketFilter === m ? "#161311" : "transparent",
-                  color: marketFilter === m ? "#FFFFFF" : "#4D4945",
+                  background: marketFilter === m ? "#0E0F26" : "transparent",
+                  color: marketFilter === m ? "#FFFFFF" : "#4B4C6B",
                   fontSize: 12,
                   fontWeight: 400,
                   cursor: "pointer",
@@ -381,7 +381,7 @@ export default function BriefBoardPage() {
               background: "#FFFFFF",
               border: "0.5px dashed rgba(0,0,0,0.12)",
               borderRadius: 14,
-              color: "#9A9A9A",
+              color: "#6E7090",
               fontSize: 13,
             }}
           >

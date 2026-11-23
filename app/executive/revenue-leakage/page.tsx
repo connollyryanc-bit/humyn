@@ -22,8 +22,8 @@ import { canSeeFinancials, useRole } from "../../components/role-context";
 import { RestrictedPage } from "../../components/restricted";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
-const EXEC_INK = "#161311";
-const EXEC_INK_SECONDARY = "#3A3633";
+const EXEC_INK = "#0E0F26";
+const EXEC_INK_SECONDARY = "#2A2B45";
 
 function fmtEur(value: number): string {
   if (value >= 1_000_000) return `€${(value / 1_000_000).toFixed(2)}M`;
@@ -89,7 +89,7 @@ export default function RevenueLeakagePage() {
           <div
             style={{
               fontSize: 11,
-              color: "#6F6B66",
+              color: "#5F6080",
               textTransform: "uppercase",
               letterSpacing: "0.14em",
               fontWeight: 600,
@@ -210,7 +210,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#6F6B66",
+        color: "#5F6080",
         textTransform: "uppercase",
         letterSpacing: "0.16em",
         fontWeight: 600,
@@ -235,11 +235,11 @@ function HeroStat({
 }) {
   const stripe =
     tone === "critical"
-      ? "#C4534A"
+      ? "#D93670"
       : tone === "warning"
-        ? "#B87A2E"
+        ? "#D9782F"
         : tone === "positive"
-          ? "#3D8A61"
+          ? "#7C5CE6"
           : EXEC_ACCENT;
   return (
     <div
@@ -258,13 +258,13 @@ function HeroStat({
       }}
     >
       <span aria-hidden style={{ position: "absolute", top: 0, left: 0, width: 2, height: "100%", background: stripe, opacity: 0.85 }} />
-      <div style={{ fontSize: 10, color: "#6F6B66", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 600 }}>
+      <div style={{ fontSize: 10, color: "#5F6080", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 600 }}>
         {label}
       </div>
       <div className="font-display" style={{ fontSize: 38, fontWeight: 600, color: EXEC_INK, letterSpacing: "-0.8px", lineHeight: 1.0 }}>
         {value}
       </div>
-      <div style={{ fontSize: 12, color: "#5A5754", lineHeight: 1.5, marginTop: "auto" }}>
+      <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.5, marginTop: "auto" }}>
         {detail}
       </div>
     </div>
@@ -287,16 +287,16 @@ function LeakageWaterfall({ items, total }: { items: LeakageItem[]; total: numbe
           const widthPct = (item.costEur / max) * 100;
           const recoverableWidth = (item.recoverable / 100) * widthPct;
           const trendColor =
-            item.trend === "up" ? "#C4534A" : item.trend === "down" ? "#3D8A61" : "#9A9A9A";
+            item.trend === "up" ? "#D93670" : item.trend === "down" ? "#7C5CE6" : "#6E7090";
           return (
             <div key={item.key} style={{ display: "grid", gridTemplateColumns: "180px 1fr 160px", gap: 16, alignItems: "center" }}>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 600, color: EXEC_INK, marginBottom: 2 }}>
                   {item.label}
                 </div>
-                <div style={{ fontSize: 11, color: "#6F6B66", lineHeight: 1.5 }}>{item.description}</div>
+                <div style={{ fontSize: 11, color: "#5F6080", lineHeight: 1.5 }}>{item.description}</div>
               </div>
-              <div style={{ position: "relative", height: 28, background: "#F3F0EA", borderRadius: 6, overflow: "hidden" }}>
+              <div style={{ position: "relative", height: 28, background: "#F4F4F8", borderRadius: 6, overflow: "hidden" }}>
                 <div
                   style={{
                     position: "absolute",
@@ -304,7 +304,7 @@ function LeakageWaterfall({ items, total }: { items: LeakageItem[]; total: numbe
                     top: 0,
                     bottom: 0,
                     width: `${widthPct}%`,
-                    background: "repeating-linear-gradient(45deg, #C4534A 0 6px, #B5483F 6px 12px)",
+                    background: "repeating-linear-gradient(45deg, #D93670 0 6px, #C22A63 6px 12px)",
                     opacity: 0.85,
                     borderRadius: 6,
                   }}
@@ -316,7 +316,7 @@ function LeakageWaterfall({ items, total }: { items: LeakageItem[]; total: numbe
                     top: 0,
                     bottom: 0,
                     width: `${recoverableWidth}%`,
-                    background: "#3D8A61",
+                    background: "#7C5CE6",
                     opacity: 0.85,
                     borderRadius: 6,
                   }}
@@ -348,11 +348,11 @@ function LeakageWaterfall({ items, total }: { items: LeakageItem[]; total: numbe
       >
         <div style={{ display: "flex", gap: 18, fontSize: 11, color: EXEC_INK_SECONDARY }}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ width: 12, height: 6, borderRadius: 2, background: "repeating-linear-gradient(45deg, #C4534A 0 3px, #B5483F 3px 6px)" }} />
+            <span style={{ width: 12, height: 6, borderRadius: 2, background: "repeating-linear-gradient(45deg, #D93670 0 3px, #C22A63 3px 6px)" }} />
             Leakage
           </span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ width: 12, height: 6, borderRadius: 2, background: "#3D8A61" }} />
+            <span style={{ width: 12, height: 6, borderRadius: 2, background: "#7C5CE6" }} />
             Recoverable share
           </span>
         </div>
@@ -412,14 +412,14 @@ function MonthlyTrendChart() {
           return (
             <g key={i}>
               <line x1={padding.left} x2={padding.left + innerW} y1={y} y2={y} stroke="rgba(0,0,0,0.06)" />
-              <text x={padding.left - 10} y={y + 4} textAnchor="end" style={{ fontSize: 10, fill: "#9A9A9A" }}>
+              <text x={padding.left - 10} y={y + 4} textAnchor="end" style={{ fontSize: 10, fill: "#6E7090" }}>
                 {fmtEur(v)}
               </text>
             </g>
           );
         })}
         {monthlyLeakage.map((m, i) => (
-          <text key={i} x={padding.left + i * xStep} y={H - 12} textAnchor="middle" style={{ fontSize: 10, fill: "#9A9A9A" }}>
+          <text key={i} x={padding.left + i * xStep} y={H - 12} textAnchor="middle" style={{ fontSize: 10, fill: "#6E7090" }}>
             {m.month}
           </text>
         ))}
@@ -434,23 +434,23 @@ function MonthlyTrendChart() {
               y={padding.top + innerH - h}
               width={barW}
               height={h}
-              fill="#C4534A"
+              fill="#D93670"
               opacity={0.85}
               rx={3}
             />
           );
         })}
-        {kind === "area" && <path d={areaPath} fill="#C4534A" opacity={0.1} />}
+        {kind === "area" && <path d={areaPath} fill="#D93670" opacity={0.1} />}
         {(kind === "area" || kind === "line") && (
           <>
-            <path d={path} fill="none" stroke="#C4534A" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+            <path d={path} fill="none" stroke="#D93670" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
             {monthlyLeakage.map((m, i) => (
               <circle
                 key={i}
                 cx={padding.left + i * xStep}
                 cy={padding.top + yScale(m.value)}
                 r={3.5}
-                fill="#C4534A"
+                fill="#D93670"
                 stroke="#FFFFFF"
                 strokeWidth={1.5}
               />
@@ -475,16 +475,16 @@ function MarketBreakdown() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: 28 }}>
         {leakageByMarket.map((m) => (
           <div key={m.market}>
-            <div style={{ fontSize: 11, color: "#6F6B66", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 8 }}>
+            <div style={{ fontSize: 11, color: "#5F6080", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 8 }}>
               {m.market}
             </div>
             <div className="font-display" style={{ fontSize: 32, fontWeight: 600, color: EXEC_INK, letterSpacing: "-0.6px", lineHeight: 1.0 }}>
               {fmtEur(m.ytd)}
             </div>
-            <div style={{ marginTop: 10, height: 4, background: "#F3F0EA", borderRadius: 2, overflow: "hidden" }}>
-              <div style={{ width: `${m.share * 2}%`, height: "100%", background: "#C4534A", opacity: 0.85 }} />
+            <div style={{ marginTop: 10, height: 4, background: "#F4F4F8", borderRadius: 2, overflow: "hidden" }}>
+              <div style={{ width: `${m.share * 2}%`, height: "100%", background: "#D93670", opacity: 0.85 }} />
             </div>
-            <div style={{ fontSize: 11, color: "#6F6B66", marginTop: 6 }}>{m.share}% of total leakage</div>
+            <div style={{ fontSize: 11, color: "#5F6080", marginTop: 6 }}>{m.share}% of total leakage</div>
           </div>
         ))}
       </div>
@@ -495,10 +495,10 @@ function MarketBreakdown() {
 function InsightCard({ insight }: { insight: LeakageAiInsight }) {
   const tone =
     insight.category === "biggest" || insight.category === "structural"
-      ? { color: "#C4534A", bg: "#FDF3F2", border: "#F0CECA" }
+      ? { color: "#D93670", bg: "#FFEEF4", border: "#FFCADB" }
       : insight.category === "fastest-growing"
-        ? { color: "#B87A2E", bg: "#FEF8EE", border: "#F2DCB0" }
-        : { color: "#3D8A61", bg: "#EFF8F3", border: "#B6E0CB" };
+        ? { color: "#D9782F", bg: "#FFF5EC", border: "#FFDCC2" }
+        : { color: "#7C5CE6", bg: "#F4F0FF", border: "#DCD1FF" };
   return (
     <div
       style={{

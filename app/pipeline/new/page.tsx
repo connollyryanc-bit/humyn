@@ -19,14 +19,14 @@ export default function NewJobPage() {
       <main style={{ maxWidth: 920, margin: "0 auto", padding: "28px 32px 40px" }}>
         <Link
           href="/pipeline"
-          style={{ fontSize: 12, color: "#5A5A5A", textDecoration: "none" }}
+          style={{ fontSize: 12, color: "#4B4C6B", textDecoration: "none" }}
         >
           ← All jobs
         </Link>
         <div
           style={{
             fontSize: 11,
-            color: "#9A9A9A",
+            color: "#6E7090",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
             fontWeight: 500,
@@ -40,14 +40,14 @@ export default function NewJobPage() {
           style={{
             fontSize: 28,
             fontWeight: 600,
-            color: "#161311",
+            color: "#0E0F26",
             letterSpacing: "-0.5px",
             margin: "6px 0 4px",
           }}
         >
           Create a job
         </h1>
-        <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.6, marginBottom: 24 }}>
+        <div style={{ fontSize: 13, color: "#4B4C6B", maxWidth: 720, lineHeight: 1.6, marginBottom: 24 }}>
           Five-step flow. Each step is a discrete block of the form. Save as draft at
           any point; only published jobs surface on the career site.
         </div>
@@ -71,14 +71,14 @@ export default function NewJobPage() {
                   width: 32,
                   height: 32,
                   borderRadius: "50%",
-                  background: "#FAFAF8",
+                  background: "#F7F7FA",
                   border: "0.5px solid rgba(0,0,0,0.07)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: 13,
                   fontWeight: 600,
-                  color: "#4D4945",
+                  color: "#4B4C6B",
                   flexShrink: 0,
                 }}
               >
@@ -89,13 +89,13 @@ export default function NewJobPage() {
                   style={{
                     fontSize: 15,
                     fontWeight: 600,
-                    color: "#161311",
+                    color: "#0E0F26",
                     marginBottom: 4,
                   }}
                 >
                   {s.label}
                 </div>
-                <div style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.55 }}>
+                <div style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.55 }}>
                   {s.body}
                 </div>
               </div>
@@ -107,7 +107,7 @@ export default function NewJobPage() {
           style={{
             marginTop: 18,
             fontSize: 11,
-            color: "#9A9A9A",
+            color: "#6E7090",
             lineHeight: 1.55,
           }}
         >

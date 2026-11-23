@@ -78,7 +78,7 @@ export const scenarios: Scenario[] = [
     shortTitle: "Major deal win",
     category: "growth",
     description: "Land an unstaffed brief as a confirmed engagement. Project revenue, capacity hit, delivery confidence and skill demands.",
-    context: "Models the impact of converting one in-pipeline opportunity into a confirmed engagement. Volvo Cars extension is the marquee example at €3.8M.",
+    context: "Models the impact of converting one in-pipeline opportunity into a confirmed engagement. Ardent Motors extension is the marquee example at €3.8M.",
     inputs: [
       { key: "dealValueEur", label: "Deal value",     unit: "€",   min: 200_000,  max: 5_000_000, step: 100_000, defaultValue: 3_800_000 },
       { key: "durationMonths", label: "Duration",    unit: "mo",  min: 2,        max: 24,        step: 1,        defaultValue: 12 },
@@ -109,7 +109,7 @@ export const scenarios: Scenario[] = [
           delta: `+${utilProjected - BASELINE.utilisationPct}pp`,
           tone: utilProjected >= 90 ? "critical" : utilProjected >= 85 ? "warning" : "positive",
           narrative: `${capacityDaysNeeded.toLocaleString()} FTE-days needed in the next 90 days. ${
-            utilProjected >= 90 ? "Pushes utilisation above the burnout threshold." : "Lifts utilisation toward target."
+            utilProjected >= 90 ? "Pushes utilisation above the overload threshold." : "Lifts utilisation toward target."
           }`,
         },
         {
@@ -139,7 +139,7 @@ export const scenarios: Scenario[] = [
     shortTitle: "Major client loss",
     category: "downside",
     description: "Simulate losing a top-3 client mid-contract. Project the revenue cliff, bench impact, and rebound capacity.",
-    context: "Worst-case stress test. Klarna is currently the largest single account at €2.4M ARR; models that scale of disruption.",
+    context: "Worst-case stress test. Payflow is currently the largest single account at €2.4M ARR; models that scale of disruption.",
     inputs: [
       { key: "annualRevenueLossEur", label: "Annualised revenue lost", unit: "€",   min: 500_000, max: 5_000_000, step: 100_000, defaultValue: 2_400_000 },
       { key: "fteOnContract",       label: "FTEs on the contract",     unit: "FTE", min: 3,       max: 25,        step: 1,        defaultValue: 9 },
@@ -221,7 +221,7 @@ export const scenarios: Scenario[] = [
           projected: `${Math.min(100, BASELINE.utilisationPct + Math.round(freezeMonths * 1.2))}%`,
           delta: `+${Math.round(freezeMonths * 1.2)}pp`,
           tone: "warning",
-          narrative: "Existing workforce absorbs more demand. Burnout risk rises across high-criticality practices.",
+          narrative: "Existing workforce absorbs more demand. Overload risk rises across high-criticality practices.",
         },
         {
           dimension: "delivery",

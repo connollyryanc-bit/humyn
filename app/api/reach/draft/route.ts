@@ -30,7 +30,7 @@ interface Body {
 const ENERGY_GUIDE = `Message style by energy type (Humyn Pulse Map):
 - Driver (action-focused): short, direct, outcome first, one clear next step, under 90 words.
 - Energizer (people-focused): warm, personable, idea-led, enthusiastic, suggests a conversation.
-- Supporter (harmony-focused): gentle, low pressure, trust-led, acknowledges their team, never pushes urgency.
+- Harmoniser (harmony-focused): gentle, low pressure, trust-led, acknowledges their team, never pushes urgency.
 - Analyst (process-focused): structured, specific, evidence-based, includes a concrete data point, lets them review before meeting.`;
 
 const SYSTEM = `You are the message strategist inside Humyn Reach, a sales outreach tool.

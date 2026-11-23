@@ -30,9 +30,9 @@ export function scoreProspect(p: Prospect, cfg: ScoringConfig): ScoreResult {
 }
 
 export const GRADE_STYLE: Record<Grade, { label: string; color: string; bg: string; text: string }> = {
-  hot: { label: "Hot", color: "#E8402A", bg: "#FDF0EE", text: "#9B2A1A" },
-  warm: { label: "Warm", color: "#F5A623", bg: "#FFFBF2", text: "#8B5A00" },
-  cold: { label: "Cold", color: "#9A9A9A", bg: "#F3F0EA", text: "#4D4945" },
+  hot: { label: "Hot", color: "#F23D7A", bg: "#FFE8F0", text: "#B0154F" },
+  warm: { label: "Warm", color: "#FF9F5A", bg: "#FFF0E4", text: "#A04A0C" },
+  cold: { label: "Cold", color: "#6E7090", bg: "#F4F4F8", text: "#4B4C6B" },
 };
 
 export function renderTemplate(

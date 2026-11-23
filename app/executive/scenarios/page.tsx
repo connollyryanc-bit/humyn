@@ -18,14 +18,14 @@ import { ScopeBreadcrumb } from "../scope-breadcrumb";
 import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
-const EXEC_INK = "#161311";
-const EXEC_INK_SECONDARY = "#3A3633";
+const EXEC_INK = "#0E0F26";
+const EXEC_INK_SECONDARY = "#2A2B45";
 
 const TONE_COLOURS: Record<ImpactTone, { color: string; bg: string; border: string }> = {
-  positive: { color: "#3D8A61", bg: "#EFF8F3", border: "#B6E0CB" },
-  warning:  { color: "#B87A2E", bg: "#FEF8EE", border: "#F2DCB0" },
-  critical: { color: "#C4534A", bg: "#FDF3F2", border: "#F0CECA" },
-  neutral:  { color: "#5A5754", bg: "#F3F0EA", border: "rgba(0,0,0,0.08)" },
+  positive: { color: "#7C5CE6", bg: "#F4F0FF", border: "#DCD1FF" },
+  warning:  { color: "#D9782F", bg: "#FFF5EC", border: "#FFDCC2" },
+  critical: { color: "#D93670", bg: "#FFEEF4", border: "#FFCADB" },
+  neutral:  { color: "#4B4C6B", bg: "#F4F4F8", border: "rgba(0,0,0,0.08)" },
 };
 
 const DIMENSION_LABELS: Record<ScenarioImpact["dimension"], { label: string; icon: string }> = {
@@ -36,10 +36,10 @@ const DIMENSION_LABELS: Record<ScenarioImpact["dimension"], { label: string; ico
 };
 
 const CATEGORY_LABELS: Record<Scenario["category"], { label: string; color: string }> = {
-  growth:       { label: "Growth",       color: "#3D8A61" },
-  downside:     { label: "Downside",     color: "#C4534A" },
+  growth:       { label: "Growth",       color: "#7C5CE6" },
+  downside:     { label: "Downside",     color: "#D93670" },
   structural:   { label: "Structural",   color: EXEC_ACCENT },
-  productivity: { label: "Productivity", color: "#B87A2E" },
+  productivity: { label: "Productivity", color: "#D9782F" },
 };
 
 export default function ScenariosPage() {
@@ -79,7 +79,7 @@ export default function ScenariosPage() {
         </Link>
 
         <section style={{ marginBottom: 32 }}>
-          <div style={{ fontSize: 11, color: "#6F6B66", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 600 }}>
+          <div style={{ fontSize: 11, color: "#5F6080", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 600 }}>
             Executive · Scenario planning
           </div>
           <h1
@@ -159,10 +159,10 @@ function ScenarioList({
       <div
         style={{
           padding: "14px 18px",
-          background: "#FAFAF8",
+          background: "#F7F7FA",
           borderBottom: "0.5px solid rgba(0,0,0,0.06)",
           fontSize: 10,
-          color: "#6F6B66",
+          color: "#5F6080",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
           fontWeight: 600,
@@ -183,7 +183,7 @@ function ScenarioList({
               textAlign: "left",
               padding: "14px 18px",
               border: "none",
-              background: isSelected ? "#F3F0EA" : "transparent",
+              background: isSelected ? "#F4F4F8" : "transparent",
               borderTop: "0.5px solid rgba(0,0,0,0.04)",
               cursor: "pointer",
               fontFamily: "inherit",
@@ -301,7 +301,7 @@ function ScenarioDetail({
         <p style={{ fontSize: 14, color: EXEC_INK_SECONDARY, lineHeight: 1.65, margin: "0 0 14px" }}>
           {scenario.description}
         </p>
-        <p style={{ fontSize: 13, color: "#6F6B66", lineHeight: 1.65, margin: 0 }}>{scenario.context}</p>
+        <p style={{ fontSize: 13, color: "#5F6080", lineHeight: 1.65, margin: 0 }}>{scenario.context}</p>
       </div>
 
       <div
@@ -348,7 +348,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#6F6B66",
+        color: "#5F6080",
         textTransform: "uppercase",
         letterSpacing: "0.16em",
         fontWeight: 600,
@@ -431,7 +431,7 @@ function ImpactCard({ impact }: { impact: ScenarioImpact }) {
         >
           {dim.icon}
         </span>
-        <span style={{ fontSize: 11, color: "#6F6B66", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>
+        <span style={{ fontSize: 11, color: "#5F6080", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>
           {dim.label}
         </span>
       </div>
@@ -440,14 +440,14 @@ function ImpactCard({ impact }: { impact: ScenarioImpact }) {
       </div>
       <div style={{ display: "flex", alignItems: "baseline", gap: 14, flexWrap: "wrap" }}>
         <div>
-          <div style={{ fontSize: 10, color: "#9A9A9A", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 2 }}>
+          <div style={{ fontSize: 10, color: "#6E7090", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 2 }}>
             Baseline
           </div>
-          <div className="font-display" style={{ fontSize: 18, fontWeight: 500, color: "#6F6B66", letterSpacing: "-0.2px" }}>
+          <div className="font-display" style={{ fontSize: 18, fontWeight: 500, color: "#5F6080", letterSpacing: "-0.2px" }}>
             {impact.baseline}
           </div>
         </div>
-        <span aria-hidden style={{ color: "#D1CDC4", fontSize: 16 }}>→</span>
+        <span aria-hidden style={{ color: "#D3D2DE", fontSize: 16 }}>→</span>
         <div>
           <div style={{ fontSize: 10, color: tone.color, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 2 }}>
             Projected

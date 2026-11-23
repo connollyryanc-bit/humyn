@@ -35,7 +35,7 @@ export function RestrictedPage({
           href={backHref}
           style={{
             fontSize: 12,
-            color: "#3A3633",
+            color: "#2A2B45",
             textDecoration: "none",
             display: "inline-block",
             marginBottom: 24,
@@ -47,7 +47,7 @@ export function RestrictedPage({
           <div
             style={{
               fontSize: 11,
-              color: "#6F6B66",
+              color: "#5F6080",
               textTransform: "uppercase",
               letterSpacing: "0.14em",
               fontWeight: 600,
@@ -62,14 +62,14 @@ export function RestrictedPage({
           style={{
             fontSize: 36,
             fontWeight: 600,
-            color: "#161311",
+            color: "#0E0F26",
             letterSpacing: "-0.8px",
             margin: "0 0 16px",
           }}
         >
           {title}
         </h1>
-        <p style={{ fontSize: 15, color: "#3A3633", lineHeight: 1.7, margin: "0 0 24px" }}>
+        <p style={{ fontSize: 15, color: "#2A2B45", lineHeight: 1.7, margin: "0 0 24px" }}>
           {reason}
         </p>
         <div
@@ -84,7 +84,7 @@ export function RestrictedPage({
           <div
             style={{
               fontSize: 11,
-              color: "#6F6B66",
+              color: "#5F6080",
               textTransform: "uppercase",
               letterSpacing: "0.1em",
               fontWeight: 600,
@@ -100,10 +100,10 @@ export function RestrictedPage({
                 style={{
                   padding: "4px 10px",
                   borderRadius: 100,
-                  background: "#F3F0EA",
+                  background: "#F4F4F8",
                   border: "0.5px solid rgba(0,0,0,0.08)",
                   fontSize: 11.5,
-                  color: "#161311",
+                  color: "#0E0F26",
                   fontWeight: 500,
                 }}
               >
@@ -111,10 +111,10 @@ export function RestrictedPage({
               </span>
             ))}
           </div>
-          <div style={{ marginTop: 14, fontSize: 12, color: "#5A5754", lineHeight: 1.5 }}>
-            You're currently viewing as <strong style={{ color: "#161311" }}>{ROLE_LABEL[role]}</strong>
+          <div style={{ marginTop: 14, fontSize: 12, color: "#4B4C6B", lineHeight: 1.5 }}>
+            You're currently viewing as <strong style={{ color: "#0E0F26" }}>{ROLE_LABEL[role]}</strong>
             {isImpersonating && (
-              <> (your real role is <strong style={{ color: "#161311" }}>{ROLE_LABEL[realRole]}</strong>)</>
+              <> (your real role is <strong style={{ color: "#0E0F26" }}>{ROLE_LABEL[realRole]}</strong>)</>
             )}
             .
             {isImpersonating && (
@@ -127,7 +127,7 @@ export function RestrictedPage({
                     background: "transparent",
                     border: "none",
                     padding: 0,
-                    color: "#FF5040",
+                    color: "#7B4DFF",
                     cursor: "pointer",
                     fontFamily: "inherit",
                     fontSize: 12,
@@ -168,7 +168,7 @@ export function RestrictedSection({
       <div
         style={{
           fontSize: 11,
-          color: "#6F6B66",
+          color: "#5F6080",
           textTransform: "uppercase",
           letterSpacing: "0.12em",
           fontWeight: 600,
@@ -177,7 +177,7 @@ export function RestrictedSection({
       >
         {title}
       </div>
-      <div style={{ fontSize: 14, color: "#3A3633", lineHeight: 1.6, marginBottom: 12 }}>
+      <div style={{ fontSize: 14, color: "#2A2B45", lineHeight: 1.6, marginBottom: 12 }}>
         {reason}
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
@@ -187,10 +187,10 @@ export function RestrictedSection({
             style={{
               padding: "3px 9px",
               borderRadius: 100,
-              background: "#F3F0EA",
+              background: "#F4F4F8",
               border: "0.5px solid rgba(0,0,0,0.08)",
               fontSize: 11,
-              color: "#161311",
+              color: "#0E0F26",
               fontWeight: 500,
             }}
           >

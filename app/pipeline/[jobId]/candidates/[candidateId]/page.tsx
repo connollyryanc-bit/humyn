@@ -48,14 +48,14 @@ export default function CandidateProfilePage() {
         <div style={{ marginBottom: 22 }}>
           <Link
             href={`/pipeline/${jobIdNum}`}
-            style={{ fontSize: 12, color: "#5A5A5A", textDecoration: "none" }}
+            style={{ fontSize: 12, color: "#4B4C6B", textDecoration: "none" }}
           >
             ← Back to {job?.internalTitle ?? "job"}
           </Link>
         </div>
 
         {!candidate ? (
-          <div style={{ fontSize: 14, color: "#9A9A9A" }}>Candidate not found.</div>
+          <div style={{ fontSize: 14, color: "#6E7090" }}>Candidate not found.</div>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "minmax(320px, 1fr) minmax(420px, 1.4fr)", gap: 20 }}>
             <PulseColumn candidate={candidate} />
@@ -93,8 +93,8 @@ function PulseColumn({ candidate }: { candidate: ReturnType<typeof seedCandidate
             width: 56,
             height: 56,
             borderRadius: "50%",
-            background: e ? e.bg : "#F3F0EA",
-            color: e ? e.text : "#5A5A5A",
+            background: e ? e.bg : "#F4F4F8",
+            color: e ? e.text : "#4B4C6B",
             border: `1.5px solid ${e ? e.color : "rgba(0,0,0,0.15)"}`,
             display: "flex",
             alignItems: "center",
@@ -107,10 +107,10 @@ function PulseColumn({ candidate }: { candidate: ReturnType<typeof seedCandidate
           {initialsOf(candidate.name)}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div className="font-display" style={{ fontSize: 20, fontWeight: 600, color: "#161311", letterSpacing: "-0.3px" }}>
+          <div className="font-display" style={{ fontSize: 20, fontWeight: 600, color: "#0E0F26", letterSpacing: "-0.3px" }}>
             {candidate.name}
           </div>
-          <div style={{ fontSize: 12, color: "#5A5A5A", marginTop: 4 }}>
+          <div style={{ fontSize: 12, color: "#4B4C6B", marginTop: 4 }}>
             {candidate.location} · {candidate.source}
             {candidate.isInternal && (
               <span
@@ -118,8 +118,8 @@ function PulseColumn({ candidate }: { candidate: ReturnType<typeof seedCandidate
                   marginLeft: 8,
                   fontSize: 10,
                   fontWeight: 600,
-                  color: "#3D8A61",
-                  background: "#EFF8F3",
+                  color: "#7C5CE6",
+                  background: "#F4F0FF",
                   padding: "2px 6px",
                   borderRadius: 100,
                   letterSpacing: "0.05em",
@@ -138,7 +138,7 @@ function PulseColumn({ candidate }: { candidate: ReturnType<typeof seedCandidate
             <div
               style={{
                 fontSize: 10,
-                color: "#9A9A9A",
+                color: "#6E7090",
                 textTransform: "uppercase",
                 letterSpacing: "0.1em",
                 fontWeight: 600,
@@ -151,7 +151,7 @@ function PulseColumn({ candidate }: { candidate: ReturnType<typeof seedCandidate
               style={{
                 fontSize: 13,
                 fontWeight: 600,
-                color: e ? e.text : "#161311",
+                color: e ? e.text : "#0E0F26",
                 marginBottom: 14,
               }}
             >
@@ -165,14 +165,14 @@ function PulseColumn({ candidate }: { candidate: ReturnType<typeof seedCandidate
               style={{
                 padding: "12px 14px",
                 borderRadius: 10,
-                background: "#EFF8F3",
-                border: "0.5px solid #B6E0CB",
+                background: "#F4F0FF",
+                border: "0.5px solid #DCD1FF",
               }}
             >
               <div
                 style={{
                   fontSize: 10,
-                  color: "#3D8A61",
+                  color: "#7C5CE6",
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
                   fontWeight: 600,
@@ -181,10 +181,10 @@ function PulseColumn({ candidate }: { candidate: ReturnType<typeof seedCandidate
               >
                 Team fit
               </div>
-              <div style={{ fontSize: 22, color: "#3D8A61", fontWeight: 600, letterSpacing: "-0.4px" }}>
+              <div style={{ fontSize: 22, color: "#7C5CE6", fontWeight: 600, letterSpacing: "-0.4px" }}>
                 {candidate.teamFitScore}%
               </div>
-              <div style={{ fontSize: 11, color: "#3D8A61", marginTop: 2 }}>
+              <div style={{ fontSize: 11, color: "#7C5CE6", marginTop: 2 }}>
                 Match against the team this role joins
               </div>
             </div>
@@ -194,9 +194,9 @@ function PulseColumn({ candidate }: { candidate: ReturnType<typeof seedCandidate
         <div
           style={{
             fontSize: 12,
-            color: "#9A9A9A",
+            color: "#6E7090",
             padding: "16px 14px",
-            background: "#FAFAF8",
+            background: "#F7F7FA",
             borderRadius: 10,
             lineHeight: 1.55,
           }}
@@ -212,8 +212,8 @@ function PulseColumn({ candidate }: { candidate: ReturnType<typeof seedCandidate
               key={t}
               style={{
                 fontSize: 10,
-                color: "#5A5A5A",
-                background: "#FAFAF8",
+                color: "#4B4C6B",
+                background: "#F7F7FA",
                 border: "0.5px solid rgba(0,0,0,0.07)",
                 padding: "3px 9px",
                 borderRadius: 100,
@@ -235,8 +235,8 @@ function EnergyBars({ scores }: { scores: Record<EnergyKey, number> }) {
       {order.map((k) => (
         <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
           <span style={{ width: 6, height: 6, borderRadius: "50%", background: energy[k].color, flexShrink: 0 }} />
-          <span style={{ fontSize: 11, color: "#5A5A5A", width: 80 }}>{energy[k].label}</span>
-          <div style={{ flex: 1, height: 4, background: "#EDEDEA", borderRadius: 2, overflow: "hidden" }}>
+          <span style={{ fontSize: 11, color: "#4B4C6B", width: 80 }}>{energy[k].label}</span>
+          <div style={{ flex: 1, height: 4, background: "#ECEBF2", borderRadius: 2, overflow: "hidden" }}>
             <div
               style={{
                 width: `${scores[k]}%`,
@@ -246,7 +246,7 @@ function EnergyBars({ scores }: { scores: Record<EnergyKey, number> }) {
               }}
             />
           </div>
-          <span style={{ fontSize: 11, color: "#9A9A9A", width: 28, textAlign: "right" }}>
+          <span style={{ fontSize: 11, color: "#6E7090", width: 28, textAlign: "right" }}>
             {scores[k]}%
           </span>
         </div>
@@ -293,7 +293,7 @@ function ActivityColumn({
           <div
             style={{
               fontSize: 10,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.1em",
               fontWeight: 600,
@@ -306,7 +306,7 @@ function ActivityColumn({
             style={{
               fontSize: 14,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               display: "inline-flex",
               alignItems: "center",
               gap: 8,
@@ -318,9 +318,9 @@ function ActivityColumn({
             {stageMeta?.label ?? candidate.currentStage}
           </div>
         </div>
-        <div style={{ fontSize: 14, color: "#D4974A", letterSpacing: "0.05em" }}>
+        <div style={{ fontSize: 14, color: "#FF9F5A", letterSpacing: "0.05em" }}>
           {"★".repeat(candidate.rating)}
-          <span style={{ color: "#EDEDEA" }}>{"☆".repeat(5 - candidate.rating)}</span>
+          <span style={{ color: "#ECEBF2" }}>{"☆".repeat(5 - candidate.rating)}</span>
         </div>
       </div>
 
@@ -334,8 +334,8 @@ function ActivityColumn({
               borderRadius: 8,
               fontSize: 12,
               fontWeight: 400,
-              background: tab === t.key ? "#161311" : "transparent",
-              color: tab === t.key ? "#FFFFFF" : "#4D4945",
+              background: tab === t.key ? "#0E0F26" : "transparent",
+              color: tab === t.key ? "#FFFFFF" : "#4B4C6B",
               border: tab === t.key ? "none" : "0.5px solid rgba(0,0,0,0.07)",
               cursor: "pointer",
               fontFamily: "inherit",
@@ -389,15 +389,15 @@ function ActivityFeed({
             display: "flex",
             gap: 12,
             padding: "10px 12px",
-            background: "#FAFAF8",
+            background: "#F7F7FA",
             borderRadius: 10,
             border: "0.5px solid rgba(0,0,0,0.05)",
           }}
         >
-          <div style={{ fontSize: 11, color: "#9A9A9A", width: 90, flexShrink: 0 }}>{it.when}</div>
+          <div style={{ fontSize: 11, color: "#6E7090", width: 90, flexShrink: 0 }}>{it.when}</div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 12.5, color: "#161311" }}>{it.what}</div>
-            <div style={{ fontSize: 11, color: "#9A9A9A", marginTop: 2 }}>by {it.who}</div>
+            <div style={{ fontSize: 12.5, color: "#0E0F26" }}>{it.what}</div>
+            <div style={{ fontSize: 11, color: "#6E7090", marginTop: 2 }}>by {it.who}</div>
           </div>
         </li>
       ))}
@@ -410,10 +410,10 @@ function PlaceholderBlock({ body }: { body: string }) {
     <div
       style={{
         padding: "20px 18px",
-        background: "#FAFAF8",
+        background: "#F7F7FA",
         borderRadius: 10,
         fontSize: 12.5,
-        color: "#5A5A5A",
+        color: "#4B4C6B",
         lineHeight: 1.6,
       }}
     >

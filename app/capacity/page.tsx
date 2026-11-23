@@ -21,9 +21,9 @@ function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
     <span
       className="font-display"
-      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
+      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#0E0F26" }}
     >
-      hum<span style={{ color: "#FF5040" }}>y</span>n
+      hum<span style={{ background: "linear-gradient(120deg, #3355E8 0%, #7B4DFF 34%, #F23D7A 68%, #FF9F5A 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>y</span>n
     </span>
   );
 }
@@ -107,7 +107,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textTransform: "uppercase",
         letterSpacing: "0.08em",
         fontWeight: 500,
@@ -160,7 +160,7 @@ function StatCard({
       <div
         style={{
           fontSize: 10,
-          color: "#9A9A9A",
+          color: "#6E7090",
           textTransform: "uppercase",
           letterSpacing: "0.08em",
           fontWeight: 500,
@@ -180,7 +180,7 @@ function StatCard({
         {value}
       </div>
       {detail && (
-        <div style={{ fontSize: 11, color: "#9A9A9A", lineHeight: 1.4 }}>{detail}</div>
+        <div style={{ fontSize: 11, color: "#6E7090", lineHeight: 1.4 }}>{detail}</div>
       )}
     </div>
   );
@@ -190,7 +190,7 @@ function RiskCard({ person }: { person: PersonWithCapacity }) {
   const tone = riskTone[person.capacity.riskLevel];
   const loyalty = person.capacity.loyaltyScore;
   const loyaltyColour =
-    loyalty < 50 ? "#E8402A" : loyalty < 70 ? "#F5A623" : "#2E8B57";
+    loyalty < 50 ? "#F23D7A" : loyalty < 70 ? "#FF9F5A" : "#9B7CFF";
 
   return (
     <div
@@ -215,7 +215,7 @@ function RiskCard({ person }: { person: PersonWithCapacity }) {
               style={{
                 fontSize: 15,
                 fontWeight: 600,
-                color: "#161311",
+                color: "#0E0F26",
                 letterSpacing: "-0.2px",
               }}
             >
@@ -223,7 +223,7 @@ function RiskCard({ person }: { person: PersonWithCapacity }) {
             </Link>
             <EnergyBadge k={person.primary} />
           </div>
-          <div style={{ fontSize: 12, color: "#5A5A5A", marginTop: 2 }}>
+          <div style={{ fontSize: 12, color: "#4B4C6B", marginTop: 2 }}>
             {person.role} · {person.location}
             {person.capacity.currentProject ? ` · ${person.capacity.currentProject}` : ""}
           </div>
@@ -237,7 +237,7 @@ function RiskCard({ person }: { person: PersonWithCapacity }) {
             display: "flex",
             justifyContent: "space-between",
             fontSize: 10,
-            color: "#9A9A9A",
+            color: "#6E7090",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
             fontWeight: 500,
@@ -247,7 +247,7 @@ function RiskCard({ person }: { person: PersonWithCapacity }) {
           <span>Loyalty score</span>
           <span style={{ color: loyaltyColour, fontWeight: 700 }}>{loyalty}/100</span>
         </div>
-        <div style={{ height: 6, background: "#EDEDEA", borderRadius: 4, overflow: "hidden" }}>
+        <div style={{ height: 6, background: "#ECEBF2", borderRadius: 4, overflow: "hidden" }}>
           <div
             style={{
               width: `${loyalty}%`,
@@ -273,7 +273,7 @@ function RiskCard({ person }: { person: PersonWithCapacity }) {
                   flexShrink: 0,
                 }}
               />
-              <span style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.5 }}>{r}</span>
+              <span style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.5 }}>{r}</span>
             </div>
           ))}
         </div>
@@ -290,7 +290,7 @@ function RiskCard({ person }: { person: PersonWithCapacity }) {
         <div
           style={{
             fontSize: 10,
-            color: "#9A9A9A",
+            color: "#6E7090",
             textTransform: "uppercase",
             letterSpacing: "0.08em",
             fontWeight: 600,
@@ -299,7 +299,7 @@ function RiskCard({ person }: { person: PersonWithCapacity }) {
         >
           Recommended action
         </div>
-        <div style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.55 }}>
+        <div style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.55 }}>
           {person.capacity.recommendedAction}
         </div>
       </div>
@@ -326,25 +326,25 @@ function AllClearRow({ person }: { person: PersonWithCapacity }) {
           width: 22,
           height: 22,
           borderRadius: "50%",
-          background: "#EEF7F2",
-          color: "#1A5C38",
+          background: "#F1ECFF",
+          color: "#5B37D6",
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
           fontSize: 12,
           fontWeight: 700,
           flexShrink: 0,
-          border: "0.5px solid #9ED4B8",
+          border: "0.5px solid #D2C5FF",
         }}
       >
         ✓
       </span>
       <Avatar person={person} size={28} />
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>{person.name}</div>
-        <div style={{ fontSize: 11, color: "#9A9A9A" }}>Stable — no immediate action needed</div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>{person.name}</div>
+        <div style={{ fontSize: 11, color: "#6E7090" }}>Stable — no immediate action needed</div>
       </div>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#1A5C38" }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#5B37D6" }}>
         {person.capacity.loyaltyScore}
       </div>
     </div>
@@ -360,7 +360,7 @@ function UtilisationRow({ person }: { person: PersonWithCapacity }) {
         style={{
           fontSize: 13,
           fontWeight: 600,
-          color: "#161311",
+          color: "#0E0F26",
           width: 140,
           minWidth: 0,
           overflow: "hidden",
@@ -373,7 +373,7 @@ function UtilisationRow({ person }: { person: PersonWithCapacity }) {
         </Link>
       </div>
       <div style={{ flex: 1, position: "relative" }}>
-        <div style={{ height: 5, background: "#EDEDEA", borderRadius: 4 }}>
+        <div style={{ height: 5, background: "#ECEBF2", borderRadius: 4 }}>
           <div
             style={{
               width: `${Math.min(person.utilisation, 100)}%`,
@@ -407,7 +407,7 @@ function UtilisationRow({ person }: { person: PersonWithCapacity }) {
       >
         {person.utilisation}%
       </div>
-      {person.capacity.burnoutRisk && (
+      {person.capacity.overloadRisk && (
         <span
           style={{
             display: "inline-flex",
@@ -415,15 +415,15 @@ function UtilisationRow({ person }: { person: PersonWithCapacity }) {
             gap: 4,
             padding: "2px 8px",
             borderRadius: 100,
-            background: "#FFFBF2",
-            color: "#8B5A00",
-            border: "0.5px solid #FAD98A",
+            background: "#FFF0E4",
+            color: "#A04A0C",
+            border: "0.5px solid #FFD2B0",
             fontSize: 10,
             fontWeight: 600,
             whiteSpace: "nowrap",
           }}
         >
-          ⚠ Burnout risk
+          ⚠ Overload risk
         </span>
       )}
     </div>
@@ -432,7 +432,7 @@ function UtilisationRow({ person }: { person: PersonWithCapacity }) {
 
 function BenchRow({ person, maxDays }: { person: PersonWithCapacity; maxDays: number }) {
   const days = person.capacity.benchDays;
-  const colour = days > 14 ? "#E8402A" : days > 7 ? "#F5A623" : "#2E8B57";
+  const colour = days > 14 ? "#F23D7A" : days > 7 ? "#FF9F5A" : "#9B7CFF";
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0" }}>
       <Avatar person={person} size={28} />
@@ -440,7 +440,7 @@ function BenchRow({ person, maxDays }: { person: PersonWithCapacity; maxDays: nu
         style={{
           fontSize: 13,
           fontWeight: 600,
-          color: "#161311",
+          color: "#0E0F26",
           width: 140,
           minWidth: 0,
           overflow: "hidden",
@@ -452,7 +452,7 @@ function BenchRow({ person, maxDays }: { person: PersonWithCapacity; maxDays: nu
           {person.name}
         </Link>
       </div>
-      <div style={{ flex: 1, height: 5, background: "#EDEDEA", borderRadius: 4 }}>
+      <div style={{ flex: 1, height: 5, background: "#ECEBF2", borderRadius: 4 }}>
         <div
           style={{
             width: `${Math.min((days / Math.max(maxDays, 28)) * 100, 100)}%`,
@@ -489,8 +489,8 @@ function CostMetric({
   return (
     <div
       style={{
-        background: emphasis ? "#FDF0EE" : "#FAFAF8",
-        border: `0.5px solid ${emphasis ? "#FCCDC6" : "rgba(0,0,0,0.07)"}`,
+        background: emphasis ? "#FFE8F0" : "#F7F7FA",
+        border: `0.5px solid ${emphasis ? "#FFC2D7" : "rgba(0,0,0,0.07)"}`,
         borderRadius: 10,
         padding: "12px 14px",
       }}
@@ -498,7 +498,7 @@ function CostMetric({
       <div
         style={{
           fontSize: 10,
-          color: emphasis ? "#9B2A1A" : "#9A9A9A",
+          color: emphasis ? "#B0154F" : "#6E7090",
           textTransform: "uppercase",
           letterSpacing: "0.08em",
           fontWeight: 600,
@@ -512,7 +512,7 @@ function CostMetric({
         style={{
           fontSize: 20,
           fontWeight: 700,
-          color: emphasis ? "#9B2A1A" : "#161311",
+          color: emphasis ? "#B0154F" : "#0E0F26",
           letterSpacing: "-0.3px",
         }}
       >
@@ -627,10 +627,10 @@ export default function CapacityPage() {
     return (
       <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.compass, padding: 32 }}>
         <div style={{ maxWidth: 720, margin: "60px auto", textAlign: "center" }}>
-          <h1 className="font-display" style={{ fontSize: 24, color: "#161311" }}>
+          <h1 className="font-display" style={{ fontSize: 24, color: "#0E0F26" }}>
             No capacity data yet
           </h1>
-          <p style={{ fontSize: 14, color: "#5A5A5A", marginTop: 10, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 14, color: "#4B4C6B", marginTop: 10, lineHeight: 1.6 }}>
             Seed the database by POSTing to <code>/api/seed</code>, or add people via the
             directory.
           </p>
@@ -656,20 +656,20 @@ export default function CapacityPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 500,
             }}
           >
-            Compass · Inceptions · Live
+            Compass · Fjord & Co · Live
           </div>
           <h1
             className="font-display"
             style={{
               fontSize: 44,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.9px",
               margin: "10px 0 8px",
               lineHeight: 1.1,
@@ -677,8 +677,8 @@ export default function CapacityPage() {
           >
             Capacity &amp; retention
           </h1>
-          <div style={{ fontSize: 13, color: "#5A5A5A" }}>
-            Inceptions · {enriched.length} consultants · Live
+          <div style={{ fontSize: 13, color: "#4B4C6B" }}>
+            Fjord & Co · {enriched.length} consultants · Live
           </div>
         </div>
 
@@ -699,20 +699,20 @@ export default function CapacityPage() {
           <StatCard
             label="Target"
             value="80%"
-            detail="Inceptions standard"
-            tone={{ color: "#1A5C38", bg: "#EEF7F2", border: "#9ED4B8" }}
+            detail="Fjord & Co standard"
+            tone={{ color: "#5B37D6", bg: "#F1ECFF", border: "#D2C5FF" }}
           />
           <StatCard
             label="Flight risks"
             value={String(flightCount)}
             detail="High + medium tier"
-            tone={{ color: "#9B2A1A", bg: "#FDF0EE", border: "#FCCDC6" }}
+            tone={{ color: "#B0154F", bg: "#FFE8F0", border: "#FFC2D7" }}
           />
           <StatCard
             label="On bench"
             value={String(benchPeople.length)}
             detail={`${benchPeople.reduce((s, p) => s + p.capacity.benchDays, 0)} days combined`}
-            tone={{ color: "#8B5A00", bg: "#FFFBF2", border: "#FAD98A" }}
+            tone={{ color: "#A04A0C", bg: "#FFF0E4", border: "#FFD2B0" }}
           />
           <RoleGate
             can={canSeeCosts}
@@ -721,7 +721,7 @@ export default function CapacityPage() {
                 label="Revenue at risk"
                 value="—"
                 detail="Restricted to capacity manager + above"
-                tone={{ color: "#9A9A9A", bg: "#FAFAF8", border: "rgba(0,0,0,0.06)" }}
+                tone={{ color: "#6E7090", bg: "#F7F7FA", border: "rgba(0,0,0,0.06)" }}
               />
             }
           >
@@ -729,7 +729,7 @@ export default function CapacityPage() {
               label="Revenue at risk"
               value={formatEuros(revenueAtRisk)}
               detail="3-month exposure"
-              tone={{ color: "#9B2A1A", bg: "#FDF0EE", border: "#FCCDC6" }}
+              tone={{ color: "#B0154F", bg: "#FFE8F0", border: "#FFC2D7" }}
             />
           </RoleGate>
         </div>
@@ -750,11 +750,11 @@ export default function CapacityPage() {
                   <div
                     style={{
                       padding: 18,
-                      background: "#EEF7F2",
-                      border: "0.5px solid #9ED4B8",
+                      background: "#F1ECFF",
+                      border: "0.5px solid #D2C5FF",
                       borderRadius: 10,
                       fontSize: 13,
-                      color: "#1A5C38",
+                      color: "#5B37D6",
                     }}
                   >
                     No one is at flight risk this week.
@@ -789,7 +789,7 @@ export default function CapacityPage() {
                   paddingTop: 10,
                   borderTop: "0.5px solid rgba(0,0,0,0.06)",
                   fontSize: 11,
-                  color: "#9A9A9A",
+                  color: "#6E7090",
                   display: "flex",
                   gap: 14,
                   alignItems: "center",
@@ -807,7 +807,7 @@ export default function CapacityPage() {
                   80% target
                 </span>
                 <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-                  ⚠ Burnout risk flagged
+                  ⚠ Overload risk flagged
                 </span>
               </div>
             </Card>
@@ -818,11 +818,11 @@ export default function CapacityPage() {
                 <div
                   style={{
                     padding: 14,
-                    background: "#EEF7F2",
-                    border: "0.5px solid #9ED4B8",
+                    background: "#F1ECFF",
+                    border: "0.5px solid #D2C5FF",
                     borderRadius: 10,
                     fontSize: 12,
-                    color: "#1A5C38",
+                    color: "#5B37D6",
                   }}
                 >
                   No one is on bench right now.
@@ -840,12 +840,12 @@ export default function CapacityPage() {
                   paddingTop: 10,
                   borderTop: "0.5px solid rgba(0,0,0,0.06)",
                   fontSize: 11,
-                  color: "#9A9A9A",
+                  color: "#6E7090",
                   lineHeight: 1.5,
                 }}
               >
-                <span style={{ fontWeight: 600, color: "#5A5A5A" }}>Risk thresholds:</span>{" "}
-                Energizer: risk at {benchThresholds.energizer}d · Supporter: risk at{" "}
+                <span style={{ fontWeight: 600, color: "#4B4C6B" }}>Risk thresholds:</span>{" "}
+                Energizer: risk at {benchThresholds.energizer}d · Harmoniser: risk at{" "}
                 {benchThresholds.supporter}d · Driver &amp; Analyst: risk at {benchThresholds.driver}d
               </div>
             </Card>
@@ -858,11 +858,11 @@ export default function CapacityPage() {
                   <div
                     style={{
                       padding: "16px 14px",
-                      background: "#FAFAF8",
+                      background: "#F7F7FA",
                       border: "0.5px solid rgba(0,0,0,0.07)",
                       borderRadius: 10,
                       fontSize: 12,
-                      color: "#5A5754",
+                      color: "#4B4C6B",
                       lineHeight: 1.5,
                     }}
                   >
@@ -877,11 +877,11 @@ export default function CapacityPage() {
                 <div
                   style={{
                     padding: 14,
-                    background: "#EEF7F2",
-                    border: "0.5px solid #9ED4B8",
+                    background: "#F1ECFF",
+                    border: "0.5px solid #D2C5FF",
                     borderRadius: 10,
                     fontSize: 12,
-                    color: "#1A5C38",
+                    color: "#5B37D6",
                   }}
                 >
                   No flight risks to cost out this week.
@@ -905,9 +905,9 @@ export default function CapacityPage() {
                           style={{
                             padding: "5px 10px",
                             borderRadius: 100,
-                            border: `0.5px solid ${active ? "#161311" : "rgba(0,0,0,0.07)"}`,
-                            background: active ? "#161311" : "#FFFFFF",
-                            color: active ? "#FFFFFF" : "#5A5A5A",
+                            border: `0.5px solid ${active ? "#0E0F26" : "rgba(0,0,0,0.07)"}`,
+                            background: active ? "#0E0F26" : "#FFFFFF",
+                            color: active ? "#FFFFFF" : "#4B4C6B",
                             fontSize: 11,
                             fontWeight: 600,
                             cursor: "pointer",
@@ -930,10 +930,10 @@ export default function CapacityPage() {
                   >
                     <Avatar person={costEntry} size={36} />
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 14, fontWeight: 600, color: "#161311" }}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: "#0E0F26" }}>
                         {costEntry.name}
                       </div>
-                      <div style={{ fontSize: 11, color: "#9A9A9A" }}>
+                      <div style={{ fontSize: 11, color: "#6E7090" }}>
                         {costEntry.role} · {costEntry.location}
                       </div>
                     </div>
@@ -960,8 +960,8 @@ export default function CapacityPage() {
                   {cost.keyClientAtRisk && (
                     <div
                       style={{
-                        background: "#FDF0EE",
-                        border: "0.5px solid #FCCDC6",
+                        background: "#FFE8F0",
+                        border: "0.5px solid #FFC2D7",
                         borderRadius: 10,
                         padding: "10px 12px",
                       }}
@@ -969,7 +969,7 @@ export default function CapacityPage() {
                       <div
                         style={{
                           fontSize: 10,
-                          color: "#9B2A1A",
+                          color: "#B0154F",
                           textTransform: "uppercase",
                           letterSpacing: "0.08em",
                           fontWeight: 600,
@@ -978,7 +978,7 @@ export default function CapacityPage() {
                       >
                         Client at risk
                       </div>
-                      <div style={{ fontSize: 13, color: "#9B2A1A", lineHeight: 1.5 }}>
+                      <div style={{ fontSize: 13, color: "#B0154F", lineHeight: 1.5 }}>
                         {cost.keyClientAtRisk}
                       </div>
                     </div>
@@ -993,8 +993,8 @@ export default function CapacityPage() {
         <div
           style={{
             marginTop: 24,
-            background: "#FFFBF2",
-            border: "0.5px solid #FAD98A",
+            background: "#FFF0E4",
+            border: "0.5px solid #FFD2B0",
             borderRadius: 12,
             padding: "1.25rem 1.5rem",
           }}
@@ -1005,7 +1005,7 @@ export default function CapacityPage() {
                 width: 32,
                 height: 32,
                 borderRadius: 8,
-                background: "#F5A623",
+                background: "#FF9F5A",
                 color: "#FFFFFF",
                 display: "flex",
                 alignItems: "center",
@@ -1021,7 +1021,7 @@ export default function CapacityPage() {
               <div
                 style={{
                   fontSize: 10,
-                  color: "#8B5A00",
+                  color: "#A04A0C",
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
                   fontWeight: 600,
@@ -1033,7 +1033,7 @@ export default function CapacityPage() {
               <p
                 style={{
                   fontSize: 14,
-                  color: "#8B5A00",
+                  color: "#A04A0C",
                   lineHeight: 1.65,
                   margin: 0,
                 }}

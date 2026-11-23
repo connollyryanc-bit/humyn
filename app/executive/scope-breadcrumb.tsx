@@ -10,9 +10,9 @@ import {
   useExecutiveScope,
 } from "./scope-context";
 
-const ACCENT = "#1A2EAA";
-const INK = "#161311";
-const INK_SECONDARY = "#3A3633";
+const ACCENT = "#3355E8";
+const INK = "#0E0F26";
+const INK_SECONDARY = "#2A2B45";
 
 export function ScopeBreadcrumb({ style }: { style?: React.CSSProperties }) {
   const { scope, setScope, resetScope } = useExecutiveScope();
@@ -62,7 +62,7 @@ export function ScopeBreadcrumb({ style }: { style?: React.CSSProperties }) {
       <span
         style={{
           fontSize: 10,
-          color: "#9A9A9A",
+          color: "#6E7090",
           textTransform: "uppercase",
           letterSpacing: "0.12em",
           fontWeight: 600,
@@ -108,7 +108,7 @@ export function ScopeBreadcrumb({ style }: { style?: React.CSSProperties }) {
             padding: "4px 10px",
             borderRadius: 100,
             border: "0.5px solid rgba(0,0,0,0.08)",
-            background: "#FAFAF8",
+            background: "#F7F7FA",
             color: INK_SECONDARY,
             fontSize: 11,
             fontWeight: 500,
@@ -162,8 +162,8 @@ function ScopePicker({
           padding: "5px 26px 5px 12px",
           borderRadius: 100,
           border: `0.5px solid ${accent ? `${ACCENT}33` : "rgba(0,0,0,0.08)"}`,
-          background: accent ? `${ACCENT}10` : "#FAFAF8",
-          color: muted ? "#9A9A9A" : accent ? ACCENT : INK,
+          background: accent ? `${ACCENT}10` : "#F7F7FA",
+          color: muted ? "#6E7090" : accent ? ACCENT : INK,
           fontSize: 12,
           fontWeight: accent ? 600 : 500,
           letterSpacing: accent ? "0.04em" : undefined,
@@ -183,7 +183,7 @@ function ScopePicker({
           position: "absolute",
           right: 10,
           fontSize: 9,
-          color: muted ? "#9A9A9A" : accent ? ACCENT : "#6F6B66",
+          color: muted ? "#6E7090" : accent ? ACCENT : "#5F6080",
           pointerEvents: "none",
         }}
       >

@@ -43,7 +43,7 @@ export function SignedInBadge() {
             ? "0.5px solid rgba(255,80,64,0.45)"
             : "0.5px solid rgba(0,0,0,0.07)",
           background: isImpersonating ? "rgba(255,80,64,0.05)" : "#FFFFFF",
-          color: "#161311",
+          color: "#0E0F26",
           fontSize: 12,
           fontWeight: 500,
           cursor: "pointer",
@@ -58,7 +58,7 @@ export function SignedInBadge() {
             width: 22,
             height: 22,
             borderRadius: "50%",
-            background: "#161311",
+            background: "#0E0F26",
             color: "#FFFFFF",
             display: "inline-flex",
             alignItems: "center",
@@ -73,16 +73,16 @@ export function SignedInBadge() {
           <span style={{ fontSize: 12, fontWeight: 600 }}>
             {ROLE_LABEL[role]}
             {isImpersonating && (
-              <span style={{ marginLeft: 6, fontSize: 10, color: "#FF5040", fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase" }}>
+              <span style={{ marginLeft: 6, fontSize: 10, color: "#7B4DFF", fontWeight: 700, letterSpacing: "0.04em", textTransform: "uppercase" }}>
                 view-as
               </span>
             )}
           </span>
-          <span style={{ fontSize: 10, color: "#6F6B66", fontWeight: 400 }}>
+          <span style={{ fontSize: 10, color: "#5F6080", fontWeight: 400 }}>
             {email.length > 26 ? email.slice(0, 24) + "…" : email}
           </span>
         </span>
-        <svg width="10" height="10" viewBox="0 0 12 12" style={{ marginLeft: 2, color: "#6F6B66", transform: open ? "rotate(180deg)" : "none", transition: "transform 0.15s ease" }}>
+        <svg width="10" height="10" viewBox="0 0 12 12" style={{ marginLeft: 2, color: "#5F6080", transform: open ? "rotate(180deg)" : "none", transition: "transform 0.15s ease" }}>
           <path d="M2 4 L6 8 L10 4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
@@ -103,22 +103,22 @@ export function SignedInBadge() {
           }}
         >
           <div style={{ padding: "8px 12px 12px", borderBottom: "0.5px solid rgba(0,0,0,0.06)" }}>
-            <div style={{ fontSize: 11, color: "#6F6B66", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>
+            <div style={{ fontSize: 11, color: "#5F6080", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>
               Signed in
             </div>
-            <div style={{ fontSize: 13, color: "#161311", fontWeight: 500, marginTop: 4, wordBreak: "break-all" }}>
+            <div style={{ fontSize: 13, color: "#0E0F26", fontWeight: 500, marginTop: 4, wordBreak: "break-all" }}>
               {email}
             </div>
-            <div style={{ fontSize: 11, color: "#6F6B66", marginTop: 4 }}>
-              Real role: <strong style={{ color: "#161311" }}>{ROLE_LABEL[realRole]}</strong>
+            <div style={{ fontSize: 11, color: "#5F6080", marginTop: 4 }}>
+              Real role: <strong style={{ color: "#0E0F26" }}>{ROLE_LABEL[realRole]}</strong>
             </div>
           </div>
 
           <div style={{ padding: "10px 12px 4px" }}>
-            <div style={{ fontSize: 11, color: "#6F6B66", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>
+            <div style={{ fontSize: 11, color: "#5F6080", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600 }}>
               View as
             </div>
-            <div style={{ fontSize: 11, color: "#9A9A9A", marginTop: 4 }}>
+            <div style={{ fontSize: 11, color: "#6E7090", marginTop: 4 }}>
               Preview the platform from another role. Doesn't change your access.
             </div>
           </div>
@@ -142,7 +142,7 @@ export function SignedInBadge() {
                     padding: "8px 10px",
                     borderRadius: 8,
                     border: "none",
-                    background: active ? "#F3F0EA" : "transparent",
+                    background: active ? "#F4F4F8" : "transparent",
                     cursor: "pointer",
                     fontFamily: "inherit",
                     textAlign: "left",
@@ -157,20 +157,20 @@ export function SignedInBadge() {
                       borderRadius: 100,
                       marginTop: 4,
                       flexShrink: 0,
-                      background: active ? "#161311" : "transparent",
+                      background: active ? "#0E0F26" : "transparent",
                       border: active ? "none" : "1.5px solid rgba(0,0,0,0.18)",
                     }}
                   />
                   <span style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                    <span style={{ fontSize: 13, color: "#161311", fontWeight: active ? 600 : 500 }}>
+                    <span style={{ fontSize: 13, color: "#0E0F26", fontWeight: active ? 600 : 500 }}>
                       {ROLE_LABEL[r]}
                       {r === realRole && (
-                        <span style={{ marginLeft: 6, fontSize: 10, color: "#6F6B66", fontWeight: 500 }}>
+                        <span style={{ marginLeft: 6, fontSize: 10, color: "#5F6080", fontWeight: 500 }}>
                           (yours)
                         </span>
                       )}
                     </span>
-                    <span style={{ fontSize: 11, color: "#5A5754", lineHeight: 1.4 }}>
+                    <span style={{ fontSize: 11, color: "#4B4C6B", lineHeight: 1.4 }}>
                       {ROLE_DESCRIPTION[r]}
                     </span>
                   </span>
@@ -189,7 +189,7 @@ export function SignedInBadge() {
                   borderRadius: 8,
                   border: "none",
                   background: "transparent",
-                  color: "#161311",
+                  color: "#0E0F26",
                   fontSize: 12.5,
                   fontWeight: 500,
                   cursor: "pointer",

@@ -128,7 +128,7 @@ export const executiveKpisByRegion: Record<string, ExecutiveKpi[]> = {
   UK: [
     { key: "revenue-forecast",  label: "Revenue Forecast",  value: "€2.1M",  detail: "Q3 forecast across UK engagements",              trend: { value: 3.4, forecast: 2.3, variance: 0.1, direction: "up" },     tone: "positive" },
     { key: "gross-margin",      label: "Gross Margin",      value: "35.8%",  detail: "UK blended margin — above firm average",         trend: { value: 0.3, forecast: 36.0, variance: 1.0, direction: "up" },    tone: "positive" },
-    { key: "utilization",       label: "Utilisation",       value: "82%",    detail: "Above target on the back of Tesco + Barclays",   trend: { value: 1.8, forecast: 83.0, variance: 2.0, direction: "up" },    tone: "positive" },
+    { key: "utilization",       label: "Utilisation",       value: "82%",    detail: "Above target on the back of Greengate Retail + Thames Bank",   trend: { value: 1.8, forecast: 83.0, variance: 2.0, direction: "up" },    tone: "positive" },
     { key: "bench",             label: "Bench %",           value: "8%",     detail: "3 consultants on bench",                          trend: { value: -0.5, forecast: 7.5, variance: -2.0, direction: "down" }, tone: "positive" },
     { key: "open-demand",       label: "Open Demand",       value: "€4.6M",  detail: "Unstaffed + weighted pipeline · next 90 days",   trend: { value: 22, forecast: 5.0, variance: 0.2, direction: "up" },      tone: "positive" },
     { key: "pipeline-coverage", label: "Pipeline Coverage", value: "1.7×",   detail: "UK pipeline is the strongest in Europe",         trend: { value: 0.3, forecast: 1.8, variance: 0.3, direction: "up" },     tone: "positive" },
@@ -140,7 +140,7 @@ export const executiveKpisByRegion: Record<string, ExecutiveKpi[]> = {
     { key: "gross-margin",      label: "Gross Margin",      value: "35.1%",  detail: "Healthy automotive + banking blend",              trend: { value: 0.4, forecast: 35.4, variance: 0.4, direction: "up" },    tone: "positive" },
     { key: "utilization",       label: "Utilisation",       value: "79%",    detail: "On target",                                       trend: { value: 0.6, forecast: 80.0, variance: -1.0, direction: "up" },   tone: "neutral"  },
     { key: "bench",             label: "Bench %",           value: "9%",     detail: "2 consultants on bench",                          trend: { value: 0.4, forecast: 9.5, variance: 0.5, direction: "up" },     tone: "neutral"  },
-    { key: "open-demand",       label: "Open Demand",       value: "€2.1M",  detail: "Allianz + Siemens active deals",                  trend: { value: 8, forecast: 2.3, variance: 0, direction: "up" },         tone: "positive" },
+    { key: "open-demand",       label: "Open Demand",       value: "€2.1M",  detail: "Aegis Insurance + Voltaris active deals",                  trend: { value: 8, forecast: 2.3, variance: 0, direction: "up" },         tone: "positive" },
     { key: "pipeline-coverage", label: "Pipeline Coverage", value: "1.5×",   detail: "Healthy pipeline coverage",                       trend: { value: 0.0, forecast: 1.5, variance: 0, direction: "flat" },     tone: "neutral"  },
     { key: "delivery-risk",     label: "Delivery Risk",     value: "Low",    detail: "No programmes flagged amber",                    trend: { value: 0, forecast: 2.5, variance: -0.5, direction: "flat" },    tone: "positive" },
     { key: "skills-gap",        label: "Skills Gap",        value: "1",      detail: "Senior cloud architecture",                       trend: { value: 0, forecast: 1, variance: 0, direction: "flat" },         tone: "warning"  },
@@ -162,7 +162,7 @@ export const aiExecutiveRead = {
   source: "claude" as const,
   paragraphs: [
     "Pipeline coverage at 1.4× is healthy and trending up, but Q3 revenue forecast remains €0.3M below target with gross margin slipping 0.8 points on the back of higher contractor utilisation in Stockholm and Oslo.",
-    "Critical exposure: the AI/ML skills gap widened to seven roles after three confirmed Q4 starts that need specialists we don't currently have internally. Helsinki utilisation breaking 86% raises burnout risk on the OP Financial programme — two consultants flagged amber.",
+    "Critical exposure: the AI/ML skills gap widened to seven roles after three confirmed Q4 starts that need specialists we don't currently have internally. Helsinki utilisation breaking 86% raises overload risk on the Kestrel Bank programme — two consultants flagged amber.",
     "Cross-Nordic redeployment unlocks an estimated €420k of bench cost before any hiring decision. The Workforce Optimization Engine recommends upskilling four mid-level consultants into the AI/ML capability over the next 90 days; estimated cost-to-value ratio is materially better than external hires.",
   ],
 };
@@ -221,7 +221,7 @@ export const executiveModules: ExecutiveModuleSummary[] = [
   {
     href: "/executive/team-health",
     title: "Team Health Overlay",
-    body: "Burnout risk, leadership balance, team dynamics, communication friction — Humyn intelligence applied to delivery risk.",
+    body: "Overload risk, leadership balance, team dynamics, communication friction — Humyn intelligence applied to delivery risk.",
     status: "2 teams flagged",
     statusTone: "warning",
   },

@@ -5,7 +5,7 @@ import { ENVIRONMENT_ACCENTS } from "../../components/top-chrome";
 export type ChartKind = "bar" | "line" | "area" | "pie";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
-const EXEC_INK = "#161311";
+const EXEC_INK = "#0E0F26";
 
 export function ChartTypeToggle({
   value,
@@ -21,7 +21,7 @@ export function ChartTypeToggle({
       <span
         style={{
           fontSize: 10,
-          color: "#6F6B66",
+          color: "#5F6080",
           textTransform: "uppercase",
           letterSpacing: "0.12em",
           fontWeight: 600,
@@ -34,7 +34,7 @@ export function ChartTypeToggle({
           display: "inline-flex",
           gap: 2,
           padding: 4,
-          background: "#F3F0EA",
+          background: "#F4F4F8",
           border: "0.5px solid rgba(0,0,0,0.08)",
           borderRadius: 10,
         }}
@@ -56,7 +56,7 @@ export function ChartTypeToggle({
                 borderRadius: 7,
                 border: "none",
                 background: isActive ? EXEC_INK : "transparent",
-                color: isActive ? "#F3F0EA" : "#3A3633",
+                color: isActive ? "#F4F4F8" : "#2A2B45",
                 fontSize: 12,
                 fontWeight: isActive ? 600 : 500,
                 fontFamily: "inherit",

@@ -17,7 +17,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textTransform: "uppercase",
         letterSpacing: "0.08em",
         fontWeight: 500,
@@ -55,9 +55,9 @@ function Field({
 }) {
   return (
     <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <span style={{ fontSize: 12, fontWeight: 600, color: "#161311" }}>{label}</span>
+      <span style={{ fontSize: 12, fontWeight: 600, color: "#0E0F26" }}>{label}</span>
       {children}
-      {hint && <span style={{ fontSize: 11, color: "#9A9A9A", lineHeight: 1.4 }}>{hint}</span>}
+      {hint && <span style={{ fontSize: 11, color: "#6E7090", lineHeight: 1.4 }}>{hint}</span>}
     </label>
   );
 }
@@ -67,7 +67,7 @@ const inputStyle: React.CSSProperties = {
   borderRadius: 8,
   border: "0.5px solid rgba(0,0,0,0.07)",
   background: "#FFFFFF",
-  color: "#161311",
+  color: "#0E0F26",
   fontSize: 13,
   outline: "none",
   fontFamily: "inherit",
@@ -275,7 +275,7 @@ export function PersonForm({
                     flexShrink: 0,
                   }}
                 />
-                <span style={{ width: 80, fontSize: 12, color: "#5A5A5A", fontWeight: 500 }}>
+                <span style={{ width: 80, fontSize: 12, color: "#4B4C6B", fontWeight: 500 }}>
                   {energy[k].label}
                 </span>
                 <input
@@ -328,7 +328,7 @@ export function PersonForm({
                   alignItems: "center",
                   gap: 6,
                   fontSize: 11,
-                  color: "#5A5A5A",
+                  color: "#4B4C6B",
                   cursor: "pointer",
                   whiteSpace: "nowrap",
                 }}
@@ -487,7 +487,7 @@ export function PersonForm({
               value={achievementsText}
               onChange={(e) => setAchievementsText(e.target.value)}
               rows={5}
-              placeholder={"Closed €4M Nordea win\nStabilised H&M loyalty rebuild\nMentor to 4 senior consultants"}
+              placeholder={"Closed €4M Baltica Bank win\nStabilised Nordmode loyalty rebuild\nMentor to 4 senior consultants"}
               style={textareaStyle}
             />
           </Field>
@@ -528,7 +528,7 @@ export function PersonForm({
             borderRadius: 8,
             border: "0.5px solid rgba(0,0,0,0.07)",
             background: "#FFFFFF",
-            color: "#5A5A5A",
+            color: "#4B4C6B",
             fontSize: 13,
             fontWeight: 500,
             cursor: "pointer",
@@ -544,8 +544,8 @@ export function PersonForm({
             padding: "9px 18px",
             borderRadius: 8,
             border: "none",
-            background: submitDisabled ? "#EDEDEA" : "#161311",
-            color: submitDisabled ? "#9A9A9A" : "#FFFFFF",
+            background: submitDisabled ? "#ECEBF2" : "#0E0F26",
+            color: submitDisabled ? "#6E7090" : "#FFFFFF",
             fontSize: 13,
             fontWeight: 500,
             cursor: submitDisabled ? "not-allowed" : "pointer",

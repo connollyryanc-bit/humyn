@@ -5,7 +5,7 @@ export const runtime = "nodejs";
 
 const SYSTEM_PROMPT = `You are a personality analyst using the Humyn Pulse Map, a four-energy
 temperament framework: Driver (action-focused), Energizer (people-focused),
-Supporter (harmony-focused) and Analyst (process-focused).
+Harmoniser (harmony-focused) and Analyst (process-focused).
 
 You are given an existing Pulse profile. Extend it with deeper, practical guidance for
 anyone who works with this person. Stay consistent with the energy scores and wheel

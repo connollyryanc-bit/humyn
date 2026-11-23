@@ -41,9 +41,9 @@ function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
     <span
       className="font-display"
-      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
+      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#0E0F26" }}
     >
-      hum<span style={{ color: "#FF5040" }}>y</span>n
+      hum<span style={{ background: "linear-gradient(120deg, #3355E8 0%, #7B4DFF 34%, #F23D7A 68%, #FF9F5A 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>y</span>n
     </span>
   );
 }
@@ -60,7 +60,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 11,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textTransform: "uppercase",
         letterSpacing: "0.07em",
         fontWeight: 500,
@@ -95,8 +95,8 @@ function Pill({ children }: { children: React.ReactNode }) {
         alignItems: "center",
         padding: "3px 9px",
         borderRadius: 100,
-        background: "#FAFAF8",
-        color: "#5A5A5A",
+        background: "#F7F7FA",
+        color: "#4B4C6B",
         border: "1px solid rgba(0,0,0,0.07)",
         fontSize: 11,
         fontWeight: 500,
@@ -137,10 +137,10 @@ function EnergyBars({ scores }: { scores: GeneratedProfile["scores"] }) {
       {(["driver", "energizer", "supporter", "analyst"] as EnergyKey[]).map((c) => (
         <div key={c} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
           <div style={{ width: 8, height: 8, borderRadius: "50%", background: energy[c].color, flexShrink: 0 }} />
-          <span style={{ fontSize: 12, color: "#5A5A5A", width: 130, fontWeight: 500 }}>
+          <span style={{ fontSize: 12, color: "#4B4C6B", width: 130, fontWeight: 500 }}>
             {energy[c].label}
           </span>
-          <div style={{ flex: 1, height: 6, background: "#EDEDEA", borderRadius: 4, overflow: "hidden" }}>
+          <div style={{ flex: 1, height: 6, background: "#ECEBF2", borderRadius: 4, overflow: "hidden" }}>
             <div
               style={{
                 width: `${Math.max(0, Math.min(100, scores[c]))}%`,
@@ -195,7 +195,7 @@ function EmptyPreview() {
         flexDirection: "column",
         alignItems: "center",
         gap: 14,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textAlign: "center",
       }}
     >
@@ -204,11 +204,11 @@ function EmptyPreview() {
           width: 72,
           height: 72,
           borderRadius: "50%",
-          background: "#FAFAF8",
+          background: "#F7F7FA",
           border: "1px dashed rgba(0,0,0,0.12)",
         }}
       />
-      <div style={{ fontSize: 14, fontWeight: 600, color: "#5A5A5A" }}>Profile preview</div>
+      <div style={{ fontSize: 14, fontWeight: 600, color: "#4B4C6B" }}>Profile preview</div>
       <p style={{ fontSize: 12, lineHeight: 1.55, maxWidth: 320, margin: 0 }}>
         Paste a LinkedIn About + Experience section on the left and click Generate profile. A full
         Pulse profile will appear here in a few seconds.
@@ -243,13 +243,13 @@ function LoadingPreview() {
           width: 72,
           height: 72,
           borderRadius: "50%",
-          background: "#FFFBF2",
-          border: "1px solid #FAD98A",
+          background: "#FFF0E4",
+          border: "1px solid #FFD2B0",
           animation: "humyn-pulse 1.4s ease-in-out infinite",
         }}
       />
-      <div style={{ fontSize: 14, fontWeight: 600, color: "#1A1A1A" }}>{LOADING_STAGES[stage]}</div>
-      <div style={{ fontSize: 12, color: "#9A9A9A", textAlign: "center", maxWidth: 320 }}>
+      <div style={{ fontSize: 14, fontWeight: 600, color: "#0E0F26" }}>{LOADING_STAGES[stage]}</div>
+      <div style={{ fontSize: 12, color: "#6E7090", textAlign: "center", maxWidth: 320 }}>
         Claude is reading the profile and inferring the Pulse energy mix. This usually takes 3–10
         seconds.
       </div>
@@ -258,7 +258,7 @@ function LoadingPreview() {
           width: "70%",
           maxWidth: 240,
           height: 4,
-          background: "#EDEDEA",
+          background: "#ECEBF2",
           borderRadius: 4,
           overflow: "hidden",
         }}
@@ -267,7 +267,7 @@ function LoadingPreview() {
           style={{
             width: "40%",
             height: "100%",
-            background: "#FF5040",
+            background: "#7B4DFF",
             borderRadius: 4,
             animation: "humyn-pulse 1.4s ease-in-out infinite",
           }}
@@ -281,8 +281,8 @@ function ErrorPreview({ message, onRetry }: { message: string; onRetry: () => vo
   return (
     <div
       style={{
-        background: "#FDF0EE",
-        border: "1px solid #FCCDC6",
+        background: "#FFE8F0",
+        border: "1px solid #FFC2D7",
         borderRadius: 12,
         padding: "1.5rem",
         display: "flex",
@@ -293,7 +293,7 @@ function ErrorPreview({ message, onRetry }: { message: string; onRetry: () => vo
       <div
         style={{
           fontSize: 11,
-          color: "#9B2A1A",
+          color: "#B0154F",
           textTransform: "uppercase",
           letterSpacing: "0.07em",
           fontWeight: 600,
@@ -301,16 +301,16 @@ function ErrorPreview({ message, onRetry }: { message: string; onRetry: () => vo
       >
         Profile generation failed
       </div>
-      <div style={{ fontSize: 13, color: "#9B2A1A", lineHeight: 1.55 }}>{message}</div>
+      <div style={{ fontSize: 13, color: "#B0154F", lineHeight: 1.55 }}>{message}</div>
       <button
         onClick={onRetry}
         style={{
           alignSelf: "flex-start",
           padding: "8px 14px",
           borderRadius: 8,
-          border: "1px solid #FCCDC6",
+          border: "1px solid #FFC2D7",
           background: "#FFFFFF",
-          color: "#9B2A1A",
+          color: "#B0154F",
           fontSize: 12,
           fontWeight: 500,
           cursor: "pointer",
@@ -384,7 +384,7 @@ function ProfileView({
             <div
               style={{
                 fontSize: 11,
-                color: "#9A9A9A",
+                color: "#6E7090",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
                 fontWeight: 500,
@@ -402,7 +402,7 @@ function ProfileView({
                 width: "100%",
                 fontSize: 28,
                 fontWeight: 600,
-                color: "#161311",
+                color: "#0E0F26",
                 letterSpacing: "-0.5px",
                 border: "none",
                 outline: "none",
@@ -417,7 +417,7 @@ function ProfileView({
               <EnergyBadge k={profile.secondary} small />
               <Pill>{profile.wheelPosition}</Pill>
             </div>
-            <div style={{ fontSize: 12, color: "#9A9A9A" }}>
+            <div style={{ fontSize: 12, color: "#6E7090" }}>
               Profile confidence: {profile.confidence}%
             </div>
           </div>
@@ -475,7 +475,7 @@ function ProfileView({
         <div
           style={{
             fontSize: 12,
-            color: "#9A9A9A",
+            color: "#6E7090",
             marginBottom: 12,
             lineHeight: 1.5,
             maxWidth: 520,
@@ -492,7 +492,7 @@ function ProfileView({
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
         <Card>
           <SectionLabel>Bio</SectionLabel>
-          <p style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.6, margin: 0 }}>{profile.bio}</p>
+          <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.6, margin: 0 }}>{profile.bio}</p>
         </Card>
 
         <Card>
@@ -503,12 +503,12 @@ function ProfileView({
                 width: 8,
                 height: 8,
                 borderRadius: "50%",
-                background: "#2E8B57",
+                background: "#9B7CFF",
                 marginTop: 6,
                 flexShrink: 0,
               }}
             />
-            <div style={{ fontSize: 13, color: "#1A5C38", lineHeight: 1.55 }}>{profile.bestTrait}</div>
+            <div style={{ fontSize: 13, color: "#5B37D6", lineHeight: 1.55 }}>{profile.bestTrait}</div>
           </div>
           <div style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
             <div
@@ -516,12 +516,12 @@ function ProfileView({
                 width: 8,
                 height: 8,
                 borderRadius: "50%",
-                background: "#E8402A",
+                background: "#F23D7A",
                 marginTop: 6,
                 flexShrink: 0,
               }}
             />
-            <div style={{ fontSize: 13, color: "#9B2A1A", lineHeight: 1.55 }}>{profile.vice}</div>
+            <div style={{ fontSize: 13, color: "#B0154F", lineHeight: 1.55 }}>{profile.vice}</div>
           </div>
         </Card>
 
@@ -587,7 +587,7 @@ function ProfileView({
                   gap: 10,
                   alignItems: "flex-start",
                   fontSize: 13,
-                  color: "#1A1A1A",
+                  color: "#0E0F26",
                   lineHeight: 1.5,
                 }}
               >
@@ -618,18 +618,18 @@ function ProfileView({
 
       <Card>
         <SectionLabel>How to speak with {firstName}</SectionLabel>
-        <p style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.65, margin: "0 0 16px" }}>
+        <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.65, margin: "0 0 16px" }}>
           {profile.howToSpeak}
         </p>
         <SectionLabel>How to email {firstName}</SectionLabel>
-        <p style={{ fontSize: 13, color: "#5A5A5A", lineHeight: 1.65, margin: 0 }}>
+        <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.65, margin: 0 }}>
           {profile.howToEmail}
         </p>
       </Card>
 
       <Card>
         <SectionLabel>Write a message to {firstName}</SectionLabel>
-        <div style={{ fontSize: 12, color: "#9A9A9A", marginBottom: 10, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 12, color: "#6E7090", marginBottom: 10, lineHeight: 1.5 }}>
           Describe what you want to say and the AI will write it in a way that lands perfectly with
           their {profile.wheelPosition} personality.
         </div>
@@ -644,7 +644,7 @@ function ProfileView({
             borderRadius: 8,
             border: "1px solid rgba(0,0,0,0.07)",
             background: "#FFFFFF",
-            color: "#1A1A1A",
+            color: "#0E0F26",
             fontSize: 13,
             outline: "none",
             resize: "vertical",
@@ -661,8 +661,8 @@ function ProfileView({
               padding: "8px 14px",
               borderRadius: 8,
               border: "none",
-              background: composerInput.trim() ? "#1A1A1A" : "#EDEDEA",
-              color: composerInput.trim() ? "#FFFFFF" : "#9A9A9A",
+              background: composerInput.trim() ? "#0E0F26" : "#ECEBF2",
+              color: composerInput.trim() ? "#FFFFFF" : "#6E7090",
               fontSize: 12,
               fontWeight: 500,
               cursor: composerInput.trim() ? "pointer" : "not-allowed",
@@ -681,7 +681,7 @@ function ProfileView({
                 borderRadius: 8,
                 border: "1px solid rgba(0,0,0,0.07)",
                 background: "#FFFFFF",
-                color: "#5A5A5A",
+                color: "#4B4C6B",
                 fontSize: 12,
                 fontWeight: 500,
                 cursor: "pointer",
@@ -742,7 +742,7 @@ function ProfileView({
             padding: "10px 18px",
             borderRadius: 8,
             border: "none",
-            background: saveState === "saved" ? "#2E8B57" : "#1A1A1A",
+            background: saveState === "saved" ? "#9B7CFF" : "#0E0F26",
             color: "#FFFFFF",
             fontSize: 13,
             fontWeight: 500,
@@ -758,7 +758,7 @@ function ProfileView({
             borderRadius: 8,
             border: "1px solid rgba(0,0,0,0.07)",
             background: "#FFFFFF",
-            color: "#1A1A1A",
+            color: "#0E0F26",
             fontSize: 13,
             fontWeight: 500,
             cursor: "pointer",
@@ -773,7 +773,7 @@ function ProfileView({
             borderRadius: 8,
             border: "1px solid rgba(0,0,0,0.07)",
             background: "#FFFFFF",
-            color: "#1A1A1A",
+            color: "#0E0F26",
             fontSize: 13,
             fontWeight: 500,
             cursor: "pointer",
@@ -902,7 +902,7 @@ export default function PulseNewPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 500,
@@ -915,14 +915,14 @@ export default function PulseNewPage() {
             style={{
               fontSize: 32,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.5px",
               margin: "6px 0 4px",
             }}
           >
             Paste a LinkedIn profile, get a Humyn profile
           </h1>
-          <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720 }}>
+          <div style={{ fontSize: 13, color: "#4B4C6B", maxWidth: 720 }}>
             Drop in the About and Experience text from any LinkedIn profile — yours, a candidate&apos;s,
             or a client&apos;s. Claude reads it and builds a full Pulse energy profile with
             communication guidance and a confidence score.
@@ -969,7 +969,7 @@ export default function PulseNewPage() {
                   borderRadius: 8,
                   border: "1px solid rgba(0,0,0,0.07)",
                   background: "#FFFFFF",
-                  color: "#1A1A1A",
+                  color: "#0E0F26",
                   fontSize: 13,
                   outline: "none",
                   boxSizing: "border-box",
@@ -990,7 +990,7 @@ export default function PulseNewPage() {
                   borderRadius: 10,
                   border: "1px solid rgba(0,0,0,0.07)",
                   background: "#FFFFFF",
-                  color: "#1A1A1A",
+                  color: "#0E0F26",
                   fontSize: 13,
                   outline: "none",
                   resize: "vertical",
@@ -1007,7 +1007,7 @@ export default function PulseNewPage() {
                   alignItems: "center",
                   marginTop: 8,
                   fontSize: 11,
-                  color: "#9A9A9A",
+                  color: "#6E7090",
                 }}
               >
                 <span>
@@ -1020,7 +1020,7 @@ export default function PulseNewPage() {
                     borderRadius: 100,
                     border: "1px solid rgba(0,0,0,0.07)",
                     background: "#FFFFFF",
-                    color: "#5A5A5A",
+                    color: "#4B4C6B",
                     fontSize: 11,
                     fontWeight: 500,
                     cursor: "pointer",
@@ -1041,9 +1041,9 @@ export default function PulseNewPage() {
                   borderRadius: 8,
                   border: "none",
                   background:
-                    status === "loading" || text.trim().length < 40 ? "#EDEDEA" : "#1A1A1A",
+                    status === "loading" || text.trim().length < 40 ? "#ECEBF2" : "#0E0F26",
                   color:
-                    status === "loading" || text.trim().length < 40 ? "#9A9A9A" : "#FFFFFF",
+                    status === "loading" || text.trim().length < 40 ? "#6E7090" : "#FFFFFF",
                   fontSize: 13,
                   fontWeight: 500,
                   cursor:
@@ -1062,7 +1062,7 @@ export default function PulseNewPage() {
                     borderRadius: 8,
                     border: "1px solid rgba(0,0,0,0.07)",
                     background: "#FFFFFF",
-                    color: "#5A5A5A",
+                    color: "#4B4C6B",
                     fontSize: 13,
                     fontWeight: 500,
                     cursor: "pointer",
@@ -1076,10 +1076,10 @@ export default function PulseNewPage() {
             <div
               style={{
                 fontSize: 11,
-                color: "#9A9A9A",
+                color: "#6E7090",
                 lineHeight: 1.55,
                 padding: "10px 12px",
-                background: "#FAFAF8",
+                background: "#F7F7FA",
                 borderRadius: 8,
                 border: "1px solid rgba(0,0,0,0.05)",
               }}

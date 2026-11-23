@@ -150,7 +150,7 @@ export default function ProspectsPage() {
                     }}
                   >
                     <span>{l.name}</span>
-                    <span style={{ color: on ? "#C8C5BD" : R.ink3 }}>{l.count}</span>
+                    <span style={{ color: on ? "#D3D2DE" : R.ink3 }}>{l.count}</span>
                   </button>
                   {l.custom && (
                     <button
@@ -160,7 +160,7 @@ export default function ProspectsPage() {
                       style={{
                         border: "none",
                         background: "transparent",
-                        color: on ? "#C8C5BD" : R.ink3,
+                        color: on ? "#D3D2DE" : R.ink3,
                         cursor: "pointer",
                         padding: "0 8px",
                         fontSize: 16,

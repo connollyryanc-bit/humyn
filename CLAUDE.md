@@ -47,7 +47,7 @@ Supporter / Coordinator / Observer / Reformer).
 The four energies map Colour → Behaviour → Archetype:
 - **Red — Action-focused — Driver**
 - **Yellow — People-focused — Energizer**
-- **Green — Harmony-focused — Supporter**
+- **Green — Harmony-focused — Harmoniser**
 - **Blue — Process-focused — Analyst**
 
 ```
@@ -63,7 +63,7 @@ Energizer (yellow) — brand primary:
   text: #8B5A00
   border: #FAD98A
 
-Supporter (green):
+Harmoniser (green):
   color: #2E8B57
   bg: #EEF7F2
   text: #1A5C38
@@ -80,9 +80,9 @@ Wheel positions — eight positions across the four quadrants:
 - Pure red → **Driver**
 - Red/Yellow mix → "Energizing Driver" or "Driving Energizer" (primary first)
 - Pure yellow → **Energizer**
-- Yellow/Green mix → "Supportive Energizer" or "Energizing Supporter"
-- Pure green → **Supporter**
-- Green/Blue mix → "Analytical Supporter" or "Supportive Analyst"
+- Yellow/Green mix → "Harmonising Energizer" or "Energizing Harmoniser"
+- Pure green → **Harmoniser**
+- Green/Blue mix → "Analytical Harmoniser" or "Harmonising Analyst"
 - Pure blue → **Analyst**
 - Blue/Red mix → "Driving Analyst" or "Analytical Driver"
 
@@ -170,12 +170,12 @@ Next.js font loader.
 ### Components — always build these consistently
 
 **Avatar**: Circular, coloured background from primary energy colour, initials, bordered
-**EnergyBadge**: Pill with colour dot + energy label (Driver / Energizer / Supporter / Analyst), coloured bg/text
-**StatusBadge**: Pill — Supporter green for available now, Energizer yellow for soon, Driver red for allocated
+**EnergyBadge**: Pill with colour dot + energy label (Driver / Energizer / Harmoniser / Analyst), coloured bg/text
+**StatusBadge**: Pill — Harmoniser green for available now, Energizer yellow for soon, Driver red for allocated
 **UtilPill**: Small bar + percentage, colour-coded green/amber/red vs 80% target
 **Section label**: Uppercase, 11px, Ink3, letter-spacing 0.07em
 **RiskPill** (capacity dashboard): high / medium / watch / low; reuses the four energy colours
-  as risk tones (Driver red = high, Energizer yellow = medium, neutral = watch, Supporter green = low)
+  as risk tones (Driver red = high, Energizer yellow = medium, neutral = watch, Harmoniser green = low)
 
 ### Shared visualisations — never recreate, always import
 
@@ -447,7 +447,7 @@ Monday email: bench consultants receive personalised email
 at 08:00 every Monday with matched open roles.
 Email tone is personalised by Pulse Map energy type —
 Driver gets direct/outcome-focused, Energizer gets
-enthusiastic/relational, Supporter gets warm/unhurried,
+enthusiastic/relational, Harmoniser gets warm/unhurried,
 Analyst gets structured/detailed.
 
 **Pipeline module (/pipeline):**
@@ -488,7 +488,7 @@ people directory automatically.
 - Never use gradients — flat colours only
 - Never add animations beyond simple CSS transitions (0.15s)
 - Never make cards or sections feel heavy or cramped — white space is intentional
-- Always use the Pulse Map archetype names in UI ("Driver", "Energizer", "Supporter", "Analyst" — not "Red", "Yellow", "Green", "Blue")
+- Always use the Pulse Map archetype names in UI ("Driver", "Energizer", "Harmoniser", "Analyst" — not "Red", "Yellow", "Green", "Blue")
 
 ---
 

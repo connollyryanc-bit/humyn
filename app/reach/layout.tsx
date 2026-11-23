@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function ReachLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ minHeight: "100vh", background: "#F1F3EE" }}>
+    <div style={{ minHeight: "100vh", background: "#F4F4F8" }}>
       <ReachChrome />
       {children}
     </div>

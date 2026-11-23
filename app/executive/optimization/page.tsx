@@ -20,8 +20,8 @@ import { ScopeBreadcrumb } from "../scope-breadcrumb";
 import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
-const EXEC_INK = "#161311";
-const EXEC_INK_SECONDARY = "#3A3633";
+const EXEC_INK = "#0E0F26";
+const EXEC_INK_SECONDARY = "#2A2B45";
 
 function fmtEur(value: number): string {
   if (value >= 1_000_000) return `€${(value / 1_000_000).toFixed(2)}M`;
@@ -97,7 +97,7 @@ export default function OptimizationPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#6F6B66",
+              color: "#5F6080",
               textTransform: "uppercase",
               letterSpacing: "0.14em",
               fontWeight: 600,
@@ -281,7 +281,7 @@ function TierFilterPicker({ filter, setFilter }: { filter: TierFilter; setFilter
             borderRadius: 8,
             border: "none",
             background: filter === i.key ? EXEC_INK : "transparent",
-            color: filter === i.key ? "#F3F0EA" : EXEC_INK_SECONDARY,
+            color: filter === i.key ? "#F4F4F8" : EXEC_INK_SECONDARY,
             fontSize: 12.5,
             fontWeight: filter === i.key ? 500 : 400,
             cursor: "pointer",
@@ -300,7 +300,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#6F6B66",
+        color: "#5F6080",
         textTransform: "uppercase",
         letterSpacing: "0.16em",
         fontWeight: 600,
@@ -325,11 +325,11 @@ function HeroStat({
 }) {
   const stripe =
     tone === "critical"
-      ? "#C4534A"
+      ? "#D93670"
       : tone === "warning"
-        ? "#B87A2E"
+        ? "#D9782F"
         : tone === "positive"
-          ? "#3D8A61"
+          ? "#7C5CE6"
           : EXEC_ACCENT;
   return (
     <div
@@ -348,9 +348,9 @@ function HeroStat({
       }}
     >
       <span aria-hidden style={{ position: "absolute", top: 0, left: 0, width: 2, height: "100%", background: stripe, opacity: 0.85 }} />
-      <div style={{ fontSize: 10, color: "#6F6B66", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 600 }}>{label}</div>
+      <div style={{ fontSize: 10, color: "#5F6080", textTransform: "uppercase", letterSpacing: "0.14em", fontWeight: 600 }}>{label}</div>
       <div className="font-display" style={{ fontSize: 38, fontWeight: 600, color: EXEC_INK, letterSpacing: "-0.8px", lineHeight: 1.0 }}>{value}</div>
-      <div style={{ fontSize: 12, color: "#5A5754", lineHeight: 1.5, marginTop: "auto" }}>{detail}</div>
+      <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.5, marginTop: "auto" }}>{detail}</div>
     </div>
   );
 }
@@ -360,10 +360,10 @@ function ActionCard({ action }: { action: Action }) {
   const efficiency = action.costEur === 0 ? "∞" : `${(action.impactEur / action.costEur).toFixed(1)}×`;
   const riskTone =
     action.risk === "low"
-      ? { color: "#3D8A61", bg: "#EFF8F3", border: "#B6E0CB" }
+      ? { color: "#7C5CE6", bg: "#F4F0FF", border: "#DCD1FF" }
       : action.risk === "medium"
-        ? { color: "#B87A2E", bg: "#FEF8EE", border: "#F2DCB0" }
-        : { color: "#C4534A", bg: "#FDF3F2", border: "#F0CECA" };
+        ? { color: "#D9782F", bg: "#FFF5EC", border: "#FFDCC2" }
+        : { color: "#D93670", bg: "#FFEEF4", border: "#FFCADB" };
   return (
     <div
       style={{
@@ -401,7 +401,7 @@ function ActionCard({ action }: { action: Action }) {
           <span style={{ width: 6, height: 6, borderRadius: "50%", background: meta.color }} />
           {meta.label} · {kindLabel[action.kind]}
         </span>
-        <span style={{ fontSize: 11, color: "#9A9A9A", marginLeft: "auto" }}>
+        <span style={{ fontSize: 11, color: "#6E7090", marginLeft: "auto" }}>
           Confidence {action.confidence}%
         </span>
       </div>
@@ -446,7 +446,7 @@ function ActionCard({ action }: { action: Action }) {
           gap: 12,
           flexWrap: "wrap",
           fontSize: 11,
-          color: "#6F6B66",
+          color: "#5F6080",
         }}
       >
         <div>
@@ -465,11 +465,11 @@ function ActionCard({ action }: { action: Action }) {
 function Cell({ label, value, tone, children }: { label: string; value?: string; tone?: "positive"; children?: React.ReactNode }) {
   return (
     <div>
-      <div style={{ fontSize: 10, color: "#9A9A9A", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 4 }}>
+      <div style={{ fontSize: 10, color: "#6E7090", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 600, marginBottom: 4 }}>
         {label}
       </div>
       {value ? (
-        <div className="font-display" style={{ fontSize: 17, fontWeight: 600, color: tone === "positive" ? "#3D8A61" : EXEC_INK, letterSpacing: "-0.2px" }}>
+        <div className="font-display" style={{ fontSize: 17, fontWeight: 600, color: tone === "positive" ? "#7C5CE6" : EXEC_INK, letterSpacing: "-0.2px" }}>
           {value}
         </div>
       ) : (

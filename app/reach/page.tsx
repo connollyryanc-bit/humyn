@@ -40,7 +40,7 @@ function ActivityChart() {
         const x = i * slot + slot / 2 - barW / 2;
         return (
           <g key={d.week}>
-            <rect x={x} y={h - padB - bh} width={barW} height={bh} fill="#E3E8DC" rx={4} />
+            <rect x={x} y={h - padB - bh} width={barW} height={bh} fill="#E6E4F0" rx={4} />
             <text x={x + barW / 2} y={h - 6} textAnchor="middle" style={{ fontSize: 10, fill: R.ink3 }}>
               {d.week}
             </text>
@@ -106,7 +106,7 @@ export default function ReachDashboard() {
                       )}
                     </span>
                   </div>
-                  <Bar value={f.value} max={top} color={i < 2 ? "#C9D3BD" : R.ink} />
+                  <Bar value={f.value} max={top} color={i < 2 ? "#D6D0F0" : R.ink} />
                 </div>
               );
             })}
@@ -118,7 +118,7 @@ export default function ReachDashboard() {
           <ActivityChart />
           <div style={{ display: "flex", gap: 16, fontSize: 12, color: R.ink2, marginTop: 8 }}>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <span style={{ width: 10, height: 10, background: "#E3E8DC", borderRadius: 2 }} /> Sent
+              <span style={{ width: 10, height: 10, background: "#E6E4F0", borderRadius: 2 }} /> Sent
             </span>
             <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
               <span style={{ width: 10, height: 2, background: R.ink }} /> Replies
@@ -176,7 +176,7 @@ export default function ReachDashboard() {
           </Card>
 
           <Card>
-            <Label dot="#2E8B57">Compliance</Label>
+            <Label dot="#9B7CFF">Compliance</Label>
             <div style={{ display: "flex", flexDirection: "column", gap: 10, fontSize: 13, color: R.ink2, lineHeight: 1.55 }}>
               <div>
                 <b style={{ color: R.ink }}>{suppressed}</b> contact on the do-not-contact list. Never emailed again.

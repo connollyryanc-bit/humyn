@@ -98,7 +98,7 @@ export interface Sequence {
 export const ENERGY_LABEL: Record<EnergyKey, string> = {
   driver: "Driver",
   energizer: "Energizer",
-  supporter: "Supporter",
+  supporter: "Harmoniser",
   analyst: "Analyst",
 };
 
@@ -153,10 +153,10 @@ export const SEGMENT_PROOF: Record<Segment, string> = {
 const POSITION_PAIRS: Record<string, string> = {
   "driver>energizer": "Energizing Driver",
   "energizer>driver": "Driving Energizer",
-  "energizer>supporter": "Supportive Energizer",
-  "supporter>energizer": "Energizing Supporter",
-  "supporter>analyst": "Analytical Supporter",
-  "analyst>supporter": "Supportive Analyst",
+  "energizer>supporter": "Harmonising Energizer",
+  "supporter>energizer": "Energizing Harmoniser",
+  "supporter>analyst": "Analytical Harmoniser",
+  "analyst>supporter": "Harmonising Analyst",
   "analyst>driver": "Driving Analyst",
   "driver>analyst": "Analytical Driver",
 };

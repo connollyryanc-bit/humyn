@@ -6,7 +6,7 @@ import { energy } from "../../../lib/people-data";
 export const runtime = "nodejs";
 
 const SYSTEM_PROMPT = `You are the Humyn Pulse analyst writing the executive board read
-for Inceptions. The audience is the C-suite and external board members
+for Fjord & Co. The audience is the C-suite and external board members
 scanning this page in under a minute.
 
 Voice rules:
@@ -15,7 +15,7 @@ Voice rules:
   what the capacity manager should do this week. They need to know whether
   the platform is holding up.
 - No names — talk about the organisation's posture and exposure in aggregate.
-- Pulse Map vocabulary only (Driver, Energizer, Supporter, Analyst). Never
+- Pulse Map vocabulary only (Driver, Energizer, Harmoniser, Analyst). Never
   Insights Discovery vocabulary.
 - No bullet points, no headings, no hedging language ("perhaps", "might").
 - Lead with the headline number that matters most this week.
@@ -27,7 +27,7 @@ function buildAnalystBrief(enriched: PersonWithCapacity[]): string {
   const flightRisks = enriched.filter(
     (p) => p.capacity.riskLevel === "high" || p.capacity.riskLevel === "medium",
   );
-  const burnouts = enriched.filter((p) => p.capacity.burnoutRisk);
+  const overloads = enriched.filter((p) => p.capacity.overloadRisk);
   const onBench = enriched.filter((p) => p.capacity.benchDays > 0);
   const totalRevenueAtRisk = flightRisks.reduce(
     (s, p) => s + p.capacity.lostRevenue3Months,
@@ -54,10 +54,10 @@ function buildAnalystBrief(enriched: PersonWithCapacity[]): string {
 - Three-month revenue exposure from retention: €${(totalRevenueAtRisk / 1000).toFixed(0)}k
 - Total attrition cost exposure across the org: €${(totalAttritionCost / 1000).toFixed(0)}k
 - Flight risks (high or medium tier): ${flightRisks.length} (${Math.round((flightRisks.length / enriched.length) * 100)}% of workforce)
-- Burnout-flagged: ${burnouts.length}
+- Over-allocated: ${overloads.length}
 - On bench: ${onBench.length}
 
-Dominant energies across the org: Driver ${enriched.filter((p) => p.primary === "driver").length}, Energizer ${enriched.filter((p) => p.primary === "energizer").length}, Supporter ${enriched.filter((p) => p.primary === "supporter").length}, Analyst ${enriched.filter((p) => p.primary === "analyst").length}.`;
+Dominant energies across the org: Driver ${enriched.filter((p) => p.primary === "driver").length}, Energizer ${enriched.filter((p) => p.primary === "energizer").length}, Harmoniser ${enriched.filter((p) => p.primary === "supporter").length}, Analyst ${enriched.filter((p) => p.primary === "analyst").length}.`;
 }
 
 export async function GET() {

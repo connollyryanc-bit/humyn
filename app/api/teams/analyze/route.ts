@@ -6,7 +6,7 @@ export const runtime = "nodejs";
 
 const SYSTEM_PROMPT = `You are a team-composition analyst specialising in the Humyn Pulse Map
 (four energies — Driver (red, action-focused), Energizer (yellow, people-focused),
-Supporter (green, harmony-focused), Analyst (blue, process-focused)).
+Harmoniser (green, harmony-focused), Analyst (blue, process-focused)).
 You are given a composed team and must return a structured JSON analysis useful
 to a Nordic capacity manager.
 
@@ -45,7 +45,7 @@ interface AnalyzeBody {
 }
 
 function personBrief(p: Person): string {
-  return `- ${p.name} (${p.role}, ${p.location}). Primary energy: ${energy[p.primary].label}, secondary: ${energy[p.secondary].label}. Wheel position: ${p.wheelPosition}. Energy scores: Driver ${p.scores.driver}, Energizer ${p.scores.energizer}, Supporter ${p.scores.supporter}, Analyst ${p.scores.analyst}. Best trait: ${p.bestTrait || "n/a"}. Watch-out: ${p.vice || "n/a"}. Drivers: ${p.drivers.join("; ") || "none"}. Detractors: ${p.detractors.join("; ") || "none"}.`;
+  return `- ${p.name} (${p.role}, ${p.location}). Primary energy: ${energy[p.primary].label}, secondary: ${energy[p.secondary].label}. Wheel position: ${p.wheelPosition}. Energy scores: Driver ${p.scores.driver}, Energizer ${p.scores.energizer}, Harmoniser ${p.scores.supporter}, Analyst ${p.scores.analyst}. Best trait: ${p.bestTrait || "n/a"}. Watch-out: ${p.vice || "n/a"}. Drivers: ${p.drivers.join("; ") || "none"}. Detractors: ${p.detractors.join("; ") || "none"}.`;
 }
 
 export async function POST(req: Request) {

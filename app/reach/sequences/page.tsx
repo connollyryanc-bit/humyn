@@ -253,9 +253,9 @@ export default function SequencesPage() {
               style={{
                 padding: "12px 16px",
                 borderRadius: 10,
-                background: "#FFFBF2",
-                border: "0.5px solid #FAD98A",
-                color: "#8B5A00",
+                background: "#FFF0E4",
+                border: "0.5px solid #FFD2B0",
+                color: "#A04A0C",
                 fontSize: 13,
                 lineHeight: 1.55,
               }}
@@ -290,7 +290,7 @@ export default function SequencesPage() {
                         {i + 1}
                       </span>
                       <span style={{ fontSize: 13, fontWeight: 600, color: R.ink }}>{meta.label}</span>
-                      <Pill bg={meta.auto ? "#EEF7F2" : "#F3F0EA"} color={meta.auto ? "#1A5C38" : R.ink2} border="transparent">
+                      <Pill bg={meta.auto ? "#F1ECFF" : "#F4F4F8"} color={meta.auto ? "#5B37D6" : R.ink2} border="transparent">
                         {meta.auto ? "Sent automatically" : "Task for you"}
                       </Pill>
                       <span style={{ flex: 1 }} />
@@ -334,8 +334,8 @@ export default function SequencesPage() {
                           title={ph.hint}
                           style={{
                             border: R.line,
-                            background: ph.ai ? "#EEF7F2" : R.subtle,
-                            color: ph.ai ? "#1A5C38" : R.ink2,
+                            background: ph.ai ? "#F1ECFF" : R.subtle,
+                            color: ph.ai ? "#5B37D6" : R.ink2,
                             borderRadius: 100,
                             padding: "3px 10px",
                             fontSize: 11,
@@ -445,7 +445,7 @@ export default function SequencesPage() {
                     </div>
 
                     {error && (
-                      <div style={{ padding: 10, borderRadius: 8, background: "#FDF0EE", color: "#9B2A1A", fontSize: 12 }}>
+                      <div style={{ padding: 10, borderRadius: 8, background: "#FFE8F0", color: "#B0154F", fontSize: 12 }}>
                         {error}
                       </div>
                     )}
@@ -455,12 +455,12 @@ export default function SequencesPage() {
                         <Label>Tailored version</Label>
                         <div
                           style={{
-                            border: "0.5px solid #9ED4B8",
+                            border: "0.5px solid #D2C5FF",
                             borderRadius: 10,
-                            background: "#EEF7F2",
+                            background: "#F1ECFF",
                             padding: 14,
                             fontSize: 13,
-                            color: "#1A5C38",
+                            color: "#5B37D6",
                             lineHeight: 1.65,
                             whiteSpace: "pre-wrap",
                           }}

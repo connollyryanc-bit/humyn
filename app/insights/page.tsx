@@ -18,9 +18,9 @@ function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
     <span
       className="font-display"
-      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
+      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#0E0F26" }}
     >
-      hum<span style={{ color: "#FF5040" }}>y</span>n
+      hum<span style={{ background: "linear-gradient(120deg, #3355E8 0%, #7B4DFF 34%, #F23D7A 68%, #FF9F5A 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>y</span>n
     </span>
   );
 }
@@ -54,7 +54,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textTransform: "uppercase",
         letterSpacing: "0.08em",
         fontWeight: 500,
@@ -107,7 +107,7 @@ function HeadlineStat({
       <div
         style={{
           fontSize: 10,
-          color: "#9A9A9A",
+          color: "#6E7090",
           textTransform: "uppercase",
           letterSpacing: "0.08em",
           fontWeight: 500,
@@ -126,7 +126,7 @@ function HeadlineStat({
       >
         {value}
       </div>
-      <div style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.45 }}>{detail}</div>
+      <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.45 }}>{detail}</div>
     </div>
   );
 }
@@ -159,7 +159,7 @@ function FlagRow({
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
           <Link
             href={`/people/${person.id}`}
-            style={{ fontSize: 14, fontWeight: 600, color: "#161311" }}
+            style={{ fontSize: 14, fontWeight: 600, color: "#0E0F26" }}
           >
             {person.name}
           </Link>
@@ -184,7 +184,7 @@ function FlagRow({
         <div style={{ fontSize: 13, color: tone.text, fontWeight: 600, marginBottom: 2 }}>
           {headline}
         </div>
-        <div style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.5 }}>{detail}</div>
+        <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.5 }}>{detail}</div>
       </div>
     </div>
   );
@@ -203,10 +203,10 @@ function MarketBar({
 }) {
   const tone =
     utilisation >= 80
-      ? { color: "#2E8B57", bg: "#EEF7F2" }
+      ? { color: "#9B7CFF", bg: "#F1ECFF" }
       : utilisation >= 70
-        ? { color: "#F5A623", bg: "#FFFBF2" }
-        : { color: "#E8402A", bg: "#FDF0EE" };
+        ? { color: "#FF9F5A", bg: "#FFF0E4" }
+        : { color: "#F23D7A", bg: "#FFE8F0" };
   return (
     <div
       style={{
@@ -214,13 +214,13 @@ function MarketBar({
         alignItems: "center",
         gap: 12,
         padding: "10px 12px",
-        background: "#FAFAF8",
+        background: "#F7F7FA",
         borderRadius: 10,
         border: "0.5px solid rgba(0,0,0,0.07)",
       }}
     >
-      <div style={{ width: 100, fontSize: 13, fontWeight: 600, color: "#161311" }}>{label}</div>
-      <div style={{ flex: 1, height: 6, background: "#EDEDEA", borderRadius: 4 }}>
+      <div style={{ width: 100, fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>{label}</div>
+      <div style={{ flex: 1, height: 6, background: "#ECEBF2", borderRadius: 4 }}>
         <div
           style={{
             width: `${Math.min(utilisation, 100)}%`,
@@ -241,7 +241,7 @@ function MarketBar({
       >
         {utilisation}%
       </div>
-      <div style={{ width: 80, fontSize: 11, color: "#9A9A9A", textAlign: "right" }}>
+      <div style={{ width: 80, fontSize: 11, color: "#6E7090", textAlign: "right" }}>
         {count} of {total}
       </div>
     </div>
@@ -255,8 +255,8 @@ function buildOutlook(enriched: PersonWithCapacity[], avgUtil: number): string {
     .filter((p) => p.capacity.riskLevel === "high" || p.capacity.riskLevel === "medium")
     .reduce((s, p) => s + p.capacity.lostRevenue3Months, 0);
 
-  const burnouts = enriched.filter((p) => p.capacity.burnoutRisk);
-  const burnoutNames = burnouts.map((b) => b.name.split(" ")[0]);
+  const overloads = enriched.filter((p) => p.capacity.overloadRisk);
+  const overloadNames = overloads.map((b) => b.name.split(" ")[0]);
 
   const lowest = [...enriched].sort(
     (a, b) => a.capacity.loyaltyScore - b.capacity.loyaltyScore,
@@ -265,25 +265,25 @@ function buildOutlook(enriched: PersonWithCapacity[], avgUtil: number): string {
   const gap = 80 - avgUtil;
   const utilSentence =
     gap > 0
-      ? `Utilisation stands at ${avgUtil}% — ${gap} points below the 80% Inceptions target. The shortfall is concentrated, not spread: ${benchPeople.length} people account for ${benchDays} bench days between them, and one tighter month of allocation closes most of the gap.`
-      : `Utilisation stands at ${avgUtil}% — at or above the 80% target. The team is running tight; the watch is now on people sustaining well above 86% (currently ${burnoutNames.length ? burnoutNames.join(", ") : "none flagged"}).`;
+      ? `Utilisation stands at ${avgUtil}% — ${gap} points below the 80% Fjord & Co target. The shortfall is concentrated, not spread: ${benchPeople.length} people account for ${benchDays} bench days between them, and one tighter month of allocation closes most of the gap.`
+      : `Utilisation stands at ${avgUtil}% — at or above the 80% target. The team is running tight; the watch is now on people sustaining well above 86% (currently ${overloadNames.length ? overloadNames.join(", ") : "none flagged"}).`;
 
   const exposureSentence =
     exposure > 0
       ? `Three-month revenue exposure from current flight risks is ${formatEuros(exposure)}. The highest-priority retention conversation is with ${lowest.name} (loyalty ${lowest.capacity.loyaltyScore}, ${energy[lowest.primary].label} profile, ${lowest.capacity.benchDays} days on bench).`
       : `No active flight risks this week — revenue exposure from retention is zero, the rare quarter to plan rather than react.`;
 
-  const burnoutSentence =
-    burnouts.length === 0
-      ? "No burnout flags this week."
-      : `Burnout flags sit on ${burnoutNames.join(" and ")} — high engagement that can mask disengagement risk. A planned step-down for either is cheaper than a surprise resignation.`;
+  const overloadSentence =
+    overloads.length === 0
+      ? "No overload flags this week."
+      : `Overload flags sit on ${overloadNames.join(" and ")} — high engagement that can mask disengagement risk. A planned step-down for either is cheaper than a surprise resignation.`;
 
   const forward = `Looking forward two weeks: prioritise allocation for ${benchPeople
     .slice(0, 2)
     .map((b) => b.name.split(" ")[0])
-    .join(" and ") || "the bench"}, hold pricing on the at-risk client relationships listed below, and protect the recovery weeks for the burnout-flagged engagements.`;
+    .join(" and ") || "the bench"}, hold pricing on the at-risk client relationships listed below, and protect the recovery weeks for the over-allocated engagements.`;
 
-  return `${utilSentence} ${exposureSentence} ${burnoutSentence} ${forward}`;
+  return `${utilSentence} ${exposureSentence} ${overloadSentence} ${forward}`;
 }
 
 const MARKETS = ["Stockholm", "Oslo", "Copenhagen", "Helsinki"] as const;
@@ -324,8 +324,8 @@ export default function InsightsPage() {
     [enriched],
   );
 
-  const burnouts = useMemo(
-    () => enriched.filter((p) => p.capacity.burnoutRisk),
+  const overloads = useMemo(
+    () => enriched.filter((p) => p.capacity.overloadRisk),
     [enriched],
   );
 
@@ -426,7 +426,7 @@ export default function InsightsPage() {
               borderRadius: 100,
               border: "0.5px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#161311",
+              color: "#0E0F26",
               fontSize: 12,
               fontWeight: 500,
               cursor: "pointer",
@@ -443,7 +443,7 @@ export default function InsightsPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 500,
@@ -456,7 +456,7 @@ export default function InsightsPage() {
             style={{
               fontSize: 44,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.9px",
               margin: "10px 0 8px",
               lineHeight: 1.1,
@@ -464,15 +464,15 @@ export default function InsightsPage() {
           >
             Insights
           </h1>
-          <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720 }}>
-            The C-suite read of where Inceptions stands this week — capacity, retention,
-            burnout, and the opportunities the bench is currently giving us.
+          <div style={{ fontSize: 13, color: "#4B4C6B", maxWidth: 720 }}>
+            The C-suite read of where Fjord & Co stands this week — capacity, retention,
+            overload, and the opportunities the bench is currently giving us.
           </div>
         </div>
 
         <div
           style={{
-            background: "#161311",
+            background: "#0E0F26",
             borderRadius: 12,
             padding: "1.5rem 1.75rem",
             color: "#FFFFFF",
@@ -497,8 +497,8 @@ export default function InsightsPage() {
               style={{
                 padding: "2px 8px",
                 borderRadius: 100,
-                background: aiSource === "claude" ? "#F5A623" : "rgba(255,255,255,0.12)",
-                color: aiSource === "claude" ? "#161311" : "rgba(255,255,255,0.7)",
+                background: aiSource === "claude" ? "#FF9F5A" : "rgba(255,255,255,0.12)",
+                color: aiSource === "claude" ? "#0E0F26" : "rgba(255,255,255,0.7)",
                 fontSize: 9,
                 letterSpacing: "0.07em",
               }}
@@ -535,33 +535,33 @@ export default function InsightsPage() {
             detail={`${80 - avgUtil >= 0 ? `${80 - avgUtil} points below target` : `${avgUtil - 80} points above target`}`}
             tone={
               avgUtil >= 80
-                ? { color: "#1A5C38", bg: "#EEF7F2", border: "#9ED4B8" }
+                ? { color: "#5B37D6", bg: "#F1ECFF", border: "#D2C5FF" }
                 : avgUtil >= 70
-                  ? { color: "#8B5A00", bg: "#FFFBF2", border: "#FAD98A" }
-                  : { color: "#9B2A1A", bg: "#FDF0EE", border: "#FCCDC6" }
+                  ? { color: "#A04A0C", bg: "#FFF0E4", border: "#FFD2B0" }
+                  : { color: "#B0154F", bg: "#FFE8F0", border: "#FFC2D7" }
             }
           />
           <HeadlineStat
             label="Revenue at risk"
             value={formatEuros(totalExposure)}
             detail={`Across ${flightRisks.length} flight risk${flightRisks.length === 1 ? "" : "s"} in the next 3 months`}
-            tone={{ color: "#9B2A1A", bg: "#FDF0EE", border: "#FCCDC6" }}
+            tone={{ color: "#B0154F", bg: "#FFE8F0", border: "#FFC2D7" }}
           />
           <HeadlineStat
-            label="Burnout watch"
-            value={String(burnouts.length)}
+            label="Overload watch"
+            value={String(overloads.length)}
             detail={
-              burnouts.length === 0
+              overloads.length === 0
                 ? "No one flagged"
-                : burnouts.map((b) => b.name.split(" ")[0]).join(" and ")
+                : overloads.map((b) => b.name.split(" ")[0]).join(" and ")
             }
-            tone={{ color: "#8B5A00", bg: "#FFFBF2", border: "#FAD98A" }}
+            tone={{ color: "#A04A0C", bg: "#FFF0E4", border: "#FFD2B0" }}
           />
           <HeadlineStat
             label="Protected revenue"
             value={formatEuros(protectedRevenue)}
             detail="On stable consultants who own key client relationships"
-            tone={{ color: "#1A5C38", bg: "#EEF7F2", border: "#9ED4B8" }}
+            tone={{ color: "#5B37D6", bg: "#F1ECFF", border: "#D2C5FF" }}
           />
         </div>
 
@@ -580,11 +580,11 @@ export default function InsightsPage() {
                 <div
                   style={{
                     padding: 14,
-                    background: "#EEF7F2",
-                    border: "0.5px solid #9ED4B8",
+                    background: "#F1ECFF",
+                    border: "0.5px solid #D2C5FF",
                     borderRadius: 10,
                     fontSize: 13,
-                    color: "#1A5C38",
+                    color: "#5B37D6",
                   }}
                 >
                   No risk flags this week.
@@ -621,11 +621,11 @@ export default function InsightsPage() {
                 <div
                   style={{
                     padding: 14,
-                    background: "#FAFAF8",
+                    background: "#F7F7FA",
                     border: "0.5px solid rgba(0,0,0,0.07)",
                     borderRadius: 10,
                     fontSize: 13,
-                    color: "#5A5A5A",
+                    color: "#4B4C6B",
                   }}
                 >
                   No bench capacity right now. Allocation is tight.
@@ -636,10 +636,10 @@ export default function InsightsPage() {
                     key={p.id}
                     person={p}
                     tone={{
-                      color: "#1A5C38",
-                      bg: "#EEF7F2",
-                      border: "#9ED4B8",
-                      text: "#1A5C38",
+                      color: "#5B37D6",
+                      bg: "#F1ECFF",
+                      border: "#D2C5FF",
+                      text: "#5B37D6",
                       label: "Available",
                       icon: "✦",
                     }}
@@ -655,12 +655,12 @@ export default function InsightsPage() {
                 paddingTop: 12,
                 borderTop: "0.5px solid rgba(0,0,0,0.06)",
                 fontSize: 11,
-                color: "#9A9A9A",
+                color: "#6E7090",
                 lineHeight: 1.5,
               }}
             >
-              <span style={{ fontWeight: 600, color: "#5A5A5A" }}>Bench thresholds:</span>{" "}
-              Energizer: risk at {benchThresholds.energizer}d · Supporter: risk at{" "}
+              <span style={{ fontWeight: 600, color: "#4B4C6B" }}>Bench thresholds:</span>{" "}
+              Energizer: risk at {benchThresholds.energizer}d · Harmoniser: risk at{" "}
               {benchThresholds.supporter}d · Driver &amp; Analyst: risk at {benchThresholds.driver}d
             </div>
           </Card>
@@ -688,11 +688,11 @@ export default function InsightsPage() {
                 paddingTop: 12,
                 borderTop: "0.5px solid rgba(0,0,0,0.06)",
                 fontSize: 11,
-                color: "#9A9A9A",
+                color: "#6E7090",
               }}
             >
-              <span style={{ fontWeight: 600, color: "#5A5A5A" }}>Energy mix across markets:</span>{" "}
-              Driver {energyMix.driver} · Energizer {energyMix.energizer} · Supporter{" "}
+              <span style={{ fontWeight: 600, color: "#4B4C6B" }}>Energy mix across markets:</span>{" "}
+              Driver {energyMix.driver} · Energizer {energyMix.energizer} · Harmoniser{" "}
               {energyMix.supporter} · Analyst {energyMix.analyst}
             </div>
           </Card>
@@ -701,7 +701,7 @@ export default function InsightsPage() {
         <div style={{ marginBottom: 12 }}>
           <Card>
             <SectionLabel>Two-week outlook</SectionLabel>
-            <p style={{ fontSize: 14, color: "#5A5A5A", lineHeight: 1.7, margin: 0 }}>
+            <p style={{ fontSize: 14, color: "#4B4C6B", lineHeight: 1.7, margin: 0 }}>
               {outlook}
             </p>
           </Card>
@@ -728,17 +728,17 @@ export default function InsightsPage() {
                     alignItems: "center",
                     gap: 12,
                     padding: "10px 12px",
-                    background: "#FAFAF8",
+                    background: "#F7F7FA",
                     borderRadius: 10,
                     border: "0.5px solid rgba(0,0,0,0.07)",
                   }}
                 >
                   <Avatar person={p} size={32} />
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600, color: "#161311" }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: "#0E0F26" }}>
                       {p.name}
                     </div>
-                    <div style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.5 }}>
+                    <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.5 }}>
                       {p.capacity.keyClientAtRisk}
                     </div>
                   </div>
@@ -747,7 +747,7 @@ export default function InsightsPage() {
                       style={{
                         fontSize: 13,
                         fontWeight: 700,
-                        color: "#161311",
+                        color: "#0E0F26",
                       }}
                     >
                       {formatEuros(p.capacity.lostRevenue3Months)}
@@ -755,7 +755,7 @@ export default function InsightsPage() {
                     <span
                       style={{
                         fontSize: 10,
-                        color: "#9A9A9A",
+                        color: "#6E7090",
                         textTransform: "uppercase",
                         letterSpacing: "0.08em",
                         fontWeight: 500,

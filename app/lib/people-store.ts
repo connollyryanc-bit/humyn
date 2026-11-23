@@ -64,15 +64,15 @@ export function initialsFromName(name: string): string {
 const PURE: Record<EnergyKey, string> = {
   driver: "Driver",
   energizer: "Energizer",
-  supporter: "Supporter",
+  supporter: "Harmoniser",
   analyst: "Analyst",
 };
 
 const MIXED: Record<EnergyKey, Record<EnergyKey, string>> = {
-  driver:    { driver: "Driver",              energizer: "Energizing Driver",   supporter: "Supportive Driver",    analyst: "Analytical Driver"    },
-  energizer: { driver: "Driving Energizer",   energizer: "Energizer",           supporter: "Supportive Energizer", analyst: "Analytical Energizer" },
-  supporter: { driver: "Driving Supporter",   energizer: "Energizing Supporter",supporter: "Supporter",            analyst: "Analytical Supporter" },
-  analyst:   { driver: "Driving Analyst",     energizer: "Energizing Analyst",  supporter: "Supportive Analyst",   analyst: "Analyst"              },
+  driver:    { driver: "Driver",              energizer: "Energizing Driver",   supporter: "Harmonising Driver",    analyst: "Analytical Driver"    },
+  energizer: { driver: "Driving Energizer",   energizer: "Energizer",           supporter: "Harmonising Energizer", analyst: "Analytical Energizer" },
+  supporter: { driver: "Driving Harmoniser",   energizer: "Energizing Harmoniser",supporter: "Harmoniser",            analyst: "Analytical Harmoniser" },
+  analyst:   { driver: "Driving Analyst",     energizer: "Energizing Analyst",  supporter: "Harmonising Analyst",   analyst: "Analyst"              },
 };
 
 export function deriveWheelPosition(primary: EnergyKey, secondary: EnergyKey): string {

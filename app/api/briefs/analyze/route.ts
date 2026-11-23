@@ -5,14 +5,14 @@ import { PersonWithCapacity } from "../../../lib/capacity-data";
 
 export const runtime = "nodejs";
 
-const SYSTEM_PROMPT = `You are the Humyn Pulse team-composition AI for Inceptions.
+const SYSTEM_PROMPT = `You are the Humyn Pulse team-composition AI for Fjord & Co.
 A capacity manager gives you an inbound brief / RFP and your job is to propose
 three distinct, named team options drawn ONLY from the consultant pool provided
 below. The capacity manager will choose one to take to client.
 
 Voice rules:
 - Pulse Map vocabulary only — the four archetypes are Driver (red,
-  action-focused), Energizer (yellow, people-focused), Supporter (green,
+  action-focused), Energizer (yellow, people-focused), Harmoniser (green,
   harmony-focused), Analyst (blue, process-focused). Never Insights
   Discovery vocabulary.
 - Use real consultant names from the pool. Never invent.
@@ -37,7 +37,7 @@ Rules:
   positioning (e.g. "Built for pace — front-load Driver energy and senior
   presence; expect a richer day-rate.")
 - Each proposal should include a one-sentence "watch-out" naming the trade-off
-  it makes (e.g. "Light on Supporter — risk of slow consensus on long phases.")
+  it makes (e.g. "Light on Harmoniser — risk of slow consensus on long phases.")
 - Prefer people whose availability is "now" or "soon" unless the brief
   explicitly needs an allocated specialist; in that case note the conflict.
 - If the brief mentions a specific client, location or skill, weight people
@@ -73,7 +73,7 @@ interface AnalyzeBody {
 }
 
 function personLine(p: PersonWithCapacity): string {
-  return `id ${p.id}: ${p.name} (${p.role}, ${p.location}). Primary ${energy[p.primary].label} (${p.scores[p.primary]}%), secondary ${energy[p.secondary].label}. All energies: Driver ${p.scores.driver} / Energizer ${p.scores.energizer} / Supporter ${p.scores.supporter} / Analyst ${p.scores.analyst}. Capabilities: ${p.capabilities.join(", ") || "n/a"}. Availability: ${p.available}, ${p.utilisation}% util, ${p.capacity.benchDays}d bench, risk ${p.capacity.riskLevel}. Day rate €${p.dayRate || 1500}.`;
+  return `id ${p.id}: ${p.name} (${p.role}, ${p.location}). Primary ${energy[p.primary].label} (${p.scores[p.primary]}%), secondary ${energy[p.secondary].label}. All energies: Driver ${p.scores.driver} / Energizer ${p.scores.energizer} / Harmoniser ${p.scores.supporter} / Analyst ${p.scores.analyst}. Capabilities: ${p.capabilities.join(", ") || "n/a"}. Availability: ${p.available}, ${p.utilisation}% util, ${p.capacity.benchDays}d bench, risk ${p.capacity.riskLevel}. Day rate €${p.dayRate || 1500}.`;
 }
 
 export async function POST(req: Request) {

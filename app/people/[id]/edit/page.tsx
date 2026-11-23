@@ -68,7 +68,7 @@ export default function EditPersonPage() {
               borderRadius: 100,
               border: "0.5px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#161311",
+              color: "#0E0F26",
               fontSize: 12,
               fontWeight: 500,
               textDecoration: "none",
@@ -84,7 +84,7 @@ export default function EditPersonPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 500,
@@ -97,14 +97,14 @@ export default function EditPersonPage() {
             style={{
               fontSize: 32,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.5px",
               margin: "6px 0 4px",
             }}
           >
             Editing {person.name}
           </h1>
-          <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 640 }}>
+          <div style={{ fontSize: 13, color: "#4B4C6B", maxWidth: 640 }}>
             Your edits override the directory value for this person and persist in your browser.
           </div>
         </div>

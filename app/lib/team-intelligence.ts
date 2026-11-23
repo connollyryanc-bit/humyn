@@ -43,16 +43,16 @@ const HARMONY_BANDS: Array<{
   band: TeamHarmony["band"];
   color: string;
 }> = [
-  { min: 85, band: "Excellent", color: "#2E8B57" },
-  { min: 70, band: "Healthy", color: "#F5A623" },
-  { min: 50, band: "Watch", color: "#F5A623" },
-  { min: 0,  band: "At risk", color: "#E8402A" },
+  { min: 85, band: "Excellent", color: "#9B7CFF" },
+  { min: 70, band: "Healthy", color: "#FF9F5A" },
+  { min: 50, band: "Watch", color: "#FF9F5A" },
+  { min: 0,  band: "At risk", color: "#F23D7A" },
 ];
 
 const POSITION_OF_PRIMARY: Record<EnergyKey, string> = {
   driver: "Driver",
   energizer: "Energizer",
-  supporter: "Supporter",
+  supporter: "Harmoniser",
   analyst: "Analyst",
 };
 
@@ -127,7 +127,7 @@ export function detectFrictionPairs(team: Person[]): FrictionPair[] {
         reasons.push("Two pure Energizers — risk of low follow-through");
       }
       if (a.primary === b.primary && a.primary === "supporter") {
-        reasons.push("Two pure Supporters — risk of slow decisions");
+        reasons.push("Two pure Harmonisers — risk of slow decisions");
       }
       if (a.primary === b.primary && a.primary === "analyst") {
         reasons.push("Two pure Analysts — risk of analysis paralysis");
@@ -155,7 +155,7 @@ export function detectEnergyGaps(team: Person[]): EnergyGap[] {
       gaps.push({
         energy: k,
         severity: "oversupplied",
-        detail: `Team average ${avg[k]}% — risks of ${k === "driver" ? "Driver overload (burnout, conflict)" : k === "energizer" ? "Energizer overload (low follow-through)" : k === "supporter" ? "Supporter overload (slow decisions)" : "Analyst overload (analysis paralysis)"}.`,
+        detail: `Team average ${avg[k]}% — risks of ${k === "driver" ? "Driver overload (overload, conflict)" : k === "energizer" ? "Energizer overload (low follow-through)" : k === "supporter" ? "Harmoniser overload (slow decisions)" : "Analyst overload (analysis paralysis)"}.`,
       });
     }
   });
@@ -170,7 +170,7 @@ export function calculateHarmony(team: Person[]): TeamHarmony {
       coverageScore: 0,
       frictionScore: 0,
       band: "At risk",
-      bandColor: "#E8402A",
+      bandColor: "#F23D7A",
     };
   }
 
@@ -313,7 +313,7 @@ export interface MarketCulture {
 function dominantLabel(k: EnergyKey): string {
   if (k === "driver") return "Driver";
   if (k === "energizer") return "Energizer";
-  if (k === "supporter") return "Supporter";
+  if (k === "supporter") return "Harmoniser";
   return "Analyst";
 }
 
@@ -403,7 +403,7 @@ function buildBestFor(dominant: EnergyKey, second: EnergyKey): string {
 function buildWatchFor(dominant: EnergyKey, avg: Record<EnergyKey, number>): string {
   const missing = ENERGIES.filter((k) => avg[k] < 35).map(dominantLabel);
   if (missing.length === 0) {
-    return `Well-balanced market — no single colour is dangerously light. Monitor for burnout if utilisation creeps above 88%.`;
+    return `Well-balanced market — no single colour is dangerously light. Monitor for overload if utilisation creeps above 88%.`;
   }
   if (missing.length === 1) {
     return `Light on ${missing[0]} — be wary of staffing engagements that lean heavily into ${missing[0]} territory from this market alone.`;
@@ -422,7 +422,7 @@ function buildSignature(
 }
 
 // Pulse Map wheel position (clockwise from top): Driver (0°) → Energizer (90°)
-// → Supporter (180°) → Analyst (270°). Energies at 180° apart on the wheel
+// → Harmoniser (180°) → Analyst (270°). Energies at 180° apart on the wheel
 // feel like opposites; neighbours feel close.
 const WHEEL_DEGREES: Record<EnergyKey, number> = {
   driver: 0,

@@ -11,8 +11,8 @@ export interface Accent {
 }
 
 const CARD_BORDER = "0.5px solid rgba(0,0,0,0.07)";
-const GREEN = "#2E8B57";
-const RED = "#E8402A";
+const GREEN = "#9B7CFF";
+const RED = "#F23D7A";
 
 function Card({ children }: { children: ReactNode }) {
   return (
@@ -40,7 +40,7 @@ function Label({ children, accent }: { children: ReactNode; accent?: Accent }) {
         fontWeight: 500,
         letterSpacing: "0.07em",
         textTransform: "uppercase",
-        color: "#9A9A9A",
+        color: "#6E7090",
         marginBottom: 12,
       }}
     >
@@ -67,7 +67,7 @@ function Bullets({ items, dot }: { items: string[]; dot: string }) {
               flexShrink: 0,
             }}
           />
-          <span style={{ fontSize: 13, color: "#4D4945", lineHeight: 1.55 }}>{item}</span>
+          <span style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.55 }}>{item}</span>
         </div>
       ))}
     </div>
@@ -94,7 +94,7 @@ function TraitSliders({ insights, accent }: { insights: PersonInsights; accent: 
                 fontSize: 11,
                 letterSpacing: "0.07em",
                 textTransform: "uppercase",
-                color: v < 45 ? "#161311" : "#9A9A9A",
+                color: v < 45 ? "#0E0F26" : "#6E7090",
                 fontWeight: v < 45 ? 600 : 500,
               }}
             >
@@ -108,7 +108,7 @@ function TraitSliders({ insights, accent }: { insights: PersonInsights; accent: 
                   right: 0,
                   top: 8,
                   height: 2,
-                  background: "#F3F0EA",
+                  background: "#F4F4F8",
                   borderRadius: 100,
                 }}
               />
@@ -142,7 +142,7 @@ function TraitSliders({ insights, accent }: { insights: PersonInsights; accent: 
                 letterSpacing: "0.07em",
                 textTransform: "uppercase",
                 textAlign: "right",
-                color: v > 55 ? "#161311" : "#9A9A9A",
+                color: v > 55 ? "#0E0F26" : "#6E7090",
                 fontWeight: v > 55 ? 600 : 500,
               }}
             >
@@ -233,14 +233,14 @@ export function InsightSections({
                   gap: 8,
                   fontSize: 13,
                   fontWeight: 600,
-                  color: "#161311",
+                  color: "#0E0F26",
                   marginBottom: 8,
                 }}
               >
                 <span style={{ width: 8, height: 8, borderRadius: "50%", background: accent.color }} />
                 {s.label}
               </div>
-              <p style={{ fontSize: 13, color: "#4D4945", lineHeight: 1.65, margin: 0 }}>
+              <p style={{ fontSize: 13, color: "#4B4C6B", lineHeight: 1.65, margin: 0 }}>
                 {insights[s.key] as string}
               </p>
             </div>

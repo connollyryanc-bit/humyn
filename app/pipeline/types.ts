@@ -51,22 +51,22 @@ export interface Candidate {
 }
 
 export const DEFAULT_STAGES = [
-  { key: "inbox",             label: "Inbox",              tone: "#9A9A9A" },
-  { key: "reviewing",         label: "Reviewing",          tone: "#D4974A" },
-  { key: "phone-screening",   label: "Phone screening",    tone: "#D4974A" },
-  { key: "manager-interview", label: "Manager interview",  tone: "#6B9FCC" },
-  { key: "hr-interview",      label: "HR interview",       tone: "#6B9FCC" },
-  { key: "group-interview",   label: "Group interview",    tone: "#6B9FCC" },
-  { key: "reference-check",   label: "Reference check",    tone: "#5CAB82" },
-  { key: "offer",             label: "Offer",              tone: "#5CAB82" },
-  { key: "hired",             label: "Hired",              tone: "#5CAB82" },
+  { key: "inbox",             label: "Inbox",              tone: "#6E7090" },
+  { key: "reviewing",         label: "Reviewing",          tone: "#FF9F5A" },
+  { key: "phone-screening",   label: "Phone screening",    tone: "#FF9F5A" },
+  { key: "manager-interview", label: "Manager interview",  tone: "#5B7BFF" },
+  { key: "hr-interview",      label: "HR interview",       tone: "#5B7BFF" },
+  { key: "group-interview",   label: "Group interview",    tone: "#5B7BFF" },
+  { key: "reference-check",   label: "Reference check",    tone: "#A68BFF" },
+  { key: "offer",             label: "Offer",              tone: "#A68BFF" },
+  { key: "hired",             label: "Hired",              tone: "#A68BFF" },
 ] as const;
 
 export type DefaultStageKey = (typeof DEFAULT_STAGES)[number]["key"];
 
 export const JOB_STATUS_TONE: Record<JobStatus, { color: string; bg: string; label: string }> = {
-  draft:   { color: "#9A9A9A", bg: "#F3F0EA", label: "Draft" },
-  active:  { color: "#3D8A61", bg: "#EFF8F3", label: "Active" },
-  paused:  { color: "#B87A2E", bg: "#FEF8EE", label: "Paused" },
-  closed:  { color: "#4D4945", bg: "#F3F0EA", label: "Closed" },
+  draft:   { color: "#6E7090", bg: "#F4F4F8", label: "Draft" },
+  active:  { color: "#7C5CE6", bg: "#F4F0FF", label: "Active" },
+  paused:  { color: "#D9782F", bg: "#FFF5EC", label: "Paused" },
+  closed:  { color: "#4B4C6B", bg: "#F4F4F8", label: "Closed" },
 };

@@ -19,7 +19,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textTransform: "uppercase",
         letterSpacing: "0.08em",
         fontWeight: 500,
@@ -100,7 +100,7 @@ function RateCell({
   return (
     <td style={{ padding: "6px 4px" }} title={error || undefined}>
       <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-        <span style={{ fontSize: 11, color: "#9A9A9A" }}>€</span>
+        <span style={{ fontSize: 11, color: "#6E7090" }}>€</span>
         <input
           type="number"
           min={0}
@@ -116,9 +116,9 @@ function RateCell({
             width: 78,
             padding: "6px 8px",
             borderRadius: 6,
-            border: `0.5px solid ${error ? "#FCCDC6" : dirty ? "#FAD98A" : "rgba(0,0,0,0.07)"}`,
-            background: error ? "#FDF0EE" : dirty ? "#FFFBF2" : "#FFFFFF",
-            color: "#161311",
+            border: `0.5px solid ${error ? "#FFC2D7" : dirty ? "#FFD2B0" : "rgba(0,0,0,0.07)"}`,
+            background: error ? "#FFE8F0" : dirty ? "#FFF0E4" : "#FFFFFF",
+            color: "#0E0F26",
             fontSize: 12,
             fontFamily: "inherit",
             outline: "none",
@@ -246,7 +246,7 @@ export default function RateCardPage() {
               borderRadius: 100,
               border: "0.5px solid rgba(0,0,0,0.07)",
               background: "#FFFFFF",
-              color: "#161311",
+              color: "#0E0F26",
               fontSize: 12,
               fontWeight: 500,
               textDecoration: "none",
@@ -262,7 +262,7 @@ export default function RateCardPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 500,
@@ -275,7 +275,7 @@ export default function RateCardPage() {
             style={{
               fontSize: 44,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.9px",
               margin: "10px 0 8px",
               lineHeight: 1.1,
@@ -283,7 +283,7 @@ export default function RateCardPage() {
           >
             Rate card
           </h1>
-          <div style={{ fontSize: 13, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.6 }}>
+          <div style={{ fontSize: 13, color: "#4B4C6B", maxWidth: 720, lineHeight: 1.6 }}>
             Central day rates per role band, seniority and market. Type into any cell, tab or click
             away, and the change saves. The Brief → Team friction-cost projection and the team
             builder both pick up rate-card values for any person whose individual day rate is set
@@ -295,11 +295,11 @@ export default function RateCardPage() {
           <div
             style={{
               padding: 14,
-              background: "#FDF0EE",
-              border: "0.5px solid #FCCDC6",
+              background: "#FFE8F0",
+              border: "0.5px solid #FFC2D7",
               borderRadius: 10,
               fontSize: 13,
-              color: "#9B2A1A",
+              color: "#B0154F",
               marginBottom: 16,
             }}
           >
@@ -321,7 +321,7 @@ export default function RateCardPage() {
                         textAlign: "left",
                         padding: "8px 10px",
                         fontSize: 10,
-                        color: "#9A9A9A",
+                        color: "#6E7090",
                         textTransform: "uppercase",
                         letterSpacing: "0.08em",
                         fontWeight: 600,
@@ -335,7 +335,7 @@ export default function RateCardPage() {
                         textAlign: "left",
                         padding: "8px 10px",
                         fontSize: 10,
-                        color: "#9A9A9A",
+                        color: "#6E7090",
                         textTransform: "uppercase",
                         letterSpacing: "0.08em",
                         fontWeight: 600,
@@ -351,7 +351,7 @@ export default function RateCardPage() {
                           textAlign: "right",
                           padding: "8px 10px",
                           fontSize: 10,
-                          color: "#9A9A9A",
+                          color: "#6E7090",
                           textTransform: "uppercase",
                           letterSpacing: "0.08em",
                           fontWeight: 600,
@@ -371,7 +371,7 @@ export default function RateCardPage() {
                         style={{
                           padding: "10px",
                           fontSize: 13,
-                          color: "#161311",
+                          color: "#0E0F26",
                           fontWeight: 600,
                           borderBottom: "0.5px solid rgba(0,0,0,0.05)",
                         }}
@@ -382,7 +382,7 @@ export default function RateCardPage() {
                         style={{
                           padding: "10px",
                           fontSize: 12,
-                          color: "#5A5A5A",
+                          color: "#4B4C6B",
                           borderBottom: "0.5px solid rgba(0,0,0,0.05)",
                         }}
                       >
@@ -411,7 +411,7 @@ export default function RateCardPage() {
                             borderRadius: 6,
                             border: "0.5px solid rgba(0,0,0,0.07)",
                             background: "#FFFFFF",
-                            color: "#9B2A1A",
+                            color: "#B0154F",
                             fontSize: 11,
                             fontWeight: 500,
                             cursor: "pointer",
@@ -438,7 +438,7 @@ export default function RateCardPage() {
                 flexWrap: "wrap",
               }}
             >
-              <span style={{ fontSize: 11, color: "#9A9A9A", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              <span style={{ fontSize: 11, color: "#6E7090", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>
                 Add row
               </span>
               <input
@@ -450,7 +450,7 @@ export default function RateCardPage() {
                   borderRadius: 7,
                   border: "0.5px solid rgba(0,0,0,0.07)",
                   background: "#FFFFFF",
-                  color: "#161311",
+                  color: "#0E0F26",
                   fontSize: 12,
                   outline: "none",
                   fontFamily: "inherit",
@@ -465,7 +465,7 @@ export default function RateCardPage() {
                   borderRadius: 7,
                   border: "0.5px solid rgba(0,0,0,0.07)",
                   background: "#FFFFFF",
-                  color: "#161311",
+                  color: "#0E0F26",
                   fontSize: 12,
                   outline: "none",
                   cursor: "pointer",
@@ -485,8 +485,8 @@ export default function RateCardPage() {
                   padding: "7px 14px",
                   borderRadius: 7,
                   border: "none",
-                  background: newBand.trim() ? "#161311" : "#EDEDEA",
-                  color: newBand.trim() ? "#FFFFFF" : "#9A9A9A",
+                  background: newBand.trim() ? "#0E0F26" : "#ECEBF2",
+                  color: newBand.trim() ? "#FFFFFF" : "#6E7090",
                   fontSize: 12,
                   fontWeight: 500,
                   cursor: newBand.trim() ? "pointer" : "not-allowed",
@@ -495,7 +495,7 @@ export default function RateCardPage() {
               >
                 Add to card
               </button>
-              <span style={{ fontSize: 11, color: "#9A9A9A" }}>
+              <span style={{ fontSize: 11, color: "#6E7090" }}>
                 Adds a blank row for every market. Edit the cells to set rates.
               </span>
             </div>

@@ -153,7 +153,7 @@ function rowToCapacity(row: CapacityRow): CapacityData {
     onboardingCost: row.onboarding_cost,
     keyClientAtRisk: row.key_client_at_risk,
     currentProject: row.current_project,
-    burnoutRisk: row.burnout_risk,
+    overloadRisk: row.burnout_risk,
   };
 }
 
@@ -170,7 +170,7 @@ function capacityToRow(personId: number, c: CapacityData): CapacityRow {
     onboarding_cost: c.onboardingCost,
     key_client_at_risk: c.keyClientAtRisk,
     current_project: c.currentProject,
-    burnout_risk: c.burnoutRisk,
+    burnout_risk: c.overloadRisk,
   };
 }
 

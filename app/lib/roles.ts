@@ -45,7 +45,7 @@ export const ROLE_DESCRIPTION: Record<Role, string> = {
   viewer: "Read-only access to public profile data.",
 };
 
-const DEFAULT_ROLE: Role = "capacity-manager";
+const DEFAULT_ROLE: Role = "c-suite"; // demo default; set back to "capacity-manager" before real users
 
 // Single source of truth until we wire a Supabase roles table.
 const EMAIL_TO_ROLE: Record<string, Role> = {

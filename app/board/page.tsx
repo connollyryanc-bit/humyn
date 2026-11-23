@@ -19,9 +19,9 @@ function HumynWordmark({ size = 22 }: { size?: number }) {
   return (
     <span
       className="font-display"
-      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#161311" }}
+      style={{ fontWeight: 700, fontSize: size, letterSpacing: "-0.5px", color: "#0E0F26" }}
     >
-      hum<span style={{ color: "#FF5040" }}>y</span>n
+      hum<span style={{ background: "linear-gradient(120deg, #3355E8 0%, #7B4DFF 34%, #F23D7A 68%, #FF9F5A 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>y</span>n
     </span>
   );
 }
@@ -31,7 +31,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#9A9A9A",
+        color: "#6E7090",
         textTransform: "uppercase",
         letterSpacing: "0.08em",
         fontWeight: 500,
@@ -86,7 +86,7 @@ function HeroMetric({
       <div
         style={{
           fontSize: 10,
-          color: "#9A9A9A",
+          color: "#6E7090",
           textTransform: "uppercase",
           letterSpacing: "0.12em",
           fontWeight: 600,
@@ -107,7 +107,7 @@ function HeroMetric({
         {value}
       </div>
       {detail && (
-        <div style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.5, marginTop: "auto" }}>
+        <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.5, marginTop: "auto" }}>
           {detail}
         </div>
       )}
@@ -120,10 +120,10 @@ function MiniBars({ scores }: { scores: Record<EnergyKey, number> }) {
     <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
       {ENERGIES.map((c) => (
         <div key={c} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 10, color: "#5A5A5A", width: 60, fontWeight: 500 }}>
+          <span style={{ fontSize: 10, color: "#4B4C6B", width: 60, fontWeight: 500 }}>
             {energy[c].label}
           </span>
-          <div style={{ flex: 1, height: 4, background: "#EDEDEA", borderRadius: 2 }}>
+          <div style={{ flex: 1, height: 4, background: "#ECEBF2", borderRadius: 2 }}>
             <div
               style={{
                 width: `${Math.min(scores[c], 100)}%`,
@@ -162,11 +162,11 @@ function MarketSummaryCard({
       <Card>
         <div
           className="font-display"
-          style={{ fontSize: 18, fontWeight: 600, color: "#161311", letterSpacing: "-0.3px" }}
+          style={{ fontSize: 18, fontWeight: 600, color: "#0E0F26", letterSpacing: "-0.3px" }}
         >
           {name}
         </div>
-        <div style={{ fontSize: 12, color: "#9A9A9A", marginTop: 8 }}>
+        <div style={{ fontSize: 12, color: "#6E7090", marginTop: 8 }}>
           No consultants on record.
         </div>
       </Card>
@@ -195,7 +195,7 @@ function MarketSummaryCard({
   const dailyRate = people.reduce((s, p) => s + (p.dayRate || 1500), 0);
   const e = energy[dominant];
   const utilColor =
-    avgUtil >= 80 ? "#1A5C38" : avgUtil >= 70 ? "#8B5A00" : "#9B2A1A";
+    avgUtil >= 80 ? "#5B37D6" : avgUtil >= 70 ? "#A04A0C" : "#B0154F";
 
   return (
     <Card>
@@ -210,11 +210,11 @@ function MarketSummaryCard({
         <div>
           <div
             className="font-display"
-            style={{ fontSize: 18, fontWeight: 600, color: "#161311", letterSpacing: "-0.3px" }}
+            style={{ fontSize: 18, fontWeight: 600, color: "#0E0F26", letterSpacing: "-0.3px" }}
           >
             {name}
           </div>
-          <div style={{ fontSize: 11, color: "#5A5A5A", marginTop: 2 }}>
+          <div style={{ fontSize: 11, color: "#4B4C6B", marginTop: 2 }}>
             {n} consultant{n === 1 ? "" : "s"}
           </div>
         </div>
@@ -253,7 +253,7 @@ function MarketSummaryCard({
           <div
             style={{
               fontSize: 10,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 600,
@@ -272,7 +272,7 @@ function MarketSummaryCard({
           <div
             style={{
               fontSize: 10,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 600,
@@ -282,7 +282,7 @@ function MarketSummaryCard({
           </div>
           <div
             className="font-display"
-            style={{ fontSize: 17, fontWeight: 700, color: "#161311", marginTop: 2 }}
+            style={{ fontSize: 17, fontWeight: 700, color: "#0E0F26", marginTop: 2 }}
           >
             €{(dailyRate / 1000).toFixed(1)}k/day
           </div>
@@ -349,7 +349,7 @@ export default function BoardPage() {
     const flightRisks = enriched.filter(
       (p) => p.capacity.riskLevel === "high" || p.capacity.riskLevel === "medium",
     );
-    const burnouts = enriched.filter((p) => p.capacity.burnoutRisk);
+    const overloads = enriched.filter((p) => p.capacity.overloadRisk);
     const revenueAtRisk = flightRisks.reduce(
       (s, p) => s + p.capacity.lostRevenue3Months,
       0,
@@ -369,7 +369,7 @@ export default function BoardPage() {
       enriched.reduce((s, p) => s + p.capacity.loyaltyScore, 0) / enriched.length,
     );
     const dailyBillable = enriched.reduce((s, p) => s + (p.dayRate || 1500), 0);
-    const burnoutCost = burnouts.reduce(
+    const overloadCost = overloads.reduce(
       (s, p) =>
         s +
         p.capacity.replacementCost +
@@ -407,13 +407,13 @@ export default function BoardPage() {
 
     return {
       flightRisks,
-      burnouts,
+      overloads,
       revenueAtRisk,
       attritionExposure,
       avgUtil,
       avgLoyalty,
       dailyBillable,
-      burnoutCost,
+      overloadCost,
       orgEnergies,
       orgDominant,
       topExposure,
@@ -429,10 +429,10 @@ export default function BoardPage() {
 
   const utilTone =
     metrics && metrics.avgUtil >= 80
-      ? { color: "#1A5C38", bg: "#EEF7F2", border: "#9ED4B8" }
+      ? { color: "#5B37D6", bg: "#F1ECFF", border: "#D2C5FF" }
       : metrics && metrics.avgUtil >= 70
-        ? { color: "#8B5A00", bg: "#FFFBF2", border: "#FAD98A" }
-        : { color: "#9B2A1A", bg: "#FDF0EE", border: "#FCCDC6" };
+        ? { color: "#A04A0C", bg: "#FFF0E4", border: "#FFD2B0" }
+        : { color: "#B0154F", bg: "#FFE8F0", border: "#FFC2D7" };
 
   return (
     <div style={{ minHeight: "100vh", background: ENVIRONMENT_SURFACES.compass, transition: "background 0.25s ease" }}>
@@ -448,7 +448,7 @@ export default function BoardPage() {
                   alignItems: "center",
                   gap: 6,
                   fontSize: 12,
-                  color: "#5A5A5A",
+                  color: "#4B4C6B",
                   cursor: "pointer",
                 }}
               >
@@ -468,7 +468,7 @@ export default function BoardPage() {
                   borderRadius: 100,
                   border: "0.5px solid rgba(0,0,0,0.07)",
                   background: "#FFFFFF",
-                  color: "#161311",
+                  color: "#0E0F26",
                   fontSize: 12,
                   fontWeight: 500,
                   cursor: "pointer",
@@ -495,7 +495,7 @@ export default function BoardPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#9A9A9A",
+              color: "#6E7090",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 500,
@@ -508,7 +508,7 @@ export default function BoardPage() {
             style={{
               fontSize: 44,
               fontWeight: 600,
-              color: "#161311",
+              color: "#0E0F26",
               letterSpacing: "-0.9px",
               margin: "10px 0 8px",
               lineHeight: 1.1,
@@ -516,8 +516,8 @@ export default function BoardPage() {
           >
             Board dashboard
           </h1>
-          <div style={{ fontSize: 14, color: "#5A5A5A", maxWidth: 720, lineHeight: 1.65 }}>
-            A 90-second read of where Inceptions stands this week — strategic posture,
+          <div style={{ fontSize: 14, color: "#4B4C6B", maxWidth: 720, lineHeight: 1.65 }}>
+            A 90-second read of where Fjord & Co stands this week — strategic posture,
             financial exposure, capacity, and the Pulse Map of the workforce. Names are masked by
             default; toggle &ldquo;Show names&rdquo; for the operating team review.
           </div>
@@ -527,11 +527,11 @@ export default function BoardPage() {
           <div
             style={{
               padding: 14,
-              background: "#FDF0EE",
-              border: "0.5px solid #FCCDC6",
+              background: "#FFE8F0",
+              border: "0.5px solid #FFC2D7",
               borderRadius: 10,
               fontSize: 13,
-              color: "#9B2A1A",
+              color: "#B0154F",
               marginBottom: 16,
             }}
           >
@@ -545,7 +545,7 @@ export default function BoardPage() {
           <>
             <div
               style={{
-                background: "#161311",
+                background: "#0E0F26",
                 borderRadius: 12,
                 padding: "1.5rem 1.75rem",
                 color: "#FFFFFF",
@@ -570,8 +570,8 @@ export default function BoardPage() {
                   style={{
                     padding: "2px 8px",
                     borderRadius: 100,
-                    background: aiSource === "claude" ? "#F5A623" : "rgba(255,255,255,0.12)",
-                    color: aiSource === "claude" ? "#161311" : "rgba(255,255,255,0.7)",
+                    background: aiSource === "claude" ? "#FF9F5A" : "rgba(255,255,255,0.12)",
+                    color: aiSource === "claude" ? "#0E0F26" : "rgba(255,255,255,0.7)",
                     fontSize: 9,
                     letterSpacing: "0.07em",
                   }}
@@ -606,7 +606,7 @@ export default function BoardPage() {
                 label="Headcount"
                 value={String(enriched.length)}
                 detail={`Across ${MARKETS.filter((m) => enriched.some((p) => p.location === m)).length} Nordic markets`}
-                tone={{ color: "#161311", bg: "#FFFFFF", border: "rgba(0,0,0,0.07)" }}
+                tone={{ color: "#0E0F26", bg: "#FFFFFF", border: "rgba(0,0,0,0.07)" }}
               />
               <HeroMetric
                 label="Avg utilisation"
@@ -618,19 +618,19 @@ export default function BoardPage() {
                 label="Billable capacity"
                 value={`€${(metrics.dailyBillable / 1000).toFixed(1)}k/day`}
                 detail={`Combined day rate across the workforce`}
-                tone={{ color: "#161311", bg: "#FFFFFF", border: "rgba(0,0,0,0.07)" }}
+                tone={{ color: "#0E0F26", bg: "#FFFFFF", border: "rgba(0,0,0,0.07)" }}
               />
               <HeroMetric
                 label="Revenue at risk"
                 value={`€${(metrics.revenueAtRisk / 1000).toFixed(0)}k`}
                 detail={`3-month exposure from ${metrics.flightRisks.length} flight risk${metrics.flightRisks.length === 1 ? "" : "s"}`}
-                tone={{ color: "#9B2A1A", bg: "#FDF0EE", border: "#FCCDC6" }}
+                tone={{ color: "#B0154F", bg: "#FFE8F0", border: "#FFC2D7" }}
               />
               <HeroMetric
                 label="Attrition exposure"
                 value={`€${(metrics.attritionExposure / 1000000).toFixed(2)}M`}
                 detail="Total cost if every consultant left"
-                tone={{ color: "#9B2A1A", bg: "#FDF0EE", border: "#FCCDC6" }}
+                tone={{ color: "#B0154F", bg: "#FFE8F0", border: "#FFC2D7" }}
               />
               <HeroMetric
                 label="Avg loyalty"
@@ -644,10 +644,10 @@ export default function BoardPage() {
                 }
                 tone={
                   metrics.avgLoyalty >= 75
-                    ? { color: "#1A5C38", bg: "#EEF7F2", border: "#9ED4B8" }
+                    ? { color: "#5B37D6", bg: "#F1ECFF", border: "#D2C5FF" }
                     : metrics.avgLoyalty >= 60
-                      ? { color: "#8B5A00", bg: "#FFFBF2", border: "#FAD98A" }
-                      : { color: "#9B2A1A", bg: "#FDF0EE", border: "#FCCDC6" }
+                      ? { color: "#A04A0C", bg: "#FFF0E4", border: "#FFD2B0" }
+                      : { color: "#B0154F", bg: "#FFE8F0", border: "#FFC2D7" }
                 }
               />
             </div>
@@ -684,7 +684,7 @@ export default function BoardPage() {
                       style={{
                         marginTop: 14,
                         fontSize: 12,
-                        color: "#5A5A5A",
+                        color: "#4B4C6B",
                         lineHeight: 1.6,
                       }}
                     >
@@ -693,7 +693,7 @@ export default function BoardPage() {
                         {energy[metrics.orgDominant].label}
                       </span>{" "}
                       ({metrics.orgEnergies[metrics.orgDominant]}%) across {enriched.length}{" "}
-                      consultants. The Pulse posture below shows the energy mix Inceptions
+                      consultants. The Pulse posture below shows the energy mix Fjord & Co
                       brings to client engagements.
                     </div>
                   </div>
@@ -701,20 +701,20 @@ export default function BoardPage() {
               </Card>
 
               <Card>
-                <SectionLabel>Burnout watch</SectionLabel>
-                {metrics.burnouts.length === 0 ? (
+                <SectionLabel>Overload watch</SectionLabel>
+                {metrics.overloads.length === 0 ? (
                   <div
                     style={{
                       padding: 16,
-                      background: "#EEF7F2",
-                      border: "0.5px solid #9ED4B8",
+                      background: "#F1ECFF",
+                      border: "0.5px solid #D2C5FF",
                       borderRadius: 10,
                       fontSize: 13,
-                      color: "#1A5C38",
+                      color: "#5B37D6",
                       lineHeight: 1.55,
                     }}
                   >
-                    No burnout flags this week. The organisation is operating within sustainable
+                    No overload flags this week. The organisation is operating within sustainable
                     utilisation thresholds.
                   </div>
                 ) : (
@@ -724,33 +724,33 @@ export default function BoardPage() {
                       style={{
                         fontSize: 30,
                         fontWeight: 700,
-                        color: "#8B5A00",
+                        color: "#A04A0C",
                         letterSpacing: "-0.5px",
                         marginBottom: 4,
                       }}
                     >
-                      {metrics.burnouts.length} flagged
+                      {metrics.overloads.length} flagged
                     </div>
-                    <div style={{ fontSize: 12, color: "#5A5A5A", lineHeight: 1.6, marginBottom: 12 }}>
+                    <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.6, marginBottom: 12 }}>
                       Consultants sustaining above 86% utilisation. The replacement cost if any
                       stepped back is{" "}
-                      <strong style={{ color: "#161311" }}>
-                        €{(metrics.burnoutCost / 1000).toFixed(0)}k
+                      <strong style={{ color: "#0E0F26" }}>
+                        €{(metrics.overloadCost / 1000).toFixed(0)}k
                       </strong>{" "}
                       across the flagged group — almost always cheaper to give them a recovery
                       week than to handle a surprise resignation.
                     </div>
                     <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                      {metrics.burnouts.map((p) => (
+                      {metrics.overloads.map((p) => (
                         <div
                           key={p.id}
                           style={{
                             padding: "8px 12px",
-                            background: "#FFFBF2",
-                            border: "0.5px solid #FAD98A",
+                            background: "#FFF0E4",
+                            border: "0.5px solid #FFD2B0",
                             borderRadius: 8,
                             fontSize: 12,
-                            color: "#8B5A00",
+                            color: "#A04A0C",
                           }}
                         >
                           {showNames ? p.name : anonymiseName(p.name, p.location)} ·{" "}
@@ -765,7 +765,7 @@ export default function BoardPage() {
 
             <Card style={{ marginBottom: 12 }}>
               <SectionLabel>Top retention exposure · 5 highest-cost departures</SectionLabel>
-              <div style={{ fontSize: 12, color: "#5A5A5A", marginBottom: 14, lineHeight: 1.55, maxWidth: 640 }}>
+              <div style={{ fontSize: 12, color: "#4B4C6B", marginBottom: 14, lineHeight: 1.55, maxWidth: 640 }}>
                 The five consultants whose departure would cost the most when summing recruitment,
                 three-month lost revenue and onboarding. Where the cost concentration is, the
                 retention focus should be.
@@ -778,12 +778,12 @@ export default function BoardPage() {
                     p.capacity.onboardingCost;
                   const riskTone =
                     p.capacity.riskLevel === "high"
-                      ? { bg: "#FDF0EE", text: "#9B2A1A", border: "#FCCDC6" }
+                      ? { bg: "#FFE8F0", text: "#B0154F", border: "#FFC2D7" }
                       : p.capacity.riskLevel === "medium"
-                        ? { bg: "#FFFBF2", text: "#8B5A00", border: "#FAD98A" }
+                        ? { bg: "#FFF0E4", text: "#A04A0C", border: "#FFD2B0" }
                         : p.capacity.riskLevel === "watch"
-                          ? { bg: "#F7F6F3", text: "#5A5A5A", border: "rgba(0,0,0,0.07)" }
-                          : { bg: "#EEF7F2", text: "#1A5C38", border: "#9ED4B8" };
+                          ? { bg: "#F7F7FA", text: "#4B4C6B", border: "rgba(0,0,0,0.07)" }
+                          : { bg: "#F1ECFF", text: "#5B37D6", border: "#D2C5FF" };
                   return (
                     <div
                       key={p.id}
@@ -792,7 +792,7 @@ export default function BoardPage() {
                         alignItems: "center",
                         gap: 12,
                         padding: "10px 14px",
-                        background: "#FAFAF8",
+                        background: "#F7F7FA",
                         border: "0.5px solid rgba(0,0,0,0.07)",
                         borderRadius: 10,
                       }}
@@ -800,7 +800,7 @@ export default function BoardPage() {
                       <span
                         style={{
                           fontSize: 12,
-                          color: "#161311",
+                          color: "#0E0F26",
                           fontWeight: 600,
                           flex: 1,
                           minWidth: 0,
@@ -831,7 +831,7 @@ export default function BoardPage() {
                         style={{
                           fontSize: 16,
                           fontWeight: 700,
-                          color: "#9B2A1A",
+                          color: "#B0154F",
                           width: 90,
                           textAlign: "right",
                         }}

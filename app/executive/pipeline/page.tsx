@@ -20,17 +20,17 @@ import { ScopeBreadcrumb } from "../scope-breadcrumb";
 import { describeScope, scopeIsRoot, useExecutiveScope } from "../scope-context";
 
 const EXEC_ACCENT = ENVIRONMENT_ACCENTS.executive;
-const EXEC_INK = "#161311";
-const EXEC_INK_SECONDARY = "#3A3633";
+const EXEC_INK = "#0E0F26";
+const EXEC_INK_SECONDARY = "#2A2B45";
 
 const READINESS_TONES: Record<
   ReadinessTone,
   { color: string; bg: string; border: string; label: string }
 > = {
-  ready:   { color: "#3D8A61", bg: "#EFF8F3", border: "#B6E0CB", label: "Ready" },
-  stretch: { color: "#B87A2E", bg: "#FEF8EE", border: "#F2DCB0", label: "Stretch" },
-  risk:    { color: "#B87A2E", bg: "#FEF8EE", border: "#F2DCB0", label: "Risk" },
-  gap:     { color: "#C4534A", bg: "#FDF3F2", border: "#F0CECA", label: "Capability gap" },
+  ready:   { color: "#7C5CE6", bg: "#F4F0FF", border: "#DCD1FF", label: "Ready" },
+  stretch: { color: "#D9782F", bg: "#FFF5EC", border: "#FFDCC2", label: "Stretch" },
+  risk:    { color: "#D9782F", bg: "#FFF5EC", border: "#FFDCC2", label: "Risk" },
+  gap:     { color: "#D93670", bg: "#FFEEF4", border: "#FFCADB", label: "Capability gap" },
 };
 
 function fmtEur(value: number): string {
@@ -104,7 +104,7 @@ export default function PipelineReadinessPage() {
           <div
             style={{
               fontSize: 11,
-              color: "#6F6B66",
+              color: "#5F6080",
               textTransform: "uppercase",
               letterSpacing: "0.14em",
               fontWeight: 600,
@@ -261,7 +261,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
     <div
       style={{
         fontSize: 10,
-        color: "#6F6B66",
+        color: "#5F6080",
         textTransform: "uppercase",
         letterSpacing: "0.16em",
         fontWeight: 600,
@@ -305,7 +305,7 @@ function StageFilterPicker({
             borderRadius: 8,
             border: "none",
             background: filter === i.key ? EXEC_INK : "transparent",
-            color: filter === i.key ? "#F3F0EA" : EXEC_INK_SECONDARY,
+            color: filter === i.key ? "#F4F4F8" : EXEC_INK_SECONDARY,
             fontSize: 12.5,
             fontWeight: filter === i.key ? 500 : 400,
             cursor: "pointer",
@@ -333,11 +333,11 @@ function HeroStat({
 }) {
   const stripe =
     tone === "critical"
-      ? "#C4534A"
+      ? "#D93670"
       : tone === "warning"
-        ? "#B87A2E"
+        ? "#D9782F"
         : tone === "positive"
-          ? "#3D8A61"
+          ? "#7C5CE6"
           : EXEC_ACCENT;
   return (
     <div
@@ -370,7 +370,7 @@ function HeroStat({
       <div
         style={{
           fontSize: 10,
-          color: "#6F6B66",
+          color: "#5F6080",
           textTransform: "uppercase",
           letterSpacing: "0.14em",
           fontWeight: 600,
@@ -390,7 +390,7 @@ function HeroStat({
       >
         {value}
       </div>
-      <div style={{ fontSize: 12, color: "#5A5754", lineHeight: 1.5, marginTop: "auto" }}>
+      <div style={{ fontSize: 12, color: "#4B4C6B", lineHeight: 1.5, marginTop: "auto" }}>
         {detail}
       </div>
     </div>
@@ -445,7 +445,7 @@ function QuadrantChart({ opportunities }: { opportunities: Opportunity[] }) {
           />
           Bubble = total deal value
         </span>
-        <span style={{ color: "#6F6B66", marginLeft: "auto" }}>
+        <span style={{ color: "#5F6080", marginLeft: "auto" }}>
           {opportunities.length} opportunities · hover a bubble for the name
         </span>
       </div>
@@ -459,7 +459,7 @@ function QuadrantChart({ opportunities }: { opportunities: Opportunity[] }) {
           y={padding.top}
           width={innerW / 2}
           height={innerH / 2}
-          fill="#EFF8F3"
+          fill="#F4F0FF"
           opacity={0.5}
         />
         <rect
@@ -467,7 +467,7 @@ function QuadrantChart({ opportunities }: { opportunities: Opportunity[] }) {
           y={padding.top + innerH / 2}
           width={innerW / 2}
           height={innerH / 2}
-          fill="#FDF3F2"
+          fill="#FFEEF4"
           opacity={0.45}
         />
 
@@ -494,7 +494,7 @@ function QuadrantChart({ opportunities }: { opportunities: Opportunity[] }) {
           textAnchor="middle"
           style={{
             fontSize: 10,
-            fill: "#3D8A61",
+            fill: "#7C5CE6",
             letterSpacing: "0.14em",
             fontWeight: 600,
             textTransform: "uppercase",
@@ -508,7 +508,7 @@ function QuadrantChart({ opportunities }: { opportunities: Opportunity[] }) {
           textAnchor="middle"
           style={{
             fontSize: 10,
-            fill: "#6F6B66",
+            fill: "#5F6080",
             letterSpacing: "0.14em",
             fontWeight: 600,
             textTransform: "uppercase",
@@ -522,7 +522,7 @@ function QuadrantChart({ opportunities }: { opportunities: Opportunity[] }) {
           textAnchor="middle"
           style={{
             fontSize: 10,
-            fill: "#C4534A",
+            fill: "#D93670",
             letterSpacing: "0.14em",
             fontWeight: 600,
             textTransform: "uppercase",
@@ -536,7 +536,7 @@ function QuadrantChart({ opportunities }: { opportunities: Opportunity[] }) {
           textAnchor="middle"
           style={{
             fontSize: 10,
-            fill: "#9A9A9A",
+            fill: "#6E7090",
             letterSpacing: "0.14em",
             fontWeight: 600,
             textTransform: "uppercase",
@@ -551,7 +551,7 @@ function QuadrantChart({ opportunities }: { opportunities: Opportunity[] }) {
               x={padding.left + xScale(v)}
               y={H - 18}
               textAnchor="middle"
-              style={{ fontSize: 10, fill: "#9A9A9A" }}
+              style={{ fontSize: 10, fill: "#6E7090" }}
             >
               {v}%
             </text>
@@ -563,7 +563,7 @@ function QuadrantChart({ opportunities }: { opportunities: Opportunity[] }) {
               x={padding.left - 12}
               y={padding.top + yScale(v) + 4}
               textAnchor="end"
-              style={{ fontSize: 10, fill: "#9A9A9A" }}
+              style={{ fontSize: 10, fill: "#6E7090" }}
             >
               {v}%
             </text>
@@ -576,7 +576,7 @@ function QuadrantChart({ opportunities }: { opportunities: Opportunity[] }) {
           textAnchor="middle"
           style={{
             fontSize: 10,
-            fill: "#6F6B66",
+            fill: "#5F6080",
             letterSpacing: "0.12em",
             fontWeight: 600,
             textTransform: "uppercase",
@@ -591,7 +591,7 @@ function QuadrantChart({ opportunities }: { opportunities: Opportunity[] }) {
           transform="rotate(-90)"
           style={{
             fontSize: 10,
-            fill: "#6F6B66",
+            fill: "#5F6080",
             letterSpacing: "0.12em",
             fontWeight: 600,
             textTransform: "uppercase",
@@ -680,7 +680,7 @@ function Funnel({ opportunities }: { opportunities: Opportunity[] }) {
                 style={{
                   position: "relative",
                   height: 28,
-                  background: "#F3F0EA",
+                  background: "#F4F4F8",
                   borderRadius: 6,
                   overflow: "hidden",
                 }}
@@ -707,7 +707,7 @@ function Funnel({ opportunities }: { opportunities: Opportunity[] }) {
                 }}
               >
                 <span style={{ color: EXEC_INK, fontWeight: 600 }}>{fmtEur(d.weighted)}</span>{" "}
-                <span style={{ color: "#9A9A9A" }}>
+                <span style={{ color: "#6E7090" }}>
                   weighted · {d.count} opp{d.count === 1 ? "" : "s"}
                 </span>
               </div>
@@ -761,7 +761,7 @@ function MarqueeOpp({ opp }: { opp: Opportunity }) {
             gap: 6,
             padding: "3px 9px",
             borderRadius: 100,
-            background: "#FAFAF8",
+            background: "#F7F7FA",
             border: "0.5px solid rgba(0,0,0,0.07)",
             fontSize: 10,
             color: EXEC_INK_SECONDARY,
@@ -802,7 +802,7 @@ function MarqueeOpp({ opp }: { opp: Opportunity }) {
       >
         {opp.name}
       </div>
-      <div style={{ fontSize: 11, color: "#9A9A9A" }}>
+      <div style={{ fontSize: 11, color: "#6E7090" }}>
         {opp.client} · {opp.market} · {opp.practice}
       </div>
 
@@ -816,7 +816,7 @@ function MarqueeOpp({ opp }: { opp: Opportunity }) {
         <div
           style={{
             fontSize: 10,
-            color: "#9A9A9A",
+            color: "#6E7090",
             textTransform: "uppercase",
             letterSpacing: "0.1em",
             fontWeight: 600,
@@ -828,7 +828,7 @@ function MarqueeOpp({ opp }: { opp: Opportunity }) {
         <div
           style={{
             height: 5,
-            background: "#F3F0EA",
+            background: "#F4F4F8",
             borderRadius: 3,
             overflow: "hidden",
           }}
@@ -869,7 +869,7 @@ function Cell({ label, value }: { label: string; value: string }) {
       <div
         style={{
           fontSize: 10,
-          color: "#9A9A9A",
+          color: "#6E7090",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
           fontWeight: 600,
@@ -914,10 +914,10 @@ function OpportunitiesTable({ opportunities }: { opportunities: Opportunity[] })
           gridTemplateColumns: "minmax(0, 2.4fr) 110px 96px 96px 80px 110px",
           gap: 12,
           padding: "12px 22px",
-          background: "#FAFAF8",
+          background: "#F7F7FA",
           borderBottom: "0.5px solid rgba(0,0,0,0.06)",
           fontSize: 10,
-          color: "#6F6B66",
+          color: "#5F6080",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
           fontWeight: 600,
@@ -955,7 +955,7 @@ function OpportunitiesTable({ opportunities }: { opportunities: Opportunity[] })
                   gap: 6,
                   alignItems: "center",
                   fontSize: 11,
-                  color: "#6F6B66",
+                  color: "#5F6080",
                   flexWrap: "wrap",
                 }}
               >
@@ -966,7 +966,7 @@ function OpportunitiesTable({ opportunities }: { opportunities: Opportunity[] })
                     gap: 5,
                     padding: "2px 8px",
                     borderRadius: 100,
-                    background: "#FAFAF8",
+                    background: "#F7F7FA",
                     border: "0.5px solid rgba(0,0,0,0.07)",
                     fontSize: 10,
                     fontWeight: 600,
@@ -1006,7 +1006,7 @@ function OpportunitiesTable({ opportunities }: { opportunities: Opportunity[] })
               style={{
                 textAlign: "right",
                 fontVariantNumeric: "tabular-nums",
-                color: "#5A5754",
+                color: "#4B4C6B",
               }}
             >
               {o.requiredFTE}
@@ -1043,7 +1043,7 @@ function InsightCard({ insight }: { insight: PipelineAiInsight }) {
       ? READINESS_TONES.ready
       : insight.category === "capability" || insight.category === "risk"
         ? READINESS_TONES.gap
-        : { color: "#5A5754", bg: "#F3F0EA", border: "rgba(0,0,0,0.08)", label: "Review" };
+        : { color: "#4B4C6B", bg: "#F4F4F8", border: "rgba(0,0,0,0.08)", label: "Review" };
   return (
     <div
       style={{

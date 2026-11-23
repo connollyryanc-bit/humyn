@@ -67,7 +67,7 @@ export async function POST() {
     onboarding_cost: c.onboardingCost,
     key_client_at_risk: c.keyClientAtRisk,
     current_project: c.currentProject,
-    burnout_risk: c.burnoutRisk,
+    burnout_risk: c.overloadRisk,
   }));
 
   const { error: capacityError } = await sb

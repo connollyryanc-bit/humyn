@@ -130,7 +130,7 @@ export default function PersonProfilePage() {
                 borderRadius: 100,
                 border: "0.5px solid rgba(0,0,0,0.07)",
                 background: "#FFFFFF",
-                color: "#161311",
+                color: "#0E0F26",
                 fontSize: 12,
                 fontWeight: 500,
                 textDecoration: "none",
@@ -145,7 +145,7 @@ export default function PersonProfilePage() {
                 borderRadius: 100,
                 border: "0.5px solid rgba(0,0,0,0.07)",
                 background: "#FFFFFF",
-                color: "#161311",
+                color: "#0E0F26",
                 fontSize: 12,
                 fontWeight: 500,
                 textDecoration: "none",
@@ -192,7 +192,7 @@ export default function PersonProfilePage() {
           insightState={insightState}
           insightError={insightError}
           onGenerateInsights={generateInsights}
-          composerPlaceholder="E.g. I need to push the Nordea kickoff by a week — flag the impact and ask for sign-off."
+          composerPlaceholder="E.g. I need to push the Baltica Bank kickoff by a week — flag the impact and ask for sign-off."
         />
       </main>
     </div>

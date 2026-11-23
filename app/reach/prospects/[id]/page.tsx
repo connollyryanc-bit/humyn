@@ -67,12 +67,12 @@ function OutreachTab({
           <p style={{ fontSize: 14, color: R.ink, lineHeight: 1.6, margin: "0 0 18px" }}>{style.summary}</p>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
             <div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: "#2E8B57", marginBottom: 10 }}>Do</div>
-              <Bullets items={style.do} dot="#2E8B57" />
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#9B7CFF", marginBottom: 10 }}>Do</div>
+              <Bullets items={style.do} dot="#9B7CFF" />
             </div>
             <div>
-              <div style={{ fontSize: 12, fontWeight: 700, color: "#E8402A", marginBottom: 10 }}>Don&apos;t</div>
-              <Bullets items={style.dont} dot="#E8402A" />
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#F23D7A", marginBottom: 10 }}>Don&apos;t</div>
+              <Bullets items={style.dont} dot="#F23D7A" />
             </div>
           </div>
         </Card>
@@ -220,9 +220,9 @@ export default function ProspectProfile() {
           style={{
             padding: "12px 16px",
             borderRadius: 10,
-            background: prospect.doNotContact ? "#FDF0EE" : "#FFFBF2",
-            border: `0.5px solid ${prospect.doNotContact ? "#FCCDC6" : "#FAD98A"}`,
-            color: prospect.doNotContact ? "#9B2A1A" : "#8B5A00",
+            background: prospect.doNotContact ? "#FFE8F0" : "#FFF0E4",
+            border: `0.5px solid ${prospect.doNotContact ? "#FFC2D7" : "#FFD2B0"}`,
+            color: prospect.doNotContact ? "#B0154F" : "#A04A0C",
             fontSize: 13,
             lineHeight: 1.55,
             marginBottom: 12,

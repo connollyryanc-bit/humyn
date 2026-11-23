@@ -329,8 +329,8 @@ function StudioInner() {
                   marginTop: 14,
                   padding: 12,
                   borderRadius: 8,
-                  background: "#FDF0EE",
-                  color: "#9B2A1A",
+                  background: "#FFE8F0",
+                  color: "#B0154F",
                   fontSize: 12,
                   lineHeight: 1.5,
                 }}
@@ -381,13 +381,13 @@ function StudioInner() {
               <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
                 {style.do.map((d) => (
                   <div key={d} style={{ fontSize: 12, color: R.ink2, display: "flex", gap: 8 }}>
-                    <span style={{ color: "#2E8B57", fontWeight: 700 }}>+</span>
+                    <span style={{ color: "#9B7CFF", fontWeight: 700 }}>+</span>
                     {d}
                   </div>
                 ))}
                 {style.dont.map((d) => (
                   <div key={d} style={{ fontSize: 12, color: R.ink2, display: "flex", gap: 8 }}>
-                    <span style={{ color: "#E8402A", fontWeight: 700 }}>-</span>
+                    <span style={{ color: "#F23D7A", fontWeight: 700 }}>-</span>
                     {d}
                   </div>
                 ))}
@@ -398,9 +398,9 @@ function StudioInner() {
                     marginTop: 14,
                     padding: 10,
                     borderRadius: 8,
-                    background: "#FFFBF2",
-                    border: "0.5px solid #FAD98A",
-                    color: "#8B5A00",
+                    background: "#FFF0E4",
+                    border: "0.5px solid #FFD2B0",
+                    color: "#A04A0C",
                     fontSize: 12,
                     lineHeight: 1.5,
                   }}
@@ -418,7 +418,7 @@ function StudioInner() {
                 <div key={ph.token}>
                   <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
                     <code style={{ fontSize: 12, color: R.ink }}>{ph.token}</code>
-                    {ph.ai && <Pill bg="#EEF7F2" color="#1A5C38" border="transparent">AI written</Pill>}
+                    {ph.ai && <Pill bg="#F1ECFF" color="#5B37D6" border="transparent">AI written</Pill>}
                   </div>
                   <div style={{ fontSize: 12, color: R.ink3, marginTop: 2 }}>{ph.hint}</div>
                 </div>
